@@ -1,0 +1,23 @@
+imports:
+    - { resource: config_dev.yml }
+
+framework:
+    test: ~
+    session:
+        storage_id: session.storage.mock_file
+    profiler:
+        collect: false
+
+web_profiler:
+    toolbar: false
+    intercept_redirects: false
+
+swiftmailer:
+    disable_delivery: true
+
+# Surcharge de la conf de doctrine
+doctrine:
+    dbal:
+        driver:   pdo_sqlite
+        path:     "%kernel.cache_dir%/ns_test.db"
+        charset:  UTF8

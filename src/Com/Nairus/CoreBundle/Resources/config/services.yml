@@ -1,0 +1,4 @@
+services:
+#    ns_core.example:
+#        class: NSCoreBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

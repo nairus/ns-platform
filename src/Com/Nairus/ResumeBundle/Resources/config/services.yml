@@ -1,0 +1,5 @@
+services:
+    ns_resume.resume_service:
+        public: true
+        class: Com\Nairus\ResumeBundle\Service\ResumeService
+        arguments: ["@doctrine.orm.entity_manager"]

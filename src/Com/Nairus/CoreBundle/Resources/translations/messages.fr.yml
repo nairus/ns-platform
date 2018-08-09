@@ -1,0 +1,37 @@
+## Main translations FR
+errors:
+    title: "Une Erreur est survenue: %status_text%"
+    error:
+        subtitle:
+            oops: "Oups! Une Erreur est survenue"
+            error: "Erreur %status_code%"
+        shortdescription: "Le serveur a retourné une \"%status_code% %status_text%\"."
+        description: |
+            Quelque chose est cassé. S'il vous plait, faites nous savoir
+            où alliez vous quand l'erreur est surevenue.
+            Nous allons réparer ceci le plus rapidement possible.
+            Nous sommes désolés pour le dérangement causé.
+
+    error404:
+        subtitle:
+            notfound: "Page Non Trouvée"
+            error: Erreur 404
+        description: >
+            La page demandée, n'a pas pu être trouvée,
+            contactez votre webmaster oy essayez à nouveau.
+            Utilisez le bouton <b>Retour</b> de votre navigateur pour retourner
+            à la page précedente
+        alttext: "Ou vous pouvez cliquer sur ce petit bouton:"
+        takemehome: Ramener Moi à l'Accueil
+
+headline: "Travaux de Nairus"
+nav:
+    homepage: "Accueil"
+    contact: "Contact"
+    resume:
+        list: "Liste des CV"
+    language:
+        en: Anglais
+        fr: Français
+    navbar-toggler:
+        label: "Basculer la navigation"

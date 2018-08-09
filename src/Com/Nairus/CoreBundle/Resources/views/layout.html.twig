@@ -1,0 +1,78 @@
+{# NSCoreBundle::layout.html.twig #}
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+            <link rel="stylesheet" href="{{ '/bundles/nscore/css/styles.css' }}" type="text/css">
+        {% endblock %}
+
+        <title>{% block title %}{{"headline" | trans}}{% endblock %}</title>
+    </head>
+    <body>
+        <header>
+            {% block header %}
+                <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+                    <div class="navbar-brand">{{"headline" | trans}}</div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbar"
+                            aria-controls="navbar"
+                            aria-expanded="false"
+                            aria-label="{{ "nav.navbar-toggler.label" }}">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbar">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{path("ns_core_homepage")}}">{{ "nav.homepage"|trans }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{path("ns_resume_homepage")}}">{{ "nav.resume.list"|trans }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link disabled" href="{{path("ns_core_contact")}}">{{ "nav.contact"|trans }}</a>
+                            </li>
+                        </ul>
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="switch-language" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="ns-flag ns-flag-{{ app.request.getLocale() }}"></span>{{ ("nav.language." ~ app.request.getLocale()) | trans }}
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="switch-language">
+                                <a class="dropdown-item" href="{{ path(app.request.get('_route'), {"_locale": "en"}) }}"><span class="ns-flag ns-flag-en"></span>{{ "nav.language.en" | trans }}</a>
+                                <a class="dropdown-item" href="{{ path(app.request.get('_route'), {"_locale": "fr"}) }}"><span class="ns-flag ns-flag-fr"></span>{{ "nav.language.fr" | trans }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            {% endblock %}
+        </header>
+
+
+        <main role="main">
+            {% block body %}
+            {% endblock %}
+        </main>
+
+        <hr>
+
+        <footer class="container">
+            {% block footer %}
+                <p>© {{ 'now'|date('Y') }} and beyond | Webmaster: {{ webmaster }}</p>
+            {% endblock %}
+        </footer>
+
+        {% block javascripts %}
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        {% endblock %}
+    </body>
+</html>

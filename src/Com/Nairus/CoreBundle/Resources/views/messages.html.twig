@@ -1,0 +1,24 @@
+{# NSCoreBundle::messages.html.twig #}
+
+<div class="message-container">
+    {% for message in app.session.flashbag.get('info') %}
+        <div class="alert alert-info fade show">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>{{ "flashes.infos"|trans({}, "NSCoreBundle") }}</strong> {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.session.flashbag.get('success') %}
+        <div class="alert alert-success fade show">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>{{ "flashes.success"|trans({}, "NSCoreBundle") }}</strong> {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.session.flashbag.get('error') %}
+        <div class="alert alert-danger fade show">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>{{ "flashes.error"|trans({}, "NSCoreBundle") }}</strong> {{ message }}
+        </div>
+    {% endfor %}
+</div>

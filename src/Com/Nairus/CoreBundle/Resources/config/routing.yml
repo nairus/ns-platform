@@ -1,0 +1,7 @@
+ns_core_homepage:
+    path:     /
+    defaults: { _controller: NSCoreBundle:Homepage:index }
+
+ns_core_contact:
+    path:     /contact
+    defaults: { _controller: NSCoreBundle:Homepage:contact }

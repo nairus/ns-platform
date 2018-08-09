@@ -1,0 +1,3 @@
+ns_resume_homepage:
+    path:     /
+    defaults: { _controller: NSResumeBundle:Public:index }

@@ -1,0 +1,22 @@
+## Translations file only for the bundle
+
+flashes:
+    infos: Infos!
+    success: Succès!
+    error: Erreur!
+    homepage:
+        contact:
+            page-unavailable: "La page de contact n'est pas encore disponible, merci de revenir plus tard."
+
+homepage:
+    index:
+        head:
+            title: Accueil
+        titles:
+            h1: Bienvenue !
+
+        description: >
+            Je suis un <strong>développeur Web</strong> depuis 2006.<br>
+            Je travaille avec plusieurs languages de programmation tel que <strong>PHP, Pyhon, Javascript, Java</strong>.<br>
+            Je suis un passionné du <strong>web</strong> et j'ai décidé de construire cette plateforme afin de partager et de montrer mon travail.
+        github-profile: Voir mon profil Github

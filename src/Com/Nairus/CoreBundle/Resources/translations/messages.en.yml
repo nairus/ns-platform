@@ -1,0 +1,38 @@
+## Main translations FR
+errors:
+    title: "An Error Occurred: %status_text%"
+    error:
+        subtitle:
+            oops: "Oops! An Error Occurred EN"
+            error: "Error %status_code%"
+        shortdescription: "The server returned a \"%status_code% %status_text%\"."
+        description: |
+            Something is broken. Please let us know what
+            you were doing when this error occurred.
+            We will fix it as soon as possible.
+            Sorry for any inconvenience caused.
+
+    error404:
+        subtitle:
+            notfound: Page Not Found
+            error: Error 404
+        description: >
+            The page you requested could not be found,
+            either contact your webmaster or try again.
+            Use your browsers <b>Back</b> button to navigate to
+            the page you have prevously come from
+        alttext: "Or you could just press this neat little button:"
+        takemehome: Take Me Home
+
+headline: "Nairus Works"
+nav:
+    homepage: "Home"
+    contact: "Contact"
+    resume:
+        list: "Resumes List"
+    language:
+        title: "Language"
+        en: English
+        fr: French
+    navbar-toggler:
+        label: "Toggle navigation"
