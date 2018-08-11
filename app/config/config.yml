@@ -8,6 +8,9 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    available_locales: &available_locales
+     - fr
+     - en
     app_webmaster: Nicolas Surian AKA Nairus
 
 framework:
@@ -40,9 +43,10 @@ twig:
     exception_controller: NSCoreBundle:Error:show
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
-    # Variables globales de vue.
+    # View globale variables
     globals:
         webmaster: "%app_webmaster%"
+        locales: *available_locales
 
 # Doctrine Configuration
 doctrine:
@@ -66,6 +70,16 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
 
+# Stof\DoctrineExtensionsBundle configuration
+stof_doctrine_extensions:
+    orm:
+        default:
+            blameable: true
+            sluggable: true
+            sortable: true
+            timestampable: true
+            uploadable: true
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: '%mailer_transport%'
@@ -85,6 +99,6 @@ fos_user:
 
 # i18n route config
 jms_i18n_routing:
-    default_locale: "%kernel.default_locale%"
-    locales: [fr, en]
+    default_locale: "%locale%"
+    locales: *available_locales
     strategy: prefix_except_default

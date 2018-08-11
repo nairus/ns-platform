@@ -2,18 +2,17 @@
 
 namespace Com\Nairus\ResumeBundle\Repository;
 
+use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Profile;
 use Com\Nairus\ResumeBundle\Entity\User;
-use Com\Nairus\ResumeBundle\Tests\AbstractKernelTestCase;
 
 /**
  * Test de la classe ProfileRepository.
  *
  * @author Nicolas Surian <nicolas.surian@gmail.com>
  */
-class ProfileRepositoryTest extends AbstractKernelTestCase
-{
+class ProfileRepositoryTest extends AbstractKernelTestCase {
 
     /**
      * @var ProfileRepository
@@ -27,33 +26,31 @@ class ProfileRepositoryTest extends AbstractKernelTestCase
      */
     private static $userManager;
 
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":Profile");
         static::$userManager = static::$container->get("fos_user.user_manager");
     }
 
     /**
-     * Test d'insertion, de mise à jour et de suppression de l'entité.
+     * Test entities insert, update and delete.
      */
-    public function testInsertUpdateAndDelete()
-    {
+    public function testInsertUpdateAndDelete() {
         // Test d'insertion.
         /* @var $user User */
         $user = static::$userManager->findUserByUsername("sadmin");
         $newProfile = new Profile();
         $newProfile
-            ->setAddress("Adresse 4")
-            ->setAddressAddition("Adresse 5")
-            ->setCell("06.02.02.02.02")
-            ->setCity("Istres")
-            ->setCountry("France")
-            ->setFirstName("Prénom")
-            ->setPhone("04.02.01.01.01")
-            ->setLastName("Nom")
-            ->setZip("13800")
-            ->setUser($user);
+                ->setAddress("Adresse 4")
+                ->setAddressAddition("Adresse 5")
+                ->setCell("06.02.02.02.02")
+                ->setCity("Istres")
+                ->setCountry("France")
+                ->setFirstName("Prénom")
+                ->setPhone("04.02.01.01.01")
+                ->setLastName("Nom")
+                ->setZip("13800")
+                ->setUser($user);
         static::$em->persist($newProfile);
         static::$em->flush();
         static::$em->clear();
@@ -73,17 +70,17 @@ class ProfileRepositoryTest extends AbstractKernelTestCase
         $this->assertSame("Prénom", $profile->getFirstName(), "1.10. Le champ [firstName] doit être identique.");
         $this->assertSame("Nom", $profile->getLastName(), "1.11. Le champ [lastName] doit être identique.");
 
-        // Test de mise à jour.
+        // Update test.
         $profile
-            ->setAddress("Adresse 6")
-            ->setAddressAddition("Adresse 7")
-            ->setCell("07.02.02.02.02")
-            ->setCity("Marseille")
-            ->setCountry("USA")
-            ->setFirstName("Prénom2")
-            ->setPhone("04.03.01.01.01")
-            ->setLastName("Nom2")
-            ->setZip("13004");
+                ->setAddress("Adresse 6")
+                ->setAddressAddition("Adresse 7")
+                ->setCell("07.02.02.02.02")
+                ->setCity("Marseille")
+                ->setCountry("USA")
+                ->setFirstName("Prénom2")
+                ->setPhone("04.03.01.01.01")
+                ->setLastName("Nom2")
+                ->setZip("13004");
         static::$em->flush();
         static::$em->clear();
         /* @var $profileUpdated Profile */
@@ -98,7 +95,7 @@ class ProfileRepositoryTest extends AbstractKernelTestCase
         $this->assertSame("Prénom2", $profile->getFirstName(), "2.8. Le champ [firstName] doit être identique.");
         $this->assertSame("Nom2", $profile->getLastName(), "2.9. Le champ [lastName] doit être identique.");
 
-        // Test de suppression.
+        // Delete test.
         $id = $profileUpdated->getId();
         static::$em->remove($profileUpdated);
         static::$em->flush();
@@ -109,24 +106,24 @@ class ProfileRepositoryTest extends AbstractKernelTestCase
     }
 
     /**
-     * Test d'insertion d'une entité sans sa clé étrangère.
+     * Insert test without foreign key.
      *
      * @expectedException \Doctrine\DBAL\Exception\NotNullConstraintViolationException
      */
-    public function testInsertWithoutUser()
-    {
+    public function testInsertWithoutUser() {
         $profile = new Profile();
         $profile
-            ->setAddress("Adresse 1")
-            ->setAddressAddition("Adresse 2")
-            ->setCell("06.01.01.01.01")
-            ->setCity("Marseille")
-            ->setCountry("France")
-            ->setFirstName("Prénom")
-            ->setPhone("04.01.01.01.01")
-            ->setLastName("Nom")
-            ->setZip("13004");
+                ->setAddress("Adresse 1")
+                ->setAddressAddition("Adresse 2")
+                ->setCell("06.01.01.01.01")
+                ->setCity("Marseille")
+                ->setCountry("France")
+                ->setFirstName("Prénom")
+                ->setPhone("04.01.01.01.01")
+                ->setLastName("Nom")
+                ->setZip("13004");
         static::$em->persist($profile);
         static::$em->flush();
     }
+
 }

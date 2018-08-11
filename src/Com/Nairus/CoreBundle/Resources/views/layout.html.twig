@@ -46,15 +46,17 @@
                             </a>
 
                             <div class="dropdown-menu" aria-labelledby="switch-language">
-                                <a class="dropdown-item" href="{{ path(app.request.get('_route'), {"_locale": "en"}) }}"><span class="ns-flag ns-flag-en"></span>{{ "nav.language.en" | trans }}</a>
-                                <a class="dropdown-item" href="{{ path(app.request.get('_route'), {"_locale": "fr"}) }}"><span class="ns-flag ns-flag-fr"></span>{{ "nav.language.fr" | trans }}</a>
+                                {% for locale in locales %}
+                                    <a class="dropdown-item" href="{{ path(app.request.get('_route'), {"_locale": locale}) }}">
+                                        <span class="ns-flag ns-flag-{{ locale }}"></span>{{ ("nav.language." ~ locale) | trans }}
+                                    </a>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
                 </nav>
             {% endblock %}
         </header>
-
 
         <main role="main">
             {% block body %}

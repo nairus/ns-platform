@@ -4,7 +4,7 @@ namespace Com\Nairus\ResumeBundle\Service;
 
 use Com\Nairus\ResumeBundle\Enums\ExceptionCodeEnums;
 use Com\Nairus\ResumeBundle\Exception\ResumeListException;
-use Com\Nairus\ResumeBundle\Tests\AbstractKernelTestCase;
+use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeOnline;
 
 /**

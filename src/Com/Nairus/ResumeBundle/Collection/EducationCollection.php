@@ -6,17 +6,16 @@ use Com\Nairus\ResumeBundle\Entity\Education;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Collection des entités Education.
+ * Education entities collection.
  *
  * @author Nicolas Surian <nicolas.surian@gmail.com>
  */
-class EducationCollection extends ArrayCollection
-{
+class EducationCollection extends ArrayCollection {
+
     /**
      * {@inheritDoc}
      */
-    public function add($element) : bool
-    {
+    public function add($element): bool {
         $this->validType($element);
         return parent::add($element);
     }
@@ -26,8 +25,7 @@ class EducationCollection extends ArrayCollection
      *
      * @return Com\Nairus\ResumeBundle\Entity\Education|bool
      */
-    public function current()
-    {
+    public function current() {
         return parent::current();
     }
 
@@ -36,16 +34,14 @@ class EducationCollection extends ArrayCollection
      *
      * @return Com\Nairus\ResumeBundle\Entity\Education|bool
      */
-    public function first()
-    {
+    public function first() {
         return parent::first();
     }
 
     /**
      * @return Com\Nairus\ResumeBundle\Entity\Education
      */
-    public function get($key) : ?Education
-    {
+    public function get($key): ?Education {
         return parent::get($key);
     }
 
@@ -54,24 +50,21 @@ class EducationCollection extends ArrayCollection
      *
      * @return Com\Nairus\ResumeBundle\Entity\Education|bool
      */
-    public function last()
-    {
+    public function last() {
         return parent::last();
     }
 
     /**
      * @return Com\Nairus\ResumeBundle\Entity\Education|null
      */
-    public function offsetGet($offset) : ?Education
-    {
+    public function offsetGet($offset): ?Education {
         return parent::offsetGet($offset);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function offsetSet($offset, $value) : ?bool
-    {
+    public function offsetSet($offset, $value): ?bool {
         $this->validType($value);
         return parent::offsetSet($offset, $value);
     }
@@ -79,8 +72,7 @@ class EducationCollection extends ArrayCollection
     /**
      * {@inheritDoc}
      */
-    public function set($key, $value) : void
-    {
+    public function set($key, $value): void {
         $this->validType($value);
         parent::set($key, $value);
     }
@@ -92,8 +84,7 @@ class EducationCollection extends ArrayCollection
      *
      * @throws \TypeError If this is the wrong type.
      */
-    private function validType($entity)
-    {
+    private function validType($entity) {
         if (!$entity instanceof Education) {
             throw new \TypeError("Entité [Education] attendue.");
         }

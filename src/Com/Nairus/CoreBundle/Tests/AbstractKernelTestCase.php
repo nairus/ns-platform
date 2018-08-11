@@ -1,6 +1,6 @@
 <?php
 
-namespace Com\Nairus\ResumeBundle\Tests;
+namespace Com\Nairus\CoreBundle\Tests;
 
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -10,8 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  *
  * @author nairus
  */
-abstract class AbstractKernelTestCase extends KernelTestCase
-{
+abstract class AbstractKernelTestCase extends KernelTestCase {
 
     /**
      * Instance du gestionnaire des entités.
@@ -31,8 +30,8 @@ abstract class AbstractKernelTestCase extends KernelTestCase
         static::bootKernel();
         static::$container = static::$kernel->getContainer();
         static::$em = static::$container
-            ->get("doctrine")
-            ->getManager();
+                ->get("doctrine")
+                ->getManager();
 
         // On active la gestion des clés étrangères pour sqlite.
         $rsm = new ResultSetMapping();
@@ -42,19 +41,19 @@ abstract class AbstractKernelTestCase extends KernelTestCase
     /**
      * {@inheritDoc}
      */
-    protected function tearDown()
-    {
+    protected function tearDown() {
         parent::tearDown();
 
         // On force le reset de l'entity manager pour les tests suivants.
         // Cela évite des erreurs du genre "Doctrine\ORM\ORMException: The EntityManager is closed."
         // quand on lance la suite de tests entière.
         static::$container
-            ->get("doctrine")
-            ->resetManager();
+                ->get("doctrine")
+                ->resetManager();
 
         static::$em = static::$container
-            ->get("doctrine")
-            ->getManager();
+                ->get("doctrine")
+                ->getManager();
     }
+
 }

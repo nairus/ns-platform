@@ -2,12 +2,12 @@
 
 namespace Com\Nairus\ResumeBundle\Repository;
 
+use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Entity\ResumeSkill;
 use Com\Nairus\ResumeBundle\Entity\Skill;
 use Com\Nairus\ResumeBundle\Entity\SkillLevel;
-use Com\Nairus\ResumeBundle\Tests\AbstractKernelTestCase;
 use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 
 /**
@@ -15,25 +15,22 @@ use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
  *
  * @author Nicolas Surian <nicolas.surian@gmail.com>
  */
-class ResumeSkillRepositoryTest extends AbstractKernelTestCase
-{
+class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
 
     /**
      * @var ResumeSkillRepository
      */
     private static $repository;
 
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":ResumeSkill");
     }
 
     /**
-     * Test d'insertion, de mise à jour et de suppression de l'entité.
+     * Test entities insert, update and delete.
      */
-    public function testInsertUpdateAndDelete()
-    {
+    public function testInsertUpdateAndDelete() {
         /* @var $resume Resume */
         $resume = static::$em->find(NSResumeBundle::NAME . ":Resume", 1);
         /* @var $skill Skill */
@@ -44,10 +41,10 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase
         // Test d'insertion.
         $newResumeSkill = new ResumeSkill();
         $newResumeSkill
-            ->setRank(1)
-            ->setResume($resume)
-            ->setSkill($skill)
-            ->setSkillLevel($skillLevel);
+                ->setRank(1)
+                ->setResume($resume)
+                ->setSkill($skill)
+                ->setSkillLevel($skillLevel);
 
         static::$em->persist($newResumeSkill);
         static::$em->flush();
@@ -63,15 +60,15 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase
         $this->assertSame($skill->getId(), $resumeSkill->getSkill()->getId(), "1.5. Le [Skill] associé doit être identique.");
         $this->assertSame($skillLevel->getId(), $resumeSkill->getSkillLevel()->getId(), "1.6. Le [SkillLevel] associé doit être identique.");
 
-        // Test de mise à jour.
+        // Update test.
         /* @var $skill Skill */
         $otherSkill = static::$em->find(NSResumeBundle::NAME . ":Skill", 2);
         /* @var $skillLevel SkillLevel */
         $otherSkillLevel = static::$em->find(NSResumeBundle::NAME . ":SkillLevel", 2);
         $resumeSkill
-            ->setRank(2)
-            ->setSkill($otherSkill)
-            ->setSkillLevel($otherSkillLevel);
+                ->setRank(2)
+                ->setSkill($otherSkill)
+                ->setSkillLevel($otherSkillLevel);
         static::$em->flush();
         static::$em->clear();
 
@@ -81,7 +78,7 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase
         $this->assertSame($otherSkill->getId(), $resumeSkillUpdated->getSkill()->getId(), "1.2. Le [Skill] associé doit être mis à jour.");
         $this->assertSame($otherSkillLevel->getId(), $resumeSkillUpdated->getSkillLevel()->getId(), "1.3. Le [SkillLevel] associé doit être mis à jour.");
 
-        // Test de suppression.
+        // Delete test.
         $id = $resumeSkillUpdated->getId();
         static::$em->remove($resumeSkillUpdated);
         static::$em->flush();
@@ -94,8 +91,7 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase
     /**
      * Test d'insertion d'une entité sans [Resume].
      */
-    public function testInsertWithoutResume()
-    {
+    public function testInsertWithoutResume() {
         try {
             static::$em->beginTransaction();
             $skill = static::$em->find(NSResumeBundle::NAME . ":Skill", 1);
@@ -103,9 +99,9 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase
 
             $newResumeSkill = new ResumeSkill();
             $newResumeSkill
-                ->setRank(1)
-                ->setSkill($skill)
-                ->setSkillLevel($skillLevel);
+                    ->setRank(1)
+                    ->setSkill($skill)
+                    ->setSkillLevel($skillLevel);
 
             static::$em->persist($newResumeSkill);
             static::$em->flush();
@@ -118,19 +114,18 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase
             static::$em->rollback();
             // Reset de l'EntityManager pour les tests d'exceptions suivants.
             static::$container
-                ->get("doctrine")
-                ->resetManager();
+                    ->get("doctrine")
+                    ->resetManager();
             static::$em = static::$container
-                ->get("doctrine")
-                ->getManager();
+                    ->get("doctrine")
+                    ->getManager();
         }
     }
 
     /**
      * Test d'insertion d'une entité sans [Skill].
      */
-    public function testInsertWithoutSkill()
-    {
+    public function testInsertWithoutSkill() {
         try {
             static::$em->beginTransaction();
             $resume = static::$em->find(NSResumeBundle::NAME . ":Resume", 1);
@@ -138,9 +133,9 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase
 
             $newResumeSkill = new ResumeSkill();
             $newResumeSkill
-                ->setRank(2)
-                ->setResume($resume)
-                ->setSkillLevel($skillLevel);
+                    ->setRank(2)
+                    ->setResume($resume)
+                    ->setSkillLevel($skillLevel);
 
             static::$em->persist($newResumeSkill);
             static::$em->flush();
@@ -153,19 +148,18 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase
             static::$em->rollback();
             // Reset de l'EntityManager pour les tests d'exceptions suivants.
             static::$container
-                ->get("doctrine")
-                ->resetManager();
+                    ->get("doctrine")
+                    ->resetManager();
             static::$em = static::$container
-                ->get("doctrine")
-                ->getManager();
+                    ->get("doctrine")
+                    ->getManager();
         }
     }
 
     /**
      * Test d'insertion d'une entité sans [SkillLevel].
      */
-    public function testInsertWithoutSkillLevel()
-    {
+    public function testInsertWithoutSkillLevel() {
         try {
             static::$em->beginTransaction();
             $resume = static::$em->find(NSResumeBundle::NAME . ":Resume", 1);
@@ -173,9 +167,9 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase
 
             $newResumeSkill = new ResumeSkill();
             $newResumeSkill
-                ->setRank(3)
-                ->setResume($resume)
-                ->setSkill($skill);
+                    ->setRank(3)
+                    ->setResume($resume)
+                    ->setSkill($skill);
 
             static::$em->persist($newResumeSkill);
             static::$em->flush();

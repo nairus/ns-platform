@@ -2,46 +2,43 @@
 
 namespace Com\Nairus\ResumeBundle\Repository;
 
+use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Education;
 use Com\Nairus\ResumeBundle\Entity\Resume;
-use Com\Nairus\ResumeBundle\Tests\AbstractKernelTestCase;
 
 /**
- * Test de la classe EducationRepository.
+ * Test Education Repository.
  *
  * @author Nicolas Surian <nicolas.surian@gmail.com>
  */
-class EducationRepositoryTest extends AbstractKernelTestCase
-{
+class EducationRepositoryTest extends AbstractKernelTestCase {
 
     /**
      * @var EducationRepository
      */
     private static $repository;
 
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":Education");
     }
 
     /**
-     * Test d'insertion, de mise à jour et de suppression de l'entité.
+     * Test entities insert, update and delete.
      */
-    public function testInsertUpdateAndDelete()
-    {
+    public function testInsertUpdateAndDelete() {
         /* @var $resume Resume */
         $resume = static::$em->find(NSResumeBundle::NAME . ":Resume", 1);
         $newEducation = new Education();
         $newEducation
-            ->setDescription("Description")
-            ->setDiploma("BTS")
-            ->setDomain("Informatique")
-            ->setEndYear(2006)
-            ->setInstitution("AFPA")
-            ->setStartYear(2005)
-            ->setResume($resume);
+                ->setDescription("Description")
+                ->setDiploma("BTS")
+                ->setDomain("Informatique")
+                ->setEndYear(2006)
+                ->setInstitution("AFPA")
+                ->setStartYear(2005)
+                ->setResume($resume);
         static::$em->persist($newEducation);
         static::$em->flush();
         static::$em->clear();
@@ -58,13 +55,13 @@ class EducationRepositoryTest extends AbstractKernelTestCase
         $this->assertSame(2005, $education->getStartYear(), "1.5. Le champ [startYear] doit être identique.");
         $this->assertSame($resume->getId(), $education->getResume()->getId(), "1.6. Le champ [resume] doit être identique.");
 
-        // Test de mise à jour.
+        // Update test.
         $education->setDescription("Description 2")
-            ->setDiploma("BAC")
-            ->setDomain("SI")
-            ->setEndYear(1997)
-            ->setInstitution("Lycée V. Hugo")
-            ->setStartYear(1996);
+                ->setDiploma("BAC")
+                ->setDomain("SI")
+                ->setEndYear(1997)
+                ->setInstitution("Lycée V. Hugo")
+                ->setStartYear(1996);
         static::$em->flush();
         static::$em->clear();
 
@@ -77,7 +74,7 @@ class EducationRepositoryTest extends AbstractKernelTestCase
         $this->assertSame(1997, $educationUpdated->getEndYear(), "2.3. Le champ [endYear] doit être identique.");
         $this->assertSame("Lycée V. Hugo", $educationUpdated->getInstitution(), "2.4. Le champ [institution] doit être identique.");
 
-        // Test de suppression.
+        // Delete test
         $id = $educationUpdated->getId();
         static::$em->remove($educationUpdated);
         static::$em->flush();
@@ -87,21 +84,21 @@ class EducationRepositoryTest extends AbstractKernelTestCase
     }
 
     /**
-     * Test d'insertion d'une entité sans sa clé étrangère.
+     * Insert test without foreign key.
      *
      * @expectedException \Doctrine\DBAL\Exception\NotNullConstraintViolationException
      */
-    public function testInsertWithoutResume()
-    {
+    public function testInsertWithoutResume() {
         $education = new Education();
         $education
-            ->setDescription("Description")
-            ->setDiploma("BTS")
-            ->setDomain("Informatique")
-            ->setEndYear(2006)
-            ->setInstitution("AFPA")
-            ->setStartYear(2005);
+                ->setDescription("Description")
+                ->setDiploma("BTS")
+                ->setDomain("Informatique")
+                ->setEndYear(2006)
+                ->setInstitution("AFPA")
+                ->setStartYear(2005);
         static::$em->persist($education);
         static::$em->flush();
     }
+
 }

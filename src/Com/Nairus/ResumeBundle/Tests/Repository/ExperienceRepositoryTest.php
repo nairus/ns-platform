@@ -2,46 +2,43 @@
 
 namespace Com\Nairus\ResumeBundle\Repository;
 
+use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Experience;
-use Com\Nairus\ResumeBundle\Tests\AbstractKernelTestCase;
 
 /**
- * Test de la classe ExperienceRepository.
+ * Test Experience Repository.
  *
  * @author Nicolas Surian <nicolas.surian@gmail.com>
  */
-class ExperienceRepositoryTest extends AbstractKernelTestCase
-{
+class ExperienceRepositoryTest extends AbstractKernelTestCase {
 
     /**
      * @var ExperienceRepository
      */
     private static $repository;
 
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":Experience");
     }
 
     /**
-     * Test d'insertion, de mise à jour et de suppression de l'entité.
+     * Test entities insert, update and delete.
      */
-    public function testInsertUpdateAndDelete()
-    {
+    public function testInsertUpdateAndDelete() {
         /* @var $resume Resume */
         $resume = static::$em->find(NSResumeBundle::NAME . ":Resume", 1);
 
         $newExperience = new Experience();
         $newExperience->setCompany("Société")
-            ->setDescription("Description")
-            ->setEndMonth(12)
-            ->setEndYear(2017)
-            ->setLocation("Marseille")
-            ->setStartMonth(1)
-            ->setStartYear(2017)
-            ->setResume($resume);
+                ->setDescription("Description")
+                ->setEndMonth(12)
+                ->setEndYear(2017)
+                ->setLocation("Marseille")
+                ->setStartMonth(1)
+                ->setStartYear(2017)
+                ->setResume($resume);
         static::$em->persist($newExperience);
         static::$em->flush();
         static::$em->clear();
@@ -60,15 +57,15 @@ class ExperienceRepositoryTest extends AbstractKernelTestCase
         $this->assertSame($newExperience->getStartMonth(), $experience->getStartMonth(), "1.9. Le champ [startMonth] doit être identique.");
         $this->assertSame($newExperience->getStartYear(), $experience->getStartYear(), "1.10. Le champ [startYear] doit être identique.");
 
-        // Test de mise à jour.
+        // Update test.
         $experience->setCompany("Société 2")
-            ->setDescription("Description 2")
-            ->setEndMonth(11)
-            ->setEndYear(2016)
-            ->setLocation("Aix")
-            ->setStartMonth(2)
-            ->setStartYear(2016)
-            ->setCurrentJob(true);
+                ->setDescription("Description 2")
+                ->setEndMonth(11)
+                ->setEndYear(2016)
+                ->setLocation("Aix")
+                ->setStartMonth(2)
+                ->setStartYear(2016)
+                ->setCurrentJob(true);
         static::$em->flush();
         static::$em->clear();
         $experienceUpdated = static::$repository->find($experience->getId());
@@ -81,7 +78,7 @@ class ExperienceRepositoryTest extends AbstractKernelTestCase
         $this->assertSame("Aix", $experienceUpdated->getLocation(), "1.7. Le champ [location] doit être identique.");
         $this->assertSame(2, $experienceUpdated->getStartMonth(), "1.8. Le champ [startMonth] doit être identique.");
 
-        // Test de suppression.
+        // Delete test.
         $id = $experienceUpdated->getId();
         static::$em->remove($experienceUpdated);
         static::$em->flush();
@@ -91,21 +88,21 @@ class ExperienceRepositoryTest extends AbstractKernelTestCase
     }
 
     /**
-     * Test d'insertion d'une entité sans sa clé étrangère.
+     * Insert test without foreign key.
      *
      * @expectedException \Doctrine\DBAL\Exception\NotNullConstraintViolationException
      */
-    public function testInsertWithoutResume()
-    {
+    public function testInsertWithoutResume() {
         $experience = new Experience();
         $experience->setCompany("Société")
-            ->setDescription("Description")
-            ->setEndMonth(12)
-            ->setEndYear(2017)
-            ->setLocation("Marseille")
-            ->setStartMonth(1)
-            ->setStartYear(2017);
+                ->setDescription("Description")
+                ->setEndMonth(12)
+                ->setEndYear(2017)
+                ->setLocation("Marseille")
+                ->setStartMonth(1)
+                ->setStartYear(2017);
         static::$em->persist($experience);
         static::$em->flush();
     }
+
 }

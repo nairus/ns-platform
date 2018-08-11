@@ -26,6 +26,7 @@ class HomepageController extends Controller {
      * @return Response
      */
     public function contactAction(Request $request): Response {
+        $availableLocales = $this->container->getParameter("available_locales");
         $request->getSession()->getFlashBag()->add(
                 'info',
                 $this->getTranslator()->trans("flashes.homepage.contact.page-unavailable", [], NSCoreBundle::NAME)

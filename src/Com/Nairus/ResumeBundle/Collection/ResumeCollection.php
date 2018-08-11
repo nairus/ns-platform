@@ -6,18 +6,16 @@ use Com\Nairus\ResumeBundle\Entity\Resume;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Collection d'entité Resume.
+ * Resume entities collection.
  *
  * @author Nicolas Surian <nicolas.surian@gmail.com>
  */
-class ResumeCollection extends ArrayCollection
-{
+class ResumeCollection extends ArrayCollection {
 
     /**
      * {@inheritDoc}
      */
-    public function add($element): bool
-    {
+    public function add($element): bool {
         $this->validType($element);
         return parent::add($element);
     }
@@ -27,8 +25,7 @@ class ResumeCollection extends ArrayCollection
      *
      * @return Resume|bool
      */
-    public function current()
-    {
+    public function current() {
         return parent::current();
     }
 
@@ -37,8 +34,7 @@ class ResumeCollection extends ArrayCollection
      *
      * @return Resume|bool
      */
-    public function first()
-    {
+    public function first() {
         return parent::first();
     }
 
@@ -49,8 +45,7 @@ class ResumeCollection extends ArrayCollection
      *
      * @return Resume
      */
-    public function get($key) : ?Resume
-    {
+    public function get($key): ?Resume {
         return parent::get($key);
     }
 
@@ -59,8 +54,7 @@ class ResumeCollection extends ArrayCollection
      *
      * @return Resume|bool
      */
-    public function last()
-    {
+    public function last() {
         return parent::last();
     }
 
@@ -71,8 +65,7 @@ class ResumeCollection extends ArrayCollection
      *
      * @return Resume
      */
-    public function offsetGet($offset) : ?Resume
-    {
+    public function offsetGet($offset): ?Resume {
         $entity = parent::offsetGet($offset);
         return $entity;
     }
@@ -80,8 +73,7 @@ class ResumeCollection extends ArrayCollection
     /**
      * {@inheritDoc}
      */
-    public function offsetSet($offset, $value) : ?bool
-    {
+    public function offsetSet($offset, $value): ?bool {
         $this->validType($value);
         return parent::offsetSet($offset, $value);
     }
@@ -89,8 +81,7 @@ class ResumeCollection extends ArrayCollection
     /**
      * {@inheritDoc}
      */
-    public function set($key, $value) : void
-    {
+    public function set($key, $value): void {
         $this->validType($value);
         parent::set($key, $value);
     }
@@ -102,8 +93,7 @@ class ResumeCollection extends ArrayCollection
      *
      * @throws \TypeError If this is the wrong type.
      */
-    private function validType($entity)
-    {
+    private function validType($entity) {
         if (!$entity instanceof Resume) {
             throw new \TypeError("Entité [Resume] attendue.");
         }
