@@ -14,30 +14,32 @@ use Doctrine\ORM\EntityManager;
  *
  * @author nairus
  */
-class ResumeService implements ResumeServiceInterface
-{
+class ResumeService implements ResumeServiceInterface {
 
     /**
      *
      * @var ResumeRepository
      */
-    private $resumeRespository;
+    private $resumeRepository;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->resumeRespository = $entityManager->getRepository(NSResumeBundle::NAME . ":Resume");
+    /**
+     * Constructor.
+     *
+     * @param EntityManager $entityManager The current entity manager.
+     */
+    public function __construct(EntityManager $entityManager) {
+        $this->resumeRepository = $entityManager->getRepository(NSResumeBundle::NAME . ":Resume");
     }
 
     /**
      * {@inheritDoc}
      */
-    public function findAllOnlineForPage(int $page, int $nbPerPage): \Doctrine\ORM\Tools\Pagination\Paginator
-    {
+    public function findAllOnlineForPage(int $page, int $nbPerPage): \Doctrine\ORM\Tools\Pagination\Paginator {
         if ($page < 1) {
             throw new ResumeListException($page, "Wrong page", ExceptionCodeEnums::WRONG_PAGE);
         }
 
-        $resumePaginator = $this->resumeRespository->findAllOnlineForPage($page, $nbPerPage);
+        $resumePaginator = $this->resumeRepository->findAllOnlineForPage($page, $nbPerPage);
         if (0 === count($resumePaginator->getQuery()->getResult())) {
             throw new ResumeListException($page, "Page not found", ExceptionCodeEnums::PAGE_NOT_FOUND);
         }

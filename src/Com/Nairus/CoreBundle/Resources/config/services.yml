@@ -1,4 +1,7 @@
 services:
-#    ns_core.example:
-#        class: NSCoreBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    ns_core.news_service:
+        public: true
+        class: Com\Nairus\CoreBundle\Service\NewsService
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+            - [setAvailableLocales, ["%available_locales%"]]
