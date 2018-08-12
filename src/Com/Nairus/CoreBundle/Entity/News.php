@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="ns_news")
  * @ORM\Entity(repositoryClass="Com\Nairus\CoreBundle\Repository\NewsRepository")
- * @ORM\HaslifecycleCallbacks()
+ * @ORM\HasLifecycleCallbacks()
  */
 class News {
 

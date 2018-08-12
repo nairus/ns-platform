@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *         "locale", "news_id"
  *     })})
  * @ORM\Entity(repositoryClass="Com\Nairus\CoreBundle\Repository\NewsContentRepository")
- * @ORM\HaslifecycleCallbacks()
+ * @ORM\HasLifecycleCallbacks()
  */
 class NewsContent {
 
