@@ -214,7 +214,7 @@ class News {
     }
 
     /**
-     * @ORM\Prepersist
+     * @ORM\PrePersist
      */
     public function preInsert() {
         $this->setCreatedAt(new \DateTimeImmutable());
