@@ -5,7 +5,7 @@ namespace Com\Nairus\CoreBundle\Service;
 use Com\Nairus\CoreBundle\NSCoreBundle;
 use Com\Nairus\CoreBundle\Exception\LocaleError;
 use Com\Nairus\CoreBundle\Repository\NewsContentRepository;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Implementation of News service.
@@ -27,9 +27,9 @@ class NewsService implements NewsServiceInterface {
     /**
      * Constructor.
      *
-     * @param EntityManager $entityManager The current entity manager.
+     * @param EntityManagerInterface $entityManager The current entity manager.
      */
-    public function __construct(EntityManager $entityManager) {
+    public function __construct(EntityManagerInterface $entityManager) {
         $this->newsContentRepository = $entityManager->getRepository(NSCoreBundle::NAME . ":NewsContent");
     }
 

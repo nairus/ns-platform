@@ -1,0 +1,4 @@
+## Parameters config for CoreBundle
+
+parameters:
+    ns_core.last_news_limit: 3
