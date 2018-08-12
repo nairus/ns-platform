@@ -216,17 +216,32 @@ class News {
     /**
      * @ORM\Prepersist
      */
-    public function addCreationDate() {
+    public function preInsert() {
         $this->setCreatedAt(new \DateTimeImmutable());
+        $this->publish();
     }
 
     /**
      * @ORM\PreUpdate
      */
-    public function publish() {
+    public function preUpdate() {
+        $this->publish();
+    }
+
+    /**
+     * Add published date if the status is TRUE.
+     */
+    private function publish() {
         if ($this->getPublished()) {
             $this->setPublishedAt(new \DateTime());
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString() {
+        return "[News] id: " . $this->getId();
     }
 
 }

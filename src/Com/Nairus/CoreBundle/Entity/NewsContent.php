@@ -260,4 +260,11 @@ class NewsContent {
         $this->setCreatedAt(new \DateTimeImmutable());
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString() {
+        return "[NewsContent] id: " . $this->getId() . " - " . $this->getTitle() . " - " . $this->getLocale();
+    }
+
 }

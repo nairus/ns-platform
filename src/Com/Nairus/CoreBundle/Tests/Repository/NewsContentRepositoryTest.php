@@ -6,6 +6,7 @@ use Com\Nairus\CoreBundle\NSCoreBundle;
 use Com\Nairus\CoreBundle\Entity\News;
 use Com\Nairus\CoreBundle\Entity\NewsContent;
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
+use Com\Nairus\CoreBundle\Tests\DataFixtures\Unit\LoadNewsPublished;
 
 /**
  * Test of NewsContent Repository
@@ -24,10 +25,16 @@ class NewsContentRepositoryTest extends AbstractKernelTestCase {
      */
     private static $newsRepository;
 
+    /**
+     * @var LoadNewsPublished
+     */
+    private static $loadNewsPublished;
+
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSCoreBundle::NAME . ":NewsContent");
         static::$newsRepository = static::$em->getRepository(NSCoreBundle::NAME . ":News");
+        static::$loadNewsPublished = new LoadNewsPublished();
     }
 
     /**
@@ -46,6 +53,7 @@ class NewsContentRepositoryTest extends AbstractKernelTestCase {
                 ->setDescription("Description FR")
                 ->setLink("http://www.news.fr")
                 ->setLocale("fr");
+        $news->addContent($contentFr);
 
         $contentEn = new NewsContent();
         $contentEn->setNews($news);
@@ -53,15 +61,14 @@ class NewsContentRepositoryTest extends AbstractKernelTestCase {
                 ->setDescription("Description EN")
                 ->setLink("http://www.news.com")
                 ->setLocale("en");
+        $news->addContent($contentEn);
 
-        static::$em->persist($contentFr);
-        static::$em->persist($contentEn);
         static::$em->flush();
         static::$em->clear();
 
         // Get the news content collection.
         $newsContentList = static::$repository->findAll();
-        $this->assertCount(2, $newsContentList, "1.1 The collection has to contain 1 entity.");
+        $this->assertCount(2, $newsContentList, "1.1 The collection has to contain 2 entities.");
 
         /* @var $firstContent NewsContent */
         $firstContent = $newsContentList[0];
@@ -105,12 +112,41 @@ class NewsContentRepositoryTest extends AbstractKernelTestCase {
         $this->assertCount(0, $contents, "3.2 All the remaining content has to be removed.");
     }
 
+    /**
+     * Test the insert without foreign key.
+     *
+     * @expectedException \Doctrine\DBAL\Exception\NotNullConstraintViolationException
+     */
     public function testInsertWithoutNews() {
-        $this->markTestIncomplete("Todo");
+        // Create contents
+        $contentFr = new NewsContent();
+        $contentFr->setTitle("Titre FR")
+                ->setDescription("Description FR")
+                ->setLink("http://www.news.fr");
+        static::$em->persist($contentFr);
+        static::$em->flush();
     }
 
-    public function testInsertUniqueNewsContent() {
-        $this->markTestIncomplete("Todo");
+    /**
+     * Test the findLastNewsPublished methode
+     */
+    public function testFindLastNewsPublished() {
+        // Init datas test set.
+        static::$loadNewsPublished->load(static::$em);
+
+        // Test with FR locale.
+        $lastNewsFr = static::$repository->findLastNewsPublished(2, "fr");
+        $this->assertCount(2, $lastNewsFr, "1.1 The FR collection has to contain 2 entities.");
+        /* @var $firstContent NewsContent */
+        $firstContent = $lastNewsFr[0];
+        $this->assertEquals("Titre 2 FR", $firstContent->getTitle(), "1.1 The first entity has to be correct.");
+
+        // Test with EN locale.
+        $lastNewsEn = static::$repository->findLastNewsPublished(2, "en");
+        $this->assertCount(1, $lastNewsEn, "2.1 The EN collection has to contain 1 entity.");
+
+        // Remove datas test set.
+        static::$loadNewsPublished->remove(static::$em);
     }
 
 }
