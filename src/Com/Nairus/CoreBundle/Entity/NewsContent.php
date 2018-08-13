@@ -3,6 +3,7 @@
 namespace Com\Nairus\CoreBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -74,23 +75,10 @@ class NewsContent {
     private $news;
 
     /**
-     * News creation date.
-     *
-     * @var \DateTimeImmutable
-     *
-     * @ORM\Column(name="createdAt", type="datetime_immutable")
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
      */
-    private $createdAt;
-
-    /**
-     * News update date.
-     *
-     * @var \DateTime|null
-     *
-     * @Gedmo\Timestampable
-     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
-     */
-    private $updatedAt;
+    use TimestampableEntity;
 
     /**
      * Get id.
@@ -188,50 +176,6 @@ class NewsContent {
     }
 
     /**
-     * Set createdAt.
-     *
-     * @param \DateTimeImmutable $createdAt
-     *
-     * @return NewsContent
-     */
-    public function setCreatedAt(\DateTimeImmutable $createdAt): NewsContent {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt.
-     *
-     * @return \DateTimeImmutable
-     */
-    public function getCreatedAt(): \DateTimeImmutable {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt.
-     *
-     * @param \DateTime|null $updatedAt
-     *
-     * @return NewsContent
-     */
-    public function setUpdatedAt(\DateTime $updatedAt = null): NewsContent {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt.
-     *
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt(): ?\DateTime {
-        return $this->updatedAt;
-    }
-
-    /**
      * Set news.
      *
      * @param News $news
@@ -251,13 +195,6 @@ class NewsContent {
      */
     public function getNews(): News {
         return $this->news;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function addCreationDate() {
-        $this->setCreatedAt(new \DateTimeImmutable());
     }
 
     /**

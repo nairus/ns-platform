@@ -2,9 +2,11 @@
 
 namespace Com\Nairus\CoreBundle\Entity;
 
+use Com\Nairus\CoreBundle\Entity\Traits\PublishedTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,43 +30,6 @@ class News {
     private $id;
 
     /**
-     * News creation date.
-     *
-     * @var datetime_immutable
-     *
-     * @ORM\Column(name="createdAt", type="datetime_immutable")
-     */
-    private $createdAt;
-
-    /**
-     * News update date.
-     *
-     * @var \DateTime|null
-     *
-     * @Gedmo\Timestampable
-     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
-     */
-    private $updatedAt;
-
-    /**
-     * News publication date.
-     *
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="publishedAt", type="datetime", nullable=true)
-     */
-    private $publishedAt;
-
-    /**
-     * News publication status.
-     *
-     * @var bool
-     *
-     * @ORM\Column(name="published", type="boolean")
-     */
-    private $published;
-
-    /**
      * @var Collection
      *
      * @ORM\OneToMany(
@@ -76,11 +41,21 @@ class News {
     private $contents;
 
     /**
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
+     */
+    use TimestampableEntity;
+
+/**
+     * Published behavior.
+     */
+    use PublishedTrait;
+
+    /**
      * Constructor
      */
     public function __construct() {
         $this->contents = new ArrayCollection();
-        $this->published = false;
     }
 
     /**
@@ -90,94 +65,6 @@ class News {
      */
     public function getId(): int {
         return $this->id;
-    }
-
-    /**
-     * Set createdAt.
-     *
-     * @param DateTimeInterface $createdAt
-     *
-     * @return News
-     */
-    public function setCreatedAt(\DateTimeInterface $createdAt): News {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt.
-     *
-     * @return DateTimeInterface
-     */
-    public function getCreatedAt(): ?\DateTimeInterface {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt.
-     *
-     * @param \DateTimeInterface|null $updatedAt
-     *
-     * @return News
-     */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt = null): News {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt.
-     *
-     * @return \DateTimeInterface|null
-     */
-    public function getUpdatedAt(): ?\DateTimeInterface {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Set publishedAt.
-     *
-     * @param \DateTimeInterface|null $publishedAt
-     *
-     * @return News
-     */
-    public function setPublishedAt(\DateTimeInterface $publishedAt = null): News {
-        $this->publishedAt = $publishedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get publishedAt.
-     *
-     * @return \DateTimeInterface|null
-     */
-    public function getPublishedAt(): ?\DateTimeInterface {
-        return $this->publishedAt;
-    }
-
-    /**
-     * Set published.
-     *
-     * @param bool $published
-     *
-     * @return News
-     */
-    public function setPublished(bool $published): News {
-        $this->published = $published;
-
-        return $this;
-    }
-
-    /**
-     * Get published.
-     *
-     * @return bool
-     */
-    public function getPublished(): bool {
-        return $this->published;
     }
 
     /**
@@ -211,30 +98,6 @@ class News {
      */
     public function getContents(): Collection {
         return $this->contents;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function preInsert() {
-        $this->setCreatedAt(new \DateTimeImmutable());
-        $this->publish();
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate() {
-        $this->publish();
-    }
-
-    /**
-     * Add published date if the status is TRUE.
-     */
-    private function publish() {
-        if ($this->getPublished()) {
-            $this->setPublishedAt(new \DateTime());
-        }
     }
 
     /**
