@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ns_education")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\EducationRepository")
  */
-class Education
-{
+class Education {
+
     /**
      * @var int
      *
@@ -24,42 +24,42 @@ class Education
     /**
      * @var string
      *
-     * @ORM\Column(name="institution", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $institution;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="diploma", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $diploma;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="domain", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $domain;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="startYear", type="smallint")
+     * @ORM\Column(type="smallint")
      */
     private $startYear;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="endYear", type="smallint")
+     * @ORM\Column(type="smallint")
      */
     private $endYear;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(type="text")
      */
     private $description;
 
@@ -76,8 +76,7 @@ class Education
      *
      * @return int
      */
-    public function getId() : int
-    {
+    public function getId(): int {
         return $this->id;
     }
 
@@ -88,8 +87,7 @@ class Education
      *
      * @return Education
      */
-    public function setInstitution(string $institution) : Education
-    {
+    public function setInstitution(string $institution): Education {
         $this->institution = $institution;
 
         return $this;
@@ -100,8 +98,7 @@ class Education
      *
      * @return string
      */
-    public function getInstitution() : string
-    {
+    public function getInstitution(): string {
         return $this->institution;
     }
 
@@ -112,8 +109,7 @@ class Education
      *
      * @return Education
      */
-    public function setDiploma(string $diploma) : Education
-    {
+    public function setDiploma(string $diploma): Education {
         $this->diploma = $diploma;
 
         return $this;
@@ -124,8 +120,7 @@ class Education
      *
      * @return string
      */
-    public function getDiploma() : string
-    {
+    public function getDiploma(): string {
         return $this->diploma;
     }
 
@@ -136,8 +131,7 @@ class Education
      *
      * @return Education
      */
-    public function setDomain(string $domain) : Education
-    {
+    public function setDomain(string $domain): Education {
         $this->domain = $domain;
 
         return $this;
@@ -148,8 +142,7 @@ class Education
      *
      * @return string
      */
-    public function getDomain() : string
-    {
+    public function getDomain(): string {
         return $this->domain;
     }
 
@@ -160,8 +153,7 @@ class Education
      *
      * @return Education
      */
-    public function setStartYear(int $startYear) : Education
-    {
+    public function setStartYear(int $startYear): Education {
         $this->startYear = $startYear;
 
         return $this;
@@ -172,8 +164,7 @@ class Education
      *
      * @return int
      */
-    public function getStartYear() : int
-    {
+    public function getStartYear(): int {
         return $this->startYear;
     }
 
@@ -184,8 +175,7 @@ class Education
      *
      * @return Education
      */
-    public function setEndYear(int $endYear) : Education
-    {
+    public function setEndYear(int $endYear): Education {
         $this->endYear = $endYear;
 
         return $this;
@@ -196,8 +186,7 @@ class Education
      *
      * @return int
      */
-    public function getEndYear() : int
-    {
+    public function getEndYear(): int {
         return $this->endYear;
     }
 
@@ -208,8 +197,7 @@ class Education
      *
      * @return Education
      */
-    public function setDescription(string $description) : Education
-    {
+    public function setDescription(string $description): Education {
         $this->description = $description;
 
         return $this;
@@ -220,8 +208,7 @@ class Education
      *
      * @return string
      */
-    public function getDescription() : string
-    {
+    public function getDescription(): string {
         return $this->description;
     }
 
@@ -232,8 +219,7 @@ class Education
      *
      * @return Education
      */
-    public function setResume(Resume $resume) : Education
-    {
+    public function setResume(Resume $resume): Education {
         $this->resume = $resume;
 
         return $this;
@@ -244,8 +230,8 @@ class Education
      *
      * @return Resume
      */
-    public function getResume() : Resume
-    {
+    public function getResume(): Resume {
         return $this->resume;
     }
+
 }

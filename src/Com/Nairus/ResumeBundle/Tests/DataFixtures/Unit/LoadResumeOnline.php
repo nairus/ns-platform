@@ -30,7 +30,7 @@ class LoadResumeOnline implements FixtureInterface {
     public function load(ObjectManager $manager): void {
         $user = new User();
         $user
-                ->setUsername("nairus")
+                ->setUsername("me")
                 ->setEmail("test@nairus.fr")
                 ->setPassword("testpass")
                 ->setEmailCanonical("test@nairus.fr")
@@ -53,6 +53,7 @@ class LoadResumeOnline implements FixtureInterface {
         $manager->persist($profile);
         $this->prepareResumeDatas($manager, $user);
         $manager->flush();
+        $manager->clear();
     }
 
     /**
@@ -105,13 +106,14 @@ class LoadResumeOnline implements FixtureInterface {
         }
 
         /* @var $user User */
-        $user = $userRepository->findOneByUsername("nairus");
+        $user = $userRepository->findOneByUsername("me");
 
         /* @var $profile Profile */
         $profile = $profileRepository->findOneBy(["user" => $user]);
         $manager->remove($profile);
         $manager->remove($user);
         $manager->flush();
+        $manager->clear();
     }
 
     /**
@@ -125,17 +127,16 @@ class LoadResumeOnline implements FixtureInterface {
         /* @var $skillLevel SkillLevel */
         $skillLevel = $manager->find(NSResumeBundle::NAME . ":SkillLevel", 1);
 
-        $today = new \DateTimeImmutable("7 days ago");
-
         for ($index = 0; $index < 3; $index++) {
-            $creationDate = $today->add(new \DateInterval("P" . ($index + 1) . "D"));
+            $creationDate = new \DateTime("7 days ago");
+            $creationDate->add(new \DateInterval("P" . ($index + 1) . "D"));
             $resume = new Resume();
             $resume
                     ->setIp("127.0.0.1")
                     ->setTitle("Test" . $index)
                     ->setAuthor($user)
                     ->setStatus(ResumeStatusEnum::ONLINE)
-                    ->setCreationDate($creationDate);
+                    ->setCreatedAt($creationDate);
             $manager->persist($resume);
 
             // On insère des données nécessaires pour les 2 premiers cv uniquement.

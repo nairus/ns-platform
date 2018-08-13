@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ns_experience")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ExperienceRepository")
  */
-class Experience
-{
+class Experience {
+
     /**
      * @var int
      *
@@ -24,35 +24,35 @@ class Experience
     /**
      * @var string
      *
-     * @ORM\Column(name="company", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $company;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="location", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $location;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(type="text")
      */
     private $description;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="startMonth", type="smallint")
+     * @ORM\Column(type="smallint")
      */
     private $startMonth;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="endMonth", type="smallint", nullable=true)
+     * @ORM\Column(type="smallint", nullable=true)
      */
     private $endMonth;
 
@@ -66,14 +66,14 @@ class Experience
     /**
      * @var int
      *
-     * @ORM\Column(name="endYear", type="smallint", nullable=true)
+     * @ORM\Column(type="smallint", nullable=true)
      */
     private $endYear;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="currentJob", type="boolean")
+     * @ORM\Column(type="boolean")
      */
     private $currentJob;
 
@@ -88,8 +88,7 @@ class Experience
     /**
      * Constructeur.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->currentJob = false;
     }
 
@@ -98,8 +97,7 @@ class Experience
      *
      * @return int
      */
-    public function getId() : int
-    {
+    public function getId(): int {
         return $this->id;
     }
 
@@ -110,8 +108,7 @@ class Experience
      *
      * @return Experience
      */
-    public function setCompany(string $company) : Experience
-    {
+    public function setCompany(string $company): Experience {
         $this->company = $company;
 
         return $this;
@@ -122,8 +119,7 @@ class Experience
      *
      * @return string
      */
-    public function getCompany() : string
-    {
+    public function getCompany(): string {
         return $this->company;
     }
 
@@ -134,8 +130,7 @@ class Experience
      *
      * @return Experience
      */
-    public function setLocation(string $location) : Experience
-    {
+    public function setLocation(string $location): Experience {
         $this->location = $location;
 
         return $this;
@@ -146,8 +141,7 @@ class Experience
      *
      * @return string
      */
-    public function getLocation() : string
-    {
+    public function getLocation(): string {
         return $this->location;
     }
 
@@ -158,8 +152,7 @@ class Experience
      *
      * @return Experience
      */
-    public function setDescription(string $description) : Experience
-    {
+    public function setDescription(string $description): Experience {
         $this->description = $description;
 
         return $this;
@@ -170,8 +163,7 @@ class Experience
      *
      * @return string
      */
-    public function getDescription(): string
-    {
+    public function getDescription(): string {
         return $this->description;
     }
 
@@ -182,8 +174,7 @@ class Experience
      *
      * @return Experience
      */
-    public function setStartMonth(int $startMonth) : Experience
-    {
+    public function setStartMonth(int $startMonth): Experience {
         $this->startMonth = $startMonth;
 
         return $this;
@@ -194,8 +185,7 @@ class Experience
      *
      * @return int
      */
-    public function getStartMonth() : int
-    {
+    public function getStartMonth(): int {
         return $this->startMonth;
     }
 
@@ -206,8 +196,7 @@ class Experience
      *
      * @return Experience
      */
-    public function setEndMonth(int $endMonth) : Experience
-    {
+    public function setEndMonth(int $endMonth): Experience {
         $this->endMonth = $endMonth;
 
         return $this;
@@ -218,8 +207,7 @@ class Experience
      *
      * @return int
      */
-    public function getEndMonth() : int
-    {
+    public function getEndMonth(): int {
         return $this->endMonth;
     }
 
@@ -230,8 +218,7 @@ class Experience
      *
      * @return Experience
      */
-    public function setStartYear(int $startYear) : Experience
-    {
+    public function setStartYear(int $startYear): Experience {
         $this->startYear = $startYear;
 
         return $this;
@@ -242,8 +229,7 @@ class Experience
      *
      * @return int
      */
-    public function getStartYear() : int
-    {
+    public function getStartYear(): int {
         return $this->startYear;
     }
 
@@ -254,8 +240,7 @@ class Experience
      *
      * @return Experience
      */
-    public function setEndYear(int $endYear) : Experience
-    {
+    public function setEndYear(int $endYear): Experience {
         $this->endYear = $endYear;
 
         return $this;
@@ -266,8 +251,7 @@ class Experience
      *
      * @return int
      */
-    public function getEndYear() : int
-    {
+    public function getEndYear(): int {
         return $this->endYear;
     }
 
@@ -278,8 +262,7 @@ class Experience
      *
      * @return Experience
      */
-    public function setCurrentJob(bool $currentJob) : Experience
-    {
+    public function setCurrentJob(bool $currentJob): Experience {
         $this->currentJob = $currentJob;
 
         return $this;
@@ -290,8 +273,7 @@ class Experience
      *
      * @return bool
      */
-    public function getCurrentJob() : bool
-    {
+    public function getCurrentJob(): bool {
         return $this->currentJob;
     }
 
@@ -302,8 +284,7 @@ class Experience
      *
      * @return Experience
      */
-    public function setResume(Resume $resume) : Experience
-    {
+    public function setResume(Resume $resume): Experience {
         $this->resume = $resume;
 
         return $this;
@@ -314,8 +295,8 @@ class Experience
      *
      * @return Resume
      */
-    public function getResume() : Resume
-    {
+    public function getResume(): Resume {
         return $this->resume;
     }
+
 }

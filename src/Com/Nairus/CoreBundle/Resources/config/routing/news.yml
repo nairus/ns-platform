@@ -1,0 +1,24 @@
+news_index:
+    path:     /
+    defaults: { _controller: "NSCoreBundle:News:index" }
+    methods:  GET
+
+news_show:
+    path:     /{id}/show
+    defaults: { _controller: "NSCoreBundle:News:show" }
+    methods:  GET
+
+news_new:
+    path:     /new
+    defaults: { _controller: "NSCoreBundle:News:new" }
+    methods:  [GET, POST]
+
+news_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "NSCoreBundle:News:edit" }
+    methods:  [GET, POST]
+
+news_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "NSCoreBundle:News:delete" }
+    methods:  DELETE

@@ -15,7 +15,7 @@ trait PublishedTrait {
      *
      * @var \DateTime|null
      *
-     * @ORM\Column(name="publishedAt", type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $publishedAt;
 
@@ -24,7 +24,7 @@ trait PublishedTrait {
      *
      * @var bool
      *
-     * @ORM\Column(name="published", type="boolean")
+     * @ORM\Column(type="boolean")
      */
     private $published = false;
 

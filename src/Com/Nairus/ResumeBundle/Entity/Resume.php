@@ -6,6 +6,7 @@ use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * Resume
@@ -14,8 +15,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ResumeRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Resume
-{
+class Resume {
+
     /**
      * @var int
      *
@@ -28,28 +29,28 @@ class Resume
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $title;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="anonymous", type="boolean")
+     * @ORM\Column(type="boolean")
      */
     private $anonymous;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="status", type="smallint")
+     * @ORM\Column(type="smallint")
      */
     private $status;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ip", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $ip;
 
@@ -83,24 +84,14 @@ class Resume
     private $educations;
 
     /**
-     * @var \DateTimeInterface
-     *
-     * @ORM\Column(name="creationDate", type="datetime")
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
      */
-    private $creationDate;
+    use TimestampableEntity;
 
-    /**
-     * @var \DateTimeInterface
-     *
-     * @ORM\Column(name="updateDate", type="datetime", nullable=true)
-     */
-    private $updateDate;
-
-    public function __construct()
-    {
+    public function __construct() {
         $this->status = ResumeStatusEnum::OFFLINE_INCOMPLETE;
         $this->anonymous = false;
-        $this->creationDate = new \DateTime();
         $this->resumeSkills = new ArrayCollection();
         $this->experiences = new ArrayCollection();
         $this->educations = new ArrayCollection();
@@ -111,8 +102,7 @@ class Resume
      *
      * @return int
      */
-    public function getId() : int
-    {
+    public function getId(): int {
         return $this->id;
     }
 
@@ -123,8 +113,7 @@ class Resume
      *
      * @return Resume
      */
-    public function setTitle(string $title) : Resume
-    {
+    public function setTitle(string $title): Resume {
         $this->title = $title;
 
         return $this;
@@ -135,8 +124,7 @@ class Resume
      *
      * @return string
      */
-    public function getTitle() : string
-    {
+    public function getTitle(): string {
         return $this->title;
     }
 
@@ -147,8 +135,7 @@ class Resume
      *
      * @return Resume
      */
-    public function setAnonymous(bool $anonymous) : Resume
-    {
+    public function setAnonymous(bool $anonymous): Resume {
         $this->anonymous = $anonymous;
 
         return $this;
@@ -159,8 +146,7 @@ class Resume
      *
      * @return bool
      */
-    public function getAnonymous() : bool
-    {
+    public function getAnonymous(): bool {
         return $this->anonymous;
     }
 
@@ -171,8 +157,7 @@ class Resume
      *
      * @return Resume
      */
-    public function setStatus(int $status) : Resume
-    {
+    public function setStatus(int $status): Resume {
         $this->status = $status;
 
         return $this;
@@ -183,57 +168,8 @@ class Resume
      *
      * @return int
      */
-    public function getStatus() : int
-    {
+    public function getStatus(): int {
         return $this->status;
-    }
-
-    /**
-     * Set creationDate
-     *
-     * @param \DateTimeInterface $creationDate
-     *
-     * @return Resume
-     */
-    public function setCreationDate(\DateTimeInterface $creationDate) : Resume
-    {
-        $this->creationDate = $creationDate;
-
-        return $this;
-    }
-
-    /**
-     * Get creationDate
-     *
-     * @return \DateTimeInterface
-     */
-    public function getCreationDate() : \DateTimeInterface
-    {
-        return $this->creationDate;
-    }
-
-    /**
-     * Set updateDate
-     *
-     * @param \DateTimeInterface $updateDate
-     *
-     * @return Resume
-     */
-    public function setUpdateDate(\DateTimeInterface $updateDate): Resume
-    {
-        $this->updateDate = $updateDate;
-
-        return $this;
-    }
-
-    /**
-     * Get updateDate
-     *
-     * @return \DateTimeInterface
-     */
-    public function getUpdateDate() : \DateTimeInterface
-    {
-        return $this->updateDate;
     }
 
     /**
@@ -243,8 +179,7 @@ class Resume
      *
      * @return Resume
      */
-    public function setAuthor(User $author) : Resume
-    {
+    public function setAuthor(User $author): Resume {
         $this->author = $author;
 
         return $this;
@@ -255,8 +190,7 @@ class Resume
      *
      * @return User
      */
-    public function getAuthor() : User
-    {
+    public function getAuthor(): User {
         return $this->author;
     }
 
@@ -267,8 +201,7 @@ class Resume
      *
      * @return Resume
      */
-    public function addResumeSkill(ResumeSkill $resumeSkill) : Resume
-    {
+    public function addResumeSkill(ResumeSkill $resumeSkill): Resume {
         $this->resumeSkills[] = $resumeSkill;
 
         return $this;
@@ -279,8 +212,7 @@ class Resume
      *
      * @param ResumeSkill $resumeSkill
      */
-    public function removeResumeSkill(ResumeSkill $resumeSkill)
-    {
+    public function removeResumeSkill(ResumeSkill $resumeSkill) {
         $this->resumeSkills->removeElement($resumeSkill);
     }
 
@@ -289,8 +221,7 @@ class Resume
      *
      * @return Collection <ResumeSkill>
      */
-    public function getResumeSkills() : Collection
-    {
+    public function getResumeSkills(): Collection {
         return $this->resumeSkills;
     }
 
@@ -301,8 +232,7 @@ class Resume
      *
      * @return Resume
      */
-    public function addExperience(Experience $experience) : Resume
-    {
+    public function addExperience(Experience $experience): Resume {
         $this->experiences[] = $experience;
 
         return $this;
@@ -313,8 +243,7 @@ class Resume
      *
      * @param Experience $experience
      */
-    public function removeExperience(Experience $experience)
-    {
+    public function removeExperience(Experience $experience) {
         $this->experiences->removeElement($experience);
     }
 
@@ -323,8 +252,7 @@ class Resume
      *
      * @return Collection <Experience>
      */
-    public function getExperiences() : Collection
-    {
+    public function getExperiences(): Collection {
         return $this->experiences;
     }
 
@@ -335,8 +263,7 @@ class Resume
      *
      * @return Resume
      */
-    public function addEducation(Education $education) : Resume
-    {
+    public function addEducation(Education $education): Resume {
         $this->educations[] = $education;
 
         return $this;
@@ -347,8 +274,7 @@ class Resume
      *
      * @param Education $education
      */
-    public function removeEducation(Education $education)
-    {
+    public function removeEducation(Education $education) {
         $this->educations->removeElement($education);
     }
 
@@ -357,8 +283,7 @@ class Resume
      *
      * @return Collection <Education>
      */
-    public function getEducations() : Collection
-    {
+    public function getEducations(): Collection {
         return $this->educations;
     }
 
@@ -369,8 +294,7 @@ class Resume
      *
      * @return Resume
      */
-    public function setIp(string $ip) : Resume
-    {
+    public function setIp(string $ip): Resume {
         $this->ip = $ip;
 
         return $this;
@@ -381,18 +305,8 @@ class Resume
      *
      * @return string
      */
-    public function getIp() : string
-    {
+    public function getIp(): string {
         return $this->ip;
     }
 
-    /**
-     * Méthode invoquée avant chaque update.
-     *
-     * @ORM\PreUpdate
-     */
-    public function updateDate()
-    {
-        $this->setUpdateDate(new \DateTime());
-    }
 }

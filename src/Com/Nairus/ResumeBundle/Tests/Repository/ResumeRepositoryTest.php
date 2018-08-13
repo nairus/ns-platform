@@ -74,7 +74,7 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
         $this->assertSame(true, $resume->getAnonymous(), "2.1. Le champ [anomymous] doit être mise à jour.");
         $this->assertSame(ResumeStatusEnum::OFFLINE_TO_PUBLISHED, $resume->getStatus(), "2.2. Le champ [status] doit être mise à jour.");
         $this->assertSame("Test MAJ", $resume->getTitle(), "2.3. Le champ [title] doit être mise à jour.");
-        $this->assertInstanceOf(\DateTimeInterface::class, $resume->getUpdateDate(), "2.4. La date de mise à jour doit automatiquement définie.");
+        $this->assertInstanceOf(\DateTimeInterface::class, $resume->getUpdatedAt(), "2.4. La date de mise à jour doit automatiquement définie.");
 
         // Delete test
         $id = $resume->getId();

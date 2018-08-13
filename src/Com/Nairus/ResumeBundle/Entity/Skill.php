@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ns_skill")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\SkillRepository")
  */
-class Skill
-{
+class Skill {
+
     /**
      * @var int
      *
@@ -24,18 +24,16 @@ class Skill
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $title;
-
 
     /**
      * Get id
      *
      * @return int
      */
-    public function getId() : int
-    {
+    public function getId(): int {
         return $this->id;
     }
 
@@ -46,8 +44,7 @@ class Skill
      *
      * @return Skill
      */
-    public function setTitle(string $title) : Skill
-    {
+    public function setTitle(string $title): Skill {
         $this->title = $title;
 
         return $this;
@@ -58,8 +55,7 @@ class Skill
      *
      * @return string
      */
-    public function getTitle() : string
-    {
+    public function getTitle(): string {
         return $this->title;
     }
 

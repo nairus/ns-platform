@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ns_avatar")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\AvatarRepository")
  */
-class Avatar
-{
+class Avatar {
+
     /**
      * @var int
      *
@@ -24,14 +24,14 @@ class Avatar
     /**
      * @var string
      *
-     * @ORM\Column(name="imageSrcPath", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $imageSrcPath;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="imageThbPath", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $imageThbPath;
 
@@ -48,8 +48,7 @@ class Avatar
      *
      * @return int
      */
-    public function getId() : int
-    {
+    public function getId(): int {
         return $this->id;
     }
 
@@ -60,8 +59,7 @@ class Avatar
      *
      * @return Avatar
      */
-    public function setImageSrcPath(string $imageSrcPath) : Avatar
-    {
+    public function setImageSrcPath(string $imageSrcPath): Avatar {
         $this->imageSrcPath = $imageSrcPath;
 
         return $this;
@@ -72,8 +70,7 @@ class Avatar
      *
      * @return string
      */
-    public function getImageSrcPath() : string
-    {
+    public function getImageSrcPath(): string {
         return $this->imageSrcPath;
     }
 
@@ -84,8 +81,7 @@ class Avatar
      *
      * @return Avatar
      */
-    public function setImageThbPath(string $imageThbPath) : Avatar
-    {
+    public function setImageThbPath(string $imageThbPath): Avatar {
         $this->imageThbPath = $imageThbPath;
 
         return $this;
@@ -96,8 +92,7 @@ class Avatar
      *
      * @return string
      */
-    public function getImageThbPath() : string
-    {
+    public function getImageThbPath(): string {
         return $this->imageThbPath;
     }
 
@@ -108,8 +103,7 @@ class Avatar
      *
      * @return Avatar
      */
-    public function setProfile(Profile $profile) : Avatar
-    {
+    public function setProfile(Profile $profile): Avatar {
         $this->profile = $profile;
 
         return $this;
@@ -120,8 +114,8 @@ class Avatar
      *
      * @return Profile
      */
-    public function getProfile() : Profile
-    {
+    public function getProfile(): Profile {
         return $this->profile;
     }
+
 }

@@ -2,12 +2,29 @@
 # https://symfony.com/doc/current/security.html
 security:
     encoders:
-        Com\Nairus\ResumeBundle\Entity\User: sha512
+        Symfony\Component\Security\Core\User\User:
+            algorithm: bcrypt
+            cost: 12
+
+    role_hierarchy:
+        ROLE_USER:        [ROLE_AUTHOR]
+        ROLE_ADMIN:       [ROLE_AUTHOR, ROLE_MODERATOR]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    user:
+                        password: $2y$12$4vqyC8fliwvIPazwIeHtTOjTlnEc22GpoKggw7kDA5pnbK1Mm2DEm
+                        roles: 'ROLE_USER'
+                    admin:
+                        password: $2y$12$poMKQzywlEZimGOh8uXqU.CvtUdOD03kc6vMnn1wFhCcS8sWjXS0y
+                        roles: 'ROLE_ADMIN'
+                    nairus:
+                        password: $2y$12$ldGSUKNiWk/Gmlhqd1ovx.bmRui9.MAuAxlPxXevOTvvCeH79E.NS
+                        roles: 'ROLE_SUPER_ADMIN'
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -16,11 +33,10 @@ security:
             security: false
 
         main:
-            anonymous: ~
-            # activate different ways to authenticate
+            pattern: ^/
+            anonymous: true
+            provider: in_memory
+            http_basic: ~
 
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+    access_control:
+        - { path: ^/news, role: ROLE_ADMIN }

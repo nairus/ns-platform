@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ns_resume_skill")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ResumeSkillRepository")
  */
-class ResumeSkill
-{
+class ResumeSkill {
+
     /**
      * @var int
      *
@@ -24,7 +24,7 @@ class ResumeSkill
     /**
      * @var int
      *
-     * @ORM\Column(name="rank", type="smallint")
+     * @ORM\Column(type="smallint")
      */
     private $rank;
 
@@ -57,8 +57,7 @@ class ResumeSkill
      *
      * @return int
      */
-    public function getId() : int
-    {
+    public function getId(): int {
         return $this->id;
     }
 
@@ -69,8 +68,7 @@ class ResumeSkill
      *
      * @return ResumeSkill
      */
-    public function setRank(int $rank) : ResumeSkill
-    {
+    public function setRank(int $rank): ResumeSkill {
         $this->rank = $rank;
 
         return $this;
@@ -81,8 +79,7 @@ class ResumeSkill
      *
      * @return int
      */
-    public function getRank() : int
-    {
+    public function getRank(): int {
         return $this->rank;
     }
 
@@ -93,8 +90,7 @@ class ResumeSkill
      *
      * @return ResumeSkill
      */
-    public function setResume(Resume $resume) : ResumeSkill
-    {
+    public function setResume(Resume $resume): ResumeSkill {
         $this->resume = $resume;
 
         return $this;
@@ -105,8 +101,7 @@ class ResumeSkill
      *
      * @return Resume
      */
-    public function getResume() : Resume
-    {
+    public function getResume(): Resume {
         return $this->resume;
     }
 
@@ -117,8 +112,7 @@ class ResumeSkill
      *
      * @return ResumeSkill
      */
-    public function setSkill(Skill $skill) : ResumeSkill
-    {
+    public function setSkill(Skill $skill): ResumeSkill {
         $this->skill = $skill;
 
         return $this;
@@ -129,8 +123,7 @@ class ResumeSkill
      *
      * @return Skill
      */
-    public function getSkill() : Skill
-    {
+    public function getSkill(): Skill {
         return $this->skill;
     }
 
@@ -141,8 +134,7 @@ class ResumeSkill
      *
      * @return ResumeSkill
      */
-    public function setSkillLevel(SkillLevel $skillLevel) : ResumeSkill
-    {
+    public function setSkillLevel(SkillLevel $skillLevel): ResumeSkill {
         $this->skillLevel = $skillLevel;
 
         return $this;
@@ -153,8 +145,8 @@ class ResumeSkill
      *
      * @return SkillLevel
      */
-    public function getSkillLevel() : SkillLevel
-    {
+    public function getSkillLevel(): SkillLevel {
         return $this->skillLevel;
     }
+
 }

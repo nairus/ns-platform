@@ -2,6 +2,7 @@
 
 namespace Com\Nairus\CoreBundle\Entity;
 
+use Com\Nairus\CoreBundle\Entity\Traits\ContentI18nTrait;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,38 +31,11 @@ class NewsContent {
     private $id;
 
     /**
-     * News title.
-     *
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=50)
-     */
-    private $title;
-
-    /**
-     * News current locale.
-     *
-     * @var string
-     *
-     * @ORM\Column(name="locale", type="string", length=2)
-     */
-    private $locale;
-
-    /**
-     * News descriptions.
-     *
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=255)
-     */
-    private $description;
-
-    /**
      * News link.
      *
      * @var string
      *
-     * @ORM\Column(name="link", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $link;
 
@@ -75,6 +49,11 @@ class NewsContent {
     private $news;
 
     /**
+     * I18n content fields behaviors.
+     */
+    use ContentI18nTrait;
+
+/**
      * Hook timestampable behavior
      * updates createdAt, updatedAt fields
      */
@@ -87,70 +66,6 @@ class NewsContent {
      */
     public function getId(): int {
         return $this->id;
-    }
-
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return News
-     */
-    public function setTitle(string $title): NewsContent {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle(): string {
-        return $this->title;
-    }
-
-    /**
-     * Get locale.
-     *
-     * @return string
-     */
-    public function getLocale(): string {
-        return $this->locale;
-    }
-
-    /**
-     * Set locale.
-     *
-     * @param string $locale
-     */
-    public function setLocale(string $locale): NewsContent {
-        $this->locale = $locale;
-
-        return $this;
-    }
-
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return News
-     */
-    public function setDescription(string $description): NewsContent {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription(): string {
-        return $this->description;
     }
 
     /**
