@@ -75,4 +75,27 @@ class HomepageControllerTest extends BaseWebTestCase {
         $this->assertEquals(404, $this->getClient()->getResponse()->getStatusCode(), "1. The response has to return a [404] code.");
     }
 
+    public function testAccessControlList() {
+        $client = $this->getClient();
+        $crawler = $client->request("GET", "/");
+        $this->assertEquals(200, $this->getClient()->getResponse()->getStatusCode(), "1.1 The response has to return a [200] code.");
+        $this->assertNotContains('<span class="mx-1 font-weight-bold text-white">Bienvenue', $crawler->filter("#navbar")->html(), "1.2 The navbar hasn't to contain authentication username");
+        $this->assertEquals(0, $crawler->filter("#admin-menu")->count(), "1.3 The navbar hasn't to contain admin dropdown button.");
+
+        // Try authentication with good credential.
+        $crawler = $client->request("GET", "/", [], [], [
+            "PHP_AUTH_USER" => "admin",
+            "PHP_AUTH_PW" => '456']);
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2.1 Unexpected HTTP status code for GET / with admin login");
+        $this->assertContains('<span class="mx-1 font-weight-bold text-white">Bienvenue admin', $crawler->filter("#navbar")->html(), "2.2 The navbar has to contain authentication username");
+        $this->assertEquals(1, $crawler->filter("#admin-menu")->count(), "2.3 The navbar has to contain admin dropdown button.");
+
+
+        // Try authentication with bad credential.
+        $client->request("GET", "/", [], [], [
+            "PHP_AUTH_USER" => "user",
+            "PHP_AUTH_PW" => 'badpwd']);
+        $this->assertEquals(401, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET / for admin login");
+    }
+
 }

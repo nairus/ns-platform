@@ -1,6 +1,7 @@
 ## Main translations FR
 errors:
     title: "Une Erreur est survenue: %status_text%"
+    takemehome: Ramener Moi à l'Accueil
     error:
         subtitle:
             oops: "Oups! Une Erreur est survenue"
@@ -12,17 +13,36 @@ errors:
             Nous allons réparer ceci le plus rapidement possible.
             Nous sommes désolés pour le dérangement causé.
 
+    error401:
+        subtitle:
+            unauthorized: "Accès non autorisé"
+            error: Erreur 401
+        description: >
+            Vous n'êtes pas autorisé pour accéder à cette page,
+            contactez votre webmaster pour changer votre mot de passe.
+        alttext: "Ou vous pouvez revenir à l'accueil :"
+
+    error403:
+        subtitle:
+            forbidden: "Accès interdit"
+            error: Erreur 403
+        description: >
+            Vous n'avez pas les droits pour accéder à cette page,
+            contactez votre webmaster.
+            Utilisez le bouton <b>Retour</b> de votre navigateur pour retourner
+            à la page précedente
+        alttext: "Ou vous pouvez revenir à l'accueil :"
+
     error404:
         subtitle:
             notfound: "Page Non Trouvée"
             error: Erreur 404
         description: >
             La page demandée, n'a pas pu être trouvée,
-            contactez votre webmaster oy essayez à nouveau.
+            contactez votre webmaster ou essayez à nouveau.
             Utilisez le bouton <b>Retour</b> de votre navigateur pour retourner
             à la page précedente
-        alttext: "Ou vous pouvez cliquer sur ce petit bouton:"
-        takemehome: Ramener Moi à l'Accueil
+        alttext: "Ou vous pouvez cliquer sur ce petit bouton :"
 
 headline: "Travaux de Nairus"
 nav:
@@ -35,3 +55,8 @@ nav:
         fr: Français
     navbar-toggler:
         label: "Basculer la navigation"
+    authentication:
+        connect: Se connecter
+        welcome: Bienvenue %username% !
+        adminbutton: Admin
+        news: Gestion des News

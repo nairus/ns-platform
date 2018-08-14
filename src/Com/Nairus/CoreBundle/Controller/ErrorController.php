@@ -14,13 +14,16 @@ use Symfony\Bundle\TwigBundle\Controller\ExceptionController as TwigErrorControl
 class ErrorController extends TwigErrorController {
 
     public function showAction(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null): Response {
-        $requestUri = $request->getRequestUri();
-
-        $matches = [];
+        // Force the locale to test transalation.
+        $locale = $request->get("lg", null);
 
         // If the request uri begin by a locale.
+        $requestUri = $request->getRequestUri();
+        $matches = [];
         if (preg_match("~^/(en|fr)/.*$~", $requestUri, $matches)) {
             $request->setLocale($matches[1]);
+        } else if (null !== $locale) {
+            $request->setLocale($locale);
         }
 
         return parent::showAction($request, $exception, $logger);

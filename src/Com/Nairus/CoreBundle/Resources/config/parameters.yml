@@ -1,4 +1,7 @@
 ## Parameters config for CoreBundle
 
 parameters:
+    user.pwd: $2y$12$4vqyC8fliwvIPazwIeHtTOjTlnEc22GpoKggw7kDA5pnbK1Mm2DEm
+    admin.pwd: $2y$12$poMKQzywlEZimGOh8uXqU.CvtUdOD03kc6vMnn1wFhCcS8sWjXS0y
+    nairus.pwd: $2y$12$ldGSUKNiWk/Gmlhqd1ovx.bmRui9.MAuAxlPxXevOTvvCeH79E.NS
     ns_core.last_news_limit: 3

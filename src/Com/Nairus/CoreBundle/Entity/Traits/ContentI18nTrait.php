@@ -3,7 +3,7 @@
 namespace Com\Nairus\CoreBundle\Entity\Traits;
 
 /**
- * Trait for content entity fields.
+ * Trait for internationalized entities.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)

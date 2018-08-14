@@ -17,13 +17,13 @@ security:
             memory:
                 users:
                     user:
-                        password: $2y$12$4vqyC8fliwvIPazwIeHtTOjTlnEc22GpoKggw7kDA5pnbK1Mm2DEm
+                        password: "%user.pwd%"
                         roles: 'ROLE_USER'
                     admin:
-                        password: $2y$12$poMKQzywlEZimGOh8uXqU.CvtUdOD03kc6vMnn1wFhCcS8sWjXS0y
+                        password: "%admin.pwd%"
                         roles: 'ROLE_ADMIN'
                     nairus:
-                        password: $2y$12$ldGSUKNiWk/Gmlhqd1ovx.bmRui9.MAuAxlPxXevOTvvCeH79E.NS
+                        password: "%nairus.pwd%"
                         roles: 'ROLE_SUPER_ADMIN'
 
     firewalls:

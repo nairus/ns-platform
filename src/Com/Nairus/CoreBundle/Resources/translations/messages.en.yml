@@ -1,6 +1,7 @@
 ## Main translations FR
 errors:
     title: "An Error Occurred: %status_text%"
+    takemehome: Take Me Home
     error:
         subtitle:
             oops: "Oops! An Error Occurred EN"
@@ -12,6 +13,27 @@ errors:
             We will fix it as soon as possible.
             Sorry for any inconvenience caused.
 
+    error401:
+        subtitle:
+            unauthorized: "Unauthorized access"
+            error: Error 401
+        description: >
+            You are not authorized to access this page,
+            contact your webmaster to change your password.
+        alttext: "Or you can come back to the homepage: "
+
+    error403:
+        subtitle:
+            forbidden: "Forbidden access"
+            error: Error 403
+        description: >
+            You do not have the rights to access this page,
+            contact your webmaster.
+            Use your browsers <b>Back</b> button to navigate to
+            the page you have prevously come from
+            à la page précedente
+        alttext: "Or you can come back to the homepage: "
+
     error404:
         subtitle:
             notfound: Page Not Found
@@ -21,8 +43,7 @@ errors:
             either contact your webmaster or try again.
             Use your browsers <b>Back</b> button to navigate to
             the page you have prevously come from
-        alttext: "Or you could just press this neat little button:"
-        takemehome: Take Me Home
+        alttext: "Or you could just press this neat little button: "
 
 headline: "Nairus Works"
 nav:
@@ -36,3 +57,8 @@ nav:
         fr: French
     navbar-toggler:
         label: "Toggle navigation"
+    authentication:
+        connect: Connect
+        welcome: Welcome %username% !
+        adminbutton: Admin
+        news: Manage News

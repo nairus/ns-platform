@@ -1,7 +1,6 @@
 ns_core_news:
     resource: "@NSCoreBundle/Resources/config/routing/news.yml"
     prefix:   /news
-    options: { i18n: true }
 
 ns_core_homepage:
     path:     /

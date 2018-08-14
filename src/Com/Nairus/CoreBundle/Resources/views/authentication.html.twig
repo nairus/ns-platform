@@ -1,0 +1,7 @@
+{# NSCoreBundle::authentication.html.twig #}
+
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    <span class="mx-1 font-weight-bold text-white">{{ "nav.authentication.welcome" | trans({"%username%": app.user.username}) }}</span>
+{% else %}
+    <a class="mx-1 btn btn-dark connect-btn" href="{{path("news_index")}}">{{ "nav.authentication.connect"|trans }}</a>
+{% endif %}
