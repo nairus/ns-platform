@@ -1,45 +1,47 @@
 {% extends 'NSCoreBundle::layout.html.twig' %}
 
 {% block body %}
-    <h1>News list</h1>
+    <h1>{{ "news.index.title" | trans({}, "NSCoreBundle")  }}</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Createdat</th>
-                <th>Updatedat</th>
-                <th>Publishedat</th>
-                <th>Published</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for news in news %}
+    {% if newsList | length > 0 %}
+        <table>
+            <thead>
                 <tr>
-                    <td><a href="{{ path('news_show', { 'id': news.id }) }}">{{ news.id }}</a></td>
-                    <td>{% if news.createdAt %}{{ news.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                    <td>{% if news.updatedAt %}{{ news.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                    <td>{% if news.publishedAt %}{{ news.publishedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                    <td>{% if news.published %}Yes{% else %}No{% endif %}</td>
-                    <td>
-                        <ul>
-                            <li>
-                                <a href="{{ path('news_show', { 'id': news.id }) }}">show</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('news_edit', { 'id': news.id }) }}">edit</a>
-                            </li>
-                        </ul>
-                    </td>
+                    <th>Id</th>
+                    <th>Createdat</th>
+                    <th>Updatedat</th>
+                    <th>Publishedat</th>
+                    <th>Published</th>
+                    <th>Actions</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for news in newsList %}
+                    <tr>
+                        <td><a href="{{ path('news_show', { 'id': news.id }) }}">{{ news.id }}</a></td>
+                        <td>{% if news.createdAt %}{{ news.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td>{% if news.updatedAt %}{{ news.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td>{% if news.publishedAt %}{{ news.publishedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td>{% if news.published %}Yes{% else %}No{% endif %}</td>
+                        <td>
+                            <ul>
+                                <li>
+                                    <a href="{{ path('news_show', { 'id': news.id }) }}">show</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('news_edit', { 'id': news.id }) }}">edit</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <em>{{ "news.index.no-news" | trans({}, "NSCoreBundle")  }}</em>
+    {% endif %}
 
-    <ul>
-        <li>
-            <a href="{{ path('news_new') }}">Create a new news</a>
-        </li>
-    </ul>
+    <div>
+        <a class="btn btn-primary" href="{{ path('news_new') }}">{{ "news.index.add-news" | trans({}, "NSCoreBundle")  }}</a>
+    </div>
 {% endblock %}

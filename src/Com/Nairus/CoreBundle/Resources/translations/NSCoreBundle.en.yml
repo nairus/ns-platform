@@ -21,3 +21,23 @@ homepage:
             I'm a <strong>web</strong> passionate and I decided to build this platform to share my experiences and show my works.
         github-profile: See my Github profile
         last_news_button: View details
+
+news:
+    index:
+        title: News list
+        no-news: There is no news for the moment! Please add one clicking on the button above!
+        add-news: Add news
+    new:
+        title: Add a news
+    edit:
+        title: Modification of the news n°%news_id%
+    form:
+        labels:
+            link: External link
+            title: Title
+            description: Description
+            published: Published?
+        save: Save
+        return:
+            list: Return to the list
+            show: Return to the view

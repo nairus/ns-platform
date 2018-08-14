@@ -86,7 +86,7 @@ class NewsContent {
      *
      * @return string
      */
-    public function getLink(): string {
+    public function getLink(): ?string {
         return $this->link;
     }
 

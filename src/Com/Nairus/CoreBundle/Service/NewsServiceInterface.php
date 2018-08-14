@@ -2,6 +2,8 @@
 
 namespace Com\Nairus\CoreBundle\Service;
 
+use Com\Nairus\CoreBundle\Entity\News;
+use Com\Nairus\CoreBundle\Entity\NewsContent;
 use Com\Nairus\CoreBundle\Exception\LocaleError;
 
 /**
@@ -22,4 +24,14 @@ interface NewsServiceInterface {
      * @throws LocaleError In case of bad language parameter.
      */
     public function findLastNewsPublished(int $limit, string $language);
+
+    /**
+     * Find a content for the current news.
+     *
+     * @param News   $news   The current News entity.
+     * @param string $locale The language of content seeked.
+     *
+     * @return NewsContent|null
+     */
+    public function findContentForNewsId(News $news, string $locale): ?NewsContent;
 }

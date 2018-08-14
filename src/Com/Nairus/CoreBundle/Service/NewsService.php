@@ -3,6 +3,8 @@
 namespace Com\Nairus\CoreBundle\Service;
 
 use Com\Nairus\CoreBundle\NSCoreBundle;
+use Com\Nairus\CoreBundle\Entity\News;
+use Com\Nairus\CoreBundle\Entity\NewsContent;
 use Com\Nairus\CoreBundle\Exception\LocaleError;
 use Com\Nairus\CoreBundle\Repository\NewsContentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -60,6 +62,13 @@ class NewsService implements NewsServiceInterface {
         foreach ($availableLocales as $locale) {
             $this->availableLocales[$locale] = TRUE;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function findContentForNewsId(News $news, string $locale): ?NewsContent {
+        return $this->newsContentRepository->findOneBy(["news" => $news, "locale" => $locale]);
     }
 
 }

@@ -1,16 +1,8 @@
 {% extends 'NSCoreBundle::layout.html.twig' %}
 
 {% block body %}
-    <h1>News creation</h1>
-
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input type="submit" value="Create" />
-    {{ form_end(form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('news_index') }}">Back to the list</a>
-        </li>
-    </ul>
+    <div class="container">
+        <h1 class="position-relative">{{ "news.new.title" | trans({}, "NSCoreBundle") }}</h1>
+        {% include 'NSCoreBundle:News:form.html.twig' %}
+    </div>
 {% endblock %}

@@ -1,0 +1,36 @@
+{# extends "NSCoreBundle:News:form.html.twig #}
+
+{{ form_start(form) }}
+
+<div class="form-group">
+    <label for="com_nairus_corebundle_newscontent_title" class="required">
+        <span class="ns-flag ns-flag-{{ locale }}"></span>
+        {{ "news.form.labels.title" | trans({}, "NSCoreBundle") }}
+    </label>
+    {{ form_widget(form.title) }}
+</div>
+
+<div class="form-group">
+    <label for="com_nairus_corebundle_newscontent_description" class="required">
+        <span class="ns-flag ns-flag-{{ locale }}"></span>
+        {{ "news.form.labels.description" | trans({}, "NSCoreBundle") }}
+    </label>
+    {{ form_widget(form.description) }}
+</div>
+
+<div class="form-group">
+    <label for="com_nairus_corebundle_newscontent_link" class="required">
+        <span class="ns-flag ns-flag-{{ locale }}"></span>
+        {{ "news.form.labels.link" | trans({}, "NSCoreBundle") }}
+    </label>
+    {{ form_widget(form.link) }}
+</div>
+
+{# Rest of the form #}
+{{ form_row(form.news.published) }}
+{{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+<a href="{{ path('news_index') }}" class="btn btn-secondary">{{ "news.form.return.list" | trans({}, "NSCoreBundle") }}</a>
+
+{{ form_rest(form) }}
+{{ form_end(form) }}
+

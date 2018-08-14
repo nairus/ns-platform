@@ -21,3 +21,23 @@ homepage:
             Je suis un passionné du <strong>web</strong> et j'ai décidé de construire cette plateforme afin de partager et de montrer mon travail.
         github-profile: Voir mon profil Github
         last_news_button: Voir les détails
+
+news:
+    index:
+        title: Liste des news
+        no-news: Il n'y a pas de news pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !
+        add-news: Ajouter une news
+    new:
+        title: Ajout d'une news
+    edit:
+        title: Modification de la news n°%news_id%
+    form:
+        labels:
+            link: Lien externe
+            title: Titre
+            description: Description
+            published: Publié ?
+        save: Sauvegarder
+        return:
+            list: Retour à la liste
+            show: Retour à la vue

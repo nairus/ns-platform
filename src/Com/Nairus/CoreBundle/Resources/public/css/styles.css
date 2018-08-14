@@ -5,7 +5,7 @@
     width: 16px;
     height: 11px;
     float: left;
-    margin: 5px 5px 0 0;
+    margin: 7px 5px 0 0;
 }
 
 .ns-flag-en {
@@ -15,7 +15,19 @@
     background-position: bottom -73px right -144px
 }
 
+[role="main"] {
+    padding-top: 32px;
+}
+
 .message-container {
-    margin-top: 4rem;
     position: relative;
+}
+
+.message-container > .alert {
+    margin-top: 1rem;
+}
+
+label.required:after {
+    content: "*";
+    color: red;
 }

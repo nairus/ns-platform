@@ -2,7 +2,7 @@ ns_core:
     resource: "@NSCoreBundle/Resources/config/routing.yml"
     prefix:   /
     options: { i18n: true }
-  
+
 ns_resume:
     resource: "@NSResumeBundle/Resources/config/routing.yml"
     prefix:   /resume

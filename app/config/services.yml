@@ -28,16 +28,3 @@ services:
         resource: '../../src/Com/Nairus/CoreBundle/Controller'
         public: true
         tags: ['controller.service_arguments']
-
-    Com\Nairus\CoreBundle\Controller\HomepageController:
-        public: true
-        tags: ['controller.service_arguments']
-        arguments:
-            $newsService: "@ns_core.news_service"
-
-    Com\Nairus\CoreBundle\Controller\ErrorController:
-        public: true
-        tags: ['controller.service_arguments']
-        arguments:
-            $twig: '@twig'
-            $debug: "%kernel.debug%"

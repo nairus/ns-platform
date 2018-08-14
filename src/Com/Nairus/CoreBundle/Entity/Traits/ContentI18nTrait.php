@@ -55,17 +55,8 @@ trait ContentI18nTrait {
      *
      * @return string
      */
-    public function getTitle(): string {
+    public function getTitle(): ?string {
         return $this->title;
-    }
-
-    /**
-     * Get locale.
-     *
-     * @return string
-     */
-    public function getLocale(): string {
-        return $this->locale;
     }
 
     /**
@@ -77,6 +68,15 @@ trait ContentI18nTrait {
         $this->locale = $locale;
 
         return $this;
+    }
+
+    /**
+     * Get locale.
+     *
+     * @return string
+     */
+    public function getLocale(): string {
+        return $this->locale;
     }
 
     /**
@@ -97,7 +97,7 @@ trait ContentI18nTrait {
      *
      * @return string
      */
-    public function getDescription(): string {
+    public function getDescription(): ?string {
         return $this->description;
     }
 

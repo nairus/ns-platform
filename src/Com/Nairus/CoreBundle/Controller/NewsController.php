@@ -4,6 +4,8 @@ namespace Com\Nairus\CoreBundle\Controller;
 
 use Com\Nairus\CoreBundle\NSCoreBundle;
 use Com\Nairus\CoreBundle\Entity\News;
+use Com\Nairus\CoreBundle\Entity\NewsContent;
+use Com\Nairus\CoreBundle\Service\NewsServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,6 +18,20 @@ class NewsController extends Controller {
     private const NAME = NSCoreBundle::NAME . ":News";
 
     /**
+     * @var NewsServiceInterface
+     */
+    private $newsService;
+
+    /**
+     * Constructor.
+     *
+     * @param NewsServiceInterface $newsService News service.
+     */
+    public function __construct(NewsServiceInterface $newsService) {
+        $this->newsService = $newsService;
+    }
+
+    /**
      * Lists all news entities.
      *
      */
@@ -25,7 +41,7 @@ class NewsController extends Controller {
         $news = $em->getRepository(static::NAME)->findAll();
 
         return $this->render(static::NAME . ':index.html.twig', array(
-                    'news' => $news,
+                    'newsList' => $news,
         ));
     }
 
@@ -34,8 +50,14 @@ class NewsController extends Controller {
      *
      */
     public function newAction(Request $request) {
+        // Get the default locale.
+        $defaultLocale = $this->container->getParameter('kernel.default_locale');
         $news = new News();
-        $form = $this->createForm('Com\Nairus\CoreBundle\Form\NewsType', $news);
+        $content = new NewsContent();
+        $content->setLocale($defaultLocale);
+        $content->setNews($news);
+        $news->addContent($content);
+        $form = $this->createForm('Com\Nairus\CoreBundle\Form\NewsContentType', $content);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -48,6 +70,7 @@ class NewsController extends Controller {
 
         return $this->render(static::NAME . ':new.html.twig', array(
                     'news' => $news,
+                    'locale' => $defaultLocale,
                     'form' => $form->createView(),
         ));
     }
@@ -70,19 +93,32 @@ class NewsController extends Controller {
      *
      */
     public function editAction(Request $request, News $news) {
+        // Get the default content.
+        $locale = $this->container->getParameter('kernel.default_locale');
+        $newsContent = $this->newsService->findContentForNewsId($news, $locale);
+
+        if (null === $newsContent) {
+            $newsContent = new NewsContent();
+            $newsContent->setLocale($locale);
+            $newsContent->setNews($news);
+        }
+        $news->addContent($newsContent);
+
+        // Create delete form
         $deleteForm = $this->createDeleteForm($news);
-        $editForm = $this->createForm('Com\Nairus\CoreBundle\Form\NewsType', $news);
+        $editForm = $this->createForm('Com\Nairus\CoreBundle\Form\NewsContentType', $newsContent);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('news_edit', array('id' => $news->getId()));
+            return $this->redirectToRoute('news_show', array('id' => $news->getId()));
         }
 
         return $this->render(static::NAME . ':edit.html.twig', array(
                     'news' => $news,
-                    'edit_form' => $editForm->createView(),
+                    'locale' => $locale,
+                    'form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
         ));
     }
