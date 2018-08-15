@@ -20,7 +20,8 @@
                             </h1>
                         </div>
                         <p>{{ "errors.error403.description"|trans({}, "messages", app.request.getLocale())|raw }}</p>
-                        <p><b>{{ "errors.error403.alttext"|trans({}, "messages", app.request.getLocale()) }}</b></p>
+                        <p>{{ "errors.browser-back"|trans({"%method%": app.request.method}, "messages", app.request.getLocale())|raw }}</p>
+                        <p><b>{{ "errors.alttext"|trans({}, "messages", app.request.getLocale()) }}</b></p>
                         <a id="home-link" href="{{ path('ns_core_homepage', {"_locale": app.request.getLocale()}) }}" class="btn btn-large btn-info">
                             <i class="icon-home icon-white"></i> {{ "errors.takemehome"|trans({}, "messages", app.request.getLocale()) }}
                         </a>

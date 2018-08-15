@@ -1,7 +1,14 @@
 {% extends 'NSCoreBundle::layout.html.twig' %}
 
+{% block title %}{{ "news.new.title" | trans({}, "NSCoreBundle") }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ '/bundles/nscore/css/forms.css' }}" type="text/css">
+{% endblock %}
+
 {% block body %}
-    <div class="container">
+    <div class="container jumbotron">
         <h1 class="position-relative">{{ "news.new.title" | trans({}, "NSCoreBundle") }}</h1>
         {% include 'NSCoreBundle:News:form.html.twig' %}
     </div>

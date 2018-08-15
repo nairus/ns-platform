@@ -1,12 +1,30 @@
 ## Translations file only for the bundle
 
 flashes:
-    infos: Infos!
-    success: Succès!
-    error: Erreur!
     homepage:
         contact:
             page-unavailable: "La page de contact n'est pas encore disponible, merci de revenir plus tard."
+
+    success:
+        news:
+            add: News ajoutée avec succès !
+            edit: News n°%news_id% modifiée avec succès !
+            delete: News n°%news_id% supprimée avec succès !
+
+            content:
+                add: Contenu "%locale%" ajouté avec succès pour la news "%news_id%"!
+                edit: Contenu "%locale%" modifié avec succès pour la news "%news_id%"!
+                delete: Contenu "%locale%" deleted avec succès pour la news "%news_id%"!
+
+    error:
+        news:
+            add: Une erreur est survenue en ajoutant une news !
+            edit: Une erreur est survenue en modifiant la news "%news_id%" !
+            delete: Une erreur est survenue en supprimant la news "%news_id%" !
+
+            content:
+                add: Une erreur est survenue en ajoutant le contenu "%locale%" pour la news "%news_id%" !
+                edit: Une erreur est survenue en modifiant le contenu "%locale%" pour la news "%news_id%" !
 
 homepage:
     index:
@@ -20,7 +38,7 @@ homepage:
             Je travaille avec plusieurs languages de programmation tel que <strong>PHP, Pyhon, Javascript, Java</strong>.<br>
             Je suis un passionné du <strong>web</strong> et j'ai décidé de construire cette plateforme afin de partager et de montrer mon travail.
         github-profile: Voir mon profil Github
-        last_news_button: Voir les détails
+        last-news-button: Voir les détails
 
 news:
     index:
@@ -31,13 +49,16 @@ news:
         title: Ajout d'une news
     edit:
         title: Modification de la news n°%news_id%
+    show:
+        title: Détail de la news n°%news_id%
+        created-at: Créée le
+        updated-at: Mise à jour le
+        published-at: Publié le
+        see-more: plus de détails
+        not-published: Non publiée
     form:
         labels:
             link: Lien externe
             title: Titre
             description: Description
             published: Publié ?
-        save: Sauvegarder
-        return:
-            list: Retour à la liste
-            show: Retour à la vue

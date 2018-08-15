@@ -23,10 +23,8 @@ class NewsContentType extends AbstractType {
                 ->add('description', TextareaType::class, ["required" => true])
                 ->add('news', NewsType::class)
                 ->add('locale', HiddenType::class)
-                ->add('save', SubmitType::class, [
-                    "label" => "news.form.save",
-                    "translation_domain" => "NSCoreBundle"
-        ]);
+                ->add('save', SubmitType::class, ["label" => 'actions.save']
+        );
     }
 
     /**

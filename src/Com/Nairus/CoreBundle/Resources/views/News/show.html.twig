@@ -1,44 +1,69 @@
 {% extends 'NSCoreBundle::layout.html.twig' %}
 
+{% block title %}{{ "news.show.title" | trans({"%news_id%": news.id}, "NSCoreBundle") }} - {{ parent() }}{% endblock %}
+
 {% block body %}
-    <h1>News</h1>
+    <div class="container jumbotron">
+        {{ include("NSCoreBundle::messages.html.twig") }}
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ news.id }}</td>
-            </tr>
-            <tr>
-                <th>Createdat</th>
-                <td>{% if news.createdAt %}{{ news.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Updatedat</th>
-                <td>{% if news.updatedAt %}{{ news.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Publishedat</th>
-                <td>{% if news.publishedAt %}{{ news.publishedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Published</th>
-                <td>{% if news.published %}Yes{% else %}No{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
+        <h1>{{ "news.show.title" | trans({"%news_id%": news.id}, "NSCoreBundle") }}</h1>
 
-    <ul>
-        <li>
-            <a href="{{ path('news_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('news_edit', { 'id': news.id }) }}">Edit</a>
-        </li>
-        <li>
+        <div class="row">
+            {% if news.createdAt %}
+                <div class="col-md-4">
+                    <strong>{{ "news.show.created-at" | trans({}, "NSCoreBundle") }}</strong>
+                    {{ news.createdAt|localizeddate('short', 'short') }}
+                </div>
+            {% endif %}
+
+            {% if news.updatedAt %}
+                <div class="col-md-4">
+                    <strong>{{ "news.show.updated-at" | trans({}, "NSCoreBundle") }}</strong>
+                    {{ news.updatedAt|localizeddate('short', 'short') }}
+                </div>
+            {% endif %}
+
+            <div class="col-md-4">
+                {% if news.published %}
+                    <i class="far fa-thumbs-up"></i>
+                    <strong>{{ "news.show.published-at" | trans({}, "NSCoreBundle") }}</strong>
+                    {{ news.publishedAt|localizeddate('short', 'short') }}
+                {% else %}
+                    <i class="far fa-thumbs-down"></i>
+                    <strong>{{ "news.show.not-published" | trans({}, "NSCoreBundle") }}</strong>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr>
+
+        <h2><span class="ns-flag ns-flag-{{ newsContent.locale }}"></span>{{ newsContent.title }}</h2>
+
+        <div>
+            <p>{{ newsContent.description }}</p>
+        </div>
+
+        <div>
+            <a href="{{ newsContent.link }}">{{ "news.show.see-more" | trans({}, "NSCoreBundle") }}</a>
+        </div>
+
+        <hr>
+
+        <div class="row actions">
+            <a class="btn btn-secondary mx-2 my-1" href="{{ path('news_index') }}">
+                <i class="fas fa-chevron-left"></i>
+                {{ "actions.list" | trans }}
+            </a>
+            <a class="btn btn-primary mx-2 my-1" href="{{ path('news_edit', { 'id': news.id }) }}">
+                <i class="fas fa-pencil-alt"></i>
+                {{ "actions.edit" | trans }}
+            </a>
             {{ form_start(delete_form) }}
-            <input type="submit" value="Delete">
+            <button class="btn btn-danger mx-2 my-1">
+                <i class="fas fa-trash-alt"></i>
+                {{ "actions.delete" | trans }}
+            </button>
             {{ form_end(delete_form) }}
-        </li>
-    </ul>
+        </div>
+    </div>
 {% endblock %}

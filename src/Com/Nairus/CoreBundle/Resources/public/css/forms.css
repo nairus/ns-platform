@@ -1,0 +1,5 @@
+/* Styles for forms */
+label.required:after {
+    content: "*";
+    color: red;
+}

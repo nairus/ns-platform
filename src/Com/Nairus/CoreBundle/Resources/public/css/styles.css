@@ -26,8 +26,3 @@
 .message-container > .alert {
     margin-top: 1rem;
 }
-
-label.required:after {
-    content: "*";
-    color: red;
-}

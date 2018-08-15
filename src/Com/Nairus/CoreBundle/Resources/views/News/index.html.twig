@@ -1,7 +1,11 @@
 {% extends 'NSCoreBundle::layout.html.twig' %}
 
+{% block title %}{{ "news.index.title" | trans({}, "NSCoreBundle") }} - {{ parent() }}{% endblock %}
+
 {% block body %}
     <h1>{{ "news.index.title" | trans({}, "NSCoreBundle")  }}</h1>
+
+    {{ include("NSCoreBundle::messages.html.twig") }}
 
     {% if newsList | length > 0 %}
         <table>
@@ -42,6 +46,9 @@
     {% endif %}
 
     <div>
-        <a class="btn btn-primary" href="{{ path('news_new') }}">{{ "news.index.add-news" | trans({}, "NSCoreBundle")  }}</a>
+        <a class="btn btn-primary" href="{{ path('news_new') }}">
+            <i class="fas fa-plus"></i>
+            {{ "news.index.add-news" | trans({}, "NSCoreBundle")  }}
+        </a>
     </div>
 {% endblock %}

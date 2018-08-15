@@ -68,6 +68,14 @@ class NewsService implements NewsServiceInterface {
      * {@inheritDoc}
      */
     public function findContentForNewsId(News $news, string $locale): ?NewsContent {
+        // Throws a LocaleError if language passed is not available.
+        if (!array_key_exists($locale, $this->availableLocales)) {
+            throw new LocaleError(
+                    $locale,
+                    "\"$locale\" locale is not available."
+            );
+        }
+
         return $this->newsContentRepository->findOneBy(["news" => $news, "locale" => $locale]);
     }
 

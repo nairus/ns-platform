@@ -101,6 +101,15 @@ class News {
     }
 
     /**
+     * Return if the entity is new.
+     *
+     * @return bool TRUE if the entity is new.
+     */
+    public function isNew(): bool {
+        return null === $this->id;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function __toString() {
