@@ -1,7 +1,8 @@
 {
-    "name": "nairus/deploy",
-    "description": "composer dependencies for NSResume project",
-    "license": "proprietary",
+    "name": "nairus/ns-platform",
+    "description": "Web platform internationalized for personal website.",
+    "homepage": "https://github.com/nairus/ns-platform",
+    "license": "MIT",
     "type": "project",
     "autoload": {
         "psr-4": {

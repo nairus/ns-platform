@@ -6,6 +6,7 @@ use Com\Nairus\CoreBundle\NSCoreBundle;
 use Com\Nairus\CoreBundle\Entity\News;
 use Com\Nairus\CoreBundle\Entity\NewsContent;
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
+use Com\Nairus\CoreBundle\Tests\DataFixtures\Unit\LoadNewsPublished;
 
 /**
  * Test of News Repository
@@ -75,6 +76,33 @@ class NewsRepositoryTest extends AbstractKernelTestCase {
 
         $newsRemoved = static::$repository->find($newsId);
         $this->assertNull($newsRemoved, "3.1 The entity has to be removed.");
+    }
+
+    /**
+     * Test the "findNewsForPage" method.
+     *
+     * @covers NewsRepository::findNewsForPage
+     */
+    public function testFindNewsForPage() {
+        // Add test datas set.
+        $loadNewsPublished = new LoadNewsPublished();
+        $loadNewsPublished->load(static::$em);
+
+        // Page 1
+        $newsForPage1 = static::$repository->findNewsForPage(0, 1);
+        $this->assertSame(2, $newsForPage1->count(), "1.1 The paginator has to return the right count.");
+        $this->assertCount(1, $newsForPage1->getIterator()->getArrayCopy(), "1.2 The collection has to contain 1 entity.");
+
+        $newsForPage2 = static::$repository->findNewsForPage(1, 1);
+        $this->assertSame(2, $newsForPage2->count(), "2.1 The paginator has to return the right count.");
+        $this->assertCount(1, $newsForPage2->getIterator()->getArrayCopy(), "2.2 The collection has to contain 1 entity.");
+
+        $newsForPage3 = static::$repository->findNewsForPage(2, 1);
+        $this->assertSame(2, $newsForPage3->count(), "3.1 The paginator has to return the right count.");
+        $this->assertCount(0, $newsForPage3->getIterator()->getArrayCopy(), "3.2 The collection has to contain 1 entity.");
+
+        // Clean datas set for other tests.
+        $loadNewsPublished->remove(static::$em);
     }
 
 }

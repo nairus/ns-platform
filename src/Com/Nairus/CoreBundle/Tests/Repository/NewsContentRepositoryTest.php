@@ -139,7 +139,7 @@ class NewsContentRepositoryTest extends AbstractKernelTestCase {
         $this->assertCount(2, $lastNewsFr, "1.1 The FR collection has to contain 2 entities.");
         /* @var $firstContent NewsContent */
         $firstContent = $lastNewsFr[0];
-        $this->assertEquals("Titre 2 FR", $firstContent->getTitle(), "1.1 The first entity has to be correct.");
+        $this->assertEquals("Titre 1 FR", $firstContent->getTitle(), "1.1 The first entity has to be correct.");
 
         // Test with EN locale.
         $lastNewsEn = static::$repository->findLastNewsPublished(2, "en");

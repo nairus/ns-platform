@@ -132,4 +132,35 @@ class NewsServiceTest extends AbstractKernelTestCase {
         $newsService->findContentForNewsId($news, "ru");
     }
 
+    /**
+     * Test the "findNewsForPage" method.
+     *
+     * @covers NewsServiceInterface::findNewsForPage
+     */
+    public function testFindNewsForPage() {
+        $newsPaginatorDto = $this->object->findNewsForPage(1, 1);
+        $entities = $newsPaginatorDto->getEntities();
+        /* @var $news \Com\Nairus\CoreBundle\Entity\News */
+        $news = $entities[0];
+        $this->assertSame(2, $newsPaginatorDto->getPages(), "1.1 The number of pages has to be correct.");
+        $this->assertCount(1, $entities, "1.2 The collection has to contain 1 entity.");
+        $this->assertSame(1, $newsPaginatorDto->getCurrentPage(), "1.3 The current page has to be set.");
+
+        // Test the missing translation algo.
+        $missingTranslations = $newsPaginatorDto->getMissingTranslations();
+        $this->assertCount(1, $missingTranslations, "2.1 The missingTranslation property has to contain 1 entry.");
+        $this->assertArrayHasKey($news->getId(), $missingTranslations, "2.2 The key has to exist.");
+        $this->assertCount(1, $missingTranslations[$news->getId()], "2.3 One locale has to be missing.");
+        $this->assertNotContains("fr", $missingTranslations[$news->getId()], "2.4 The [fr] locale hasn't to be missing.");
+    }
+
+    /**
+     * Test the "findNewsForPage" method.
+     *
+     * @expectedException \Com\Nairus\CoreBundle\Exception\PaginatorException
+     */
+    public function testFindNewsForPageWithBadPage() {
+        $this->object->findNewsForPage(0, 1);
+    }
+
 }
