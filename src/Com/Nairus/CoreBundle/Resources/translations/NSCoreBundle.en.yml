@@ -44,6 +44,7 @@ news:
         title: News list
         no-news: There is no news for the moment! Please add one clicking on the button above!
         add-news: Add news
+        pagination-label: News pagination
     new:
         title: Add a news
     edit:

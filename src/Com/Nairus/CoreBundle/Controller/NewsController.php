@@ -35,14 +35,22 @@ class NewsController extends Controller {
      * Lists all news entities.
      *
      */
-    public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction($page) {
+        // Bug chrome
+        if ("" === $page) {
+            $page = 1;
+        }
 
+        // Get the news in database.
+        $em = $this->getDoctrine()->getManager();
         $news = $em->getRepository(static::NAME)->findAll();
 
-        return $this->render(static::NAME . ':index.html.twig', array(
+        // Render the view.
+        return $this->render(static::NAME . ':index.html.twig', [
                     'newsList' => $news,
-        ));
+                    'currentPage' => $page,
+                    'pages' => 3
+        ]);
     }
 
     /**

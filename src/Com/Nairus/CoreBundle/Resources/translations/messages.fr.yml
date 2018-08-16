@@ -76,3 +76,7 @@ flashes:
     infos: Infos!
     success: Succès!
     error: Erreur!
+
+pagination:
+    previous: Préc.
+    next: Suiv.
