@@ -7,3 +7,5 @@ parameters:
     admin.pwd: $2y$12$mI.RckkwKuVw/eP3nY3rJOWw67erev5taiptjVTbw0d/vndMCtfeG
     #789
     nairus.pwd: $2y$12$X8KWvna7ufQd1d/uGnHhmuEfqAdo8NqDb2RmRGCxDM7neMeXrYd7C
+    # Limit for the news list.
+    ns_core.news_limit: 1

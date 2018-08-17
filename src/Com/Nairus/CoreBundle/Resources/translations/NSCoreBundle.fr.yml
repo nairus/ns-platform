@@ -14,7 +14,6 @@ flashes:
             content:
                 add: Contenu "%locale%" ajouté avec succès pour la news "%news_id%"!
                 edit: Contenu "%locale%" modifié avec succès pour la news "%news_id%"!
-                delete: Contenu "%locale%" deleted avec succès pour la news "%news_id%"!
 
     error:
         news:
@@ -46,6 +45,14 @@ news:
         no-news: Il n'y a pas de news pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !
         add-news: Ajouter une news
         pagination-label: Pagination des news
+        table:
+            titles: Titres des news
+            creation-date: Date de création
+            publication-date: Date de publication
+            offline: Hors ligne
+            actions: Gestions
+            missing-translations: Traductions manquantes
+
     new:
         title: Ajout d'une news
     edit:
@@ -57,6 +64,11 @@ news:
         published-at: Publié le
         see-more: plus de détails
         not-published: Non publiée
+    translation:
+        original-content: Contenu d'origine en "%locale%"
+        title:
+            add: Ajout de la traduction "%locale%" pour la news n°%news_id%
+            edit: Modification de la traduction "%locale%" pour la news n°%news_id%
     form:
         labels:
             link: Lien externe

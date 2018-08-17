@@ -3,6 +3,7 @@
 <div class="message-container">
     {% for message in app.session.flashbag.get('info') %}
         <div class="alert alert-info fade show">
+            <i class="fas fa-info-circle"></i>
             <a href="#" class="close" data-dismiss="alert">&times;</a>
             <strong>{{ "flashes.infos"|trans }}</strong> {{ message }}
         </div>
@@ -10,6 +11,7 @@
 
     {% for message in app.session.flashbag.get('success') %}
         <div class="alert alert-success fade show">
+            <i class="fas fa-check-circle"></i>
             <a href="#" class="close" data-dismiss="alert">&times;</a>
             <strong>{{ "flashes.success"|trans }}</strong> {{ message }}
         </div>
@@ -17,6 +19,7 @@
 
     {% for message in app.session.flashbag.get('error') %}
         <div class="alert alert-danger fade show">
+            <i class="fas fa-exclamation-triangle"></i>
             <a href="#" class="close" data-dismiss="alert">&times;</a>
             <strong>{{ "flashes.error"|trans }}</strong> {{ message }}
         </div>

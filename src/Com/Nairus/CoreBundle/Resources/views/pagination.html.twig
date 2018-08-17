@@ -1,0 +1,36 @@
+{# NSCoreBundle::pagination.html.twig #}
+
+<nav aria-label="{{ paginationLabel }}">
+    <ul class="pagination">
+        {% set previousUrl = currentPage == 1 ? "#" : path(routeName, {"page": currentPage - 1}) %}
+        {% set nextUrl = currentPage == pages ? "#" : path(routeName, {"page": currentPage + 1}) %}
+
+        <li class="page-item {%if currentPage == 1%}disabled{%endif%}">
+            <a class="page-link"
+               href="{{ previousUrl }}"
+               {%if currentPage == 1%}tabindex="-1"{%endif%}
+               aria-label="{{ "pagination.previous" | trans }}">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">{{ "pagination.previous" | trans }}</span>
+            </a>
+        </li>
+
+        {% for page in range(1, pages) %}
+            <li class="page-item {%if page == currentPage%}active{%endif%}">
+                <a class="page-link" href="{{ path(routeName, {"page": page}) }}">
+                    {{ page }} {%if page == currentPage%}<span class="sr-only">(current){%endif%}</span>
+                </a>
+            </li>
+        {% endfor %}
+
+        <li class="page-item {%if currentPage == pages%}disabled{%endif%}">
+            <a class="page-link"
+               href="{{ nextUrl }}"
+               {%if currentPage == pages%}tabindex="-1"{%endif%}
+               aria-label="{{ "pagination.next" | trans }}">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">{{ "pagination.next" | trans }}</span>
+            </a>
+        </li>
+    </ul>
+</nav>

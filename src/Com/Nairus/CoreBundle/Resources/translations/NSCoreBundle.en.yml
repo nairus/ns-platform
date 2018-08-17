@@ -13,7 +13,6 @@ flashes:
             content:
                 add: Content "%locale%" added successfully for news "%news_id%"!
                 edit: Content "%locale%" modified successfully for news "%news_id%"!
-                delete: Content "%locale%" deleted successfully for news "%news_id%"!
 
     error:
         news:
@@ -45,17 +44,29 @@ news:
         no-news: There is no news for the moment! Please add one clicking on the button above!
         add-news: Add news
         pagination-label: News pagination
+        table:
+            titles: News titles
+            creation-date: Creation date
+            publication-date: Publication date
+            offline: Offline
+            actions: Actions
+            missing-translations: Missing translations
     new:
         title: Add a news
     edit:
-        title: Modification of the news n°%news_id%
+        title: Modification of the news No. %news_id%
     show:
-        title: Détail de la news n°%news_id%
+        title: Détail de la news No. %news_id%
         created-at: Created at
         updated-at: Updated at
         published-at: Published at
         see-more: more details
         not-published: Not published
+    translation:
+        original-content: Original content in "%locale%"
+        title:
+            add: Add "%locale%" translation for the news No. %news_id%
+            edit: Edit "%locale%" translation for the news No. %news_id%
     form:
         labels:
             link: External link

@@ -1,4 +1,5 @@
-{# extends "NSCoreBundle:News:form.html.twig #}
+{# NSCoreBundle:News:form.html.twig #}
+
 {{ form_start(form) }}
 
 <div class="form-group">
@@ -25,8 +26,12 @@
     {{ form_widget(form.link) }}
 </div>
 
+{# render published field if exist #}
+{% if form.news.published is defined %}
+    {{ form_widget(form.news.published, {label_attr: {class: 'checkbox-custom'}}) }}
+{% endif %}
+
 {# Rest of the form #}
-{{ form_row(form.news.published, {label_attr: {class: 'checkbox-custom'}}) }}
 <div class="row">
     <a href="{{ path('news_index') }}" class="btn btn-secondary mx-1 my-1">
         <i class="fas fa-chevron-left"></i>

@@ -21,7 +21,7 @@ class NewsContentType extends AbstractType {
                 ->add('link', UrlType::class, ["required" => true])
                 ->add('title', TextType::class, ["required" => true])
                 ->add('description', TextareaType::class, ["required" => true])
-                ->add('news', NewsType::class)
+                ->add('news', NewsType::class, ["required" => false])
                 ->add('locale', HiddenType::class)
                 ->add('save', SubmitType::class, ["label" => 'actions.save']
         );

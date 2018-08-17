@@ -1,92 +1,118 @@
-{% extends 'NSCoreBundle::layout.html.twig' %}
+{% extends 'NSCoreBundle::admin.html.twig' %}
 
 {% block title %}{{ "news.index.title" | trans({}, "NSCoreBundle") }} - {{ parent() }}{% endblock %}
 
-{% block body %}
-    <h1>{{ "news.index.title" | trans({}, "NSCoreBundle")  }}</h1>
+{% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "news.index.title" | trans({}, "NSCoreBundle") }}</h1>
 
-    {{ include("NSCoreBundle::messages.html.twig") }}
+        {{ include("NSCoreBundle::messages.html.twig") }}
 
-    {% if newsList | length > 0 %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Createdat</th>
-                    <th>Updatedat</th>
-                    <th>Publishedat</th>
-                    <th>Published</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for news in newsList %}
-                    <tr>
-                        <td><a href="{{ path('news_show', { 'id': news.id }) }}">{{ news.id }}</a></td>
-                        <td>{% if news.createdAt %}{{ news.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                        <td>{% if news.updatedAt %}{{ news.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                        <td>{% if news.publishedAt %}{{ news.publishedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                        <td>{% if news.published %}Yes{% else %}No{% endif %}</td>
-                        <td>
-                            <ul>
-                                <li>
-                                    <a href="{{ path('news_show', { 'id': news.id }) }}">show</a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('news_edit', { 'id': news.id }) }}">edit</a>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        {% if pages > 1 %}
-            <nav aria-label="{{ "news.index.pagination-label" | trans({}, "NSCoreBundle") }}">
-                <ul class="pagination">
-                    {% set previousUrl = currentPage == 1 ? "#" : path("news_index", {"page": currentPage - 1}) %}
-                    {% set nextUrl = currentPage == pages ? "#" : path("news_index", {"page": currentPage + 1}) %}
-
-                    <li class="page-item {%if currentPage == 1%}disabled{%endif%}">
-                        <a class="page-link"
-                           href="{{ previousUrl }}"
-                           {%if currentPage == 1%}tabindex="-1"{%endif%}
-                           aria-label="{{ "pagination.previous" | trans }}">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">{{ "pagination.previous" | trans }}</span>
-                        </a>
-                    </li>
-
-                    {% for page in range(1, pages) %}
-                        <li class="page-item {%if page == currentPage%}active{%endif%}">
-                            <a class="page-link" href="{{ path("news_index", {"page": page}) }}">
-                                {{ page }} {%if page == currentPage%}<span class="sr-only">(current){%endif%}</span>
-                            </a>
-                        </li>
-                    {% endfor %}
-
-                    <li class="page-item {%if currentPage == pages%}disabled{%endif%}">
-                        <a class="page-link"
-                           href="{{ nextUrl }}"
-                           {%if currentPage == pages%}tabindex="-1"{%endif%}
-                           aria-label="{{ "pagination.next" | trans }}">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">{{ "pagination.next" | trans }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        {% endif %}
-
-    {% else %}
-        <em>{{ "news.index.no-news" | trans({}, "NSCoreBundle")  }}</em>
-    {% endif %}
-
-    <div>
         <a class="btn btn-primary" href="{{ path('news_new') }}">
             <i class="fas fa-plus"></i>
             {{ "news.index.add-news" | trans({}, "NSCoreBundle")  }}
         </a>
+    </div>
+
+    <div class="container-fluid">
+        {% if newsList | length > 0 %}
+            <table class="table table-hover table-light table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">{{ "news.index.table.titles" | trans({}, "NSCoreBundle") }}</th>
+                        <th scope="col">{{ "news.index.table.creation-date" | trans({}, "NSCoreBundle") }}</th>
+                        <th scope="col">{{ "news.index.table.publication-date" | trans({}, "NSCoreBundle") }}</th>
+                        <th scope="col">{{ "news.index.table.missing-translations" | trans({}, "NSCoreBundle") }}</th>
+                        <th scope="col">{{ "news.index.table.actions" | trans({}, "NSCoreBundle") }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for news in newsList %}
+                        <tr>
+                            <th scope="row"><a href="{{ path('news_show', { 'id': news.id }) }}">{{ news.id }}</a></th>
+                            <td>
+                                <div class="d-flex flex-md-column bd-highlight mb-3">
+                                    {% for content in news.contents %}
+                                        <div class="p-2 bd-highlight">
+                                            <a href="{{ path("news_translation", {"id": news.id, "locale": content.locale}) }}">
+                                                <span class="ns-flag ns-flag-{{ content.locale }}"></span>
+                                                {{ content.title }}
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td>{{ news.createdAt|localizeddate('short', 'short') }}</td>
+                            <td>
+                                {% if news.published %}
+                                    <i class="far fa-thumbs-up"></i>
+                                    {{ news.publishedAt|localizeddate('short', 'short') }}
+                                {% else %}
+                                    <i class="far fa-thumbs-down"></i>
+                                    {{ "news.index.table.offline" | trans({}, "NSCoreBundle") }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if news.id in missingTranslations|keys %}
+                                    {% set translations = missingTranslations[news.id] %}
+                                    <div class="d-flex flex-md-column bd-highlight mb-3">
+                                        {% for translation in translations %}
+                                            <div class="p-2 bd-highlight">
+                                                <a href="{{ path("news_translation", {"id": news.id, "locale": translation}) }}">
+                                                    <span class="ns-flag ns-flag-{{ translation }}"></span>
+                                                    {{ translation }}
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="d-flex flex-md-column bd-highlight mb-3">
+                                    <div class="p-2 bd-highlight">
+                                        <a class="btn btn-primary"
+                                           href="{{ path('news_edit', { 'id': news.id }) }}">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            {{ "actions.edit" | trans }}
+                                        </a>
+                                    </div>
+                                    {% if not news.published %}
+                                        <div class="p-2 bd-highlight">
+                                            <form action="{{ path('news_publish', { 'id': news.id }) }}" method="POST">
+                                                <button class="btn btn-success">
+                                                    <i class="fas fa-globe-americas"></i>
+                                                    {{ "actions.publish" | trans }}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                    <div class="p-2 bd-highlight">
+                                        <a class="btn btn-secondary"
+                                           href="{{ path('news_show', { 'id': news.id }) }}">
+                                            <i class="far fa-eye"></i>
+                                            {{ "actions.show" | trans}}
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pages > 1 %}
+                {#
+                    We set the specific variables for the pagination template.
+                    See NewsController for the generic variables (pages and currentPage).
+                #}
+                {% set paginationLabel = ("news.index.pagination-label" | trans({}, "NSCoreBundle")) %}
+                {% set routeName = "news_index" %}
+                {% include "NSCoreBundle::pagination.html.twig" %}
+            {% endif %}
+
+        {% else %}
+            <em>{{ "news.index.no-news" | trans({}, "NSCoreBundle")  }}</em>
+        {% endif %}
     </div>
 {% endblock %}

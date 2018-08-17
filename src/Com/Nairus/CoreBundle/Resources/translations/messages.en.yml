@@ -72,6 +72,7 @@ actions:
     edit: Edit
     add: Add
     delete: Delete
+    publish: Publish
 
 flashes:
     infos: Infos!

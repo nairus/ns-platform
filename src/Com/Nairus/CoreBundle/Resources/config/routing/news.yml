@@ -26,3 +26,13 @@ news_delete:
     path:     /{id}/delete
     defaults: { _controller: "NSCoreBundle:News:delete" }
     methods:  DELETE
+
+news_translation:
+    path: /{id}/translation/{locale}
+    defaults: { _controller: "NSCoreBundle:News:translation" }
+    methods: [GET, POST]
+
+news_publish:
+    path: /{id}/publish
+    defaults: { _controller: "NSCoreBundle:News:publish" }
+    methods: [POST]

@@ -19,15 +19,17 @@
                 <div class="row">
                     {% for newsContent in lastNewsContentList %}
                         <div class="col-md-4 last-news-tile">
-                            <h2>newsContent.title</h2>
-                            <p>newsContent.description</p>
-                            <p>
-                                <a class="btn btn-secondary"
-                                   href="{{ newsContent.link }}"
-                                   role="button">
-                                    {{ "homepage.index.last-news-button" }} &raquo;
-                                </a>
-                            </p>
+                            <div class="card">
+                                <div class="class-body p-3">
+                                    <h5 class="card-title">{{ newsContent.title }}</h5>
+                                    <p class="card-text text-justify">{{ newsContent.description }}</p>
+                                    <a class="btn btn-primary"
+                                       href="{{ newsContent.link }}"
+                                       role="button">
+                                        {{ "homepage.index.last-news-button" | trans({}, "NSCoreBundle")}} &raquo;
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     {% endfor %}
                 </div>

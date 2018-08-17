@@ -1,4 +1,4 @@
-{% extends 'NSCoreBundle::layout.html.twig' %}
+{% extends 'NSCoreBundle::admin.html.twig' %}
 
 {% block title %}{{ "news.edit.title" | trans({"%news_id%": news.id}, "NSCoreBundle") }} - {{ parent() }}{% endblock %}
 
@@ -7,9 +7,7 @@
     <link rel="stylesheet" href="{{ '/bundles/nscore/css/forms.css' }}" type="text/css">
 {% endblock %}
 
-{% block body %}
-    <div class="container jumbotron">
-        <h1>{{ "news.edit.title" | trans({"%news_id%": news.id}, "NSCoreBundle") }}</h1>
-        {% include 'NSCoreBundle:News:form.html.twig' %}
-    </div>
+{% block ns_core_admin_body %}
+    <h1>{{ "news.edit.title" | trans({"%news_id%": news.id}, "NSCoreBundle") }}</h1>
+    {% include 'NSCoreBundle:News:form.html.twig' %}
 {% endblock %}
