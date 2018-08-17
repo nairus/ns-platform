@@ -21,7 +21,13 @@
                         <div class="col-md-4 last-news-tile">
                             <h2>newsContent.title</h2>
                             <p>newsContent.description</p>
-                            <p><a class="btn btn-secondary" href="{{ newsContent.link }}" role="button">{{ "homepage.index.last_news_button" }} &raquo;</a></p>
+                            <p>
+                                <a class="btn btn-secondary"
+                                   href="{{ newsContent.link }}"
+                                   role="button">
+                                    {{ "homepage.index.last-news-button" }} &raquo;
+                                </a>
+                            </p>
                         </div>
                     {% endfor %}
                 </div>

@@ -1,4 +1,4 @@
-{# app/Ressources/TwigBundle/view/Exception:error401.html.twig #}
+{# app/Ressources/TwigBundle/view/Exception:error405.html.twig #}
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,13 +13,14 @@
                     <div class="hero-unit center">
                         <div class="jumbotron">
                             <h1 class="text-center">
-                                {{ "errors.error401.subtitle.unauthorized"|trans({}, "messages", app.request.getLocale()) }}
+                                {{ "errors.error405.subtitle.notallowed"|trans({"%method%": app.request.method}, "messages", app.request.getLocale()) }}
                                 <small>
-                                    <font face="Tahoma" color="red">{{ "errors.error401.subtitle.error"|trans({}, "messages", app.request.getLocale()) }}</font>
+                                    <font face="Tahoma" color="red">{{ "errors.error405.subtitle.error"|trans({}, "messages", app.request.getLocale()) }}</font>
                                 </small>
                             </h1>
                         </div>
-                        <p>{{ "errors.error401.description"|trans({}, "messages", app.request.getLocale())|raw }}</p>
+                        <p>{{ "errors.error405.description"|trans({"%method%": app.request.method}, "messages", app.request.getLocale())|raw }}</p>
+                        <p>{{ "errors.browser-back"|trans({"%method%": app.request.method}, "messages", app.request.getLocale())|raw }}</p>
                         <p><b>{{ "errors.alttext"|trans({}, "messages", app.request.getLocale()) }}</b></p>
                         <a id="home-link" href="{{ path('ns_core_homepage', {"_locale": app.request.getLocale()}) }}" class="btn btn-large btn-info">
                             <i class="icon-home icon-white"></i> {{ "errors.takemehome"|trans({}, "messages", app.request.getLocale()) }}

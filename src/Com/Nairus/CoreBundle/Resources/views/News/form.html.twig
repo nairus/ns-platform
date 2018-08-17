@@ -1,5 +1,4 @@
 {# extends "NSCoreBundle:News:form.html.twig #}
-
 {{ form_start(form) }}
 
 <div class="form-group">
@@ -27,10 +26,19 @@
 </div>
 
 {# Rest of the form #}
-{{ form_row(form.news.published) }}
-{{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
-<a href="{{ path('news_index') }}" class="btn btn-secondary">{{ "news.form.return.list" | trans({}, "NSCoreBundle") }}</a>
-
+{{ form_row(form.news.published, {label_attr: {class: 'checkbox-custom'}}) }}
+<div class="row">
+    <a href="{{ path('news_index') }}" class="btn btn-secondary mx-1 my-1">
+        <i class="fas fa-chevron-left"></i>
+        {{ "actions.list" | trans}}
+    </a>
+    {% if not news.isNew %}
+        <a href="{{ path('news_show', {"id": news.id}) }}" class="btn btn-secondary mx-1 my-1">
+            <i class="fas fa-chevron-up"></i>
+            {{ "actions.show" | trans}}
+        </a>
+    {% endif %}
+    {{ form_widget(form.save, {'attr': {'class': 'btn-primary mx-1 my-1'}}) }}
+</div>
 {{ form_rest(form) }}
 {{ form_end(form) }}
-

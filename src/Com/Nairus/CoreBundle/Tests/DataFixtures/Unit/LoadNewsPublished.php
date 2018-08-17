@@ -33,7 +33,12 @@ class LoadNewsPublished implements FixtureInterface {
                 ->setLink("http://www.news.fr")
                 ->setLocale("fr");
         $firstNews->addContent($firstContentFr);
+        $manager->persist($firstNews);
+        $manager->flush();
+
+        // We make a pause for having not the same creation date.
         sleep(1);
+
         $secondNews = new News();
         $secondNews->setPublished(true);
 
@@ -54,7 +59,6 @@ class LoadNewsPublished implements FixtureInterface {
                 ->setNews($secondNews);
         $secondNews->addContent($secondContentFr);
         $secondNews->addContent($secondContentEn);
-        $manager->persist($firstNews);
         $manager->persist($secondNews);
         $manager->flush();
     }

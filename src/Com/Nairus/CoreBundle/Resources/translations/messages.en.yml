@@ -2,6 +2,10 @@
 errors:
     title: "An Error Occurred: %status_text%"
     takemehome: Take Me Home
+    browser-back: >
+        Use your browsers <b>Back</b> button to navigate to
+        the page you have prevously come from
+    alttext: "Or you can come back to the homepage: "
     error:
         subtitle:
             oops: "Oops! An Error Occurred EN"
@@ -20,7 +24,6 @@ errors:
         description: >
             You are not authorized to access this page,
             contact your webmaster to change your password.
-        alttext: "Or you can come back to the homepage: "
 
     error403:
         subtitle:
@@ -29,10 +32,6 @@ errors:
         description: >
             You do not have the rights to access this page,
             contact your webmaster.
-            Use your browsers <b>Back</b> button to navigate to
-            the page you have prevously come from
-            à la page précedente
-        alttext: "Or you can come back to the homepage: "
 
     error404:
         subtitle:
@@ -41,9 +40,13 @@ errors:
         description: >
             The page you requested could not be found,
             either contact your webmaster or try again.
-            Use your browsers <b>Back</b> button to navigate to
-            the page you have prevously come from
-        alttext: "Or you could just press this neat little button: "
+
+    error405:
+        subtitle:
+            notallowed: '"%method%" method not allowed!'
+            error: Error 405
+        description: >
+            The requested page, can't be reached with "%method%" method.
 
 headline: "Nairus Works"
 nav:
@@ -62,3 +65,19 @@ nav:
         welcome: Welcome %username% !
         adminbutton: Admin
         news: Manage News
+actions:
+    list: Return to the list
+    show: Show details
+    save: Save
+    edit: Edit
+    add: Add
+    delete: Delete
+
+flashes:
+    infos: Infos!
+    success: Success!
+    error: Error!
+
+pagination:
+    previous: Prev.
+    next: Next

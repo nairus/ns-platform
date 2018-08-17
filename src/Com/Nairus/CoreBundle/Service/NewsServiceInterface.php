@@ -2,9 +2,11 @@
 
 namespace Com\Nairus\CoreBundle\Service;
 
+use Com\Nairus\CoreBundle\Dto\NewsPaginatorDto;
 use Com\Nairus\CoreBundle\Entity\News;
 use Com\Nairus\CoreBundle\Entity\NewsContent;
 use Com\Nairus\CoreBundle\Exception\LocaleError;
+use Com\Nairus\CoreBundle\Exception\PaginatorException;
 
 /**
  * News service.
@@ -34,4 +36,16 @@ interface NewsServiceInterface {
      * @return NewsContent|null
      */
     public function findContentForNewsId(News $news, string $locale): ?NewsContent;
+
+    /**
+     * Find the news and dependencies for the current page.
+     *
+     * @param int $page  The current page.
+     * @param int $limit The limit of entities per page.
+     *
+     * @return NewsPaginatorDto
+     *
+     * @throws PaginatorException
+     */
+    public function findNewsForPage(int $page, int $limit): NewsPaginatorDto;
 }

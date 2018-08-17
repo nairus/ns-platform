@@ -1,6 +1,10 @@
 news_index:
-    path:     /
-    defaults: { _controller: "NSCoreBundle:News:index" }
+    path:     /{page}
+    defaults:
+        _controller: "NSCoreBundle:News:index"
+        page: 1
+    requirements:
+        page: \d*
     methods:  GET
 
 news_show:

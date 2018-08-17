@@ -2,6 +2,10 @@
 errors:
     title: "Une Erreur est survenue: %status_text%"
     takemehome: Ramener Moi à l'Accueil
+    browser-back: >
+        Utilisez le bouton <b>Retour</b> de votre navigateur pour retourner
+        à la page précedente
+    alttext: "Ou vous pouvez revenir à l'accueil :"
     error:
         subtitle:
             oops: "Oups! Une Erreur est survenue"
@@ -9,7 +13,7 @@ errors:
         shortdescription: "Le serveur a retourné une \"%status_code% %status_text%\"."
         description: |
             Quelque chose est cassé. S'il vous plait, faites nous savoir
-            où alliez vous quand l'erreur est surevenue.
+            où alliez vous quand l'erreur est survenue.
             Nous allons réparer ceci le plus rapidement possible.
             Nous sommes désolés pour le dérangement causé.
 
@@ -20,7 +24,6 @@ errors:
         description: >
             Vous n'êtes pas autorisé pour accéder à cette page,
             contactez votre webmaster pour changer votre mot de passe.
-        alttext: "Ou vous pouvez revenir à l'accueil :"
 
     error403:
         subtitle:
@@ -29,9 +32,6 @@ errors:
         description: >
             Vous n'avez pas les droits pour accéder à cette page,
             contactez votre webmaster.
-            Utilisez le bouton <b>Retour</b> de votre navigateur pour retourner
-            à la page précedente
-        alttext: "Ou vous pouvez revenir à l'accueil :"
 
     error404:
         subtitle:
@@ -40,9 +40,13 @@ errors:
         description: >
             La page demandée, n'a pas pu être trouvée,
             contactez votre webmaster ou essayez à nouveau.
-            Utilisez le bouton <b>Retour</b> de votre navigateur pour retourner
-            à la page précedente
-        alttext: "Ou vous pouvez cliquer sur ce petit bouton :"
+
+    error405:
+        subtitle:
+            notallowed: 'Méthode "%method%" Non autorisée !'
+            error: Erreur 405
+        description: >
+            La page demandée, ne peut pas être appelée avec la méthode "%method%".
 
 headline: "Travaux de Nairus"
 nav:
@@ -60,3 +64,19 @@ nav:
         welcome: Bienvenue %username% !
         adminbutton: Admin
         news: Gestion des News
+actions:
+    list: Retour à la liste
+    show: Voir les détails
+    save: Sauvegarder
+    edit: Modifier
+    add: Ajouter
+    delete: Supprimer
+
+flashes:
+    infos: Infos!
+    success: Succès!
+    error: Erreur!
+
+pagination:
+    previous: Préc.
+    next: Suiv.

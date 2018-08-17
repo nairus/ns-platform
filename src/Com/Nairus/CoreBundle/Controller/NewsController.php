@@ -35,14 +35,22 @@ class NewsController extends Controller {
      * Lists all news entities.
      *
      */
-    public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction($page) {
+        // Bug chrome
+        if ("" === $page) {
+            $page = 1;
+        }
 
+        // Get the news in database.
+        $em = $this->getDoctrine()->getManager();
         $news = $em->getRepository(static::NAME)->findAll();
 
-        return $this->render(static::NAME . ':index.html.twig', array(
+        // Render the view.
+        return $this->render(static::NAME . ':index.html.twig', [
                     'newsList' => $news,
-        ));
+                    'currentPage' => $page,
+                    'pages' => 3
+        ]);
     }
 
     /**
@@ -61,11 +69,28 @@ class NewsController extends Controller {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($news);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($news);
+                $em->flush();
 
-            return $this->redirectToRoute('news_show', array('id' => $news->getId()));
+                // Add success flash message
+                $request->getSession()->getFlashBag()->add(
+                        'success',
+                        $this->getTranslator()->trans("flashes.success.news.add", [], NSCoreBundle::NAME)
+                );
+            } catch (\Exception $exc) {
+                // Log the error.
+                $this->logError($exc, self::NAME . ":add");
+
+                // Add error flash message.
+                $request->getSession()->getFlashBag()->add(
+                        'error',
+                        $this->getTranslator()->trans("flashes.error.news.add", [], NSCoreBundle::NAME)
+                );
+            } finally {
+                return $this->redirectToRoute('news_show', array('id' => $news->getId()));
+            }
         }
 
         return $this->render(static::NAME . ':new.html.twig', array(
@@ -80,10 +105,14 @@ class NewsController extends Controller {
      *
      */
     public function showAction(News $news) {
+        // Get the default content.
+        $locale = $this->container->getParameter('kernel.default_locale');
+        $newsContent = $this->newsService->findContentForNewsId($news, $locale);
         $deleteForm = $this->createDeleteForm($news);
 
         return $this->render(static::NAME . ':show.html.twig', array(
                     'news' => $news,
+                    'newsContent' => $newsContent,
                     'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -104,22 +133,35 @@ class NewsController extends Controller {
         }
         $news->addContent($newsContent);
 
-        // Create delete form
-        $deleteForm = $this->createDeleteForm($news);
         $editForm = $this->createForm('Com\Nairus\CoreBundle\Form\NewsContentType', $newsContent);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            try {
+                $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('news_show', array('id' => $news->getId()));
+                // Add success flash message.
+                $request->getSession()->getFlashBag()->add(
+                        'success',
+                        $this->getTranslator()->trans("flashes.success.news.edit", ["%news_id%" => $news->getId()], NSCoreBundle::NAME)
+                );
+            } catch (\Exception $exc) {
+                $this->logError($exc, NSCoreBundle::NAME . ":edit");
+
+                // Add error flash message.
+                $request->getSession()->getFlashBag()->add(
+                        'error',
+                        $this->getTranslator()->trans("flashes.error.news.edit", ["%news_id%" => $news->getId()], NSCoreBundle::NAME)
+                );
+            } finally {
+                return $this->redirectToRoute('news_show', array('id' => $news->getId()));
+            }
         }
 
         return $this->render(static::NAME . ':edit.html.twig', array(
                     'news' => $news,
                     'locale' => $locale,
                     'form' => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -130,11 +172,28 @@ class NewsController extends Controller {
     public function deleteAction(Request $request, News $news) {
         $form = $this->createDeleteForm($news);
         $form->handleRequest($request);
+        $news_id = $news->getId();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($news);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($news);
+                $em->flush();
+
+                // Add success flash message.
+                $request->getSession()->getFlashBag()->add(
+                        'success',
+                        $this->getTranslator()->trans("flashes.success.news.delete", ["%news_id%" => $news_id], NSCoreBundle::NAME)
+                );
+            } catch (\Exception $exc) {
+                $this->logError($exc, NSCoreBundle::NAME . ":delete");
+
+                // Add error flash message.
+                $request->getSession()->getFlashBag()->add(
+                        'error',
+                        $this->getTranslator()->trans("flashes.error.news.delete", ["%news_id%" => $news_id], NSCoreBundle::NAME)
+                );
+            }
         }
 
         return $this->redirectToRoute('news_index');
@@ -153,6 +212,26 @@ class NewsController extends Controller {
                         ->setMethod('DELETE')
                         ->getForm()
         ;
+    }
+
+    /**
+     * Return the translation service.
+     *
+     * @return \Symfony\Component\Translation\TranslatorInterface
+     */
+    private function getTranslator() {
+        return $this->get("translator");
+    }
+
+    /**
+     * Log an error
+     *
+     * @param \Exception $exc The exception to log.
+     */
+    private function logError(\Exception $exc, string $context): void {
+        /* @var $logger \Psr\Log\LoggerInterface */
+        $logger = $this->container->get("logger");
+        $logger->error($exc->getMessage(), [$context => $exc]);
     }
 
 }
