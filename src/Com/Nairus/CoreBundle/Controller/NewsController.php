@@ -5,8 +5,10 @@ namespace Com\Nairus\CoreBundle\Controller;
 use Com\Nairus\CoreBundle\NSCoreBundle;
 use Com\Nairus\CoreBundle\Entity\News;
 use Com\Nairus\CoreBundle\Entity\NewsContent;
+use Com\Nairus\CoreBundle\Exception\PaginatorException;
 use Com\Nairus\CoreBundle\Service\NewsServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,9 +44,18 @@ class NewsController extends Controller {
             $page = 1;
         }
 
-        // Get the news in database.
-        $limit = $this->container->getParameter("ns_core.news_limit");
-        $newsPaginationDto = $this->newsService->findNewsForPage($page, $limit);
+        try {
+            // Get the news in database.
+            $limit = $this->container->getParameter("ns_core.news_limit");
+            $newsPaginationDto = $this->newsService->findNewsForPage($page, $limit);
+
+            // If the number of page is wrong, we throw a 404 error
+            if ($page > 1 && $page > $newsPaginationDto->getPages()) {
+                throw $this->createNotFoundException();
+            }
+        } catch (PaginatorException $exc) {
+            throw new BadRequestHttpException("Bad page parameter", $exc);
+        }
 
         // Render the view.
         return $this->render(static::NAME . ':index.html.twig', [
@@ -77,19 +88,13 @@ class NewsController extends Controller {
                 $em->flush();
 
                 // Add success flash message
-                $request->getSession()->getFlashBag()->add(
-                        'success',
-                        $this->getTranslator()->trans("flashes.success.news.add", [], NSCoreBundle::NAME)
-                );
+                $this->addFlash('success', $this->getTranslation("flashes.success.news.add"));
             } catch (\Exception $exc) {
                 // Log the error.
                 $this->logError($exc, self::NAME . ":add");
 
                 // Add error flash message.
-                $request->getSession()->getFlashBag()->add(
-                        'error',
-                        $this->getTranslator()->trans("flashes.error.news.add", [], NSCoreBundle::NAME)
-                );
+                $this->addFlash('error', $this->getTranslation("flashes.error.news.add"));
             } finally {
                 return $this->redirectToRoute('news_show', ['id' => $news->getId()]);
             }
@@ -139,22 +144,17 @@ class NewsController extends Controller {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $transParams = ["%news_id%" => $news->getId()];
             try {
                 $this->getDoctrine()->getManager()->flush();
 
                 // Add success flash message.
-                $request->getSession()->getFlashBag()->add(
-                        'success',
-                        $this->getTranslator()->trans("flashes.success.news.edit", ["%news_id%" => $news->getId()], NSCoreBundle::NAME)
-                );
+                $this->addFlash('success', $this->getTranslation("flashes.success.news.edit", $transParams));
             } catch (\Exception $exc) {
                 $this->logError($exc, NSCoreBundle::NAME . ":edit");
 
                 // Add error flash message.
-                $request->getSession()->getFlashBag()->add(
-                        'error',
-                        $this->getTranslator()->trans("flashes.error.news.edit", ["%news_id%" => $news->getId()], NSCoreBundle::NAME)
-                );
+                $this->addFlash('error', $this->getTranslation("flashes.error.news.edit", $transParams));
             } finally {
                 return $this->redirectToRoute('news_show', ['id' => $news->getId()]);
             }
@@ -177,24 +177,19 @@ class NewsController extends Controller {
         $news_id = $news->getId();
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $transParams = ["%news_id%" => $news_id];
             try {
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($news);
                 $em->flush();
 
                 // Add success flash message.
-                $request->getSession()->getFlashBag()->add(
-                        'success',
-                        $this->getTranslator()->trans("flashes.success.news.delete", ["%news_id%" => $news_id], NSCoreBundle::NAME)
-                );
+                $this->addFlash('success', $this->getTranslation("flashes.success.news.delete", $transParams));
             } catch (\Exception $exc) {
                 $this->logError($exc, static::NAME . ":delete");
 
                 // Add error flash message.
-                $request->getSession()->getFlashBag()->add(
-                        'error',
-                        $this->getTranslator()->trans("flashes.error.news.delete", ["%news_id%" => $news_id], NSCoreBundle::NAME)
-                );
+                $this->addFlash('error', $this->getTranslation("flashes.error.news.delete", $transParams));
             }
         }
 
@@ -243,28 +238,21 @@ class NewsController extends Controller {
         $form = $this->createForm('Com\Nairus\CoreBundle\Form\NewsContentType', $newsContent);
 
         // Remove published field (to use in new and edit page).
-        $form->get("news")->remove("published");
+        $form->remove("news");
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $transParams = ["%news_id%" => $news->getId(), "%locale%" => $locale];
             try {
                 $this->getDoctrine()->getManager()->flush();
 
                 // Add success flash message.
-                $request->getSession()->getFlashBag()->add(
-                        'success',
-                        $this->getTranslator()->trans($successFlashMessage,
-                                ["%news_id%" => $news->getId(), "%locale%" => $locale], NSCoreBundle::NAME)
-                );
+                $this->addFlash('success', $this->getTranslation($successFlashMessage, $transParams));
             } catch (\Exception $exc) {
                 $this->logError($exc, NSCoreBundle::NAME . ":translation");
 
                 // Add error flash message.
-                $request->getSession()->getFlashBag()->add(
-                        'error',
-                        $this->getTranslator()->trans($errorFlashMessage,
-                                ["%news_id%" => $news->getId(), "%locale%" => $locale], NSCoreBundle::NAME)
-                );
+                $this->addFlash('error', $this->getTranslation($errorFlashMessage, $transParam));
             } finally {
                 return $this->redirectToRoute('news_show', ['id' => $news->getId()]);
             }
@@ -282,12 +270,11 @@ class NewsController extends Controller {
     /**
      * Publish a news.
      *
-     * @param Request $request The HTTP request.
-     * @param News    $news    The current news.
+     * @param News $news The current news.
      *
      * @return Response
      */
-    public function publishAction(Request $request, News $news): Response {
+    public function publishAction(News $news): Response {
 
         try {
             $news->setPublished(true);
@@ -297,11 +284,7 @@ class NewsController extends Controller {
             $this->logError($exc, NSCoreBundle::NAME . ":publish");
 
             // Add error flash message.
-            $request->getSession()->getFlashBag()->add(
-                    'error',
-                    $this->getTranslator()->trans("flashes.error.news.edit",
-                            ["%id%" => $news->getId()], NSCoreBundle::NAME)
-            );
+            $this->addFlash('error', $this->getTranslation("flashes.error.news.edit", ["%id%" => $news->getId()]));
             return $this->redirectToRoute('news_index');
         }
     }
@@ -322,12 +305,16 @@ class NewsController extends Controller {
     }
 
     /**
-     * Return the translation service.
+     * Return the translation of a message.
      *
-     * @return \Symfony\Component\Translation\TranslatorInterface
+     * @param string $id     The id of the translation.
+     * @param array  $params The parameters for the translation.
+     * @param string $domain The file domain where the translations is stored.
+     *
+     * @return string
      */
-    private function getTranslator() {
-        return $this->get("translator");
+    private function getTranslation($id, $params = [], $domain = NSCoreBundle::NAME): string {
+        return $this->get("translator")->trans($id, $params, $domain);
     }
 
     /**

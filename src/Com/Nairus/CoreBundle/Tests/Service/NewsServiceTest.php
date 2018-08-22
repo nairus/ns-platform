@@ -138,20 +138,25 @@ class NewsServiceTest extends AbstractKernelTestCase {
      * @covers NewsServiceInterface::findNewsForPage
      */
     public function testFindNewsForPage() {
-        $newsPaginatorDto = $this->object->findNewsForPage(1, 1);
-        $entities = $newsPaginatorDto->getEntities();
-        /* @var $news \Com\Nairus\CoreBundle\Entity\News */
-        $news = $entities[0];
-        $this->assertSame(2, $newsPaginatorDto->getPages(), "1.1 The number of pages has to be correct.");
-        $this->assertCount(1, $entities, "1.2 The collection has to contain 1 entity.");
-        $this->assertSame(1, $newsPaginatorDto->getCurrentPage(), "1.3 The current page has to be set.");
+        // Test page 1
+        $newsPaginatorDtoForPage1 = $this->object->findNewsForPage(1, 2);
+        $entitiesForPage1 = $newsPaginatorDtoForPage1->getEntities();
+        /* @var $ $firstNews \Com\Nairus\CoreBundle\Entity\News */
+        $firstNews = $entitiesForPage1[0];
+        $this->assertSame(1, $newsPaginatorDtoForPage1->getPages(), "1.1 The number of pages has to be correct.");
+        $this->assertCount(2, $entitiesForPage1, "1.2 The collection has to contain 2 entities.");
+        $this->assertSame(1, $newsPaginatorDtoForPage1->getCurrentPage(), "1.3 The current page has to be set.");
 
         // Test the missing translation algo.
-        $missingTranslations = $newsPaginatorDto->getMissingTranslations();
-        $this->assertCount(1, $missingTranslations, "2.1 The missingTranslation property has to contain 1 entry.");
-        $this->assertArrayHasKey($news->getId(), $missingTranslations, "2.2 The key has to exist.");
-        $this->assertCount(1, $missingTranslations[$news->getId()], "2.3 One locale has to be missing.");
-        $this->assertNotContains("fr", $missingTranslations[$news->getId()], "2.4 The [fr] locale hasn't to be missing.");
+        $missingTranslations = $newsPaginatorDtoForPage1->getMissingTranslations();
+        $this->assertCount(2, $missingTranslations, "2.1 The missingTranslation property has to contain 1 entry.");
+        $this->assertArrayHasKey($firstNews->getId(), $missingTranslations, "2.2 The key has to exist.");
+        $this->assertCount(1, $missingTranslations[$firstNews->getId()], "2.3 One locale has to be missing.");
+        $this->assertNotContains("fr", $missingTranslations[$firstNews->getId()], "2.4 The [fr] locale hasn't to be missing.");
+
+        // Test page 2
+        $newsPaginatorDtoForPage2 = $this->object->findNewsForPage(2, 2);
+        $this->assertCount(0, $newsPaginatorDtoForPage2->getEntities(), "3.1 The page 2 must be empty.");
     }
 
     /**

@@ -1,0 +1,5 @@
+## Parameters config for CoreBundle (dev env.)
+
+parameters:
+    # Limit for the News list (Cf. NewsController::IndexAction).
+    ns_core.news_limit: 2

@@ -87,7 +87,7 @@ class HomepageControllerTest extends BaseWebTestCase {
             "PHP_AUTH_USER" => "admin",
             "PHP_AUTH_PW" => '456']);
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2.1 Unexpected HTTP status code for GET / with admin login");
-        $this->assertContains('<span class="mx-1 font-weight-bold text-white">Bienvenue admin', $crawler->filter("#navbar")->html(), "2.2 The navbar has to contain authentication username");
+        $this->assertContains('Bienvenue admin', $crawler->filter("#navbar")->text(), "2.2 The navbar has to contain authentication username");
         $this->assertEquals(1, $crawler->filter("#admin-menu")->count(), "2.3 The navbar has to contain admin dropdown button.");
 
 

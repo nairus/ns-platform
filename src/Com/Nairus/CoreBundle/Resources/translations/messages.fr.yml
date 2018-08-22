@@ -17,6 +17,13 @@ errors:
             Nous allons réparer ceci le plus rapidement possible.
             Nous sommes désolés pour le dérangement causé.
 
+    error400:
+        subtitle:
+            bad-request: "Mauvaise requête"
+            error: Erreur 400
+        description: >
+            La page demandée n'existe pas.
+
     error401:
         subtitle:
             unauthorized: "Accès non autorisé"

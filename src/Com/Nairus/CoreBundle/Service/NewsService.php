@@ -100,8 +100,11 @@ class NewsService implements NewsServiceInterface {
             throw new PaginatorException($page, "Bad page [$page] for new list");
         }
 
+        // Calculate the offset for the current page.
+        $offset = ($page - 1) * $limit;
+
         // Get the doctrine Paginator.
-        $newsPaginator = $this->newsRepository->findNewsForPage($page - 1, $limit);
+        $newsPaginator = $this->newsRepository->findNewsForPage($offset, $limit);
         $entities = $newsPaginator->getIterator()->getArrayCopy();
         $missingTranslations = [];
 
@@ -120,6 +123,8 @@ class NewsService implements NewsServiceInterface {
 
         // Get the total of entities.
         $total = $newsPaginator->count();
+
+        // Calculate the number of pages.
         $pages = ceil($total / $limit);
 
         $newsPaginatorDto->setCurrentPage($page)

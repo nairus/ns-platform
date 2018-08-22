@@ -53,7 +53,7 @@
                                     {{ "news.index.table.offline" | trans({}, "NSCoreBundle") }}
                                 {% endif %}
                             </td>
-                            <td>
+                            <td class="missing-translations">
                                 {% if news.id in missingTranslations|keys %}
                                     {% set translations = missingTranslations[news.id] %}
                                     <div class="d-flex flex-md-column bd-highlight mb-3">

@@ -7,4 +7,4 @@ parameters:
     # Limit for the last news tiles on the homepage.
     ns_core.last_news_limit: 3
     # Limit for the News list (Cf. NewsController::IndexAction).
-    ns_core.news_limit: 10
+    ns_core.news_limit: 5

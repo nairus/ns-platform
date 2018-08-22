@@ -17,6 +17,13 @@ errors:
             We will fix it as soon as possible.
             Sorry for any inconvenience caused.
 
+    error400:
+        subtitle:
+            bad-request: "Bad request"
+            error: Error 400
+        description: >
+            The requested page does not exist.
+
     error401:
         subtitle:
             unauthorized: "Unauthorized access"
