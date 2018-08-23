@@ -3,6 +3,8 @@
 namespace Com\Nairus\ResumeBundle\Entity;
 
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
+use Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,6 +15,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *
  * @ORM\Table(name="ns_resume")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ResumeRepository")
+ * @Gedmo\TranslationEntity(class="Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation")
  * @ORM\HasLifecycleCallbacks()
  */
 class Resume {
@@ -29,9 +32,28 @@ class Resume {
     /**
      * @var string
      *
+     * @Gedmo\Translatable
      * @ORM\Column(type="string", length=255)
      */
     private $title;
+
+    /**
+     * @var string
+     *
+     * @Gedmo\Translatable
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(length=64, unique=true)
+     */
+    private $slug;
+
+    /**
+     * @ORM\OneToMany(
+     *   targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation",
+     *   mappedBy="object",
+     *   cascade={"persist", "remove"}
+     * )
+     */
+    private $translations;
 
     /**
      * @var bool
@@ -95,6 +117,7 @@ class Resume {
         $this->resumeSkills = new ArrayCollection();
         $this->experiences = new ArrayCollection();
         $this->educations = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -307,6 +330,61 @@ class Resume {
      */
     public function getIp(): string {
         return $this->ip;
+    }
+
+    /**
+     * Set slug.
+     *
+     * @param string $slug
+     *
+     * @return Resume
+     */
+    public function setSlug(string $slug): Resume {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug.
+     *
+     * @return string
+     */
+    public function getSlug(): string {
+        return $this->slug;
+    }
+
+    /**
+     * Add translation.
+     *
+     * @param ResumeTranslation $translation
+     *
+     * @return Resume
+     */
+    public function addTranslation(ResumeTranslation $translation): Resume {
+        $this->translations[] = $translation;
+
+        return $this;
+    }
+
+    /**
+     * Remove translation.
+     *
+     * @param ResumeTranslation $translation
+     *
+     * @return boolean <code>TRUE</code> if this collection contained the specified element, <code>FALSE</code> otherwise.
+     */
+    public function removeTranslation(ResumeTranslation $translation) {
+        return $this->translations->removeElement($translation);
+    }
+
+    /**
+     * Get translations.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTranslations() {
+        return $this->translations;
     }
 
 }
