@@ -1,4 +1,5 @@
 <?php
+
 namespace Com\Nairus\ResumeBundle\Tests\DataFixtures\ORM;
 
 use Com\Nairus\ResumeBundle\Enums\UserRolesEnum;
@@ -12,20 +13,18 @@ use Doctrine\Common\Persistence\ObjectManager;
  *
  * @author nairus
  */
-class LoadResume extends AbstractFixture implements OrderedFixtureInterface
-{
+class LoadResume extends AbstractFixture implements OrderedFixtureInterface {
 
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
-    {
+    public function load(ObjectManager $manager) {
         $author = $this->getReference("user_" . UserRolesEnum::AUTHOR);
         $resume = new Resume();
         $resume
-            ->setTitle("Default title")
-            ->setIp("127.0.0.1")
-            ->setAuthor($author);
+                ->setTitle("Default title")
+                ->setIp("127.0.0.1")
+                ->setAuthor($author);
 
         $manager->persist($resume);
         $manager->flush();
@@ -34,9 +33,8 @@ class LoadResume extends AbstractFixture implements OrderedFixtureInterface
     /**
      * {@inheritdoc}
      */
-    public function getOrder()
-    {
-        return 2;
+    public function getOrder() {
+        return 3;
     }
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Com\Nairus\ResumeBundle\Tests\DataFixtures\ORM;
 
 use Com\Nairus\ResumeBundle\Entity\Skill;
@@ -11,14 +12,12 @@ use Doctrine\Common\Persistence\ObjectManager;
  *
  * @author nairus
  */
-class LoadSkill extends AbstractFixture implements OrderedFixtureInterface
-{
+class LoadSkill extends AbstractFixture implements OrderedFixtureInterface {
 
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
-    {
+    public function load(ObjectManager $manager) {
         $skills = [
             "PHP 7",
             "Python 2/3"
@@ -36,9 +35,8 @@ class LoadSkill extends AbstractFixture implements OrderedFixtureInterface
     /**
      * {@inheritdoc}
      */
-    public function getOrder()
-    {
-        return 3;
+    public function getOrder() {
+        return 4;
     }
 
 }

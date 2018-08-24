@@ -2,12 +2,17 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
+use Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Experience
  *
  * @ORM\Table(name="ns_experience")
+ * @Gedmo\TranslationEntity(class="Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ExperienceRepository")
  */
 class Experience {
@@ -38,6 +43,7 @@ class Experience {
     /**
      * @var string
      *
+     * @Gedmo\Translatable
      * @ORM\Column(type="text")
      */
     private $description;
@@ -86,10 +92,20 @@ class Experience {
     private $resume;
 
     /**
+     * @ORM\OneToMany(
+     *   targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation",
+     *   mappedBy="object",
+     *   cascade={"persist", "remove"}
+     * )
+     */
+    private $translations;
+
+    /**
      * Constructeur.
      */
     public function __construct() {
         $this->currentJob = false;
+        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -297,6 +313,39 @@ class Experience {
      */
     public function getResume(): Resume {
         return $this->resume;
+    }
+
+    /**
+     * Add translation.
+     *
+     * @param ExperienceTranslation $translation
+     *
+     * @return Experience
+     */
+    public function addTranslation(ExperienceTranslation $translation): Experience {
+        $this->translations[] = $translation;
+
+        return $this;
+    }
+
+    /**
+     * Remove translation.
+     *
+     * @param ExperienceTranslation $translation
+     *
+     * @return boolean <code>TRUE</code> if this collection contained the specified element, <code>FALSE</code> otherwise.
+     */
+    public function removeTranslation(ExperienceTranslation $translation): bool {
+        return $this->translations->removeElement($translation);
+    }
+
+    /**
+     * Get translations.
+     *
+     * @return Collection
+     */
+    public function getTranslations(): Collection {
+        return $this->translations;
     }
 
 }

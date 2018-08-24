@@ -2,13 +2,18 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
+use Com\Nairus\ResumeBundle\Entity\Translation\EducationTranslation;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Education
  *
  * @ORM\Table(name="ns_education")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\EducationRepository")
+ * @Gedmo\TranslationEntity(class="Com\Nairus\ResumeBundle\Entity\Translation\EducationTranslation")
  */
 class Education {
 
@@ -59,6 +64,7 @@ class Education {
     /**
      * @var string
      *
+     * @Gedmo\Translatable
      * @ORM\Column(type="text")
      */
     private $description;
@@ -70,6 +76,22 @@ class Education {
      * @ORM\JoinColumn(nullable=false)
      */
     private $resume;
+
+    /**
+     * @ORM\OneToMany(
+     *   targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\EducationTranslation",
+     *   mappedBy="object",
+     *   cascade={"persist", "remove"}
+     * )
+     */
+    private $translations;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->translations = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -232,6 +254,39 @@ class Education {
      */
     public function getResume(): Resume {
         return $this->resume;
+    }
+
+    /**
+     * Add translation.
+     *
+     * @param EducationTranslation $translation
+     *
+     * @return Education
+     */
+    public function addTranslation(EducationTranslation $translation): Education {
+        $this->translations[] = $translation;
+
+        return $this;
+    }
+
+    /**
+     * Remove translation.
+     *
+     * @param EducationTranslation $translation
+     *
+     * @return boolean <code>TRUE</code> if this collection contained the specified element, <cod>FALSE</code> otherwise.
+     */
+    public function removeTranslation(EducationTranslation $translation): bool {
+        return $this->translations->removeElement($translation);
+    }
+
+    /**
+     * Get translations.
+     *
+     * @return Collection
+     */
+    public function getTranslations(): Collection {
+        return $this->translations;
     }
 
 }

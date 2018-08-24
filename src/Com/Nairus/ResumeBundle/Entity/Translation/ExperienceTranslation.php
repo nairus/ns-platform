@@ -6,16 +6,19 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 
 /**
- * Description of ResumeTranslation
+ * ExperienceTransalation Entity
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Entity
- * @ORM\Table(name="ns_resume_translations",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="ns_resume_translations_lookup_unique_idx", columns={
+ * @ORM\Table(name="ns_experience_translations",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="ns_experience_translations_lookup_unique_idx", columns={
  *         "locale", "object_id", "field"
  *     })}
  * )
  */
-class ResumeTranslation extends AbstractPersonalTranslation {
+class ExperienceTranslation extends AbstractPersonalTranslation {
 
     /**
      * Convinient constructor
@@ -31,7 +34,7 @@ class ResumeTranslation extends AbstractPersonalTranslation {
     }
 
     /**
-     * @ORM\ManyToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Resume", inversedBy="translations")
+     * @ORM\ManyToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Experience", inversedBy="translations")
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $object;

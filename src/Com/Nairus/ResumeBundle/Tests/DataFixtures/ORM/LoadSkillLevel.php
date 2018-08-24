@@ -1,4 +1,5 @@
 <?php
+
 namespace Com\Nairus\ResumeBundle\Tests\DataFixtures\ORM;
 
 use Com\Nairus\ResumeBundle\Entity\SkillLevel;
@@ -11,14 +12,12 @@ use Doctrine\Common\Persistence\ObjectManager;
  *
  * @author nairus
  */
-class LoadSkillLevel extends AbstractFixture implements OrderedFixtureInterface
-{
+class LoadSkillLevel extends AbstractFixture implements OrderedFixtureInterface {
 
     /**
      * {@inheritDoc}
      */
-    public function load(ObjectManager $manager)
-    {
+    public function load(ObjectManager $manager) {
         $skillLevels = [
             "Débutant",
             "Confirmé",
@@ -37,9 +36,8 @@ class LoadSkillLevel extends AbstractFixture implements OrderedFixtureInterface
     /**
      * {@inheritdoc}
      */
-    public function getOrder()
-    {
-        return 4;
+    public function getOrder() {
+        return 5;
     }
 
 }
