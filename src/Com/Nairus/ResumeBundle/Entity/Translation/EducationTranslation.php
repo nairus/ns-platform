@@ -2,11 +2,13 @@
 
 namespace Com\Nairus\ResumeBundle\Entity\Translation;
 
+use Com\Nairus\CoreBundle\Entity\TranslatableEntity;
+use Com\Nairus\CoreBundle\Entity\AbstractTranslationEntity;
+use Com\Nairus\ResumeBundle\Entity\Education;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 
 /**
- * EducationTranslation Entity
+ * EducationTranslation entity.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -18,25 +20,21 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
  *     })}
  * )
  */
-class EducationTranslation extends AbstractPersonalTranslation {
-
-    /**
-     * Convinient constructor
-     *
-     * @param string $locale
-     * @param string $field
-     * @param string $value
-     */
-    public function __construct(string $locale, string $field, string $value) {
-        $this->setLocale($locale);
-        $this->setField($field);
-        $this->setContent($value);
-    }
+class EducationTranslation extends AbstractTranslationEntity {
 
     /**
      * @ORM\ManyToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Education", inversedBy="translations")
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $object;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function validObjectClass(TranslatableEntity $object): void {
+        if (!$object instanceof Education) {
+            throw new \TypeError("Instance of [Education] expected!");
+        }
+    }
 
 }

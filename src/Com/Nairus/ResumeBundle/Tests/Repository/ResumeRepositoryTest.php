@@ -9,9 +9,10 @@ use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeOnline;
 
 /**
- * Test de la classe ResumeRepository.
+ * Test of ResumeRepository.
  *
- * @author Nicolas Surian <nicolas.surian@gmail.com>
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class ResumeRepositoryTest extends AbstractKernelTestCase {
 
@@ -57,8 +58,8 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
 
         // Get the resumes.
         $resumes = static::$repository->findAll();
-        $this->assertCount(2, $resumes, "1.1. Il doit y avoir 2 entités en base.");
-        $this->assertSame($newResume->getId(), $resumes[1]->getId(), "1.2. L'id de l'entité récupérée doit être identique à celle créée.");
+        $this->assertCount(2, $resumes, "1.1. Two entities are expected in database.");
+        $this->assertSame($newResume->getId(), $resumes[1]->getId(), "1.2. The entity id has to be the identical.");
 
         // Update test.
         /* @var $entity Resume */
@@ -71,10 +72,10 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
 
         /* @var $resume Resume */
         $resume = static::$repository->find($entity->getId());
-        $this->assertSame(true, $resume->getAnonymous(), "2.1. Le champ [anomymous] doit être mise à jour.");
-        $this->assertSame(ResumeStatusEnum::OFFLINE_TO_PUBLISHED, $resume->getStatus(), "2.2. Le champ [status] doit être mise à jour.");
-        $this->assertSame("Test MAJ", $resume->getTitle(), "2.3. Le champ [title] doit être mise à jour.");
-        $this->assertInstanceOf(\DateTimeInterface::class, $resume->getUpdatedAt(), "2.4. La date de mise à jour doit automatiquement définie.");
+        $this->assertSame(true, $resume->getAnonymous(), "2.1. The [anomymous] fiels has to be updated.");
+        $this->assertSame(ResumeStatusEnum::OFFLINE_TO_PUBLISHED, $resume->getStatus(), "2.2. The [status] field has to be updated.");
+        $this->assertSame("Test MAJ", $resume->getTitle(), "2.3. The [title] field has to be updated.");
+        $this->assertInstanceOf(\DateTimeInterface::class, $resume->getUpdatedAt(), "2.4. The update date has to be automaticaly updated.");
 
         // Delete test
         $id = $resume->getId();
@@ -83,7 +84,7 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
         static::$em->clear();
 
         $resumeRemoved = static::$repository->find($id);
-        $this->assertNull($resumeRemoved, "3.1. L'entité doit être supprimée.");
+        $this->assertNull($resumeRemoved, "3.1. The entity has to be deleted.");
     }
 
     /**
@@ -107,34 +108,48 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
     public function testFindAllOnlineForPage() {
         // Test with no online resume.
         $noResumeList = static::$repository->findAllOnlineForPage(1, 1);
-        $this->assertInstanceOf(\Doctrine\ORM\Tools\Pagination\Paginator::class, $noResumeList, "1.1. La méthode doit retourner un objet de type [Paginator].");
-        $this->assertSame(0, $noResumeList->count(), "1.2. Il ne doit y avoir aucun CV en ligne.");
+        $this->assertInstanceOf(\Doctrine\ORM\Tools\Pagination\Paginator::class, $noResumeList, "1.1. The method has to return a [Paginator] object.");
+        $this->assertSame(0, $noResumeList->count(), "1.2. No resume has to be online.");
 
         // Add entities in the database.
         static::$loadResumeOnline->load(static::$em);
 
         // Page 1.
         $resumesPage1 = static::$repository->findAllOnlineForPage(1, 1);
-        $this->assertSame(2, $resumesPage1->count(), "2.1. Il ne doit y avoir que 2 CV en ligne sur toutes les pages.");
+        $this->assertSame(2, $resumesPage1->count(), "2.1. Only two resumes have to be online.");
         $resultPage1 = $resumesPage1->getQuery()->getResult();
-        $this->assertCount(1, $resultPage1, "2.2. Il doit y avoir un CV sur la page 1.");
-        $this->assertSame("Test1", $resultPage1[0]->getTitle(), "2.3. Le premier CV doit avoir le titre attendu.");
+        $this->assertCount(1, $resultPage1, "2.2. One resume has to be on page 1.");
+        $this->assertSame("Test1", $resultPage1[0]->getTitle(), "2.3. The first resume has to have the title expected.");
 
         // Page 2.
         $resumesPage2 = static::$repository->findAllOnlineForPage(2, 1);
-        $this->assertSame(2, $resumesPage2->count(), "3.1. Il ne doit y avoir que 2 CV en ligne sur toutes les pages.");
+        $this->assertSame(2, $resumesPage2->count(), "3.1. Only two resumes have to be online.");
         $resultPage2 = $resumesPage2->getQuery()->getResult();
-        $this->assertCount(1, $resultPage2, "3.2. Il doit y avoir un CV sur la page 2.");
-        $this->assertSame("Test0", $resultPage2[0]->getTitle(), "3.3. Le deuxième CV doit avoir le titre attendu.");
+        $this->assertCount(1, $resultPage2, "3.2. One resume has to be on  page 2.");
+        $this->assertSame("Test0", $resultPage2[0]->getTitle(), "3.3. The second resume has to have the title expected.");
 
         // Page 3.
         $resumesPage3 = static::$repository->findAllOnlineForPage(3, 1);
-        $this->assertSame(2, $resumesPage3->count(), "3.1. Il ne doit y avoir que 2 CV en ligne sur toutes les pages.");
+        $this->assertSame(2, $resumesPage3->count(), "3.1. Only two resumes have to be online.");
         $resultPage3 = $resumesPage3->getQuery()->getResult();
-        $this->assertCount(0, $resultPage3, "3.2. Il doit y avoir aucun CV sur la page 3.");
+        $this->assertCount(0, $resultPage3, "3.2. No resume are expected on page 3.");
 
         // Delete datas for others tests.
         static::$loadResumeOnline->remove(static::$em);
+    }
+
+    /**
+     * Test find a resume with his translation.
+     *
+     * @covers ResumeRepository::findWithTranslation
+     */
+    public function testFindWithTranslation() {
+        /* @var $resumeFr Resume */
+        $resumeFr = static::$repository->findWithTranslation(1, "fr");
+        $this->assertInstanceOf("Com\Nairus\ResumeBundle\Entity\Resume", $resumeFr, "1. The entity has to be an instance of [Resume] with [fr] translation.");
+
+        $resumeEn = static::$repository->findWithTranslation(1, "en");
+        $this->assertNull($resumeEn, "2. The resume musts not exist with [en] locale.");
     }
 
 }

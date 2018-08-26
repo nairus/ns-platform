@@ -74,6 +74,9 @@ doctrine:
 
 # Stof\DoctrineExtensionsBundle configuration
 stof_doctrine_extensions:
+    default_locale: "%locale%"
+    translation_fallback: true
+    persist_default_translation: true
     orm:
         default:
             blameable: true
@@ -81,6 +84,7 @@ stof_doctrine_extensions:
             sortable: true
             timestampable: true
             uploadable: true
+            translatable: true
 
 # Swiftmailer Configuration
 swiftmailer:

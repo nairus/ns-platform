@@ -2,20 +2,23 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
+use Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity;
 use Com\Nairus\ResumeBundle\Entity\Translation\EducationTranslation;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 
 /**
- * Education
+ * Education entity.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Table(name="ns_education")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\EducationRepository")
  * @Gedmo\TranslationEntity(class="Com\Nairus\ResumeBundle\Entity\Translation\EducationTranslation")
  */
-class Education {
+class Education extends AbstractTranslatableEntity {
 
     /**
      * @var int
@@ -84,14 +87,7 @@ class Education {
      *   cascade={"persist", "remove"}
      * )
      */
-    private $translations;
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->translations = new ArrayCollection();
-    }
+    protected $translations;
 
     /**
      * Get id
@@ -263,7 +259,11 @@ class Education {
      *
      * @return Education
      */
-    public function addTranslation(EducationTranslation $translation): Education {
+    public function addTranslation(AbstractPersonalTranslation $translation): Education {
+        if (!$translation instanceof EducationTranslation) {
+            throw new \TypeError("Instance of [EducationTranslation] expected!");
+        }
+
         $this->translations[] = $translation;
 
         return $this;
@@ -276,17 +276,12 @@ class Education {
      *
      * @return boolean <code>TRUE</code> if this collection contained the specified element, <cod>FALSE</code> otherwise.
      */
-    public function removeTranslation(EducationTranslation $translation): bool {
-        return $this->translations->removeElement($translation);
-    }
+    public function removeTranslation(AbstractPersonalTranslation $translation): bool {
+        if (!$translation instanceof EducationTranslation) {
+            throw new \TypeError("Instance of [EducationTranslation] expected!");
+        }
 
-    /**
-     * Get translations.
-     *
-     * @return Collection
-     */
-    public function getTranslations(): Collection {
-        return $this->translations;
+        return $this->translations->removeElement($translation);
     }
 
 }
