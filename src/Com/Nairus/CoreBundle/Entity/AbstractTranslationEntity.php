@@ -37,5 +37,5 @@ abstract class AbstractTranslationEntity extends AbstractPersonalTranslation {
      *
      * @throws \TypeError In case of bad type.
      */
-    abstract public function validObjectClass(TranslatableEntity $object): void;
+    abstract protected function validObjectClass(TranslatableEntity $object): void;
 }

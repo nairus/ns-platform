@@ -30,7 +30,7 @@ class EducationTest extends KernelTestCase {
      * This method is called after a test is executed.
      */
     protected function tearDown() {
-
+        unset($this->object);
     }
 
     /**
@@ -44,7 +44,6 @@ class EducationTest extends KernelTestCase {
     /**
      * Test adding bad translation.
      *
-     * @covers Education::addTranslations
      * @expectedException \TypeError
      * @expectedExceptionMessage Instance of [EducationTranslation] expected!
      */
@@ -55,12 +54,11 @@ class EducationTest extends KernelTestCase {
     /**
      * Test removing bad translation.
      *
-     * @covers Education::removeTranslation
      * @expectedException \TypeError
      * @expectedExceptionMessage Instance of [EducationTranslation] expected!
      */
     public function testRemoveBadTranslation() {
-        $this->object->removeTranslation(new Translation\ExperienceTranslation("en", "description", "bad translation"));
+        $this->object->removeTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity("en", "description", "bad translation"));
     }
 
     /**
@@ -72,9 +70,9 @@ class EducationTest extends KernelTestCase {
             $this->object->setInstitution("AFPA");
             $this->assertSame("AFPA", $this->object->getInstitution());
         } catch (\Exception $exc) {
-            $this->fail("Aucune exception ne doit être levée :" . $exc->getMessage());
+            $this->fail("No exception has to be thrown: " . $exc->getMessage());
         } catch (\Error $err) {
-            $this->fail("Aucune erreur ne doit être levée :" . $err->getMessage());
+            $this->fail("No error has to be thrown: " . $err->getMessage());
         }
     }
 
@@ -96,9 +94,9 @@ class EducationTest extends KernelTestCase {
             $this->object->setDiploma("BTS");
             $this->assertSame("BTS", $this->object->getDiploma());
         } catch (\Exception $exc) {
-            $this->fail("Aucune exception ne doit être levée: " . $exc->getMessage());
+            $this->fail("No error has to be thrown: " . $exc->getMessage());
         } catch (\Error $err) {
-            $this->fail("Aucune erreur ne doit être levée :" . $err->getMessage());
+            $this->fail("No error has to be thrown:" . $err->getMessage());
         }
     }
 
@@ -120,9 +118,9 @@ class EducationTest extends KernelTestCase {
             $this->object->setDomain("Web");
             $this->assertSame("Web", $this->object->getDomain());
         } catch (\Exception $exc) {
-            $this->fail("Aucune exception ne doit être levée: " . $exc->getMessage());
+            $this->fail("No exception has to be thrown: " . $exc->getMessage());
         } catch (\Error $err) {
-            $this->fail("Aucune erreur ne doit être levée :" . $err->getMessage());
+            $this->fail("No error has to be thrown: " . $err->getMessage());
         }
     }
 
@@ -150,9 +148,9 @@ class EducationTest extends KernelTestCase {
             $this->object->setStartYear("42"); // typecasting en (int)42
             $this->object->setStartYear(1.5); // typecasting en (int)1
         } catch (\Exception $exc) {
-            $this->fail("Aucune exception ne doit être levée: " . $exc->getMessage());
+            $this->fail("No exception has to be thrown: " . $exc->getMessage());
         } catch (\Error $err) {
-            $this->fail("Aucune erreur ne doit être levée :" . $err->getMessage());
+            $this->fail("No error has to be thrown: " . $err->getMessage());
         }
     }
 
@@ -174,9 +172,9 @@ class EducationTest extends KernelTestCase {
             $this->object->setEndYear(2018);
             $this->assertSame(2018, $this->object->getEndYear());
         } catch (\Exception $exc) {
-            $this->fail("Aucune exception ne doit être levée: " . $exc->getMessage());
+            $this->fail("No exception has to be thrown: " . $exc->getMessage());
         } catch (\Error $err) {
-            $this->fail("Aucune erreur ne doit être levée :" . $err->getMessage());
+            $this->fail("No error has to be thrown: " . $err->getMessage());
         }
     }
 
@@ -199,9 +197,9 @@ class EducationTest extends KernelTestCase {
             $this->object->setDescription($desc);
             $this->assertSame($desc, $this->object->getDescription());
         } catch (\Exception $exc) {
-            $this->fail("Aucune exception ne doit être levée: " . $exc->getMessage());
+            $this->fail("No exception has to be thrown: " . $exc->getMessage());
         } catch (\Error $err) {
-            $this->fail("Aucune erreur ne doit être levée :" . $err->getMessage());
+            $this->fail("No error has to be thrown: " . $err->getMessage());
         }
     }
 
@@ -224,9 +222,9 @@ class EducationTest extends KernelTestCase {
             $this->object->setResume($resume);
             $this->assertSame($resume, $this->object->getResume());
         } catch (\Exception $exc) {
-            $this->fail("Aucune exception ne doit être levée: " . $exc->getMessage());
+            $this->fail("No exception has to be thrown: " . $exc->getMessage());
         } catch (\Error $err) {
-            $this->fail("Aucune erreur ne doit être levée :" . $err->getMessage());
+            $this->fail("No error has to be thrown: " . $err->getMessage());
         }
     }
 

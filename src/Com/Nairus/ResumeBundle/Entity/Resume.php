@@ -2,23 +2,28 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
+use Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 
 /**
- * Resume
+ * Resume entity.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Table(name="ns_resume")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ResumeRepository")
  * @Gedmo\TranslationEntity(class="Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation")
  * @ORM\HasLifecycleCallbacks()
  */
-class Resume {
+class Resume extends AbstractTranslatableEntity {
 
     /**
      * @var int
@@ -40,20 +45,11 @@ class Resume {
     /**
      * @var string
      *
-     * @Gedmo\Translatable
      * @Gedmo\Slug(fields={"title"})
+     * @Gedmo\Translatable
      * @ORM\Column(length=64, unique=true)
      */
     private $slug;
-
-    /**
-     * @ORM\OneToMany(
-     *   targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation",
-     *   mappedBy="object",
-     *   cascade={"persist", "remove"}
-     * )
-     */
-    private $translations;
 
     /**
      * @var bool
@@ -104,6 +100,15 @@ class Resume {
      * @ORM\OneToMany(targetEntity="Com\Nairus\ResumeBundle\Entity\Education", mappedBy="resume")
      */
     private $educations;
+
+    /**
+     * @ORM\OneToMany(
+     *   targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation",
+     *   mappedBy="object",
+     *   cascade={"persist", "remove"}
+     * )
+     */
+    protected $translations;
 
     /**
      * Hook timestampable behavior
@@ -355,36 +360,12 @@ class Resume {
     }
 
     /**
-     * Add translation.
-     *
-     * @param ResumeTranslation $translation
-     *
-     * @return Resume
+     * {@inheritDoc}
      */
-    public function addTranslation(ResumeTranslation $translation): Resume {
-        $this->translations[] = $translation;
-
-        return $this;
-    }
-
-    /**
-     * Remove translation.
-     *
-     * @param ResumeTranslation $translation
-     *
-     * @return boolean <code>TRUE</code> if this collection contained the specified element, <code>FALSE</code> otherwise.
-     */
-    public function removeTranslation(ResumeTranslation $translation) {
-        return $this->translations->removeElement($translation);
-    }
-
-    /**
-     * Get translations.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTranslations() {
-        return $this->translations;
+    protected function validateTranslationEntity(AbstractPersonalTranslation $translation): void {
+        if (!$translation instanceof ResumeTranslation) {
+            throw new \TypeError("Instance of [ResumeTranslation] expected!");
+        }
     }
 
 }

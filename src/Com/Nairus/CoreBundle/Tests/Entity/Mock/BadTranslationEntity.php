@@ -12,7 +12,7 @@ use Com\Nairus\CoreBundle\Entity\AbstractTranslationEntity;
  */
 class BadTranslationEntity extends AbstractTranslationEntity {
 
-    public function validObjectClass(\Com\Nairus\CoreBundle\Entity\TranslatableEntity $object): void {
+    protected function validObjectClass(\Com\Nairus\CoreBundle\Entity\TranslatableEntity $object): void {
 
     }
 

@@ -253,35 +253,12 @@ class Education extends AbstractTranslatableEntity {
     }
 
     /**
-     * Add translation.
-     *
-     * @param EducationTranslation $translation
-     *
-     * @return Education
+     * {@inheritDoc}
      */
-    public function addTranslation(AbstractPersonalTranslation $translation): Education {
+    protected function validateTranslationEntity(AbstractPersonalTranslation $translation): void {
         if (!$translation instanceof EducationTranslation) {
             throw new \TypeError("Instance of [EducationTranslation] expected!");
         }
-
-        $this->translations[] = $translation;
-
-        return $this;
-    }
-
-    /**
-     * Remove translation.
-     *
-     * @param EducationTranslation $translation
-     *
-     * @return boolean <code>TRUE</code> if this collection contained the specified element, <cod>FALSE</code> otherwise.
-     */
-    public function removeTranslation(AbstractPersonalTranslation $translation): bool {
-        if (!$translation instanceof EducationTranslation) {
-            throw new \TypeError("Instance of [EducationTranslation] expected!");
-        }
-
-        return $this->translations->removeElement($translation);
     }
 
 }

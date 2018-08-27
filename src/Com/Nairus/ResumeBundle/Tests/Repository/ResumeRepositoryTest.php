@@ -6,6 +6,7 @@ use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Resume;
+use Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeOnline;
 
 /**
@@ -58,12 +59,17 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
 
         // Get the resumes.
         $resumes = static::$repository->findAll();
-        $this->assertCount(2, $resumes, "1.1. Two entities are expected in database.");
-        $this->assertSame($newResume->getId(), $resumes[1]->getId(), "1.2. The entity id has to be the identical.");
-
-        // Update test.
         /* @var $entity Resume */
         $entity = $resumes[1];
+        $this->assertCount(2, $resumes, "1.1. Two entities are expected in database.");
+        $this->assertSame($newResume->getId(), $entity->getId(), "1.2. The entity id has to be the identical.");
+        $this->assertSame("test", $entity->getSlug(), "1.3. The [slug] field has to be set automaticaly.");
+        $this->assertTrue($entity->hasTranslation("fr", "title"), "1.4. The entity musts have a default translation for [title] field and [fr] locale.");
+        $this->assertSame("Test", $entity->getTranslation("fr", "title"), "1.5 The translation for [title] field has to be identical.");
+        $this->assertTrue($entity->hasTranslation("fr", "slug"), "1.6. The entity musts have a default translation for [slug] field and [fr] locale.");
+        $this->assertSame("test", $entity->getTranslation("fr", "slug"), "1.7 The translation for [slug] field has to be identical.");
+
+        // Update test.
         $entity->setAnonymous(true)
                 ->setStatus(ResumeStatusEnum::OFFLINE_TO_PUBLISHED)
                 ->setTitle("Test MAJ");
@@ -76,6 +82,20 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
         $this->assertSame(ResumeStatusEnum::OFFLINE_TO_PUBLISHED, $resume->getStatus(), "2.2. The [status] field has to be updated.");
         $this->assertSame("Test MAJ", $resume->getTitle(), "2.3. The [title] field has to be updated.");
         $this->assertInstanceOf(\DateTimeInterface::class, $resume->getUpdatedAt(), "2.4. The update date has to be automaticaly updated.");
+        $this->assertSame("Test MAJ", $resume->getTranslation("fr", "title"), "2.5 The translation for [title] field has to be updated.");
+        $this->assertSame("test-maj", $resume->getTranslation("fr", "slug"), "2.6 The translation for [slug] field has to be updated.");
+
+        // Test translations
+        $this->assertFalse($resume->hasTranslation("en", "title"), "3.1. The entity musts not have a [en] translation for [title] field.");
+        $this->assertFalse($resume->hasTranslation("en", "slug"), "3.2. The entity musts not have a [en] translation for [slug] field.");
+        $resume->addTranslation(new ResumeTranslation("en", "title", "Title in EN", $resume))
+                ->addTranslation(new ResumeTranslation("en", "slug", "Title in EN", $resume));
+        static::$em->flush($resume);
+        static::$em->refresh($resume);
+        $this->assertTrue($resume->hasTranslation("en", "title"), "3.3. The entity musts have a [en] translation for [title] field.");
+        $this->assertSame("Title in EN", $resume->getTranslation("en", "title"), "3.4. The translation in [en] for [title] field has to be identical.");
+        $this->assertTrue($resume->hasTranslation("en", "slug"), "3.5. The entity musts have a [en] translation for [slug] field.");
+        $this->assertSame("title-in-en", $resume->getTranslation("en", "slug"), "3.6. The translation in [en] for [slug] field has to be identical.");
 
         // Delete test
         $id = $resume->getId();
@@ -84,7 +104,7 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
         static::$em->clear();
 
         $resumeRemoved = static::$repository->find($id);
-        $this->assertNull($resumeRemoved, "3.1. The entity has to be deleted.");
+        $this->assertNull($resumeRemoved, "4.1. The entity has to be deleted.");
     }
 
     /**

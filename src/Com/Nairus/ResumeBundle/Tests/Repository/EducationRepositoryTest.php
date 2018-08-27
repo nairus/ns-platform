@@ -77,7 +77,7 @@ class EducationRepositoryTest extends AbstractKernelTestCase {
         $this->assertSame("SI", $educationUpdated->getDomain(), "2.4. The [domain] field has to be identical.");
         $this->assertSame(1997, $educationUpdated->getEndYear(), "2.3. The [endYear] field has to be identical.");
         $this->assertSame("Lycée V. Hugo", $educationUpdated->getInstitution(), "2.4. The [institution] field has to be identical.");
-        $this->assertSame("Description 2", $educationUpdated->getTranslation("fr", "description"), "2.5 The translation for [description] field has to be identical.");
+        $this->assertSame("Description 2", $educationUpdated->getTranslation("fr", "description"), "2.5 The default translation for [description] field has to be updated.");
 
         // Test translation.
         $this->assertFalse($educationUpdated->hasTranslation("en", "description"), "3.1 The entity musts not have a [en] translation for [description] field.");
@@ -93,7 +93,7 @@ class EducationRepositoryTest extends AbstractKernelTestCase {
         static::$em->flush();
         static::$em->clear();
         $educationDeleted = static::$repository->find($id);
-        $this->assertNull($educationDeleted, "3.1. The entity has to be deleted.");
+        $this->assertNull($educationDeleted, "4.1. The entity has to be deleted.");
     }
 
     /**

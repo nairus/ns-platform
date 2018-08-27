@@ -31,7 +31,7 @@ class EducationTranslation extends AbstractTranslationEntity {
     /**
      * {@inheritDoc}
      */
-    public function validObjectClass(TranslatableEntity $object): void {
+    protected function validObjectClass(TranslatableEntity $object): void {
         if (!$object instanceof Education) {
             throw new \TypeError("Instance of [Education] expected!");
         }

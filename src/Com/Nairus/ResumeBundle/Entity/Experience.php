@@ -2,20 +2,24 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
+use Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity;
 use Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 
 /**
  * Experience
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Table(name="ns_experience")
  * @Gedmo\TranslationEntity(class="Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ExperienceRepository")
  */
-class Experience {
+class Experience extends AbstractTranslatableEntity {
 
     /**
      * @var int
@@ -98,12 +102,13 @@ class Experience {
      *   cascade={"persist", "remove"}
      * )
      */
-    private $translations;
+    protected $translations;
 
     /**
      * Constructeur.
      */
     public function __construct() {
+        parent::__construct();
         $this->currentJob = false;
         $this->translations = new ArrayCollection();
     }
@@ -316,36 +321,12 @@ class Experience {
     }
 
     /**
-     * Add translation.
-     *
-     * @param ExperienceTranslation $translation
-     *
-     * @return Experience
+     * {@inheritDoc}
      */
-    public function addTranslation(ExperienceTranslation $translation): Experience {
-        $this->translations[] = $translation;
-
-        return $this;
-    }
-
-    /**
-     * Remove translation.
-     *
-     * @param ExperienceTranslation $translation
-     *
-     * @return boolean <code>TRUE</code> if this collection contained the specified element, <code>FALSE</code> otherwise.
-     */
-    public function removeTranslation(ExperienceTranslation $translation): bool {
-        return $this->translations->removeElement($translation);
-    }
-
-    /**
-     * Get translations.
-     *
-     * @return Collection
-     */
-    public function getTranslations(): Collection {
-        return $this->translations;
+    protected function validateTranslationEntity(AbstractPersonalTranslation $translation): void {
+        if (!$translation instanceof ExperienceTranslation) {
+            throw new \TypeError("Instance of [ExperienceTranslation] expected!");
+        }
     }
 
 }

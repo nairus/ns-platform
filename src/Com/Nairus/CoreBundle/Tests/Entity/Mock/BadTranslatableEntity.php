@@ -10,12 +10,8 @@ namespace Com\Nairus\CoreBundle\Tests\Entity\Mock;
  */
 class BadTranslatableEntity extends \Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity {
 
-    public function addTranslation(\Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation $translation) {
-        return $this;
-    }
+    protected function validateTranslationEntity(\Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation $translation): void {
 
-    public function removeTranslation(\Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation $translation): bool {
-        return false;
     }
 
 }

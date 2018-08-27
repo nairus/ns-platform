@@ -31,12 +31,22 @@ abstract class AbstractTranslatableEntity implements TranslatableEntity {
     /**
      * {@inheritDoc}
      */
-    abstract public function addTranslation(AbstractPersonalTranslation $translation);
+    public function addTranslation(AbstractPersonalTranslation $translation) {
+        $this->validateTranslationEntity($translation);
+
+        $this->translations[] = $translation;
+
+        return $this;
+    }
 
     /**
      * {@inheritDoc}
      */
-    abstract public function removeTranslation(AbstractPersonalTranslation $translation): bool;
+    public function removeTranslation(AbstractPersonalTranslation $translation): bool {
+        $this->validateTranslationEntity($translation);
+
+        return $this->translations->removeElement($translation);
+    }
 
     /**
      * {@inheritDoc}
@@ -73,4 +83,10 @@ abstract class AbstractTranslatableEntity implements TranslatableEntity {
         return false;
     }
 
+    /**
+     * Validate the translation entity.
+     *
+     * @throw \TypeError In case of bad translation type.
+     */
+    abstract protected function validateTranslationEntity(AbstractPersonalTranslation $translation): void;
 }
