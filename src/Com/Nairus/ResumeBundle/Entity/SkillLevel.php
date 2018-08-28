@@ -2,20 +2,23 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
+use Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity;
 use Com\Nairus\ResumeBundle\Entity\Translation\SkillLevelTranslation;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 
 /**
- * SkillLevel
+ * SkillLevel entity.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Table(name="ns_skill_level")
  * @Gedmo\TranslationEntity(class="Com\Nairus\ResumeBundle\Entity\Translation\SkillLevelTranslation")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\SkillLevelRepository")
  */
-class SkillLevel {
+class SkillLevel extends AbstractTranslatableEntity {
 
     /**
      * @var int
@@ -41,7 +44,7 @@ class SkillLevel {
      *   cascade={"persist", "remove"}
      * )
      */
-    private $translations;
+    protected $translations;
 
     /**
      * Get id
@@ -75,43 +78,12 @@ class SkillLevel {
     }
 
     /**
-     * Constructor
+     * {@inheritDoc}
      */
-    public function __construct() {
-        $this->translations = new ArrayCollection();
-    }
-
-    /**
-     * Add translation.
-     *
-     * @param \Com\Nairus\ResumeBundle\Entity\Translation\SkillLevelTranslation $translation
-     *
-     * @return SkillLevel
-     */
-    public function addTranslation(SkillLevelTranslation $translation): SkillLevel {
-        $this->translations[] = $translation;
-
-        return $this;
-    }
-
-    /**
-     * Remove translation.
-     *
-     * @param SkillLevelTranslation $translation
-     *
-     * @return boolean <code>TRUE</code> if this collection contained the specified element, <code>FALSE</code> otherwise.
-     */
-    public function removeTranslation(SkillLevelTranslation $translation): bool {
-        return $this->translations->removeElement($translation);
-    }
-
-    /**
-     * Get translations.
-     *
-     * @return Collection
-     */
-    public function getTranslations(): Collection {
-        return $this->translations;
+    protected function validateTranslationEntity(AbstractPersonalTranslation $translation): void {
+        if (!$translation instanceof SkillLevelTranslation) {
+            throw new \TypeError("Instance of [SkillLevelTranslation] expected!");
+        }
     }
 
 }

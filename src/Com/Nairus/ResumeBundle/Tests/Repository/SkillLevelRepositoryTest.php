@@ -5,11 +5,13 @@ namespace Com\Nairus\ResumeBundle\Repository;
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\SkillLevel;
+use Com\Nairus\ResumeBundle\Entity\Translation\SkillLevelTranslation;
 
 /**
  * Test de la classe SkillLevelRepository.
  *
- * @author Nicolas Surian <nicolas.surian@gmail.com>
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class SkillLevelRepositoryTest extends AbstractKernelTestCase {
 
@@ -36,19 +38,31 @@ class SkillLevelRepositoryTest extends AbstractKernelTestCase {
 
         // Récupération de l'entité en base.
         $skillLevels = static::$repository->findAll();
-        $this->assertCount(4, $skillLevels, "1.1. Il y avoir 4 entités en base.");
-        $this->assertSame($newSkillLevel->getId(), $skillLevels[3]->getId(), "1.2. L'id récupérée doit être identique à celle créée.");
 
-        // Update test.
         /* @var $entity SkillLevel */
         $entity = $skillLevels[3];
+
+        $this->assertCount(4, $skillLevels, "1.1. 4 entities has to remain in database.");
+        $this->assertSame($newSkillLevel->getId(), $entity->getId(), "1.2. The id has to be identical.");
+        $this->assertTrue($entity->hasTranslation("fr", "title"), "1.3. The entity has to have a [fr] translation for [title] field.");
+        $this->assertSame("Débutant", $entity->getTranslation("fr", "title"), "1.2. The default title translation has to be identical.");
+
+        // Update test.
         $entity->setTitle("Expert");
         static::$em->flush();
         static::$em->clear();
 
         /* @var $skillLevel SkillLevel */
         $skillLevel = static::$repository->find($entity->getId());
-        $this->assertSame("Expert", $skillLevel->getTitle(), "2.1. Le titre de l'entité récupérée doit être mise à jour.");
+        $this->assertSame("Expert", $skillLevel->getTitle(), "2.1. The title has to be identical.");
+        $this->assertSame("Expert", $skillLevel->getTranslation("fr", "title"), "2.2. The default title translation has to be updated.");
+
+        // Test translation
+        $skillLevel->addTranslation(new SkillLevelTranslation("en", "title", "The best", $skillLevel));
+        static::$em->flush($skillLevel);
+        static::$em->refresh($skillLevel);
+        $this->assertTrue($skillLevel->hasTranslation("en", "title"), "1.3. The entity has to have a [en] translation for [title] field.");
+        $this->assertSame("The best", $skillLevel->getTranslation("en", "title"), "1.2. The [en] title translation has to be identical.");
 
         // Delete test.
         $id = $skillLevel->getId();
@@ -57,7 +71,7 @@ class SkillLevelRepositoryTest extends AbstractKernelTestCase {
         static::$em->clear();
 
         $skillLevelRemoved = static::$repository->find($id);
-        $this->assertNull($skillLevelRemoved, "3.1. L'entité doit être supprimée.");
+        $this->assertNull($skillLevelRemoved, "3.1. The entity has to be removed.");
     }
 
 }

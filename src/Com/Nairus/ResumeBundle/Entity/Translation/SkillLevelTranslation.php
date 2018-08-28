@@ -2,8 +2,10 @@
 
 namespace Com\Nairus\ResumeBundle\Entity\Translation;
 
+use Com\Nairus\CoreBundle\Entity\TranslatableEntity;
+use Com\Nairus\CoreBundle\Entity\AbstractTranslationEntity;
+use Com\Nairus\ResumeBundle\Entity\SkillLevel;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 
 /**
  * SkillLevelTranslation Entity
@@ -18,25 +20,21 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
  *     })}
  * )
  */
-class SkillLevelTranslation extends AbstractPersonalTranslation {
-
-    /**
-     * Convinient constructor
-     *
-     * @param string $locale
-     * @param string $field
-     * @param string $value
-     */
-    public function __construct(string $locale, string $field, string $value) {
-        $this->setLocale($locale);
-        $this->setField($field);
-        $this->setContent($value);
-    }
+class SkillLevelTranslation extends AbstractTranslationEntity {
 
     /**
      * @ORM\ManyToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\SkillLevel", inversedBy="translations")
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $object;
+
+    /**
+     * {@ihneritDoc}
+     */
+    protected function validObjectClass(TranslatableEntity $object): void {
+        if (!$object instanceof SkillLevel) {
+            throw new \TypeError("Instance of [SkillLevel] expected!");
+        }
+    }
 
 }
