@@ -3,5 +3,32 @@
 {% block title %}{{ "public.index.head.title" | trans({}, "NSResumeBundle")}} - {{ parent() }}{% endblock %}
 
 {% block body %}
-    {# TODO #}
+    <div class="container">
+        <div class="jumbotron">
+            <h1>{{ "public.index.head.title" | trans({}, "NSResumeBundle")}}</h1>
+            <p>
+                Publier vos CV et Mettez vos talents en évidence sur cette plateforme moderne.
+                <br>
+                Recruteurs, Chercher et Retrouver en un clin d'oeil votre perle rare ici.
+            </p>
+        </div>
+
+        <div class="row mb-2">
+            {% for i in range(1, maxCardPerPage) %}
+                {% include 'NSResumeBundle::card.html.twig' %}
+            {% endfor %}
+        </div>
+
+        <div class="row pagination-container">
+            {% if pages > 1 %}
+                {#
+                    We set the specific variables for the pagination template.
+                    See NewsController for the generic variables (pages and currentPage).
+                #}
+                {% set paginationLabel = ("public.index.pagination-label" | trans({}, "NSResumeBundle")) %}
+                {% set routeName = "ns_resume_homepage" %}
+                {% include "NSCoreBundle::pagination.html.twig" %}
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

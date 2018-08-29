@@ -8,3 +8,6 @@ parameters:
     ns_core.last_news_limit: 3
     # Limit for the News list (Cf. NewsController::IndexAction).
     ns_core.news_limit: 5
+    dates_format:
+        fr: EEE d MMM Y
+        en: EEE, MMM d Y

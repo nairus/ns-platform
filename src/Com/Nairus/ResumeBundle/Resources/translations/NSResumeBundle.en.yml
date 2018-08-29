@@ -1,1 +1,8 @@
-public.index.head.title: 'Resumes platform'
+public:
+    index:
+        head:
+            title: 'Resumes platform'
+        pagination-label: 'Resumes list Pagination'
+        show-detail: Show Resume
+        published-at: Published at
+        skills-title: "Skills:"

@@ -1,1 +1,8 @@
-public.index.head.title: 'Plateforme des CV'
+public:
+    index:
+        head:
+            title: 'Plateforme des CV'
+        pagination-label: 'Pagination de liste des CV'
+        show-detail: Voir le CV
+        published-at: Publié le
+        skills-title: "Compétences :"

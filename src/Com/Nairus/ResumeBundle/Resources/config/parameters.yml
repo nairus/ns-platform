@@ -1,0 +1,4 @@
+## Config for ResumeBundle
+
+parameters:
+    max-cards-per-page: 12
