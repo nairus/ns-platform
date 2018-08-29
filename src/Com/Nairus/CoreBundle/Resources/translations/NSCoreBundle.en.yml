@@ -56,7 +56,7 @@ news:
     edit:
         title: Modification of the news No. %news_id%
     show:
-        title: Détail de la news No. %news_id%
+        title: Details of the news No. %news_id%
         created-at: Created at
         updated-at: Updated at
         published-at: Published at

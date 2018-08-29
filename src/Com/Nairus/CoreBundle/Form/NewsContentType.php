@@ -18,9 +18,9 @@ class NewsContentType extends AbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-                ->add('link', UrlType::class, ["required" => true])
-                ->add('title', TextType::class, ["required" => true])
-                ->add('description', TextareaType::class, ["required" => true])
+                ->add('link', UrlType::class, ["required" => false])
+                ->add('title', TextType::class, ["required" => false])
+                ->add('description', TextareaType::class, ["required" => false])
                 ->add('news', NewsType::class, ["required" => false])
                 ->add('locale', HiddenType::class)
                 ->add('save', SubmitType::class, ["label" => 'actions.save']

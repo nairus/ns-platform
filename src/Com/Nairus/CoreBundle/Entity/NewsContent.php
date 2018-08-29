@@ -6,6 +6,7 @@ use Com\Nairus\CoreBundle\Entity\Traits\ContentI18nTrait;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Content for News Entity
@@ -35,6 +36,10 @@ class NewsContent {
      *
      * @var string
      *
+     * @Assert\NotBlank()
+     * @Assert\Url(
+     *      protocols = {"http", "https"}
+     * )
      * @ORM\Column(type="string", length=255)
      */
     private $link;
@@ -75,7 +80,7 @@ class NewsContent {
      *
      * @return News
      */
-    public function setLink(string $link): NewsContent {
+    public function setLink(?string $link): NewsContent {
         $this->link = $link;
 
         return $this;

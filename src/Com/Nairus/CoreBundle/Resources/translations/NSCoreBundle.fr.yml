@@ -58,7 +58,7 @@ news:
     edit:
         title: Modification de la news n°%news_id%
     show:
-        title: Détail de la news n°%news_id%
+        title: Détails de la news n°%news_id%
         created-at: Créée le
         updated-at: Mise à jour le
         published-at: Publié le

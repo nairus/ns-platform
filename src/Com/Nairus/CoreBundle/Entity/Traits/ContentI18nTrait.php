@@ -2,6 +2,8 @@
 
 namespace Com\Nairus\CoreBundle\Entity\Traits;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Trait for internationalized entities.
  *
@@ -15,6 +17,10 @@ trait ContentI18nTrait {
      *
      * @var string
      *
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      max = 50
+     * )
      * @ORM\Column(type="string", length=50)
      */
     private $title;
@@ -24,6 +30,7 @@ trait ContentI18nTrait {
      *
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $description;
@@ -44,7 +51,7 @@ trait ContentI18nTrait {
      *
      * @return News
      */
-    public function setTitle(string $title) {
+    public function setTitle(?string $title = "") {
         $this->title = $title;
 
         return $this;
@@ -57,6 +64,28 @@ trait ContentI18nTrait {
      */
     public function getTitle(): ?string {
         return $this->title;
+    }
+
+    /**
+     * Set description.
+     *
+     * @param string $description
+     *
+     * @return News
+     */
+    public function setDescription(?string $description) {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description.
+     *
+     * @return string
+     */
+    public function getDescription(): ?string {
+        return $this->description;
     }
 
     /**
@@ -77,28 +106,6 @@ trait ContentI18nTrait {
      */
     public function getLocale(): string {
         return $this->locale;
-    }
-
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return News
-     */
-    public function setDescription(string $description) {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription(): ?string {
-        return $this->description;
     }
 
 }

@@ -8,6 +8,7 @@
         {{ "news.form.labels.title" | trans({}, "NSCoreBundle") }}
     </label>
     {{ form_widget(form.title) }}
+    {{ form_errors(form.title) }}
 </div>
 
 <div class="form-group">
@@ -16,6 +17,7 @@
         {{ "news.form.labels.description" | trans({}, "NSCoreBundle") }}
     </label>
     {{ form_widget(form.description) }}
+    {{ form_errors(form.description) }}
 </div>
 
 <div class="form-group">
@@ -24,6 +26,7 @@
         {{ "news.form.labels.link" | trans({}, "NSCoreBundle") }}
     </label>
     {{ form_widget(form.link) }}
+    {{ form_errors(form.link) }}
 </div>
 
 {# render published field if exist #}
