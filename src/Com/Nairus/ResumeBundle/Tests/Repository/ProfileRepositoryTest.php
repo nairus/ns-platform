@@ -5,7 +5,7 @@ namespace Com\Nairus\ResumeBundle\Repository;
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Profile;
-use Com\Nairus\ResumeBundle\Entity\User;
+use Com\Nairus\UserBundle\Entity\User;
 
 /**
  * Test de la classe ProfileRepository.

@@ -1,14 +1,15 @@
 <?php
 
-namespace Com\Nairus\ResumeBundle\Enums;
+namespace Com\Nairus\UserBundle\Enums;
 
 /**
- * Classe d'énumération des roles des utilisateurs.
+ * Enum class for user's roles.
  *
- * @author nairus
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-abstract class UserRolesEnum
-{
+abstract class UserRolesEnum {
+
     /**
      * Définition des rôles d'utilisateur.
      */
@@ -28,8 +29,7 @@ abstract class UserRolesEnum
      *
      * @return array
      */
-    public static function getRolesList()
-    {
+    public static function getRolesList() {
         return [
             self::AUTHOR => "Author",
             self::USER => "User",
@@ -37,4 +37,5 @@ abstract class UserRolesEnum
             self::SUPER_ADMIN => "Super Admin",
         ];
     }
+
 }

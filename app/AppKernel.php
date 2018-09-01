@@ -9,6 +9,7 @@ class AppKernel extends Kernel {
         $bundles = [
             new Com\Nairus\CoreBundle\NSCoreBundle(),
             new Com\Nairus\ResumeBundle\NSResumeBundle(),
+            new Com\Nairus\UserBundle\NSUserBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),

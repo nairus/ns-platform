@@ -1,0 +1,17 @@
+## Translations file only for the bundle
+flashes:
+    email-sent: A confirmation email will be sent soon
+
+login:
+    title: "Please sign in"
+    placeholder:
+        username: Username
+        password: Password
+
+profile:
+    edit:
+        title: Edit my account
+    show:
+        title: My account detail
+    change-password:
+        title: Modification of my password

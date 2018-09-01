@@ -1,0 +1,17 @@
+{# NSCoreBundle::admin-nav.html.twig #}
+
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="admin-menu" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ "nav.authentication.adminbutton" | trans }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="admin-menu">
+            <a class="dropdown-item" href="{{ path("fos_user_profile_show") }}">{{ "nav.authentication.user.account" | trans }}</a>
+            <a class="dropdown-item" href="{{ path("fos_user_change_password") }}">{{ "actions.change-password" | trans }}</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a class="dropdown-item" href="{{ path("news_index") }}">{{ "nav.authentication.news" | trans }}</a>
+            {% endif %}
+        </div>
+    </li>
+{% endif %}

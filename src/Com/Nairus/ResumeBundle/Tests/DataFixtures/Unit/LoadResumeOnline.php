@@ -10,9 +10,10 @@ use Com\Nairus\ResumeBundle\Entity\SkillLevel;
 use Com\Nairus\ResumeBundle\Entity\Profile;
 use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Entity\ResumeSkill;
-use Com\Nairus\ResumeBundle\Entity\User;
+use Com\Nairus\UserBundle\Entity\User;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
-use Com\Nairus\ResumeBundle\Enums\UserRolesEnum;
+use Com\Nairus\UserBundle\NSUserBundle;
+use Com\Nairus\UserBundle\Enums\UserRolesEnum;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -73,7 +74,7 @@ class LoadResumeOnline implements FixtureInterface {
         /* @var $resumeSkillRepository EntityRepository */
         $resumeSkillRepository = $manager->getRepository(NSResumeBundle::NAME . ":ResumeSkill");
         /* @var $userRepository ObjectRepository */
-        $userRepository = $manager->getRepository(NSResumeBundle::NAME . ":User");
+        $userRepository = $manager->getRepository(NSUserBundle::NAME . ":User");
 
         // Récupération des Resume à supprimer.
         $dql = "SELECT r FROM NSResumeBundle:Resume r WHERE r.status = :status";

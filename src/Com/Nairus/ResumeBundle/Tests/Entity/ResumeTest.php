@@ -2,6 +2,7 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
+use Com\Nairus\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Doctrine\Common\Collections\Collection;
 

@@ -67,10 +67,13 @@ nav:
     navbar-toggler:
         label: "Basculer la navigation"
     authentication:
-        connect: Se connecter
+        connect: Connexion
+        disconnect: Déconnexion
         welcome: Bienvenue %username% !
         adminbutton: Admin
         news: Gestion des News
+        user:
+            account: Mon compte
 actions:
     list: Retour à la liste
     show: Voir les détails
@@ -79,6 +82,8 @@ actions:
     add: Ajouter
     delete: Supprimer
     publish: Publier
+    change-password: Changer mon mot de passe
+    return: Return
 
 flashes:
     infos: Infos!

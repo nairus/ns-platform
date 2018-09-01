@@ -5,6 +5,7 @@ namespace Com\Nairus\ResumeBundle\Entity;
 use Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation;
+use Com\Nairus\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -75,7 +76,7 @@ class Resume extends AbstractTranslatableEntity {
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Com\Nairus\UserBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;

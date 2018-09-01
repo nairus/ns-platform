@@ -1,7 +1,7 @@
 <?php
 namespace Com\Nairus\ResumeBundle\Tests\DataFixtures\ORM;
 
-use Com\Nairus\ResumeBundle\Enums\UserRolesEnum;
+use Com\Nairus\UserBundle\Enums\UserRolesEnum;
 use Com\Nairus\ResumeBundle\Entity\Profile;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;

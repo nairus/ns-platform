@@ -1,0 +1,27 @@
+services:
+    Com\Nairus\UserBundle\:
+        resource: '../../../UserBundle/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../../../UserBundle/{Entity,Repository,Tests}'
+
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    Com\Nairus\UserBundle\Controller\:
+        resource: '../../../UserBundle/Controller'
+        public: true
+        tags: ['controller.service_arguments']
+
+    Com\Nairus\UserBundle\Controller\SecurityController:
+        public: true
+        tags: ['controller.service_arguments']
+        arguments:
+            $tokenManager: "@security.csrf.token_manager"
+
+    Com\Nairus\UserBundle\EventListener\UserProfileListener:
+        public: false
+        arguments:
+            $translator: "@translator"
+        tags:
+            - { name: kernel.event_listener, event: fos_user.change_password.edit.completed, method: onChangePasswordCompleted }
+            - { name: kernel.event_listener, event: fos_user.profile.edit.completed, method: onProfileEditCompleted }

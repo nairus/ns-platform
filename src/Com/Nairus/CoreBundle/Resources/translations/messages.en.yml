@@ -69,9 +69,13 @@ nav:
         label: "Toggle navigation"
     authentication:
         connect: Connect
+        disconnect: Disconnect
         welcome: Welcome %username% !
         adminbutton: Admin
         news: Manage News
+        user:
+            account: My account
+
 actions:
     list: Return to the list
     show: Show details
@@ -80,6 +84,8 @@ actions:
     add: Add
     delete: Delete
     publish: Publish
+    change-password: Change my password
+    return: Return
 
 flashes:
     infos: Infos!

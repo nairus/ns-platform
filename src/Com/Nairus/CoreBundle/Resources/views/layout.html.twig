@@ -19,56 +19,7 @@
     <body>
         <header>
             {% block header %}
-                <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                    <div class="navbar-brand">{{"headline" | trans}}</div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse"
-                            data-target="#navbar"
-                            aria-controls="navbar"
-                            aria-expanded="false"
-                            aria-label="{{ "nav.navbar-toggler.label" }}">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbar">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item {%if app.request.get('_route') == "ns_core_homepage" %}active{%endif%}">
-                                <a class="nav-link" href="{{path("ns_core_homepage")}}">{{ "nav.homepage"|trans }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {%if app.request.pathinfo matches '~^/(en/)?resume/+$~' %}active{%endif%}"
-                                   href="{{path("ns_resume_homepage")}}">{{ "nav.resume.list"|trans }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link disabled" href="{{path("ns_core_contact")}}">{{ "nav.contact"|trans }}</a>
-                            </li>
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <li class="nav-item dropdown {%if app.request.pathinfo matches '~^/(en/)?news/+$~' %}active{%endif%}">
-                                    <a class="nav-link dropdown-toggle" href="#" id="admin-menu" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        {{ "nav.authentication.adminbutton" | trans }}
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="admin-menu">
-                                        <a class="dropdown-item" href="{{ path("news_index") }}">{{ "nav.authentication.news" | trans }}</a>
-                                    </div>
-                                </li>
-                            {% endif %}
-                        </ul>
-                        {% include 'NSCoreBundle::authentication.html.twig' %}
-                        <div class="dropdown">
-                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="switch-language" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="ns-flag ns-flag-{{ app.request.getLocale() }}"></span>{{ ("nav.language." ~ app.request.getLocale()) | trans }}
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="switch-language">
-                                {% for locale in locales %}
-                                    {% set route_params = app.request.attributes.get('_route_params')|merge({"_locale": locale}) %}
-                                    <a class="dropdown-item" href="{{ path(app.request.get('_route'), route_params) }}">
-                                        <span class="ns-flag ns-flag-{{ locale }}"></span>{{ ("nav.language." ~ locale) | trans }}
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </nav>
+                {% include 'NSCoreBundle::nav.html.twig' %}
             {% endblock %}
             {{ app.request.pathinfo }}
         </header>

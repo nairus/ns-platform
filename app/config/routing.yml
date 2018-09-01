@@ -7,3 +7,8 @@ ns_resume:
     resource: "@NSResumeBundle/Resources/config/routing.yml"
     prefix:   /resume
     options: { i18n: true }
+
+ns_user:
+    resource: "@NSUserBundle/Resources/config/routing.yml"
+    prefix:   /
+    options: { i18n: true }

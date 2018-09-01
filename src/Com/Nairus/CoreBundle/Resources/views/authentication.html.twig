@@ -5,8 +5,12 @@
         <i class="fas fa-user-tie"></i>
         {{ "nav.authentication.welcome" | trans({"%username%": app.user.username}) }}
     </span>
+    <a class="mx-1 btn btn-dark connect-btn" href="{{path("fos_user_security_logout")}}">
+        <i class="fas fa-user-secret"></i>
+        {{ "nav.authentication.disconnect"|trans }}
+    </a>
 {% else %}
-    <a class="mx-1 btn btn-dark connect-btn" href="{{path("news_index")}}">
+    <a class="mx-1 btn btn-dark connect-btn" href="{{path("fos_user_security_login")}}">
         <i class="fas fa-user-secret"></i>
         {{ "nav.authentication.connect"|trans }}
     </a>

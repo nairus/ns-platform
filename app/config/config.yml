@@ -3,8 +3,10 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: "@NSCoreBundle/Resources/config/parameters.yml"}
-    - { resource: "@NSCoreBundle/Resources/config/services.yml" }
     - { resource: "@NSResumeBundle/Resources/config/parameters.yml"}
+    - { resource: "@NSCoreBundle/Resources/config/services.yml" }
+    - { resource: "@NSUserBundle/Resources/config/services.yml"}
+
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -23,7 +25,7 @@ framework:
         resource: '%kernel.project_dir%/app/config/routing.yml'
         strict_requirements: ~
     form: ~
-    csrf_protection: ~
+    csrf_protection: true
     validation: { enable_annotations: true }
     #serializer: { enable_annotations: true }
     templating:
@@ -99,7 +101,7 @@ swiftmailer:
 fos_user:
     db_driver: orm
     firewall_name: main
-    user_class: Com\Nairus\ResumeBundle\Entity\User
+    user_class: Com\Nairus\UserBundle\Entity\User
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"

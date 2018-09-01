@@ -2,16 +2,20 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
+use Com\Nairus\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Profile
  *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ *
  * @ORM\Table(name="ns_profile")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ProfileRepository")
  */
-class Profile
-{
+class Profile {
+
     /**
      * @var int
      *
@@ -23,18 +27,18 @@ class Profile
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="firstName", type="string", length=100)
      */
     private $firstName;
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="lastName", type="string", length=100)
      */
     private $lastName;
-    
+
     /**
      * @var string
      *
@@ -87,7 +91,7 @@ class Profile
     /**
      * @var User
      *
-     * @ORM\OneToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\User")
+     * @ORM\OneToOne(targetEntity="Com\Nairus\UserBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -97,8 +101,7 @@ class Profile
      *
      * @return int
      */
-    public function getId() : int
-    {
+    public function getId(): int {
         return $this->id;
     }
 
@@ -109,8 +112,7 @@ class Profile
      *
      * @return Profile
      */
-    public function setPhone(string $phone) : Profile
-    {
+    public function setPhone(string $phone): Profile {
         $this->phone = $phone;
 
         return $this;
@@ -121,8 +123,7 @@ class Profile
      *
      * @return string
      */
-    public function getPhone() : string
-    {
+    public function getPhone(): string {
         return $this->phone;
     }
 
@@ -133,8 +134,7 @@ class Profile
      *
      * @return Profile
      */
-    public function setCell(string $cell) : Profile
-    {
+    public function setCell(string $cell): Profile {
         $this->cell = $cell;
 
         return $this;
@@ -145,8 +145,7 @@ class Profile
      *
      * @return string
      */
-    public function getCell() : string
-    {
+    public function getCell(): string {
         return $this->cell;
     }
 
@@ -157,8 +156,7 @@ class Profile
      *
      * @return Profile
      */
-    public function setAddress(string $address) : Profile
-    {
+    public function setAddress(string $address): Profile {
         $this->address = $address;
 
         return $this;
@@ -169,8 +167,7 @@ class Profile
      *
      * @return string
      */
-    public function getAddress() : string
-    {
+    public function getAddress(): string {
         return $this->address;
     }
 
@@ -181,8 +178,7 @@ class Profile
      *
      * @return Profile
      */
-    public function setAddressAddition(string $addressAddition) : Profile
-    {
+    public function setAddressAddition(string $addressAddition): Profile {
         $this->addressAddition = $addressAddition;
 
         return $this;
@@ -193,8 +189,7 @@ class Profile
      *
      * @return string
      */
-    public function getAddressAddition() : string
-    {
+    public function getAddressAddition(): string {
         return $this->addressAddition;
     }
 
@@ -205,8 +200,7 @@ class Profile
      *
      * @return Profile
      */
-    public function setCity(string $city) : Profile
-    {
+    public function setCity(string $city): Profile {
         $this->city = $city;
 
         return $this;
@@ -217,8 +211,7 @@ class Profile
      *
      * @return string
      */
-    public function getCity() : string
-    {
+    public function getCity(): string {
         return $this->city;
     }
 
@@ -229,8 +222,7 @@ class Profile
      *
      * @return Profile
      */
-    public function setZip(string $zip) : Profile
-    {
+    public function setZip(string $zip): Profile {
         $this->zip = $zip;
 
         return $this;
@@ -241,8 +233,7 @@ class Profile
      *
      * @return string
      */
-    public function getZip() : string
-    {
+    public function getZip(): string {
         return $this->zip;
     }
 
@@ -253,8 +244,7 @@ class Profile
      *
      * @return Profile
      */
-    public function setCountry(string $country) : Profile
-    {
+    public function setCountry(string $country): Profile {
         $this->country = $country;
 
         return $this;
@@ -265,8 +255,7 @@ class Profile
      *
      * @return string
      */
-    public function getCountry() : string
-    {
+    public function getCountry(): string {
         return $this->country;
     }
 
@@ -277,8 +266,7 @@ class Profile
      *
      * @return Profile
      */
-    public function setUser(User $user) : Profile
-    {
+    public function setUser(User $user): Profile {
         $this->user = $user;
 
         return $this;
@@ -289,8 +277,7 @@ class Profile
      *
      * @return User
      */
-    public function getUser() : User
-    {
+    public function getUser(): User {
         return $this->user;
     }
 
@@ -301,8 +288,7 @@ class Profile
      *
      * @return Profile
      */
-    public function setFirstName(string $firstName) : Profile
-    {
+    public function setFirstName(string $firstName): Profile {
         $this->firstName = $firstName;
 
         return $this;
@@ -313,8 +299,7 @@ class Profile
      *
      * @return string
      */
-    public function getFirstName() : string
-    {
+    public function getFirstName(): string {
         return $this->firstName;
     }
 
@@ -325,8 +310,7 @@ class Profile
      *
      * @return Profile
      */
-    public function setLastName(string $lastName) : Profile
-    {
+    public function setLastName(string $lastName): Profile {
         $this->lastName = $lastName;
 
         return $this;
@@ -337,8 +321,8 @@ class Profile
      *
      * @return string
      */
-    public function getLastName() : string
-    {
+    public function getLastName(): string {
         return $this->lastName;
     }
+
 }

@@ -1,0 +1,19 @@
+## Translations file only for the bundle
+
+flashes:
+    email-sent: Un email de confirmation vous sera envoyé prochainement
+
+security:
+    login:
+        title: "Veuillez vous connecter"
+        placeholder:
+            username: Pseudo
+            password: Mot de passe
+
+profile:
+    edit:
+        title: Modification de mon compte
+    show:
+        title: Détail de mon compte
+    change-password:
+        title: Modification de mon mot de passe

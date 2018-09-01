@@ -26,6 +26,7 @@ executeCommand($application, "doctrine:schema:create");
 executeCommand($application,
         "doctrine:fixtures:load", [
     "--fixtures" => [
+        "src/Com/Nairus/UserBundle/Tests/DataFixtures/ORM",
         "src/Com/Nairus/ResumeBundle/Tests/DataFixtures/ORM"
     ]
         ]
@@ -43,7 +44,7 @@ function executeCommand($application, $command, array $options = []) {
 
 function deleteDatabase($cacheDir) {
     $folder = $cacheDir . "/";
-    foreach (array('ns_test.db', 'ns_test.db.bk', 'test.db', 'test.db.bk') AS $file) {
+    foreach (array('ns_test.db', 'ns_test.db.bk') AS $file) {
         if (file_exists($folder . $file)) {
             unlink($folder . $file);
         }

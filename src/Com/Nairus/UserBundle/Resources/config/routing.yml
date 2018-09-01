@@ -1,0 +1,10 @@
+ns_user_login:
+    path: /login
+    defaults: { _controller: NSUserBundle:Security:login}
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+ns_user_account:
+    resource: "@NSUserBundle/Resources/config/user/account.yml"
+    prefix: /account
