@@ -1,12 +1,13 @@
 <?php
 
-namespace Com\Nairus\ResumeBundle\Tests\DataFixtures\ORM;
+namespace Com\Nairus\UserBundle\Tests\DataFixtures\ORM;
 
 use Com\Nairus\UserBundle\Entity\User;
-use Com\Nairus\UserBundle\Enums\UserRolesEnum;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Com\Nairus\UserBundle\Tests\AbstractUserWebTestCase;
+use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 
 /**
  * Users fixtures.
@@ -20,19 +21,18 @@ class LoadUser extends AbstractFixture implements OrderedFixtureInterface {
      * {@inheritDoc}
      */
     public function load(ObjectManager $manager) {
-        $namesList = [
-            "author" => UserRolesEnum::AUTHOR,
-            "moderator" => UserRolesEnum::MODERATOR,
-            "sadmin" => UserRolesEnum::SUPER_ADMIN
-        ];
-
-        foreach ($namesList as $name => $role) {
+        // See the security file for cost value.
+        $encoder = new BCryptPasswordEncoder(12);
+        // See NSCoreBundle/Resource/config/parameters_test.yml
+        $salt = "ThisIsASecret";
+        foreach (AbstractUserWebTestCase::$users as $name => $role) {
             $user = new User();
             $user
-                    ->setPassword($name . "pass")
+                    ->setPassword($encoder->encodePassword($name . "pass", $salt))
                     ->addRole($role)
                     ->setUsername($name)
-                    ->setEmail($name . "@test.com");
+                    ->setEmail($name . "@test.com")
+                    ->setEnabled(true);
             $manager->persist($user);
 
             $this->addReference("user_$role", $user);

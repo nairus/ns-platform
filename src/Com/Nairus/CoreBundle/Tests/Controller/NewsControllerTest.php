@@ -3,50 +3,145 @@
 namespace Com\Nairus\CoreBundle\Tests\Controller;
 
 use Com\Nairus\CoreBundle\NSCoreBundle;
-use Com\Nairus\CoreBundle\Tests\BaseWebTestCase;
+use Com\Nairus\UserBundle\Tests\AbstractUserWebTestCase;
 
-class NewsControllerTest extends BaseWebTestCase {
+/**
+ * News controller tests.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+class NewsControllerTest extends AbstractUserWebTestCase {
 
     /**
-     * Test the access control on "/news" routes.
+     * Test the access control on "/news" routes for user.
+     *
+     * @return void
      */
-    public function testAccessControlList(): void {
-        // Try authentication with bad credentials.
+    public function testAccessControlListWithUser(): void {
         $client = $this->getClient();
-        $client->request("GET", "/news", [], [], [
-            "PHP_AUTH_USER" => "user",
-            "PHP_AUTH_PW" => '123'
-        ]);
-        $this->assertEquals(403, $client->getResponse()->getStatusCode(), "1. Unexpected HTTP status code for GET /news/ with user login");
+        $client->request("GET", "/news");
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1 302 redirection to /login expected");
 
-        // Try authentication with good credential.
-        $client->request("GET", "/news", [], [], [
-            "PHP_AUTH_USER" => "admin",
-            "PHP_AUTH_PW" => '456']);
+        $crawler = $client->followRedirect();
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2 Unexpected HTTP status code for GET /news/ with user login");
+
+        // Fill in the form and submit it with bad credential
+        $form = $crawler->selectButton('Connexion')->form(array(
+            '_username' => 'user',
+            '_password' => 'userpass',
+        ));
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertEquals(403, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /news for user login");
+    }
+
+    /**
+     * Test the access control on "/news" routes for author.
+     *
+     * @return void
+     */
+    public function testAccessControlListWithAuthor(): void {
+        $client = $this->getClient();
+        $client->request("GET", "/news");
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1 302 redirection to /login expected");
+
+        $crawler = $client->followRedirect();
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2 Unexpected HTTP status code for GET /news/ with author login");
+
+        // Fill in the form and submit it with bad credential
+        $form = $crawler->selectButton('Connexion')->form(array(
+            '_username' => 'author',
+            '_password' => 'authorpass',
+        ));
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertEquals(403, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /news for author login");
+    }
+
+    /**
+     * Test the access control on "/news" routes for moderator.
+     *
+     * @return void
+     */
+    public function testAccessControlListWithModerator(): void {
+        $client = $this->getClient();
+        $client->request("GET", "/news");
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1 302 redirection to /login expected");
+
+        $crawler = $client->followRedirect();
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2 Unexpected HTTP status code for GET /news/ with moderator login");
+
+        // Fill in the form and submit it with bad credential
+        $form = $crawler->selectButton('Connexion')->form(array(
+            '_username' => 'moderator',
+            '_password' => 'moderatorpass',
+        ));
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertEquals(403, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /news for moderator login");
+    }
+
+    /**
+     * Test the access control on "/news" routes for admin.
+     *
+     * @return void
+     */
+    public function testAccessControlListWithAdmin(): void {
+        $client = $this->getClient();
+        $client->request("GET", "/news");
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1 302 redirection to /login expected");
+
+        $crawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2 Unexpected HTTP status code for GET /news/ with admin login");
 
-        $client->request("GET", "/news", [], [], [
-            "PHP_AUTH_USER" => "nairus",
-            "PHP_AUTH_PW" => '789']);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3 Unexpected HTTP status code for GET /news/ with nairus login");
+        // Fill in the form and submit it with good credential
+        $form = $crawler->selectButton('Connexion')->form(array(
+            '_username' => 'admin',
+            '_password' => 'adminpass',
+        ));
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3 Unexpected HTTP status code for GET /news/ with admin login");
+    }
+
+    public function testAccessControlListWithSAdmin(): void {
+        $client = $this->getClient();
+        $client->request("GET", "/news");
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1 302 redirection to /login expected");
+
+        $crawler = $client->followRedirect();
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2 Unexpected HTTP status code for GET /news/ with sadmin login");
+
+        // Fill in the form and submit it with good credential
+        $form = $crawler->selectButton('Connexion')->form(array(
+            '_username' => 'sadmin',
+            '_password' => 'sadminpass',
+        ));
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3 Unexpected HTTP status code for GET /news/ with sadmin login");
     }
 
     public function testIndexActionNotFoundException(): void {
-        $client = $this->getClient();
+        // Login with good credential.
+        $this->logInAdmin();
 
         // Test first page with no news.
-        $crawler = $client->request("GET", "/news", [], [], [
-            "PHP_AUTH_USER" => "admin",
-            "PHP_AUTH_PW" => '456']);
+        $client = $this->getClient();
+        $crawler = $client->request("GET", "/news");
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 200 status code expected");
         $noNewsMessage = "Il n'y a pas de news pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !";
         $body = $crawler->filter(".container-fluid > em")->text();
         $this->assertContains($noNewsMessage, $body, "1.2 The [no-news] message has to be displayed");
 
         // Non existing second page 404 error.
-        $client->request("GET", "/news/2", [], [], [
-            "PHP_AUTH_USER" => "admin",
-            "PHP_AUTH_PW" => '456']);
+        $client->request("GET", "/news/2");
         $this->assertEquals(404, $client->getResponse()->getStatusCode(), "2.1 404 status code expected");
     }
 
@@ -54,10 +149,11 @@ class NewsControllerTest extends BaseWebTestCase {
      * Test 400 bad request use case.
      */
     public function testIndexActionBadRequestException(): void {
+        // Login with good credential.
+        $this->logInAdmin();
+
         $client = $this->getClient();
-        $client->request("GET", "/news/0", [], [], [
-            "PHP_AUTH_USER" => "admin",
-            "PHP_AUTH_PW" => '456']);
+        $client->request("GET", "/news/0");
         $this->assertEquals(400, $client->getResponse()->getStatusCode(), "1. 400 status code expected");
     }
 
@@ -65,13 +161,14 @@ class NewsControllerTest extends BaseWebTestCase {
      * Test complete scenario, add, edit, delete and read News.
      */
     public function testCompleteScenario(): void {
+        // Login with good credential.
+        $this->logInAdmin();
+
         // Create a new client to browse the application
         $client = $this->getClient();
 
         // Create a new entry in the database
-        $crawler = $client->request('GET', '/news/', [], [], [
-            "PHP_AUTH_USER" => "admin",
-            "PHP_AUTH_PW" => '456']);
+        $crawler = $client->request('GET', '/news/');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /news/");
         $crawler = $client->click($crawler->selectLink('Ajouter une news')->link());
@@ -133,13 +230,14 @@ class NewsControllerTest extends BaseWebTestCase {
      * Test translation and publish actions.
      */
     public function testTranslationAndPublishAction(): void {
+        // Login with good credential.
+        $this->logInAdmin();
+
         // Create a new client to browse the application
         $client = $this->getClient();
 
         // Create a new entry in the database
-        $crawler = $client->request('GET', '/news/', [], [], [
-            "PHP_AUTH_USER" => "admin",
-            "PHP_AUTH_PW" => '456']);
+        $crawler = $client->request('GET', '/news/');
 
         // Click on the add button
         $crawler = $client->click($crawler->selectLink('Ajouter une news')->link());
@@ -207,13 +305,14 @@ class NewsControllerTest extends BaseWebTestCase {
      * @return void
      */
     public function testFormValidation(): void {
+        // Login with good credential.
+        $this->logInAdmin();
+
         // Create a new client to browse the application
         $client = $this->getClient();
 
         // Connect the the admin news homepage.
-        $crawler = $client->request('GET', '/news/', [], [], [
-            "PHP_AUTH_USER" => "admin",
-            "PHP_AUTH_PW" => '456']);
+        $crawler = $client->request('GET', '/news/');
 
         // Click on the add button
         $crawler = $client->click($crawler->selectLink('Ajouter une news')->link());

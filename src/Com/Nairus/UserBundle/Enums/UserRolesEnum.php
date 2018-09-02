@@ -16,6 +16,7 @@ abstract class UserRolesEnum {
     const USER = "ROLE_USER";
     const AUTHOR = "ROLE_AUTHOR";
     const MODERATOR = "ROLE_MODERATOR";
+    const ADMIN = "ROLE_ADMIN";
     const SUPER_ADMIN = "ROLE_SUPER_ADMIN";
 
     /**
@@ -34,6 +35,7 @@ abstract class UserRolesEnum {
             self::AUTHOR => "Author",
             self::USER => "User",
             self::MODERATOR => "Moderator",
+            self::ADMIN => "Admin",
             self::SUPER_ADMIN => "Super Admin",
         ];
     }
