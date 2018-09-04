@@ -9,12 +9,10 @@
     {% include "@FOSUser/Profile/show_content.html.twig" %}
     <div id="actions">
         <a href="{{ path("fos_user_profile_edit") }}" id="user-profile-edit" class="btn btn-primary">
-            <i class="fas fa-pencil-alt"></i>
-            {{ "actions.edit" | trans }}
+            <i class="fas fa-pencil-alt"></i> {{ "actions.edit" | trans }}
         </a>
         <a href="{{ path("fos_user_change_password") }}" id="user-change-password" class="btn btn-warning">
-            <i class="fas fa-user-shield"></i>
-            {{ "actions.change-password" | trans }}
+            <i class="fas fa-user-shield"></i> {{ "actions.change-password" | trans }}
         </a>
     </div>
 {% endblock fos_user_content %}

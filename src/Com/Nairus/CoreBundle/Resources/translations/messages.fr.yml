@@ -83,7 +83,7 @@ actions:
     delete: Supprimer
     publish: Publier
     change-password: Changer mon mot de passe
-    return: Return
+    return: Retour
 
 flashes:
     infos: Infos!
