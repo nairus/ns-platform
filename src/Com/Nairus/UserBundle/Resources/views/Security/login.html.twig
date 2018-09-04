@@ -2,6 +2,8 @@
 
 {% extends "@FOSUser/layout.html.twig" %}
 
+{% block title %}{{ "security.login.title" | trans({}, "NSUserBundle") }} - {{ parent() }}{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ '/bundles/nsuser/css/login.css' }}" type="text/css">

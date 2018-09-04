@@ -23,6 +23,10 @@ class SecurityControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals(200, $this->getClient()->getResponse()->getStatusCode(), "1.1 The response has to return a [200] code.");
         $this->assertNotContains('<span class="mx-1 font-weight-bold text-white">Bienvenue', $crawler->filter("#navbar")->html(), "1.2 The navbar hasn't to contain authentication username");
         $this->assertEquals(0, $crawler->filter("#admin-menu")->count(), "1.3 The navbar hasn't to contain admin dropdown button.");
+        $this->assertContains("Veuillez vous connecter", $crawler->filter("html > head > title")->text(), "1.4 The page title expected is not ok.");
+        $this->assertContains("Veuillez vous connecter", $crawler->filter("h1")->text(), "1.5 The h1 tag expected is not ok.");
+        $this->assertContains("Pseudo", $crawler->filter("input#username")->attr("placeholder"), "1.6 The username placeholder is not ok.");
+        $this->assertContains("Mot de passe", $crawler->filter("input#password")->attr("placeholder"), "1.7 The password placeholder is not ok.");
 
         // Try authentication with good credential.
         // Fill in the form and submit it
@@ -55,6 +59,10 @@ class SecurityControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals(200, $this->getClient()->getResponse()->getStatusCode(), "1.1 The response has to return a [200] code.");
         $this->assertNotContains('<span class="mx-1 font-weight-bold text-white">Bienvenue', $crawler->filter("#navbar")->html(), "1.2 The navbar hasn't to contain authentication username");
         $this->assertEquals(0, $crawler->filter("#admin-menu")->count(), "1.3 The navbar hasn't to contain admin dropdown button.");
+        $this->assertContains("Please sign in", $crawler->filter("html > head > title")->text(), "1.4 The page title expected is not ok.");
+        $this->assertContains("Please sign in", $crawler->filter("h1")->text(), "1.5 The h1 tag expected is not ok.");
+        $this->assertContains("Username", $crawler->filter("input#username")->attr("placeholder"), "1.6 The username placeholder is not ok.");
+        $this->assertContains("Password", $crawler->filter("input#password")->attr("placeholder"), "1.7 The password placeholder is not ok.");
 
         // Try authentication with good credential.
         // Fill in the form and submit it

@@ -2,11 +2,12 @@
 flashes:
     email-sent: A confirmation email will be sent soon
 
-login:
-    title: "Please sign in"
-    placeholder:
-        username: Username
-        password: Password
+security:
+    login:
+        title: "Please sign in"
+        placeholder:
+            username: Username
+            password: Password
 
 profile:
     edit:

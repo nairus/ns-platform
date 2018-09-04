@@ -21,10 +21,10 @@ class NewsControllerTest extends AbstractUserWebTestCase {
     public function testAccessControlListWithUser(): void {
         $client = $this->getClient();
         $client->request("GET", "/news");
-        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1 302 redirection to /login expected");
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1. 302 redirection to /login expected");
 
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2 Unexpected HTTP status code for GET /news/ with user login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /news/ with user login");
 
         // Fill in the form and submit it with bad credential
         $form = $crawler->selectButton('Connexion')->form(array(
@@ -45,10 +45,10 @@ class NewsControllerTest extends AbstractUserWebTestCase {
     public function testAccessControlListWithAuthor(): void {
         $client = $this->getClient();
         $client->request("GET", "/news");
-        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1 302 redirection to /login expected");
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1. 302 redirection to /login expected");
 
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2 Unexpected HTTP status code for GET /news/ with author login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /news/ with author login");
 
         // Fill in the form and submit it with bad credential
         $form = $crawler->selectButton('Connexion')->form(array(
@@ -69,10 +69,10 @@ class NewsControllerTest extends AbstractUserWebTestCase {
     public function testAccessControlListWithModerator(): void {
         $client = $this->getClient();
         $client->request("GET", "/news");
-        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1 302 redirection to /login expected");
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1. 302 redirection to /login expected");
 
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2 Unexpected HTTP status code for GET /news/ with moderator login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /news/ with moderator login");
 
         // Fill in the form and submit it with bad credential
         $form = $crawler->selectButton('Connexion')->form(array(
@@ -93,10 +93,10 @@ class NewsControllerTest extends AbstractUserWebTestCase {
     public function testAccessControlListWithAdmin(): void {
         $client = $this->getClient();
         $client->request("GET", "/news");
-        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1 302 redirection to /login expected");
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1. 302 redirection to /login expected");
 
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2 Unexpected HTTP status code for GET /news/ with admin login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /login/ with admin login");
 
         // Fill in the form and submit it with good credential
         $form = $crawler->selectButton('Connexion')->form(array(
@@ -106,28 +106,42 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         $client->submit($form);
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3 Unexpected HTTP status code for GET /news/ with admin login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /news/ with admin login");
+        $this->assertContains("Liste des news", $crawler->filter("html > head > title")->text(), "4.1 The page title expected is not ok.");
+        $this->assertContains("Liste des news", $crawler->filter("h1")->text(), "4.2 The h1 tag expected is not ok.");
     }
 
+    /**
+     * Test access control list with sadmin credential.
+     *
+     * @return void
+     */
     public function testAccessControlListWithSAdmin(): void {
         $client = $this->getClient();
-        $client->request("GET", "/news");
-        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1 302 redirection to /login expected");
+        $client->request("GET", "/en/news");
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1. 302 redirection to /en/login expected");
 
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2 Unexpected HTTP status code for GET /news/ with sadmin login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /en/login/ with sadmin login");
 
         // Fill in the form and submit it with good credential
-        $form = $crawler->selectButton('Connexion')->form(array(
+        $form = $crawler->selectButton('Connect')->form(array(
             '_username' => 'sadmin',
             '_password' => 'sadminpass',
         ));
 
         $client->submit($form);
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3 Unexpected HTTP status code for GET /news/ with sadmin login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /en/news/ with sadmin login");
+        $this->assertContains("News list", $crawler->filter("html > head > title")->text(), "4.1 The page title expected is not ok.");
+        $this->assertContains("News list", $crawler->filter("h1")->text(), "4.2 The h1 tag expected is not ok.");
     }
 
+    /**
+     * Test not found exception in index action.
+     *
+     * @return void
+     */
     public function testIndexActionNotFoundException(): void {
         // Login with good credential.
         $this->logInAdmin();
@@ -147,6 +161,8 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
     /**
      * Test 400 bad request use case.
+     *
+     * @return void
      */
     public function testIndexActionBadRequestException(): void {
         // Login with good credential.
@@ -159,6 +175,8 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
     /**
      * Test complete scenario, add, edit, delete and read News.
+     *
+     * @return void
      */
     public function testCompleteScenario(): void {
         // Login with good credential.
@@ -228,6 +246,8 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
     /**
      * Test translation and publish actions.
+     *
+     * @return void
      */
     public function testTranslationAndPublishAction(): void {
         // Login with good credential.
