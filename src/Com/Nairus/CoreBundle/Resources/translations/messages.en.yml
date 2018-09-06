@@ -75,6 +75,8 @@ nav:
         news: Manage News
         user:
             account: My account
+        resume:
+            skills: Manage Skills
 
 actions:
     list: Return to the list

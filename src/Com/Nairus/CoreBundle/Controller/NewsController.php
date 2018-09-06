@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * News controller.
  *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class NewsController extends Controller {
 

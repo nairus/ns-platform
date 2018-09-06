@@ -74,6 +74,8 @@ nav:
         news: Gestion des News
         user:
             account: Mon compte
+        resume:
+            skills: Gestion des compétences
 actions:
     list: Retour à la liste
     show: Voir les détails

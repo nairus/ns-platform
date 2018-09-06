@@ -1,3 +1,7 @@
+ns_resume_skill:
+    resource: "@NSResumeBundle/Resources/config/routing/skill.yml"
+    prefix:   /admin/skill
+
 ns_resume_homepage:
     path:     /{page}
     defaults:

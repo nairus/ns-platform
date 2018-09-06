@@ -5,7 +5,10 @@ namespace Com\Nairus\ResumeBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Skill
+ * Skill entity.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Table(name="ns_skill")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\SkillRepository")
@@ -53,9 +56,9 @@ class Skill {
     /**
      * Get title
      *
-     * @return string
+     * @return string|null
      */
-    public function getTitle(): string {
+    public function getTitle(): ?string {
         return $this->title;
     }
 

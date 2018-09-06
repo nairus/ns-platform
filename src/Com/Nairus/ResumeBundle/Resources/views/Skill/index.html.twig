@@ -1,0 +1,40 @@
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block ns_core_admin_body %}
+
+    <h1>Skills list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for skill in skills %}
+                <tr>
+                    <td><a href="{{ path('skill_show', { 'id': skill.id }) }}">{{ skill.id }}</a></td>
+                    <td>{{ skill.title }}</td>
+                    <td>
+                        <ul>
+                            <li>
+                                <a href="{{ path('skill_show', { 'id': skill.id }) }}">show</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('skill_edit', { 'id': skill.id }) }}">edit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('skill_new') }}">Create a new skill</a>
+        </li>
+    </ul>
+{% endblock %}

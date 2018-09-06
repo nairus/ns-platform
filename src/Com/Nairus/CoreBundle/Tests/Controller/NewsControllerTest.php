@@ -14,17 +14,17 @@ use Com\Nairus\UserBundle\Tests\AbstractUserWebTestCase;
 class NewsControllerTest extends AbstractUserWebTestCase {
 
     /**
-     * Test the access control on "/news" routes for user.
+     * Test the access control on "/admin/news" routes for user.
      *
      * @return void
      */
     public function testAccessControlListWithUser(): void {
         $client = $this->getClient();
-        $client->request("GET", "/news");
+        $client->request("GET", "/admin/news");
         $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1. 302 redirection to /login expected");
 
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /news/ with user login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /admin/news/ with user login");
 
         // Fill in the form and submit it with bad credential
         $form = $crawler->selectButton('Connexion')->form(array(
@@ -34,21 +34,21 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         $client->submit($form);
         $crawler = $client->followRedirect();
-        $this->assertEquals(403, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /news for user login");
+        $this->assertEquals(403, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /admin/news for user login");
     }
 
     /**
-     * Test the access control on "/news" routes for author.
+     * Test the access control on "/admin/news" routes for author.
      *
      * @return void
      */
     public function testAccessControlListWithAuthor(): void {
         $client = $this->getClient();
-        $client->request("GET", "/news");
+        $client->request("GET", "/admin/news");
         $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1. 302 redirection to /login expected");
 
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /news/ with author login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /admin/news/ with author login");
 
         // Fill in the form and submit it with bad credential
         $form = $crawler->selectButton('Connexion')->form(array(
@@ -58,21 +58,21 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         $client->submit($form);
         $crawler = $client->followRedirect();
-        $this->assertEquals(403, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /news for author login");
+        $this->assertEquals(403, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /admin/news for author login");
     }
 
     /**
-     * Test the access control on "/news" routes for moderator.
+     * Test the access control on "/admin/news" routes for moderator.
      *
      * @return void
      */
     public function testAccessControlListWithModerator(): void {
         $client = $this->getClient();
-        $client->request("GET", "/news");
+        $client->request("GET", "/admin/news");
         $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1. 302 redirection to /login expected");
 
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /news/ with moderator login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /admin/news/ with moderator login");
 
         // Fill in the form and submit it with bad credential
         $form = $crawler->selectButton('Connexion')->form(array(
@@ -82,17 +82,17 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         $client->submit($form);
         $crawler = $client->followRedirect();
-        $this->assertEquals(403, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /news for moderator login");
+        $this->assertEquals(403, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /admin/news for moderator login");
     }
 
     /**
-     * Test the access control on "/news" routes for admin.
+     * Test the access control on "/admin/news" routes for admin.
      *
      * @return void
      */
     public function testAccessControlListWithAdmin(): void {
         $client = $this->getClient();
-        $client->request("GET", "/news");
+        $client->request("GET", "/admin/news");
         $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1. 302 redirection to /login expected");
 
         $crawler = $client->followRedirect();
@@ -106,7 +106,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         $client->submit($form);
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /news/ with admin login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /admin/news/ with admin login");
         $this->assertContains("Liste des news", $crawler->filter("html > head > title")->text(), "4.1 The page title expected is not ok.");
         $this->assertContains("Liste des news", $crawler->filter("h1")->text(), "4.2 The h1 tag expected is not ok.");
     }
@@ -118,7 +118,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
      */
     public function testAccessControlListWithSAdmin(): void {
         $client = $this->getClient();
-        $client->request("GET", "/en/news");
+        $client->request("GET", "/en/admin/news");
         $this->assertEquals(302, $client->getResponse()->getStatusCode(), "1. 302 redirection to /en/login expected");
 
         $crawler = $client->followRedirect();
@@ -132,7 +132,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         $client->submit($form);
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /en/news/ with sadmin login");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /en/admin/news/ with sadmin login");
         $this->assertContains("News list", $crawler->filter("html > head > title")->text(), "4.1 The page title expected is not ok.");
         $this->assertContains("News list", $crawler->filter("h1")->text(), "4.2 The h1 tag expected is not ok.");
     }
@@ -148,14 +148,14 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         // Test first page with no news.
         $client = $this->getClient();
-        $crawler = $client->request("GET", "/news");
+        $crawler = $client->request("GET", "/admin/news");
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 200 status code expected");
         $noNewsMessage = "Il n'y a pas de news pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !";
         $body = $crawler->filter(".container-fluid > em")->text();
         $this->assertContains($noNewsMessage, $body, "1.2 The [no-news] message has to be displayed");
 
         // Non existing second page 404 error.
-        $client->request("GET", "/news/2");
+        $client->request("GET", "/admin/news/2");
         $this->assertEquals(404, $client->getResponse()->getStatusCode(), "2.1 404 status code expected");
     }
 
@@ -169,7 +169,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $this->logInAdmin();
 
         $client = $this->getClient();
-        $client->request("GET", "/news/0");
+        $client->request("GET", "/admin/news/0");
         $this->assertEquals(400, $client->getResponse()->getStatusCode(), "1. 400 status code expected");
     }
 
@@ -186,9 +186,9 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $client = $this->getClient();
 
         // Create a new entry in the database
-        $crawler = $client->request('GET', '/news/');
+        $crawler = $client->request('GET', '/admin/news/');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /news/");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /admin/news/");
         $crawler = $client->click($crawler->selectLink('Ajouter une news')->link());
 
         // Fill in the form and submit it
@@ -257,7 +257,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $client = $this->getClient();
 
         // Create a new entry in the database
-        $crawler = $client->request('GET', '/news/');
+        $crawler = $client->request('GET', '/admin/news/');
 
         // Click on the add button
         $crawler = $client->click($crawler->selectLink('Ajouter une news')->link());
@@ -332,7 +332,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $client = $this->getClient();
 
         // Connect the the admin news homepage.
-        $crawler = $client->request('GET', '/news/');
+        $crawler = $client->request('GET', '/admin/news/');
 
         // Click on the add button
         $crawler = $client->click($crawler->selectLink('Ajouter une news')->link());

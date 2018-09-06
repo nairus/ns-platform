@@ -1,0 +1,16 @@
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block ns_core_admin_body %}
+    <h1>Skill creation</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input type="submit" value="Create" />
+    {{ form_end(form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('skill_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

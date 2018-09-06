@@ -1,6 +1,6 @@
 ns_core_news:
     resource: "@NSCoreBundle/Resources/config/routing/news.yml"
-    prefix:   /news
+    prefix:   /admin/news
 
 ns_core_homepage:
     path:     /

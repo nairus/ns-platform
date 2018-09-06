@@ -7,9 +7,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Public controller.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
 class PublicController extends Controller {
 
-    private const NAME = NSResumeBundle::NAME . ':' . "Public";
+    private const NAME = NSResumeBundle::NAME . ":Public";
 
     /**
      * Index controller.
