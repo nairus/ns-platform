@@ -7,6 +7,7 @@ use Com\Nairus\UserBundle\Enums\UserRolesEnum;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Abstract test class with user's credentials.
@@ -24,6 +25,13 @@ class AbstractUserWebTestCase extends WebTestCase {
     private $client = null;
 
     /**
+     * The translator service.
+     *
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * Liste d'utilisateurs de test.
      *
      * @var User[]
@@ -38,6 +46,12 @@ class AbstractUserWebTestCase extends WebTestCase {
 
     public function setUp(): void {
         $this->client = static::createClient();
+        $this->translator = static::$kernel->getContainer()->get('translator');
+    }
+
+    public function tearDown(): void {
+        // Free the resources.
+        unset($this->client);
     }
 
     /**
@@ -52,76 +66,86 @@ class AbstractUserWebTestCase extends WebTestCase {
     /**
      * Log with user credential.
      *
-     * @return void
+     * @param string $locale the locale to force in url.
+     *
+     * @return Crawler
      */
-    protected function logInUser(): Crawler {
+    protected function logInUser($locale = null): Crawler {
         $user = new User();
         $user->setUsername("user")
                 ->setPassword("userpass")
                 ->setEmail("user@test.com")
                 ->addRole(static::$users["user"]);
 
-        return $this->login($user);
+        return $this->login($user, $locale);
     }
 
     /**
      * Log with author credential.
      *
-     * @return void
+     * @param string $locale the locale to force in url.
+     *
+     * @return Crawler
      */
-    protected function logInAuthor(): Crawler {
+    protected function logInAuthor($locale = null): Crawler {
         $user = new User();
         $user->setUsername("author")
                 ->setPassword("authorpass")
                 ->setEmail("author@test.com")
                 ->addRole(static::$users["author"]);
 
-        return $this->login($user);
+        return $this->login($user, $locale);
     }
 
     /**
      * Log with moderator credential.
      *
-     * @return void
+     * @param string $locale the locale to force in url.
+     *
+     * @return Crawler
      */
-    protected function logInModerator(): Crawler {
+    protected function logInModerator($locale = null): Crawler {
         $user = new User();
         $user->setUsername("moderator")
                 ->setPassword("moderatorpass")
                 ->setEmail("moderator@test.com")
                 ->addRole(static::$users["moderator"]);
 
-        return $this->login($user);
+        return $this->login($user, $locale);
     }
 
     /**
      * Login with admin credentials.
      *
-     * @return void
+     * @param string $locale the locale to force in url.
+     *
+     * @return Crawler
      */
-    protected function logInAdmin(): Crawler {
+    protected function logInAdmin($locale = null): Crawler {
         $user = new User();
         $user->setUsername("admin")
                 ->setPassword("adminpass")
                 ->setEmail("admin@test.com")
                 ->addRole(static::$users["admin"]);
 
-        return $this->login($user);
+        return $this->login($user, $locale);
     }
 
     /**
      * Login with sadmin credentials.
      *
-     * @return void
+     * @param string $locale the locale to force in url.
+     *
+     * @return Crawler
      */
-    protected function logInSuperAdmin(): Crawler {
+    protected function logInSuperAdmin($locale = null): Crawler {
         $user = new User();
         $user->setUsername("sadmin")
                 ->setPassword("sadminpass")
                 ->setEmail("sadmin@test.com")
                 ->addRole(static::$users["sadmin"]);
 
-        return $this->login($user);
+        return $this->login($user, $locale);
     }
 
     /**
@@ -136,14 +160,30 @@ class AbstractUserWebTestCase extends WebTestCase {
     /**
      * Simulate the login action.
      *
-     * @param User $user the current user.
+     * @param User   $user    the current user.
+     * @param string $locale  the locale to force in url.
+     *
+     * @return Crawler
      */
-    private function login(User $user): Crawler {
-        $crawler = $this->client->request('GET', '/login');
+    private function login(User $user, string $locale = null): Crawler {
+        $localeParameter = '';
+        $loginButtonLabel = 'Connexion';
+
+        // If locale is not null we add it in the uri
+        // and change the login button label.
+        if (null !== $locale) {
+            $localeParameter = '/' . $locale;
+            $loginButtonLabel = $this->translator->trans(
+                    "security.login.submit", [],
+                    'FOSUserBundle', $locale
+            );
+        }
+
+        $crawler = $this->client->request('GET', $localeParameter . '/login');
 
         // Try authentication with good credential.
         // Fill in the form and submit it
-        $form = $crawler->selectButton('Connexion')->form(array(
+        $form = $crawler->selectButton($loginButtonLabel)->form(array(
             '_username' => $user->getUsername(),
             '_password' => $user->getPassword(),
         ));

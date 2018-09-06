@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Event listener for profile events.
+ * Event listener for user bundle events (edit profile, change password ...).
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -50,7 +50,7 @@ class UserProfileListener implements EventSubscriberInterface {
      * @return void
      */
     public function onChangePasswordCompleted(FilterUserResponseEvent $event): void {
-        $this->addFlashMessage($event->getRequest()->getSession(), "info", "flashes.email-sent");
+        $this->addFlashMessage($event->getRequest()->getSession(), "info", "flashes.info.email-sent");
     }
 
     /**
@@ -61,7 +61,7 @@ class UserProfileListener implements EventSubscriberInterface {
      * @return void
      */
     public function onProfileEditCompleted(FilterUserResponseEvent $event): void {
-        $this->addFlashMessage($event->getRequest()->getSession(), "info", "flashes.email-sent");
+        $this->addFlashMessage($event->getRequest()->getSession(), "info", "flashes.info.email-sent");
     }
 
     /**

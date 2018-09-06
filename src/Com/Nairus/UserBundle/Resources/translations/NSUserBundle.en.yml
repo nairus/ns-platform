@@ -1,6 +1,7 @@
 ## Translations file only for the bundle
 flashes:
-    email-sent: A confirmation email will be sent soon
+    info:
+        email-sent: A confirmation email will be sent soon
 
 security:
     login:

@@ -125,7 +125,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2. Unexpected HTTP status code for GET /en/login/ with sadmin login");
 
         // Fill in the form and submit it with good credential
-        $form = $crawler->selectButton('Connect')->form(array(
+        $form = $crawler->selectButton('Log in')->form(array(
             '_username' => 'sadmin',
             '_password' => 'sadminpass',
         ));

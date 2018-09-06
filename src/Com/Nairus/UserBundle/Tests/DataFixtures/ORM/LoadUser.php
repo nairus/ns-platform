@@ -23,12 +23,10 @@ class LoadUser extends AbstractFixture implements OrderedFixtureInterface {
     public function load(ObjectManager $manager) {
         // See the security file for cost value.
         $encoder = new BCryptPasswordEncoder(12);
-        // See NSCoreBundle/Resource/config/parameters_test.yml
-        $salt = "ThisIsASecret";
         foreach (AbstractUserWebTestCase::$users as $name => $role) {
             $user = new User();
             $user
-                    ->setPassword($encoder->encodePassword($name . "pass", $salt))
+                    ->setPassword($encoder->encodePassword($name . "pass", null))
                     ->addRole($role)
                     ->setUsername($name)
                     ->setEmail($name . "@test.com")
