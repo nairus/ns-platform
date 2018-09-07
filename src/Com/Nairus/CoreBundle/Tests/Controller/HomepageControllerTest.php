@@ -16,6 +16,8 @@ class HomepageControllerTest extends BaseWebTestCase {
     /**
      * Test index action.
      *
+     * @covers Com\Nairus\CoreBundle\Controller\HomepageController::indexAction
+     *
      * @return void
      */
     public function testIndex(): void {
@@ -100,6 +102,8 @@ class HomepageControllerTest extends BaseWebTestCase {
 
     /**
      * Test contact action in english.
+     *
+     * @covers Com\Nairus\CoreBundle\Controller\HomepageController::contactAction
      *
      * @return void
      */

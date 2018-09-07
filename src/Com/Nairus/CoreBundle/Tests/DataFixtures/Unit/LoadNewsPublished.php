@@ -10,9 +10,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Description of LoadNewsPublished
+ * Fixture for published news.
  *
- * @author nairus
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class LoadNewsPublished implements FixtureInterface {
 

@@ -6,7 +6,7 @@ parameters:
     nairus.pwd: $2y$12$ldGSUKNiWk/Gmlhqd1ovx.bmRui9.MAuAxlPxXevOTvvCeH79E.NS
     # Limit for the last news tiles on the homepage.
     ns_core.last_news_limit: 3
-    # Limit for the News list (Cf. NewsController::IndexAction).
+    # Limit for the News list (Cf. NewsController::indexAction).
     ns_core.news_limit: 5
     dates_format:
         fr: EEE d MMM Y

@@ -123,7 +123,7 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
     /**
      * Test getting paginated entities.
      *
-     * @covers ResumeRepository::findAllOnlineForPage
+     * @covers Com\Nairus\ResumeBundle\Repository\ResumeRepository::findAllOnlineForPage
      */
     public function testFindAllOnlineForPage() {
         // Test with no online resume.
@@ -161,7 +161,7 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
     /**
      * Test find a resume with his translation.
      *
-     * @covers ResumeRepository::findWithTranslation
+     * @covers Com\Nairus\ResumeBundle\Repository\ResumeRepository::findWithTranslation
      */
     public function testFindWithTranslation() {
         /* @var $resumeFr Resume */

@@ -11,7 +11,8 @@ use Com\Nairus\CoreBundle\Tests\DataFixtures\Unit\LoadNewsPublished;
 /**
  * Test of News Repository
  *
- * @author nairus
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class NewsRepositoryTest extends AbstractKernelTestCase {
 
@@ -81,7 +82,7 @@ class NewsRepositoryTest extends AbstractKernelTestCase {
     /**
      * Test the "findNewsForPage" method.
      *
-     * @covers NewsRepository::findNewsForPage
+     * @covers Com\Nairus\CoreBundle\Repository\NewsRepository::findNewsForPage
      */
     public function testFindNewsForPage() {
         // Add test datas set.

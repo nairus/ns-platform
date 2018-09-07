@@ -97,3 +97,13 @@ flashes:
 pagination:
     previous: Prev.
     next: Next
+
+table:
+    no-item: There is no item for now! Please add one clicking on the button above!
+    cols:
+        titles: News titles
+        creation-date: Creation date
+        publication-date: Publication date
+        offline: Offline
+        actions: Actions
+        missing-translations: Missing translations

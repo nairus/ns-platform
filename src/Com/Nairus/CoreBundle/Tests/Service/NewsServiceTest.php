@@ -10,7 +10,8 @@ use Com\Nairus\CoreBundle\Tests\DataFixtures\Unit\LoadNewsPublished;
 /**
  * Test of the News service.
  *
- * @author nairus
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class NewsServiceTest extends AbstractKernelTestCase {
 
@@ -39,34 +40,39 @@ class NewsServiceTest extends AbstractKernelTestCase {
         $this->object->setAvailableLocales(["fr", "en", "ru"]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function tearDown() {
+        parent::tearDown();
         unset($this->object);
     }
 
     /**
      * Test the implementation of NewsServiceInterface.
      */
-    public function testImplementation() {
+    public function testImplementation(): void {
         $this->assertInstanceOf(NewsServiceInterface::class, $this->object, "1. The service has to be of type [NewsServiceInterface].");
     }
 
     /**
      * Test the implementation of NewsServiceInterface from IoC.
      */
-    public function testImplementationFromIoC() {
+    public function testImplementationFromIoC(): void {
         try {
             /* @var $newsService NewsServiceInterface */
             $newsService = static::$container->get("ns_core.news_service");
             $this->assertInstanceOf(NewsServiceInterface::class, $newsService, "1. The service has to be of type [NewsServiceInterface].");
+            $this->assertInstanceOf(NewsService::class, $newsService, "1. The service has to be of type [NewsService].");
         } catch (\Exception | \Error $exc) {
             $this->fail("2. Exception not expected: " . $exc->getMessage());
         }
     }
 
     /**
-     * Test of the "findAllOnlineForPage" method.
+     * Test of the <code>findAllOnlineForPage</code> method.
      */
-    public function testFindLastNewsPublished() {
+    public function testFindLastNewsPublished(): void {
         $newsContents = $this->object->findLastNewsPublished(2, "fr");
         $this->assertCount(2, $newsContents, "1. The collection has to contain 2 entities.");
 
@@ -78,7 +84,7 @@ class NewsServiceTest extends AbstractKernelTestCase {
      * @expectedException \TypeError
      * @expectedExceptionMessage must be of the type integer, string given
      */
-    public function testFindLastNewsPublishedWithBadLimitParameter() {
+    public function testFindLastNewsPublishedWithBadLimitParameter(): void {
         $this->object->findLastNewsPublished("fr", null);
     }
 
@@ -86,7 +92,7 @@ class NewsServiceTest extends AbstractKernelTestCase {
      * @expectedException \TypeError
      * @expectedExceptionMessage must be of the type string, null given
      */
-    public function testFindLastNewsPublishedWithBadLanguageParameter() {
+    public function testFindLastNewsPublishedWithBadLanguageParameter(): void {
         $this->object->findLastNewsPublished(2, null);
     }
 
@@ -94,9 +100,9 @@ class NewsServiceTest extends AbstractKernelTestCase {
      * @expectedException \Com\Nairus\CoreBundle\Exception\LocaleError
      * @expectedExceptionMessage "ru" locale is not available.
      *
-     * @covers NewsServiceInterface::findLastNewsPublished
+     * @covers Com\Nairus\CoreBundle\Service\NewsService::findLastNewsPublished
      */
-    public function testFindLastNewsPublishedWithLanguageNotAvailable() {
+    public function testFindLastNewsPublishedWithLanguageNotAvailable(): void {
         /* @var $newsService NewsServiceInterface */
         $newsService = static::$container->get("ns_core.news_service");
         $newsService->findLastNewsPublished(2, "ru");
@@ -105,9 +111,9 @@ class NewsServiceTest extends AbstractKernelTestCase {
     /**
      * Test "findLastNewsPublished" method.
      * .
-     * @covers NewsServiceInterface::findContentForNewsId
+     * @covers Com\Nairus\CoreBundle\Service\NewsService::findContentForNewsId
      */
-    public function testFindContentForNewsId() {
+    public function testFindContentForNewsId(): void {
         /* @var $newsRepository NewsRepository */
         $newsRepository = static::$em->getRepository(NSCoreBundle::NAME . ":News");
         $news = $newsRepository->findOneBy(["published" => true]);
@@ -122,7 +128,7 @@ class NewsServiceTest extends AbstractKernelTestCase {
      * @expectedException \Com\Nairus\CoreBundle\Exception\LocaleError
      * @expectedExceptionMessage "ru" locale is not available.
      */
-    public function testFindContentForNewsIdWithBadLocale() {
+    public function testFindContentForNewsIdWithBadLocale(): void {
         /* @var $newsRepository NewsRepository */
         $newsRepository = static::$em->getRepository(NSCoreBundle::NAME . ":News");
         $news = $newsRepository->findOneBy(["published" => true]);
@@ -135,9 +141,9 @@ class NewsServiceTest extends AbstractKernelTestCase {
     /**
      * Test the "findNewsForPage" method.
      *
-     * @covers NewsServiceInterface::findNewsForPage
+     * @covers Com\Nairus\CoreBundle\Service\NewsService::findNewsForPage
      */
-    public function testFindNewsForPage() {
+    public function testFindNewsForPage(): void {
         // Test page 1
         $newsPaginatorDtoForPage1 = $this->object->findNewsForPage(1, 2);
         $entitiesForPage1 = $newsPaginatorDtoForPage1->getEntities();
@@ -164,7 +170,7 @@ class NewsServiceTest extends AbstractKernelTestCase {
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\PaginatorException
      */
-    public function testFindNewsForPageWithBadPage() {
+    public function testFindNewsForPageWithBadPage(): void {
         $this->object->findNewsForPage(0, 1);
     }
 

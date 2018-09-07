@@ -9,7 +9,8 @@ use Com\Nairus\ResumeBundle\Entity\Skill;
 /**
  * Test de la classe SkillRepository.
  *
- * @author Nicolas Surian <nicolas.surian@gmail.com>
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class SkillRepositoryTest extends AbstractKernelTestCase {
 
@@ -26,9 +27,9 @@ class SkillRepositoryTest extends AbstractKernelTestCase {
     /**
      * Test entities insert, update and delete.
      *
-     * @todo implement testInsertUpdateAndDelete
+     * @return void
      */
-    public function testInsertUpdateAndDelete() {
+    public function testInsertUpdateAndDelete(): void {
         // Création d'une nouvelle compétence.
         $newSkill = new Skill();
         $newSkill->setTitle("PHP 7");
@@ -38,8 +39,8 @@ class SkillRepositoryTest extends AbstractKernelTestCase {
 
         // Récupération des compétences en base.
         $skills = static::$repository->findAll();
-        $this->assertCount(3, $skills, "1.1. Il doit y avoir 3 entité3 en base.");
-        $this->assertSame($newSkill->getId(), $skills[2]->getId(), "1.2. L'id de l'entité récupérée doit être identique à celle créée.");
+        $this->assertCount(3, $skills, "1.1. The database doesn't contain 3 entities.");
+        $this->assertSame($newSkill->getId(), $skills[2]->getId(), "1.2. The ids are not identicals.");
 
         // Update test.
         $skills[2]->setTitle("PHP 7.1");
@@ -48,7 +49,7 @@ class SkillRepositoryTest extends AbstractKernelTestCase {
 
         /* @var $skill Skill */
         $skill = static::$repository->find($skills[2]->getId());
-        $this->assertSame("PHP 7.1", $skill->getTitle(), "2.1 Le titre de l'entité récupérée doit être mis à jour.");
+        $this->assertSame("PHP 7.1", $skill->getTitle(), "2.1 The title isn't updated.");
 
         // Delete test.
         $id = $skill->getId();
@@ -57,7 +58,40 @@ class SkillRepositoryTest extends AbstractKernelTestCase {
         static::$em->clear();
 
         $skillRemoved = static::$repository->find($id);
-        $this->assertNull($skillRemoved, "3.1. L'entité doit être  supprimée.");
+        $this->assertNull($skillRemoved, "3.1. The entity is not deleted.");
+    }
+
+    /**
+     * Test the <code>findAllForPage</code> method.
+     *
+     * @covers Com\Nairus\ResumeBundle\Repository\SkillRepository::findAllForPage
+     *
+     * @return void
+     */
+    public function testFindAllForPage(): void {
+        // Page 1
+        $paginatorForPage1 = static::$repository->findAllForPage(0, 1);
+        $this->assertSame(2, $paginatorForPage1->count(), "1.1. The paginator has not the total expected.");
+        $collForPage1 = $paginatorForPage1->getIterator()->getArrayCopy();
+        $this->assertCount(1, $collForPage1, "1.2. The paginator doesn't contain the expected entity.");
+        /* @var $skillForPage1 Skill */
+        $skillForPage1 = $collForPage1[0];
+        $this->assertInstanceOf(Skill::class, $skillForPage1, "1.3. The entity class is not expected.");
+        $this->assertEquals(1, $skillForPage1->getId(), "1.4. The entity's id is not the one expected.");
+        $this->assertEquals("PHP 7", $skillForPage1->getTitle(), "1.5. The entity's title is not the one expected.");
+
+        // Page 2
+        $paginatorForPage2 = static::$repository->findAllForPage(1, 1);
+        $collForPage2 = $paginatorForPage2->getIterator()->getArrayCopy();
+        $this->assertCount(1, $collForPage2, "2.1. The paginator doesn't contain the expected entity.");
+        /* @var $skillForPage2 Skill */
+        $skillForPage2 = $collForPage2[0];
+        $this->assertEquals(2, $skillForPage2->getId(), "2.2. The entity's id is not the one expected.");
+        $this->assertEquals("Python 2/3", $skillForPage2->getTitle(), "2.2. The entity's title is not the one expected.");
+
+        // Page 3
+        $paginatorForPage3 = static::$repository->findAllForPage(2, 1);
+        $this->assertCount(0, $paginatorForPage3->getIterator()->getArrayCopy(), "3. The paginator is not empty has expected.");
     }
 
 }

@@ -4,6 +4,7 @@ namespace Com\Nairus\ResumeBundle\Controller;
 
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Skill;
+use Com\Nairus\ResumeBundle\Service\SkillServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,17 +21,44 @@ class SkillController extends Controller {
     private const NAME = NSResumeBundle::NAME . ":Skill";
 
     /**
+     * The skill service.
+     *
+     * @var SkillServiceInterface
+     */
+    private $skillService;
+
+    /**
+     * Constructor.
+     *
+     * @param SkillServiceInterface $skillService The skill service.
+     */
+    public function __construct(SkillServiceInterface $skillService) {
+        $this->skillService = $skillService;
+    }
+
+    /**
      * Lists all skill entities.
      *
      * @return Response
      */
-    public function indexAction(): Response {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction($page): Response {
+        // Bug chrome
+        if ("" === $page) {
+            $page = 1;
+        }
 
-        $skills = $em->getRepository('NSResumeBundle:Skill')->findAll();
+        try {
+            // Get the limit from the config file.
+            $limit = $this->container->getParameter("ns_resume.skills-limit");
+            $skillPaginatorDto = $this->skillService->findAllForPage($page, $limit);
+        } catch (PaginatorException $exc) {
+            throw new BadRequestHttpException("Bad page parameter", $exc);
+        }
 
         return $this->render(self::NAME . ':index.html.twig', array(
-                    'skills' => $skills,
+                    'skills' => $skillPaginatorDto->getEntities(),
+                    'pages' => $skillPaginatorDto->getPages(),
+                    'currentPage' => $skillPaginatorDto->getCurrentPage()
         ));
     }
 

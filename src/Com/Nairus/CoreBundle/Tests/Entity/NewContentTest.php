@@ -20,6 +20,10 @@ class NewContentTest extends AbstractKernelTestCase {
      *
      * Test NotBlank constraint.
      *
+     * @covers Com\Nairus\CoreBundle\Entity\NewsContent::setDescription
+     * @covers Com\Nairus\CoreBundle\Entity\NewsContent::setLink
+     * @covers Com\Nairus\CoreBundle\Entity\NewsContent::setTitle
+     *
      * @return void
      */
     public function testValidateEntityCase1(): void {

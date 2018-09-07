@@ -6,3 +6,9 @@ public:
         show-detail: Voir le CV
         published-at: Publié le
         skills-title: "Compétences :"
+
+skill:
+    index:
+        title: Liste des compétences
+        add-new: Ajouter une nouvelle compétence
+        pagination-label: Pagination des compétences

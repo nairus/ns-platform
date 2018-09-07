@@ -1,8 +1,8 @@
-## Config for ResumeBundle for prod env.
+## Config for ResumeBundle for dev env.
 
 parameters:
     # Limit for resume card on frontend (see PublicController:indexAction).
-    ns_resume.max-cards-per-page: 12
+    ns_resume.max-cards-per-page: 8
 
     # Limit for skill admin list (see SkillController:indexAction).
-    ns_resume.skills-limit: 10
+    ns_resume.skills-limit: 6

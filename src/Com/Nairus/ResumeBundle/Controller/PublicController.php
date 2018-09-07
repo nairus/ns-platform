@@ -29,7 +29,7 @@ class PublicController extends Controller {
         }
 
         $datesFormat = $this->container->getParameter("dates_format");
-        $maxCardPerPage = $this->container->getParameter("max-cards-per-page");
+        $maxCardPerPage = $this->container->getParameter("ns_resume.max-cards-per-page");
 
         return $this->render(self::NAME . ':index.html.twig', [
                     "currentPage" => $page,

@@ -16,6 +16,8 @@ class NewsControllerTest extends AbstractUserWebTestCase {
     /**
      * Test the access control on "/admin/news" routes for user.
      *
+     * @covers Com\Nairus\CoreBundle\Controller\NewsController::indexAction
+     *
      * @return void
      */
     public function testAccessControlListWithUser(): void {
@@ -150,13 +152,31 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $client = $this->getClient();
         $crawler = $client->request("GET", "/admin/news");
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 200 status code expected");
-        $noNewsMessage = "Il n'y a pas de news pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !";
+        $noNewsMessage = "Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !";
         $body = $crawler->filter(".container-fluid > em")->text();
         $this->assertContains($noNewsMessage, $body, "1.2 The [no-news] message has to be displayed");
 
         // Non existing second page 404 error.
         $client->request("GET", "/admin/news/2");
         $this->assertEquals(404, $client->getResponse()->getStatusCode(), "2.1 404 status code expected");
+    }
+
+    /**
+     * Test display list with no news in english.
+     *
+     * @return void
+     */
+    public function testIndexActionNoNewsInEn(): void {
+        // Login with good credential.
+        $this->logInAdmin();
+
+        // Test first page with no news.
+        $client = $this->getClient();
+        $crawler = $client->request("GET", "/en/admin/news");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 200 status code expected");
+        $noNewsMessage = "There is no item for now! Please add one clicking on the button above!";
+        $body = $crawler->filter(".container-fluid > em")->text();
+        $this->assertContains($noNewsMessage, $body, "1.2 The [no-news] message has to be displayed");
     }
 
     /**
@@ -175,6 +195,11 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
     /**
      * Test complete scenario, add, edit, delete and read News.
+     *
+     * @covers Com\Nairus\CoreBundle\Controller\NewsController::newAction
+     * @covers Com\Nairus\CoreBundle\Controller\NewsController::editAction
+     * @covers Com\Nairus\CoreBundle\Controller\NewsController::showAction
+     * @covers Com\Nairus\CoreBundle\Controller\NewsController::deleteAction
      *
      * @return void
      */
@@ -246,6 +271,9 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
     /**
      * Test translation and publish actions.
+     *
+     * @covers Com\Nairus\CoreBundle\Controller\NewsController::translationAction
+     * @covers Com\Nairus\CoreBundle\Controller\NewsController::publishAction
      *
      * @return void
      */

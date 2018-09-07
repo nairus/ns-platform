@@ -11,7 +11,8 @@ use Com\Nairus\CoreBundle\Tests\DataFixtures\Unit\LoadNewsPublished;
 /**
  * Test of NewsContent Repository
  *
- * @author nairus
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class NewsContentRepositoryTest extends AbstractKernelTestCase {
 
@@ -30,7 +31,10 @@ class NewsContentRepositoryTest extends AbstractKernelTestCase {
      */
     private static $loadNewsPublished;
 
-    public static function setUpBeforeClass() {
+    /**
+     * {@inheritDoc}
+     */
+    public static function setUpBeforeClass(): void {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSCoreBundle::NAME . ":NewsContent");
         static::$newsRepository = static::$em->getRepository(NSCoreBundle::NAME . ":News");
@@ -39,8 +43,10 @@ class NewsContentRepositoryTest extends AbstractKernelTestCase {
 
     /**
      * Test entities insert, update and delete.
+     *
+     * @return void
      */
-    public function testInsertUpdateAndDelete() {
+    public function testInsertUpdateAndDelete(): void {
         // Create parent News
         $news = new News();
         static::$em->persist($news);
@@ -115,9 +121,11 @@ class NewsContentRepositoryTest extends AbstractKernelTestCase {
     /**
      * Test the insert without foreign key.
      *
+     * @return void
+     *
      * @expectedException \Doctrine\DBAL\Exception\NotNullConstraintViolationException
      */
-    public function testInsertWithoutNews() {
+    public function testInsertWithoutNews(): void {
         // Create contents
         $contentFr = new NewsContent();
         $contentFr->setTitle("Titre FR")
@@ -128,9 +136,13 @@ class NewsContentRepositoryTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the findLastNewsPublished methode
+     * Test the findLastNewsPublished method.
+     *
+     * @covers Com\Nairus\CoreBundle\Repository\NewsContentRepository::findLastNewsPublished
+     *
+     * @return void
      */
-    public function testFindLastNewsPublished() {
+    public function testFindLastNewsPublished(): void {
         // Init datas test set.
         static::$loadNewsPublished->load(static::$em);
 

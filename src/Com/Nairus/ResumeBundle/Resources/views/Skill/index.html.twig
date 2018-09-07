@@ -1,40 +1,67 @@
 {% extends 'NSCoreBundle::admin.html.twig' %}
 
+{% block title %}{{ "skill.index.title" | trans({}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
+
 {% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "skill.index.title" | trans({}, "NSResumeBundle") }}</h1>
 
-    <h1>Skills list</h1>
+        {{ include("NSCoreBundle::messages.html.twig") }}
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for skill in skills %}
-                <tr>
-                    <td><a href="{{ path('skill_show', { 'id': skill.id }) }}">{{ skill.id }}</a></td>
-                    <td>{{ skill.title }}</td>
-                    <td>
-                        <ul>
-                            <li>
-                                <a href="{{ path('skill_show', { 'id': skill.id }) }}">show</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('skill_edit', { 'id': skill.id }) }}">edit</a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <a class="btn btn-primary" href="{{ path('skill_new') }}">
+            <i class="fas fa-plus"></i>
+            {{ "skill.index.add-new" | trans({}, "NSResumeBundle")  }}
+        </a>
+    </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('skill_new') }}">Create a new skill</a>
-        </li>
-    </ul>
+    <div class="container-fluid">
+        {% if skills | length > 0 %}
+            <table class="table table-hover table-light table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">{{ "table.cols.titles" | trans }}</th>
+                        <th scope="col">{{ "table.cols.actions" | trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for skill in skills %}
+                        <tr>
+                            <td scope="row"><a href="{{ path('skill_show', { 'id': skill.id }) }}">{{ skill.title }}</a></td>
+                            <td>
+                                <div class="d-flex flex-md-row bd-highlight mb-3">
+                                    <div class="p-2 bd-highlight">
+                                        <a class="btn btn-primary"
+                                           href="{{ path('skill_edit', { 'id': skill.id }) }}">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            {{ "actions.edit" | trans }}
+                                        </a>
+                                    </div>
+                                    <div class="p-2 bd-highlight">
+                                        <a class="btn btn-secondary"
+                                           href="{{ path('skill_show', { 'id': skill.id }) }}">
+                                            <i class="far fa-eye"></i>
+                                            {{ "actions.show" | trans}}
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pages > 1 %}
+                {#
+                    We set the specific variables for the pagination template.
+                    See Skill Controller for the generic variables (pages and currentPage).
+                #}
+                {% set paginationLabel = ("skill.index.pagination-label" | trans({}, "NSResumeBundle")) %}
+                {% set routeName = "skill_index" %}
+                {% include "NSCoreBundle::pagination.html.twig" %}
+            {% endif %}
+
+        {% else %}
+            <em>{{ "table.no-item" | trans }}</em>
+        {% endif %}
+    </div>
 {% endblock %}

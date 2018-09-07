@@ -1,5 +1,16 @@
 services:
+    Com\Nairus\ResumeBundle\Controller\SkillController:
+        public: true
+        tags: ['controller.service_arguments']
+        arguments:
+            $skillService: "@ns_resume.skill_service"
+
     ns_resume.resume_service:
         public: true
         class: Com\Nairus\ResumeBundle\Service\ResumeService
+        arguments: ["@doctrine.orm.entity_manager"]
+
+    ns_resume.skill_service:
+        public: true
+        class: Com\Nairus\ResumeBundle\Service\SkillService
         arguments: ["@doctrine.orm.entity_manager"]

@@ -41,16 +41,8 @@ homepage:
 news:
     index:
         title: News list
-        no-news: There is no news for the moment! Please add one clicking on the button above!
         add-news: Add news
         pagination-label: News pagination
-        table:
-            titles: News titles
-            creation-date: Creation date
-            publication-date: Publication date
-            offline: Offline
-            actions: Actions
-            missing-translations: Missing translations
     new:
         title: Add a news
     edit:

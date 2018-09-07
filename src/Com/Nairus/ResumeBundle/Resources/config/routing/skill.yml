@@ -1,6 +1,10 @@
 skill_index:
-    path:     /
-    defaults: { _controller: "NSResumeBundle:Skill:index" }
+    path:     /{page}
+    defaults:
+        _controller: "NSResumeBundle:Skill:index"
+        page: 1
+    requirements:
+        page: \d*
     methods:  GET
 
 skill_show:

@@ -6,3 +6,9 @@ public:
         show-detail: Show Resume
         published-at: Published at
         skills-title: "Skills:"
+
+skill:
+    index:
+        title: Skills list
+        add-new: Add a new skill
+        pagination-label: Skills pagination

@@ -4,6 +4,9 @@ namespace Com\Nairus\CoreBundle\Repository;
 
 /**
  * Manage NewsContent entities.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class NewsContentRepository extends \Doctrine\ORM\EntityRepository {
 

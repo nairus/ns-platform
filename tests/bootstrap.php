@@ -1,7 +1,10 @@
 <?php
 
 /**
- * Fichier de bootstrap pour les tests unitaires et fonctionnels.
+ * Bootstrap file for unit and functional tests.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 /** @var \Composer\Autoload\ClassLoader $loader */
 $loader = require __DIR__ . '/../vendor/autoload.php';

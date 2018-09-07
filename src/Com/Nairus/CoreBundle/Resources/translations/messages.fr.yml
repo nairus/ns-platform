@@ -95,3 +95,13 @@ flashes:
 pagination:
     previous: Préc.
     next: Suiv.
+
+table:
+    no-item: Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !
+    cols:
+        titles: Titres
+        creation-date: Date de création
+        publication-date: Date de publication
+        offline: Hors ligne
+        actions: Gestions
+        missing-translations: Traductions manquantes

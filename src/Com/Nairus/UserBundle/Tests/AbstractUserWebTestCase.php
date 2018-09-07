@@ -44,14 +44,22 @@ class AbstractUserWebTestCase extends WebTestCase {
         "sadmin" => UserRolesEnum::SUPER_ADMIN
     ];
 
-    public function setUp(): void {
+    /**
+     * Init the HTTP test client and other resources needed for each tests.
+     */
+    protected function setUp() {
         $this->client = static::createClient();
         $this->translator = static::$kernel->getContainer()->get('translator');
     }
 
-    public function tearDown(): void {
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown() {
+        parent::tearDown();
+
         // Free the resources.
-        unset($this->client);
+        unset($this->client, $this->translator);
     }
 
     /**

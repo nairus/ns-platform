@@ -5,7 +5,13 @@ namespace Com\Nairus\CoreBundle\Tests;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 
-class BaseWebTestCase extends WebTestCase {
+/**
+ * Base class test for simple functional tests (for public controllers).
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+abstract class BaseWebTestCase extends WebTestCase {
 
     /**
      * Test HTTP Client.
@@ -14,7 +20,12 @@ class BaseWebTestCase extends WebTestCase {
      */
     private $client = null;
 
-    public function setUp() {
+    /**
+     * Init the HTTP test client for each tests.
+     *
+     * @return void
+     */
+    public function setUp(): void {
         $this->client = static::createClient();
     }
 

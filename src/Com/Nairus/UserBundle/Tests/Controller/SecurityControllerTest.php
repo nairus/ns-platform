@@ -14,6 +14,10 @@ class SecurityControllerTest extends AbstractUserWebTestCase {
 
     /**
      * Test login action with user credential.
+     *
+     * @covers Com\Nairus\UserBundle\Controller\SecurityController::loginAction
+     *
+     * @return void
      */
     public function testLoginWithUser(): void {
         $client = $this->getClient();

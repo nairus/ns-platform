@@ -20,11 +20,11 @@
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">{{ "news.index.table.titles" | trans({}, "NSCoreBundle") }}</th>
-                        <th scope="col">{{ "news.index.table.creation-date" | trans({}, "NSCoreBundle") }}</th>
-                        <th scope="col">{{ "news.index.table.publication-date" | trans({}, "NSCoreBundle") }}</th>
-                        <th scope="col">{{ "news.index.table.missing-translations" | trans({}, "NSCoreBundle") }}</th>
-                        <th scope="col">{{ "news.index.table.actions" | trans({}, "NSCoreBundle") }}</th>
+                        <th scope="col">{{ "table.cols.titles" | trans }}</th>
+                        <th scope="col">{{ "table.cols.creation-date" | trans }}</th>
+                        <th scope="col">{{ "table.cols.publication-date" | trans }}</th>
+                        <th scope="col">{{ "table.cols.missing-translations" | trans }}</th>
+                        <th scope="col">{{ "table.cols.actions" | trans }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,7 +50,7 @@
                                     {{ news.publishedAt|localizeddate('short', 'short') }}
                                 {% else %}
                                     <i class="far fa-thumbs-down"></i>
-                                    {{ "news.index.table.offline" | trans({}, "NSCoreBundle") }}
+                                    {{ "table.cols.offline" | trans }}
                                 {% endif %}
                             </td>
                             <td class="missing-translations">
@@ -112,7 +112,7 @@
             {% endif %}
 
         {% else %}
-            <em>{{ "news.index.no-news" | trans({}, "NSCoreBundle")  }}</em>
+            <em>{{ "table.no-item" | trans }}</em>
         {% endif %}
     </div>
 {% endblock %}

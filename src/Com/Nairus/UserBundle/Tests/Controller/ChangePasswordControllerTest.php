@@ -27,7 +27,10 @@ class ChangePasswordControllerTest extends AbstractUserWebTestCase {
      */
     private $em;
 
-    public function setUp(): void {
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void {
         parent::setUp();
         $this->userManager = static::$kernel->getContainer()->get("fos_user.user_manager");
         $this->em = static::$kernel->getContainer()
@@ -35,7 +38,10 @@ class ChangePasswordControllerTest extends AbstractUserWebTestCase {
                 ->getManager();
     }
 
-    public function tearDown(): void {
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown(): void {
         // Free the resources.
         parent::tearDown();
         unset($this->userManager);
