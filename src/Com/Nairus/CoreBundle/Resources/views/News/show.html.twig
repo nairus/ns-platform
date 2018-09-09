@@ -3,34 +3,36 @@
 {% block title %}{{ "news.show.title" | trans({"%news_id%": news.id}, "NSCoreBundle") }} - {{ parent() }}{% endblock %}
 
 {% block ns_core_admin_body %}
-    {{ include("NSCoreBundle::messages.html.twig") }}
+    <div class="jumbotron">
+        {{ include("NSCoreBundle::messages.html.twig") }}
 
-    <h1>{{ "news.show.title" | trans({"%news_id%": news.id}, "NSCoreBundle") }}</h1>
+        <h1>{{ "news.show.title" | trans({"%news_id%": news.id}, "NSCoreBundle") }}</h1>
 
-    <div class="row">
-        {% if news.createdAt %}
-            <div class="col-md-4">
-                <strong>{{ "news.show.created-at" | trans({}, "NSCoreBundle") }}</strong>
-                {{ news.createdAt|localizeddate('short', 'short') }}
-            </div>
-        {% endif %}
-
-        {% if news.updatedAt %}
-            <div class="col-md-4">
-                <strong>{{ "news.show.updated-at" | trans({}, "NSCoreBundle") }}</strong>
-                {{ news.updatedAt|localizeddate('short', 'short') }}
-            </div>
-        {% endif %}
-
-        <div class="col-md-4">
-            {% if news.published %}
-                <i class="far fa-thumbs-up"></i>
-                <strong>{{ "news.show.published-at" | trans({}, "NSCoreBundle") }}</strong>
-                {{ news.publishedAt|localizeddate('short', 'short') }}
-            {% else %}
-                <i class="far fa-thumbs-down"></i>
-                <strong>{{ "news.show.not-published" | trans({}, "NSCoreBundle") }}</strong>
+        <div class="row">
+            {% if news.createdAt %}
+                <div class="col-md-4">
+                    <strong>{{ "news.show.created-at" | trans({}, "NSCoreBundle") }}</strong>
+                    {{ news.createdAt|localizeddate('short', 'short') }}
+                </div>
             {% endif %}
+
+            {% if news.updatedAt %}
+                <div class="col-md-4">
+                    <strong>{{ "news.show.updated-at" | trans({}, "NSCoreBundle") }}</strong>
+                    {{ news.updatedAt|localizeddate('short', 'short') }}
+                </div>
+            {% endif %}
+
+            <div class="col-md-4">
+                {% if news.published %}
+                    <i class="far fa-thumbs-up"></i>
+                    <strong>{{ "news.show.published-at" | trans({}, "NSCoreBundle") }}</strong>
+                    {{ news.publishedAt|localizeddate('short', 'short') }}
+                {% else %}
+                    <i class="far fa-thumbs-down"></i>
+                    <strong>{{ "news.show.not-published" | trans({}, "NSCoreBundle") }}</strong>
+                {% endif %}
+            </div>
         </div>
     </div>
 

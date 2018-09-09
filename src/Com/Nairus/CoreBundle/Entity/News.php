@@ -3,6 +3,7 @@
 namespace Com\Nairus\CoreBundle\Entity;
 
 use Com\Nairus\CoreBundle\Entity\Traits\PublishedTrait;
+use Com\Nairus\CoreBundle\Entity\Traits\IsNewTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -100,14 +101,7 @@ class News {
         return $this->contents;
     }
 
-    /**
-     * Return if the entity is new.
-     *
-     * @return bool TRUE if the entity is new.
-     */
-    public function isNew(): bool {
-        return null === $this->id;
-    }
+    use IsNewTrait;
 
     /**
      * {@inheritDoc}

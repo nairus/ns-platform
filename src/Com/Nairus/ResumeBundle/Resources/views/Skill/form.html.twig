@@ -1,0 +1,31 @@
+{# NSResumeBundle:Skill:form.html.twig #}
+
+{{ form_start(form) }}
+
+<div class="form-group">
+    <label for="com_nairus_resumebundle_skill_title" class="required">
+        {{ "form.labels.title" | trans({}, "NSResumeBundle") }}
+    </label>
+    {{ form_widget(form.title) }}
+    {{ form_errors(form.title) }}
+</div>
+
+<div class="row">
+    <a href="{{ path('skill_index') }}" class="btn btn-secondary mx-1 my-1">
+        <i class="fas fa-chevron-left"></i>
+        {{ "actions.list" | trans}}
+    </a>
+    {% if not skill.isNew %}
+        <a href="{{ path('skill_show', {"id": skill.id}) }}" class="btn btn-secondary mx-1 my-1">
+            <i class="fas fa-chevron-up"></i>
+            {{ "actions.show" | trans}}
+        </a>
+    {% endif %}
+    <button class="btn btn-primary mx-1 my-1">
+        <i class="far fa-save"></i>
+        {{ "actions.save" | trans }}
+    </button>
+</div>
+
+{{ form_rest(form) }}
+{{ form_end(form) }}

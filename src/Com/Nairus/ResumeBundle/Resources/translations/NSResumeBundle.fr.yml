@@ -12,3 +12,13 @@ skill:
         title: Liste des compétences
         add-new: Ajouter une nouvelle compétence
         pagination-label: Pagination des compétences
+    new:
+        title: Ajout d'une compétence
+    edit:
+        title: Modification de la compétence n° %id%
+    show:
+        title: Détail de la compétence n° %id%
+        label: "Libellé&nbsp;:&nbsp;"
+form:
+    labels:
+        title: Libellé

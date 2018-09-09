@@ -31,7 +31,7 @@ trait ContentI18nTrait {
      * @var string
      *
      * @Assert\NotBlank()
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private $description;
 

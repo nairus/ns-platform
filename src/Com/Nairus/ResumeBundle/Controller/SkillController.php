@@ -114,20 +114,18 @@ class SkillController extends Controller {
      * @return Response
      */
     public function editAction(Request $request, Skill $skill): Response {
-        $deleteForm = $this->createDeleteForm($skill);
         $editForm = $this->createForm('Com\Nairus\ResumeBundle\Form\SkillType', $skill);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('skill_edit', array('id' => $skill->getId()));
+            return $this->redirectToRoute('skill_show', array('id' => $skill->getId()));
         }
 
         return $this->render(self::NAME . ':edit.html.twig', array(
                     'skill' => $skill,
-                    'edit_form' => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
+                    'form' => $editForm->createView(),
         ));
     }
 

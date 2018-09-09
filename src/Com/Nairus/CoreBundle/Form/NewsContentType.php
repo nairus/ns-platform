@@ -7,7 +7,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,9 +21,7 @@ class NewsContentType extends AbstractType {
                 ->add('title', TextType::class, ["required" => false])
                 ->add('description', TextareaType::class, ["required" => false])
                 ->add('news', NewsType::class, ["required" => false])
-                ->add('locale', HiddenType::class)
-                ->add('save', SubmitType::class, ["label" => 'actions.save']
-        );
+                ->add('locale', HiddenType::class);
     }
 
     /**

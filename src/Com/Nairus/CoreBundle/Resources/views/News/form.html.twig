@@ -46,7 +46,10 @@
             {{ "actions.show" | trans}}
         </a>
     {% endif %}
-    {{ form_widget(form.save, {'attr': {'class': 'btn-primary mx-1 my-1'}}) }}
+    <button class="btn btn-primary mx-1 my-1">
+        <i class="far fa-save"></i>
+        {{ "actions.save" | trans }}
+    </button>
 </div>
 {{ form_rest(form) }}
 {{ form_end(form) }}

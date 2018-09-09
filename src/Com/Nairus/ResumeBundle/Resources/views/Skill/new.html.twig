@@ -1,16 +1,15 @@
 {% extends 'NSCoreBundle::admin.html.twig' %}
 
+{% block title %}{{ "skill.new.title" | trans({}, "NSCoreBundle") }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ '/bundles/nscore/css/forms.css' }}" type="text/css">
+{% endblock %}
+
 {% block ns_core_admin_body %}
-    <h1>Skill creation</h1>
-
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input type="submit" value="Create" />
-    {{ form_end(form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('skill_index') }}">Back to the list</a>
-        </li>
-    </ul>
+    <div class="jumbotron">
+        <h1 class="position-relative">{{ "skill.new.title" | trans({}, "NSResumeBundle")}}</h1>
+        {% include 'NSResumeBundle:Skill:form.html.twig' %}
+    </div>
 {% endblock %}

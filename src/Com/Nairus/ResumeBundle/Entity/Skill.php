@@ -2,7 +2,9 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
+use Com\Nairus\CoreBundle\Entity\Traits\IsNewTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Skill entity.
@@ -27,6 +29,10 @@ class Skill {
     /**
      * @var string
      *
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 2
+     * )
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -62,4 +68,5 @@ class Skill {
         return $this->title;
     }
 
+    use IsNewTrait;
 }

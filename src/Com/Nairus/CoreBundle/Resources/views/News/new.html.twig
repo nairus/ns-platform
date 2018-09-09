@@ -8,6 +8,8 @@
 {% endblock %}
 
 {% block ns_core_admin_body %}
-    <h1 class="position-relative">{{ "news.new.title" | trans({}, "NSCoreBundle") }}</h1>
-    {% include 'NSCoreBundle:News:form.html.twig' %}
+    <div class="jumbotron">
+        <h1 class="position-relative">{{ "news.new.title" | trans({}, "NSCoreBundle") }}</h1>
+        {% include 'NSCoreBundle:News:form.html.twig' %}
+    </div>
 {% endblock %}

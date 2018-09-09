@@ -12,3 +12,13 @@ skill:
         title: Skills list
         add-new: Add a new skill
         pagination-label: Skills pagination
+    new:
+        title: Add a skill
+    edit:
+        title: Modification of the skill No. %id%
+    show:
+        title: Detail of the skill No. %id%
+        label: "Label:&nbsp;"
+form:
+    labels:
+        title: Label
