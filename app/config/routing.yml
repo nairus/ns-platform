@@ -5,7 +5,7 @@ ns_core:
 
 ns_resume:
     resource: "@NSResumeBundle/Resources/config/routing.yml"
-    prefix:   /resume
+    prefix:   /
     options: { i18n: true }
 
 ns_user:

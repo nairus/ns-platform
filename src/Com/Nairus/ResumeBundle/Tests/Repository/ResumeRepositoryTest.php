@@ -8,6 +8,7 @@ use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeOnline;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 
 /**
  * Test of ResumeRepository.
@@ -36,11 +37,30 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
      */
     private static $loadResumeOnline;
 
+    /**
+     * {@inheritDoc}
+     */
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":Resume");
         static::$userManager = static::$container->get("fos_user.user_manager");
         static::$loadResumeOnline = new LoadResumeOnline(static::$userManager);
+
+        // Load test fixtures.
+        $loadSkill = new LoadSkill();
+        $loadSkill->load(static::$em);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function tearDownAfterClass() {
+        // Remove test fixtures.
+        $loadSkill = new LoadSkill();
+        $result = $loadSkill->remove(static::$em);
+        if ($result <= 0) {
+            $this->fail("The table truncate was not executed successfully!");
+        }
     }
 
     /**

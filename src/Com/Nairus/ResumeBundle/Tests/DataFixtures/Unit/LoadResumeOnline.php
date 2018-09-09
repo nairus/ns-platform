@@ -124,7 +124,7 @@ class LoadResumeOnline implements FixtureInterface {
      */
     private function prepareResumeDatas(EntityManagerInterface $manager, User $user): void {
         /* @var $skill Skill */
-        $skill = $manager->find(NSResumeBundle::NAME . ":Skill", 1);
+        $skill = $manager->getRepository(NSResumeBundle::NAME . ":Skill")->findOneBy(["title" => "PHP 7"]);
         /* @var $skillLevel SkillLevel */
         $skillLevel = $manager->find(NSResumeBundle::NAME . ":SkillLevel", 1);
 
@@ -147,7 +147,7 @@ class LoadResumeOnline implements FixtureInterface {
         }
     }
 
-    private function buildDependencies(EntityManagerInterface $manager, Resume $resume, Skill $skill, SkillLevel $skillLevel) {
+    private function buildDependencies(EntityManagerInterface $manager, Resume $resume, Skill $skill, SkillLevel $skillLevel): void {
         $education = new Education();
         $education
                 ->setDescription("Description")

@@ -59,7 +59,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         ));
 
         $client->submit($form);
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
         $this->assertEquals(403, $client->getResponse()->getStatusCode(), "3. Unexpected HTTP status code for GET /admin/news for author login");
     }
 

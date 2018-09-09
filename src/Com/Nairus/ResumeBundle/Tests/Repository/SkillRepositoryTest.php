@@ -5,6 +5,7 @@ namespace Com\Nairus\ResumeBundle\Repository;
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Skill;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 
 /**
  * Test de la classe SkillRepository.
@@ -19,9 +20,25 @@ class SkillRepositoryTest extends AbstractKernelTestCase {
      */
     private static $repository;
 
+    /**
+     * {@inheritDoc}
+     */
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":Skill");
+
+        // Load test fixtures.
+        $loadSkill = new LoadSkill();
+        $loadSkill->load(static::$em);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function tearDownAfterClass() {
+        // Remove test fixtures.
+        $loadSkill = new LoadSkill();
+        $loadSkill->remove(static::$em);
     }
 
     /**
@@ -32,7 +49,7 @@ class SkillRepositoryTest extends AbstractKernelTestCase {
     public function testInsertUpdateAndDelete(): void {
         // Création d'une nouvelle compétence.
         $newSkill = new Skill();
-        $newSkill->setTitle("PHP 7");
+        $newSkill->setTitle("Java 8");
         static::$em->persist($newSkill);
         static::$em->flush();
         static::$em->clear();
@@ -43,13 +60,13 @@ class SkillRepositoryTest extends AbstractKernelTestCase {
         $this->assertSame($newSkill->getId(), $skills[2]->getId(), "1.2. The ids are not identicals.");
 
         // Update test.
-        $skills[2]->setTitle("PHP 7.1");
+        $skills[2]->setTitle("Java 11");
         static::$em->flush();
         static::$em->clear();
 
         /* @var $skill Skill */
         $skill = static::$repository->find($skills[2]->getId());
-        $this->assertSame("PHP 7.1", $skill->getTitle(), "2.1 The title isn't updated.");
+        $this->assertSame("Java 11", $skill->getTitle(), "2.1 The title isn't updated.");
 
         // Delete test.
         $id = $skill->getId();
@@ -77,8 +94,7 @@ class SkillRepositoryTest extends AbstractKernelTestCase {
         /* @var $skillForPage1 Skill */
         $skillForPage1 = $collForPage1[0];
         $this->assertInstanceOf(Skill::class, $skillForPage1, "1.3. The entity class is not expected.");
-        $this->assertEquals(1, $skillForPage1->getId(), "1.4. The entity's id is not the one expected.");
-        $this->assertEquals("PHP 7", $skillForPage1->getTitle(), "1.5. The entity's title is not the one expected.");
+        $this->assertEquals("PHP 7", $skillForPage1->getTitle(), "1.4. The entity's title is not the one expected.");
 
         // Page 2
         $paginatorForPage2 = static::$repository->findAllForPage(1, 1);
@@ -86,7 +102,6 @@ class SkillRepositoryTest extends AbstractKernelTestCase {
         $this->assertCount(1, $collForPage2, "2.1. The paginator doesn't contain the expected entity.");
         /* @var $skillForPage2 Skill */
         $skillForPage2 = $collForPage2[0];
-        $this->assertEquals(2, $skillForPage2->getId(), "2.2. The entity's id is not the one expected.");
         $this->assertEquals("Python 2/3", $skillForPage2->getTitle(), "2.2. The entity's title is not the one expected.");
 
         // Page 3

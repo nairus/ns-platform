@@ -8,10 +8,11 @@ use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Entity\ResumeSkill;
 use Com\Nairus\ResumeBundle\Entity\Skill;
 use Com\Nairus\ResumeBundle\Entity\SkillLevel;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 
 /**
- * Test de la classe ResumeSkillRepository.
+ * ResumeSkillRepository class test.
  *
  * @author Nicolas Surian <nicolas.surian@gmail.com>
  */
@@ -22,9 +23,25 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
      */
     private static $repository;
 
+    /**
+     * {@inheritDoc}
+     */
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":ResumeSkill");
+
+        // Load test fixtures.
+        $loadSkill = new LoadSkill();
+        $loadSkill->load(static::$em);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function tearDownAfterClass() {
+        // Remove test fixtures.
+        $loadSkill = new LoadSkill();
+        $loadSkill->remove(static::$em);
     }
 
     /**
@@ -34,7 +51,7 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
         /* @var $resume Resume */
         $resume = static::$em->find(NSResumeBundle::NAME . ":Resume", 1);
         /* @var $skill Skill */
-        $skill = static::$em->find(NSResumeBundle::NAME . ":Skill", 1);
+        $skill = static::$em->getRepository(NSResumeBundle::NAME . ":Skill")->findOneBy(["title" => "PHP 7"]);
         /* @var $skillLevel SkillLevel */
         $skillLevel = static::$em->find(NSResumeBundle::NAME . ":SkillLevel", 1);
 
@@ -62,7 +79,7 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
 
         // Update test.
         /* @var $skill Skill */
-        $otherSkill = static::$em->find(NSResumeBundle::NAME . ":Skill", 2);
+        $otherSkill = static::$em->getRepository(NSResumeBundle::NAME . ":Skill")->findOneBy(["title" => "Python 2/3"]);
         /* @var $skillLevel SkillLevel */
         $otherSkillLevel = static::$em->find(NSResumeBundle::NAME . ":SkillLevel", 2);
         $resumeSkill
@@ -94,7 +111,7 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
     public function testInsertWithoutResume() {
         try {
             static::$em->beginTransaction();
-            $skill = static::$em->find(NSResumeBundle::NAME . ":Skill", 1);
+            $skill = static::$em->getRepository(NSResumeBundle::NAME . ":Skill")->findOneBy(["title" => "PHP 7"]);
             $skillLevel = static::$em->find(NSResumeBundle::NAME . ":SkillLevel", 1);
 
             $newResumeSkill = new ResumeSkill();
@@ -163,7 +180,7 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
         try {
             static::$em->beginTransaction();
             $resume = static::$em->find(NSResumeBundle::NAME . ":Resume", 1);
-            $skill = static::$em->find(NSResumeBundle::NAME . ":Skill", 2);
+            $skill = static::$em->getRepository(NSResumeBundle::NAME . ":Skill")->findOneBy(["title" => "Python 2/3"]);
 
             $newResumeSkill = new ResumeSkill();
             $newResumeSkill

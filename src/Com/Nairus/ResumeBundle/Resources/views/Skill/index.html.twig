@@ -8,13 +8,13 @@
 
         {{ include("NSCoreBundle::messages.html.twig") }}
 
-        <a class="btn btn-primary" href="{{ path('skill_new') }}">
+        <a id="skill-add-new" class="btn btn-primary" href="{{ path('skill_new') }}">
             <i class="fas fa-plus"></i>
             {{ "skill.index.add-new" | trans({}, "NSResumeBundle")  }}
         </a>
     </div>
 
-    <div class="container-fluid">
+    <div id="skills-container" class="container-fluid">
         {% if skills | length > 0 %}
             <table class="table table-hover table-light table-bordered">
                 <thead class="thead-dark">

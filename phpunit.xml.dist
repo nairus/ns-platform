@@ -24,7 +24,16 @@
         <whitelist>
             <directory>src</directory>
             <exclude>
+                <!--
+                    Exclude this folders because they don't need unit tests or code coverage is wrong about this components.
+                    For example controllers are testes with functional tests.
+                    We don't need the test classes in the code coverae report too.
+                    And the interfaces are tested with their implementations classes.
+                -->
                 <directory>src/Com/Nairus/*Bundle/Tests</directory>
+                <directory>src/Com/Nairus/*Bundle/Controller</directory>
+                <directory>src/Com/Nairus/*Bundle/DependencyInjection</directory>
+                <directory>src/Com/Nairus/*Bundle/*/*Interface</directory>
                 <directory>src/Com/Nairus/*Bundle/Resources</directory>
             </exclude>
         </whitelist>
@@ -34,9 +43,9 @@
     <!--<logging>-->
     <!--<log type="coverage-html" target="var/coverage" lowUpperBound="35"
     highLowerBound="70"/>-->
+    <!--<log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>-->
     <!--<log type="coverage-clover" target="var/coverage.xml"/>-->
     <!--<log type="coverage-php" target="var/coverage.serialized"/>-->
-    <!--<log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>-->
     <!--<log type="junit" target="var/logfile.xml"/>-->
     <!--<log type="testdox-html" target="var/testdox.html"/>-->
     <!--<log type="testdox-text" target="var/testdox.txt"/>-->

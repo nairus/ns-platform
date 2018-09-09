@@ -1,0 +1,9 @@
+## public routing.
+ns_resume_homepage:
+    path:     /{page}
+    defaults:
+        _controller: NSResumeBundle:Public:index
+        page: 1
+    requirements:
+        page: \d*
+    methods: GET

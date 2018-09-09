@@ -3,6 +3,7 @@
 namespace Com\Nairus\ResumeBundle\Service;
 
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 
 /**
  * Test of SkillService.
@@ -18,6 +19,26 @@ class SkillServiceTest extends AbstractKernelTestCase {
      * @var SkillService
      */
     private $object;
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function setUpBeforeClass() {
+        parent::setUpBeforeClass();
+
+        // Load test fixtures.
+        $loadSkill = new LoadSkill();
+        $loadSkill->load(static::$em);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function tearDownAfterClass() {
+        // Remove test fixtures.
+        $loadSkill = new LoadSkill();
+        $loadSkill->remove(static::$em);
+    }
 
     /**
      * Sets up the fixture, for example, opens a network connection.

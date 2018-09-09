@@ -2,11 +2,13 @@
 
 namespace Com\Nairus\ResumeBundle\Controller;
 
+use Com\Nairus\CoreBundle\Exception\PaginatorException;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Skill;
 use Com\Nairus\ResumeBundle\Service\SkillServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -53,6 +55,12 @@ class SkillController extends Controller {
             $skillPaginatorDto = $this->skillService->findAllForPage($page, $limit);
         } catch (PaginatorException $exc) {
             throw new BadRequestHttpException("Bad page parameter", $exc);
+        }
+
+        // If the number of pages is less than the current page (expect for page 1).
+        if ($page > 1 && $skillPaginatorDto->getPages() < $page) {
+            // We throw a NotFound Exception.
+            throw $this->createNotFoundException("Page [$page] does not exist!");
         }
 
         return $this->render(self::NAME . ':index.html.twig', array(

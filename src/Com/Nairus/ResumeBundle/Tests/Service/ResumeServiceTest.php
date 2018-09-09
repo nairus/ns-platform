@@ -6,6 +6,7 @@ use Com\Nairus\ResumeBundle\Enums\ExceptionCodeEnums;
 use Com\Nairus\ResumeBundle\Exception\ResumeListException;
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeOnline;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 
 /**
  * Test of ResumeService.
@@ -30,24 +31,38 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     private $loadResumeOnline;
 
     /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    protected function setUp(): void {
+    public static function setUpBeforeClass() {
+        parent::setUpBeforeClass();
+
+        // Load test fixtures.
+        $loadSkill = new LoadSkill();
+        $loadSkill->load(static::$em);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function tearDownAfterClass() {
+        // Remove test fixtures.
+        $loadSkill = new LoadSkill();
+        $loadSkill->remove(static::$em);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp() {
         $this->object = new ResumeService(static::$em);
         $this->loadResumeOnline = new LoadResumeOnline();
         $this->loadResumeOnline->load(static::$em);
     }
 
     /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->loadResumeOnline->remove(static::$em);
     }
 

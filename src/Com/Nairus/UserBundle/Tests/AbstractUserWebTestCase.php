@@ -4,6 +4,7 @@ namespace Com\Nairus\UserBundle\Tests;
 
 use Com\Nairus\UserBundle\Entity\User;
 use Com\Nairus\UserBundle\Enums\UserRolesEnum;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
@@ -32,6 +33,13 @@ class AbstractUserWebTestCase extends WebTestCase {
     private $translator;
 
     /**
+     * Entity manager instance.
+     *
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
      * Liste d'utilisateurs de test.
      *
      * @var User[]
@@ -49,7 +57,11 @@ class AbstractUserWebTestCase extends WebTestCase {
      */
     protected function setUp() {
         $this->client = static::createClient();
-        $this->translator = static::$kernel->getContainer()->get('translator');
+        $this->translator = static::$kernel->getContainer()
+                ->get('translator');
+        $this->entityManager = static::$kernel->getContainer()
+                ->get("doctrine")
+                ->getManager();
     }
 
     /**
@@ -59,7 +71,7 @@ class AbstractUserWebTestCase extends WebTestCase {
         parent::tearDown();
 
         // Free the resources.
-        unset($this->client, $this->translator);
+        unset($this->client, $this->translator, $this->entityManager);
     }
 
     /**
@@ -69,6 +81,24 @@ class AbstractUserWebTestCase extends WebTestCase {
      */
     public function getClient(): Client {
         return $this->client;
+    }
+
+    /**
+     * Return the translator service.
+     *
+     * @return TranslatorInterface
+     */
+    public function getTranslator(): TranslatorInterface {
+        return $this->translator;
+    }
+
+    /**
+     * Return the entity manager.
+     *
+     * @return EntityManagerInterface
+     */
+    public function getEntityManager(): EntityManagerInterface {
+        return $this->entityManager;
     }
 
     /**
