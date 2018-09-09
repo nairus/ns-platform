@@ -85,6 +85,8 @@ class SkillController extends Controller {
             $em->persist($skill);
             $em->flush();
 
+            // Add flash message
+            $this->addFlash("success", $this->getTranslation("flashes.success.skill.new"));
             return $this->redirectToRoute('skill_show', array('id' => $skill->getId()));
         }
 
@@ -120,6 +122,8 @@ class SkillController extends Controller {
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            // Add flash message
+            $this->addFlash("success", $this->getTranslation("flashes.success.skill.edit", ["%id%" => $skill->getId()]));
             return $this->redirectToRoute('skill_show', array('id' => $skill->getId()));
         }
 
@@ -139,9 +143,13 @@ class SkillController extends Controller {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $idDeleted = $skill->getId();
             $em = $this->getDoctrine()->getManager();
             $em->remove($skill);
             $em->flush();
+
+            // Add flash message
+            $this->addFlash("success", $this->getTranslation("flashes.success.skill.delete", ["%id%" => $idDeleted]));
         }
 
         return $this->redirectToRoute('skill_index');
@@ -160,6 +168,19 @@ class SkillController extends Controller {
                         ->setMethod('DELETE')
                         ->getForm()
         ;
+    }
+
+    /**
+     * Return the translation of a message.
+     *
+     * @param string $id     The id of the translation.
+     * @param array  $params The parameters for the translation.
+     * @param string $domain The file domain where the translations is stored.
+     *
+     * @return string
+     */
+    private function getTranslation($id, $params = [], $domain = NSResumeBundle::NAME): string {
+        return $this->get("translator")->trans($id, $params, $domain);
     }
 
 }

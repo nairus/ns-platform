@@ -1,5 +1,7 @@
 {% extends 'NSCoreBundle::admin.html.twig' %}
 
+{% block title %}{{ "skill.show.title" | trans({"%id%": skill.id}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
+
 {% block ns_core_admin_body %}
     <div class="jumbotron">
         {{ include("NSCoreBundle::messages.html.twig") }}

@@ -7,8 +7,8 @@ flashes:
     success:
         news:
             add: News added successfully!
-            edit: News n°%news_id% modified successfully!
-            delete: News n°%news_id% deleted successfully!
+            edit: News No. %news_id% modified successfully!
+            delete: News No. %news_id% deleted successfully!
 
             content:
                 add: Content "%locale%" added successfully for news "%news_id%"!

@@ -81,6 +81,7 @@ actions:
     show: Voir les détails
     save: Sauvegarder
     edit: Modifier
+    translate: Traduire en "%locale%"
     add: Ajouter
     delete: Supprimer
     publish: Publier

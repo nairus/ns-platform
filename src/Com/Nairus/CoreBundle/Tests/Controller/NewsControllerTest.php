@@ -203,17 +203,18 @@ class NewsControllerTest extends AbstractUserWebTestCase {
      *
      * @return void
      */
-    public function testCompleteScenario(): void {
+    public function testCompleteScenarioFr(): void {
         // Login with good credential.
-        $this->logInAdmin();
+        $crawler = $this->logInAdmin();
 
         // Create a new client to browse the application
         $client = $this->getClient();
 
         // Create a new entry in the database
-        $crawler = $client->request('GET', '/admin/news/');
+        $crawler = $client->click($crawler->selectLink("Gestion des News")->link());
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /admin/news/");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 Unexpected HTTP status code for GET /admin/news/");
+        $this->assertEquals("/admin/news", $client->getRequest()->getRequestUri(), "1.2 Unexpected Request URI");
         $crawler = $client->click($crawler->selectLink('Ajouter une news')->link());
 
         // Fill in the form and submit it
@@ -227,16 +228,18 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         $client->submit($form);
         $crawler = $client->followRedirect();
+        $this->assertRegExp("~^/admin/news/[0-9]+/show$~", $client->getRequest()->getRequestUri(), "1.3 Unexpected Request URI");
 
         // Check data in the show view
-        $this->assertGreaterThan(0, $crawler->filter('h5:contains("Test titre")')->count(), 'Missing element td:contains("Test titre")');
+        $this->assertGreaterThan(0, $crawler->filter('h5:contains("Test titre")')->count(), '2.1 Missing element td:contains("Test titre")');
 
         // Check the flash message
-        $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "The [add] flash message is missing.");
+        $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "2.2 The [add] flash message is missing.");
+        $this->assertContains("News ajoutée avec succès !", $crawler->filter('.message-container')->text(), "2.3 The [add] flash message is not ok.");
 
         // Edit the entity
         $crawler = $client->click($crawler->selectLink('Modifier')->link());
-
+        $this->assertRegExp("~^/admin/news/[0-9]+/edit~", $client->getRequest()->getRequestUri(), "2.4 The request uri expected is not ok");
         $form = $crawler->selectButton('Sauvegarder')->form(array(
             'com_nairus_corebundle_newscontent[title]' => 'Foo'
         ));
@@ -245,10 +248,11 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->followRedirect();
 
         // Check the element contains an attribute with value equals "Foo"
-        $this->assertGreaterThan(0, $crawler->filter('h5:contains("Foo")')->count(), 'Missing element [value="Foo"]');
+        $this->assertGreaterThan(0, $crawler->filter('h5:contains("Foo")')->count(), '3.1 Missing element [value="Foo"]');
 
         // Check the flash message
-        $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "The [edit] flash message is missing.");
+        $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "3.2 The [edit] flash message is missing.");
+        $this->assertRegExp("~News n°[0-9]+ modifiée avec succès !~", $crawler->filter('.message-container')->text(), "3.3 The [edit] flash message is not ok.");
 
         // Delete the entity
         $client->submit($crawler->selectButton('Supprimer')->form());
@@ -259,6 +263,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         // Check the flash message
         $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "The [delete] flash message is missing.");
+        $this->assertRegExp("~News n°[0-9]+ supprimée avec succès !~", $crawler->filter('.message-container')->text(), "3.3 The [delete] flash message is not ok.");
 
         // Select in database to make sure there no news left.
         $container = static::$kernel->getContainer();
@@ -303,10 +308,11 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         // Go on the list and check missing translation in the list.
         $crawler = $client->click($crawler->selectLink('Retour à la liste')->link());
-        $this->assertGreaterThan(0, $crawler->filter('.missing-translations > div > div > a > .ns-flag-en')->count(), 'The missing translation link is missing');
+        $this->assertGreaterThan(0, $crawler->filter('.missing-translations > div > div > a > .ns-flag-en')->count(), '1.1 The missing translation link is missing');
 
         // Click on the the translation button.
         $crawler = $client->click($crawler->selectLink('en')->link());
+        $this->assertRegExp("~^/admin/news/[0-9]+/translation/en~", $client->getRequest()->getRequestUri(), "1.2 The request uri expected is not ok");
 
         // Fill in the form and submit it
         $form = $crawler->selectButton('Sauvegarder')->form(array(
@@ -319,11 +325,12 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->followRedirect();
 
         // Check the flash message
-        $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "The [edit] flash message is missing.");
+        $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "2.1 The [add] flash message is missing.");
+        $this->assertRegExp('~Contenu "en" ajouté avec succès pour la news "[0-9]+" !~', $crawler->filter('.message-container')->text(), "2.2 The [add] flash message is not ok.");
 
         // Go on the list and check if there is no missing translation in the list.
         $crawler = $client->click($crawler->selectLink('Retour à la liste')->link());
-        $this->assertEquals(0, $crawler->filter('.missing-translations > div')->children()->count(), 'No missing translation has to be missing');
+        $this->assertEquals(0, $crawler->filter('.missing-translations > div')->children()->count(), '2.3 No missing translation has to be missing');
 
         // Click on publish button
         $form = $crawler->selectButton('Publier')->form();
@@ -337,10 +344,10 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         /* @var $newsRepository \Com\Nairus\CoreBundle\Repository\NewsRepository */
         $newsRepository = $em->getRepository(NSCoreBundle::NAME . ":News");
         $newsList = $newsRepository->findBy(["published" => true]);
-        $this->assertCount(1, $newsList, "One news has to be online.");
+        $this->assertCount(1, $newsList, "2.4 One news has to be online.");
         /* @var $news \Com\Nairus\CoreBundle\Entity\News */
         $news = $newsList[0];
-        $this->assertCount(2, $news->getContents(), "The news has to have 2 contents.");
+        $this->assertCount(2, $news->getContents(), "2.5 The news has to have 2 contents.");
 
         // Clean database.
         $em->remove($news);

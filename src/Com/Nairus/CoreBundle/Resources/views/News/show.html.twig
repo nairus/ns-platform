@@ -48,9 +48,9 @@
                     </h5>
                     <div class="card-body">
                         <p class="card-text">{{ content.description }}</p>
-                        <a class="btn btn-primary" href="{{ path("news_translation", {"id": news.id, "locale": content.locale}) }}">
+                        <a class="btn btn-outline-info btn-sm" href="{{ path("news_translation", {"id": news.id, "locale": content.locale}) }}">
                             <i class="fas fa-pencil-alt"></i>
-                            {{ "actions.edit" | trans }}
+                            {{ "actions.translate" | trans({"%locale%": content.locale}) }}
                         </a>
                         <a class="card-link" href="{{ content.link }}">{{ "news.show.see-more" | trans({}, "NSCoreBundle") }}</a>
                     </div>

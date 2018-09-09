@@ -1,3 +1,10 @@
+flashes:
+    success:
+        skill:
+            new: Compétence ajoutée avec succès !
+            edit: Compétence n°%id% modifiée avec succès !
+            delete: Compétence n°%id% supprimée avec succès !
+
 public:
     index:
         head:

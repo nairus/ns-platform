@@ -1,3 +1,10 @@
+flashes:
+    success:
+        skill:
+            new: Skill added successfully!
+            edit: Skill No. %id% modified successfully!
+            delete: Skill No. %id% deleted successfully!
+
 public:
     index:
         head:

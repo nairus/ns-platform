@@ -12,8 +12,8 @@ flashes:
             delete: News n°%news_id% supprimée avec succès !
 
             content:
-                add: Contenu "%locale%" ajouté avec succès pour la news "%news_id%"!
-                edit: Contenu "%locale%" modifié avec succès pour la news "%news_id%"!
+                add: Contenu "%locale%" ajouté avec succès pour la news "%news_id%" !
+                edit: Contenu "%locale%" modifié avec succès pour la news "%news_id%" !
 
     error:
         news:
