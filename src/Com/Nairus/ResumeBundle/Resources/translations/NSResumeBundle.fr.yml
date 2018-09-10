@@ -4,6 +4,11 @@ flashes:
             new: Compétence ajoutée avec succès !
             edit: Compétence n°%id% modifiée avec succès !
             delete: Compétence n°%id% supprimée avec succès !
+    error:
+        skill:
+            delete:
+                resume-linked: La compétence n°%id% est associé à un ou plusieurs CV !
+                unknown: Une erreur inconnue est survenue ! La compétence n°%id% n'a pas été supprimée !
 
 public:
     index:

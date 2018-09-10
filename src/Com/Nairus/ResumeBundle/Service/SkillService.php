@@ -2,9 +2,12 @@
 
 namespace Com\Nairus\ResumeBundle\Service;
 
+use Com\Nairus\CoreBundle\Exception\FunctionalException;
 use Com\Nairus\CoreBundle\Exception\PaginatorException;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Dto\SkillPaginatorDto;
+use Com\Nairus\ResumeBundle\Entity\Skill;
+use Com\Nairus\ResumeBundle\Repository\ResumeSkillRepository;
 use Com\Nairus\ResumeBundle\Repository\SkillRepository;
 use Com\Nairus\ResumeBundle\Service\SkillServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,12 +26,18 @@ class SkillService implements SkillServiceInterface {
     private $skillRepository;
 
     /**
+     * @var ResumeSkillRepository
+     */
+    private $resumeSkillRepository;
+
+    /**
      * Constructor.
      *
      * @param EntityManagerInterface $entityManager The entity manager.
      */
     public function __construct(EntityManagerInterface $entityManager) {
         $this->skillRepository = $entityManager->getRepository(NSResumeBundle::NAME . ":Skill");
+        $this->resumeSkillRepository = $entityManager->getRepository(NSResumeBundle::NAME . ":ResumeSkill");
     }
 
     /**
@@ -64,6 +73,28 @@ class SkillService implements SkillServiceInterface {
                 ->setPages($pages);
 
         return $skillPaginatorDto;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeSkill(Skill $skill) {
+        // Check if no resume is linked to this skill.
+        $resumeSkill = $this->resumeSkillRepository->findOneBy(["skill" => $skill]);
+
+        if (null !== $resumeSkill) {
+            throw new FunctionalException(
+                    "flashes.error.skill.delete.resume-linked",
+                    "A resume is linked to the skill No. " . $skill->getId());
+        }
+
+        try {
+            $this->skillRepository->remove($skill);
+        } catch (\Doctrine\ORM\ORMException | \Doctrine\ORM\ORMInvalidArgumentException $exc) {
+            throw new FunctionalException(
+                    "flashes.error.skill.delete.unknown",
+                    "An unkwnow error occured", 0, $exc);
+        }
     }
 
 }

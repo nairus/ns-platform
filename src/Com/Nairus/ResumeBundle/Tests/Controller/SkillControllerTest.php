@@ -16,6 +16,9 @@ class SkillControllerTest extends AbstractUserWebTestCase {
     /**
      * Test index action with bad credentials.
      *
+     * @covers \Com\Nairus\ResumeBundle\Controller\SkillController::indexAction
+     * @covers \Com\Nairus\CoreBundle\Controller\ErrorController::showAction
+     *
      * @return void
      */
     public function testIndexActionWithBadCredentials(): void {
@@ -60,6 +63,22 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         // Not found
         $client->request("GET", "/admin/skill/99");
         $this->assertEquals(404, $client->getResponse()->getStatusCode(), "2. The status code expected is not ok.");
+    }
+
+    /**
+     *
+     * @return void
+     */
+    public function testDeleteSkillWithLinkedResumeInFr(): void {
+        $this->markTestIncomplete("TODO");
+    }
+
+    /**
+     *
+     * @return void
+     */
+    public function testDeleteSkillWithLinkedResumeInEn(): void {
+        $this->markTestIncomplete("TODO");
     }
 
     /**

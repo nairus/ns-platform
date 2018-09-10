@@ -2,6 +2,7 @@
 
 namespace Com\Nairus\ResumeBundle\Repository;
 
+use Com\Nairus\ResumeBundle\Entity\Skill;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
@@ -26,6 +27,19 @@ class SkillRepository extends \Doctrine\ORM\EntityRepository {
                 ->setMaxResults($limit);
 
         return new Paginator($qb);
+    }
+
+    /**
+     * Remove the entity.
+     *
+     * @param Skill $skill The entity to remove.
+     *
+     * @return void
+     */
+    public function remove(Skill $skill): void {
+        $entityManager = $this->getEntityManager();
+        $entityManager->remove($skill);
+        $entityManager->flush($skill);
     }
 
 }

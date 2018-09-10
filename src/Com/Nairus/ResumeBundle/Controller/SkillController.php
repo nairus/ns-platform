@@ -2,6 +2,7 @@
 
 namespace Com\Nairus\ResumeBundle\Controller;
 
+use Com\Nairus\CoreBundle\Exception\FunctionalException;
 use Com\Nairus\CoreBundle\Exception\PaginatorException;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Skill;
@@ -144,12 +145,16 @@ class SkillController extends Controller {
 
         if ($form->isSubmitted() && $form->isValid()) {
             $idDeleted = $skill->getId();
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($skill);
-            $em->flush();
 
-            // Add flash message
-            $this->addFlash("success", $this->getTranslation("flashes.success.skill.delete", ["%id%" => $idDeleted]));
+            try {
+                $this->skillService->removeSkill($skill);
+
+                // Add flash message
+                $this->addFlash("success", $this->getTranslation("flashes.success.skill.delete", ["%id%" => $idDeleted]));
+            } catch (FunctionalException $exc) {
+                $this->addFlash("error", $this->getTranslation($exc->getTranslationKey(), ["%id%" => $idDeleted]));
+                $this->logError($exc, [NSResumeBundle::NAME . ":deleteAction" => $exc]);
+            }
         }
 
         return $this->redirectToRoute('skill_index');
@@ -181,6 +186,17 @@ class SkillController extends Controller {
      */
     private function getTranslation($id, $params = [], $domain = NSResumeBundle::NAME): string {
         return $this->get("translator")->trans($id, $params, $domain);
+    }
+
+    /**
+     * Log an error
+     *
+     * @param \Exception $exc The exception to log.
+     */
+    private function logError(\Exception $exc, string $context): void {
+        /* @var $logger \Psr\Log\LoggerInterface */
+        $logger = $this->container->get("logger");
+        $logger->error($exc->getMessage(), [$context => $exc]);
     }
 
 }

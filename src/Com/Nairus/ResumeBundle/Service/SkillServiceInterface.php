@@ -2,7 +2,9 @@
 
 namespace Com\Nairus\ResumeBundle\Service;
 
+use Com\Nairus\CoreBundle\Exception\FunctionalException;
 use Com\Nairus\ResumeBundle\Dto\SkillPaginatorDto;
+use Com\Nairus\ResumeBundle\Entity\Skill;
 
 /**
  * Skill service interface.
@@ -20,7 +22,16 @@ interface SkillServiceInterface {
      *
      * @return SkillPaginatorDto
      *
-     * @throws PaginatorException
+     * @throws <code>PaginatorException</code> in case of pagination error.
      */
     public function findAllForPage(int $page, int $limit): SkillPaginatorDto;
+
+    /**
+     * Remove a skill.
+     *
+     * @param Skill $skill The current skill.
+     *
+     * @throw <code>FunctionalException</code> in case of deletion error.
+     */
+    public function removeSkill(Skill $skill);
 }
