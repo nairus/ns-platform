@@ -5,9 +5,10 @@ flashes:
             edit: Skill No. %id% modified successfully!
             delete: Skill No. %id% deleted successfully!
     error:
-        delete:
-            resume-linked: The skill No. %id% is linked to one or many resumes!
-            unknown: An unknown error occured! The skill No. %id% has not been deleted!
+        skill:
+            delete:
+                resume-linked: The skill No. %id% is linked to one or many resumes!
+                unknown: An unknown error occured! The skill No. %id% has not been deleted!
 
 public:
     index:
