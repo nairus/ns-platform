@@ -31,6 +31,12 @@ skill:
     show:
         title: Détail de la compétence n° %id%
         label: "Libellé&nbsp;:&nbsp;"
+
+skilllevel:
+    index:
+        title: Liste des niveaux de compétence
+        add-new: Ajouter un nouveau niveau
+
 form:
     labels:
         title: Libellé

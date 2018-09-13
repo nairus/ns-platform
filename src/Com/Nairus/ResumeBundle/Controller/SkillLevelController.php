@@ -28,8 +28,14 @@ class SkillLevelController extends Controller {
 
         $skillLevels = $em->getRepository(static::NAME)->findAll();
 
+        // Foreach entity, we create a delete form.
+        $items = [];
+        foreach ($skillLevels as $skillLevel) {
+            $deleteForm = $this->createDeleteForm($skillLevel)->createView();
+            array_push($items, ['entity' => $skillLevel, 'deleteForm' => $deleteForm]);
+        }
         return $this->render(static::NAME . ':index.html.twig', array(
-                    'skillLevels' => $skillLevels,
+                    'items' => $items,
         ));
     }
 
@@ -48,7 +54,7 @@ class SkillLevelController extends Controller {
             $em->persist($skillLevel);
             $em->flush();
 
-            return $this->redirectToRoute('skilllevel_show', array('id' => $skillLevel->getId()));
+            return $this->redirectToRoute('skilllevel_index');
         }
 
         return $this->render(static::NAME . ':new.html.twig', array(
@@ -84,7 +90,7 @@ class SkillLevelController extends Controller {
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('skilllevel_edit', array('id' => $skillLevel->getId()));
+            return $this->redirectToRoute('skilllevel_index');
         }
 
         return $this->render(static::NAME . ':edit.html.twig', array(

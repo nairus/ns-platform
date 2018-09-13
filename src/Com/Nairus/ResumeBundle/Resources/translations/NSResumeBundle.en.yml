@@ -31,6 +31,12 @@ skill:
     show:
         title: Detail of the skill No. %id%
         label: "Label:&nbsp;"
+
+skilllevel:
+    index:
+        title: Skill levels list
+        add-new: Add a new level
+
 form:
     labels:
         title: Label
