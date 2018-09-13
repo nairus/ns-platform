@@ -15,7 +15,7 @@
     </div>
 
     <div id="skills-container" class="container-fluid">
-        {% if skills | length > 0 %}
+        {% if items | length > 0 %}
             <table class="table table-hover table-light table-bordered">
                 <thead class="thead-dark">
                     <tr>
@@ -24,11 +24,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for skill in skills %}
+                    {% for item in items %}
+                        {% set skill = item['entity'] %}
+                        {% set delete_form = item['deleteForm'] %}
                         <tr>
                             <td scope="row"><a href="{{ path('skill_show', { 'id': skill.id }) }}">{{ skill.title }}</a></td>
                             <td>
-                                <div class="d-flex flex-md-row bd-highlight mb-3">
+                                <div class="d-flex flex-md-row bd-highlight mb-3 actions">
                                     <div class="p-2 bd-highlight">
                                         <a class="btn btn-primary"
                                            href="{{ path('skill_edit', { 'id': skill.id }) }}">
@@ -42,6 +44,14 @@
                                             <i class="far fa-eye"></i>
                                             {{ "actions.show" | trans}}
                                         </a>
+                                    </div>
+                                    <div class="p-2 bd-highlight">
+                                        {{ form_start(delete_form) }}
+                                        <button class="btn btn-danger">
+                                            <i class="fas fa-trash-alt"></i>
+                                            {{ "actions.delete" | trans}}
+                                        </button>
+                                        {{ form_end(delete_form) }}
                                     </div>
                                 </div>
                             </td>

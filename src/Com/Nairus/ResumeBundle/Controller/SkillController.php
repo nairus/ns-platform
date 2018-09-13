@@ -64,8 +64,13 @@ class SkillController extends Controller {
             throw $this->createNotFoundException("Page [$page] does not exist!");
         }
 
+        $items = [];
+        foreach ($skillPaginatorDto->getEntities() as $entity) {
+            array_push($items, ['entity' => $entity, 'deleteForm' => $this->createDeleteForm($entity)->createView()]);
+        }
+
         return $this->render(self::NAME . ':index.html.twig', array(
-                    'skills' => $skillPaginatorDto->getEntities(),
+                    'items' => $items,
                     'pages' => $skillPaginatorDto->getPages(),
                     'currentPage' => $skillPaginatorDto->getCurrentPage()
         ));

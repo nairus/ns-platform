@@ -183,13 +183,22 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $this->assertContains('Retour à la liste', $actionsRow, "3.7 The return label expected is not ok");
         $this->assertContains('<i class="fas fa-pencil-alt"></i>', $actionsRow, "3.8 The edit picto expected is not in the actions div");
         $this->assertContains('Modifier', $actionsRow, "3.9 The edit label expected is not ok");
-        $this->assertContains('<i class="fas fa-trash-alt"></i>', $actionsRow, "3.8 The delete picto expected is not in the actions div");
-        $this->assertContains('Supprimer', $actionsRow, "3.9 The delete label expected is not ok");
+        $this->assertContains('<i class="fas fa-trash-alt"></i>', $actionsRow, "3.10 The delete picto expected is not in the actions div");
+        $this->assertContains('Supprimer', $actionsRow, "3.11 The delete label expected is not ok");
 
         // Return to the list
         $crawler = $client->click($crawler->selectLink('Retour à la liste')->link());
         $this->assertEquals("/admin/skill", $client->getRequest()->getRequestUri(), "4.1 The request uri expected is not ok.");
         $this->assertEquals(1, $crawler->filter("#skills-container > table > tbody > tr")->count(), "4.2 The table should contain 1 row");
+        $this->assertEquals(3, $crawler->filter("#skills-container > table > tbody > tr > td > .actions")->children()->count(), "4.3 Three actions buttons are expected");
+
+        $actionsRow = $crawler->filter("#skills-container > table > tbody > tr > td > .actions")->html();
+        $this->assertContains('<i class="far fa-eye"></i>', $actionsRow, "4.4 The see detail picto expected is not in the actions div");
+        $this->assertContains('Voir les détail', $actionsRow, "4.5 The return label expected is not ok");
+        $this->assertContains('<i class="fas fa-pencil-alt"></i>', $actionsRow, "4.6 The edit picto expected is not in the actions div");
+        $this->assertContains('Modifier', $actionsRow, "4.7 The edit label expected is not ok");
+        $this->assertContains('<i class="fas fa-trash-alt"></i>', $actionsRow, "4.8 The delete picto expected is not in the actions div");
+        $this->assertContains('Supprimer', $actionsRow, "4.9 The delete label expected is not ok");
 
         // Edit the entity
         $crawler = $client->click($crawler->selectLink('Modifier')->link());
@@ -214,7 +223,6 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $this->assertRegExp('/Foo/', $client->getResponse()->getContent(), '6.1. Missing element "Foo"');
         $this->assertGreaterThan(0, $crawler->filter(".message-container > .alert-success")->count(), "6.2 Success flash messages has to be displayed.");
         $this->assertRegExp("~Compétence n°[0-9]+ modifiée avec succès !~", $crawler->filter(".message-container")->text(), "6.3 The [edit] flash message expected is not ok.");
-
 
         // Delete the entity
         $client->submit($crawler->selectButton('Supprimer')->form());
