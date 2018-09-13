@@ -72,7 +72,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
      *
      * @return void
      */
-    public function testDeleteSkillWithLinkedResumeInFr(): void {
+    public function testDeleteActionWithLinkedResumeInFr(): void {
         try {
             // Prepare datas
             $this->prepareDatas();
@@ -102,9 +102,10 @@ class SkillControllerTest extends AbstractUserWebTestCase {
 
     /**
      * Test delete action for a skill with a linked resume in en.
+     *
      * @return void
      */
-    public function testDeleteSkillWithLinkedResumeInEn(): void {
+    public function testDeleteActionWithLinkedResumeInEn(): void {
         try {
             // Prepare datas
             $this->prepareDatas();

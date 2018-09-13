@@ -3,6 +3,7 @@
 namespace Com\Nairus\ResumeBundle\Entity;
 
 use Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity;
+use Com\Nairus\CoreBundle\Entity\Traits\IsNewTrait;
 use Com\Nairus\ResumeBundle\Entity\Translation\SkillLevelTranslation;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -71,11 +72,13 @@ class SkillLevel extends AbstractTranslatableEntity {
     /**
      * Get title
      *
-     * @return string
+     * @return string| null
      */
-    public function getTitle(): string {
+    public function getTitle(): ?string {
         return $this->title;
     }
+
+    use IsNewTrait;
 
     /**
      * {@inheritDoc}

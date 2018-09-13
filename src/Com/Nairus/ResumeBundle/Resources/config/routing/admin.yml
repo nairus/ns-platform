@@ -1,4 +1,8 @@
 ## Admin routing.
-ns_resume_skill:
+ns_resume_admin_skill:
     resource: "@NSResumeBundle/Resources/config/routing/admin/skill.yml"
     prefix:   /skill
+
+ns_resume_admin_skilllevel:
+    resource: "@NSResumeBundle/Resources/config/routing/admin/skilllevel.yml"
+    prefix:   /skilllevel

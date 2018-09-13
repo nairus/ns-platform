@@ -1,0 +1,24 @@
+skilllevel_index:
+    path:     /
+    defaults: { _controller: "NSResumeBundle:SkillLevel:index" }
+    methods:  GET
+
+skilllevel_show:
+    path:     /{id}/show
+    defaults: { _controller: "NSResumeBundle:SkillLevel:show" }
+    methods:  GET
+
+skilllevel_new:
+    path:     /new
+    defaults: { _controller: "NSResumeBundle:SkillLevel:new" }
+    methods:  [GET, POST]
+
+skilllevel_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "NSResumeBundle:SkillLevel:edit" }
+    methods:  [GET, POST]
+
+skilllevel_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "NSResumeBundle:SkillLevel:delete" }
+    methods:  DELETE

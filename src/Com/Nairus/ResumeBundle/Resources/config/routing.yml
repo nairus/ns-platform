@@ -1,7 +1,9 @@
+# Routing configuration for admin pages.
 ns_resume_admin:
     resource: "@NSResumeBundle/Resources/config/routing/admin.yml"
     prefix:   /admin
 
+# Routing configuration for public pages.
 ns_resume_public:
     resource: "@NSResumeBundle/Resources/config/routing/public.yml"
     prefix:   /resume

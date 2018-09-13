@@ -76,6 +76,7 @@ nav:
             account: Mon compte
         resume:
             skills: Gestion des compétences
+            skilllevels: Gestion des niveaux de compétence
 actions:
     list: Retour à la liste
     show: Voir les détails

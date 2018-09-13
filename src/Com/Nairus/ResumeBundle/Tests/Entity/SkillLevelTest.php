@@ -35,10 +35,13 @@ class SkillLevelTest extends KernelTestCase {
 
     /**
      * Test the implementation of the entity.
+     *
+     * @covers \Com\Nairus\ResumeBundle\Entity\SkillLevel::isNew
      */
     public function testImplementation() {
         $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity", $this->object, "1. The entity musts be of type [AbstractTranslatableEntity]");
         $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\TranslatableEntity", $this->object, "2. The entity musts implement [TranslatableEntity] interface");
+        $this->assertTrue($this->object->isNew(), "3. The entity has to be new.");
     }
 
     /**
@@ -67,10 +70,12 @@ class SkillLevelTest extends KernelTestCase {
      */
     public function testGetAndSetTitle() {
         try {
+            $title = $this->object->getTitle();
+            $this->assertNull($title, "1. The title has to be null.");
             $this->object->setTitle("Title");
             $this->assertSame("Title", $this->object->getTitle());
         } catch (\Exception $exc) {
-            $this->fail("Aucune exception ne doit être levée :" . $exc->getMessage());
+            $this->fail("2. No exception expected:" . $exc->getMessage());
         }
     }
 

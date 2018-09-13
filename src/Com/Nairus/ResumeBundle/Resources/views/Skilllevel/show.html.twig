@@ -1,0 +1,32 @@
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block ns_core_admin_body %}
+    <h1>Skilllevel</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ skillLevel.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ skillLevel.title }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('skilllevel_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('skilllevel_edit', { 'id': skillLevel.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+            <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
