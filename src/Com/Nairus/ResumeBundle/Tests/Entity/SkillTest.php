@@ -2,7 +2,9 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Tests for Skill entity.
@@ -10,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class SkillTest extends KernelTestCase {
+class SkillTest extends AbstractKernelTestCase {
 
     /**
      * @var Skill
@@ -42,7 +44,7 @@ class SkillTest extends KernelTestCase {
             $this->object->setTitle("Title");
             $this->assertSame("Title", $this->object->getTitle());
         } catch (\Exception $exc) {
-            $this->fail("No excepection expected:" . $exc->getMessage());
+            $this->fail("No exception expected:" . $exc->getMessage());
         }
     }
 
@@ -62,6 +64,29 @@ class SkillTest extends KernelTestCase {
      */
     public function testIsNew(): void {
         $this->assertTrue($this->object->isNew(), "1. The entity has to be new.");
+    }
+
+    /**
+     * Test the entity validation.
+     *
+     * @return void
+     */
+    public function testValidate(): void {
+        /* @var $validator \Symfony\Component\Validator\Validator\ValidatorInterface */
+        $validator = static::$container->get("validator");
+
+        // Case 1.
+        $skill = new Skill();
+        $skill->setTitle("");
+        $errors = $validator->validate($skill);
+        $this->assertCount(1, $errors, "1.1 One error is expected.");
+        $this->assertInstanceOf(NotBlank::class, $errors[0]->getConstraint(), "1.2 The error has to be a NotNull constraint.");
+
+        // Case 2.
+        $skill->setTitle("a");
+        $errors = $validator->validate($skill);
+        $this->assertCount(1, $errors, "2.1 One error is expected.");
+        $this->assertInstanceOf(Length::class, $errors[0]->getConstraint(), "2.2 The error has to be a Length constraint.");
     }
 
 }

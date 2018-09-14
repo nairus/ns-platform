@@ -7,10 +7,12 @@ use Com\Nairus\CoreBundle\Entity\News;
 use Com\Nairus\CoreBundle\Entity\NewsContent;
 use Com\Nairus\CoreBundle\Exception\PaginatorException;
 use Com\Nairus\CoreBundle\Service\NewsServiceInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * News controller.
@@ -28,12 +30,21 @@ class NewsController extends Controller {
     private $newsService;
 
     /**
+     * Logger service.
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Constructor.
      *
      * @param NewsServiceInterface $newsService News service.
+     * @param LoggerInterface      $logger      Logger service.
      */
-    public function __construct(NewsServiceInterface $newsService) {
+    public function __construct(NewsServiceInterface $newsService, LoggerInterface $logger) {
         $this->newsService = $newsService;
+        $this->logger = $logger;
     }
 
     /**
@@ -59,9 +70,14 @@ class NewsController extends Controller {
             throw new BadRequestHttpException("Bad page parameter", $exc);
         }
 
+        $items = [];
+        foreach ($newsPaginationDto->getEntities() as $news) {
+            array_push($items, ['entity' => $news, 'deleteForm' => $this->createDeleteForm($news)->createView()]);
+        }
+
         // Render the view.
         return $this->render(static::NAME . ':index.html.twig', [
-                    'newsList' => $newsPaginationDto->getEntities(),
+                    'items' => $items,
                     'missingTranslations' => $newsPaginationDto->getMissingTranslations(),
                     'currentPage' => $newsPaginationDto->getCurrentPage(),
                     'pages' => $newsPaginationDto->getPages()
@@ -325,9 +341,7 @@ class NewsController extends Controller {
      * @param \Exception $exc The exception to log.
      */
     private function logError(\Exception $exc, string $context): void {
-        /* @var $logger \Psr\Log\LoggerInterface */
-        $logger = $this->container->get("logger");
-        $logger->error($exc->getMessage(), [$context => $exc]);
+        $this->logger->error($exc->getMessage(), [$context => $exc]);
     }
 
 }

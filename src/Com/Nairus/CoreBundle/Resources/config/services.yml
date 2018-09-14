@@ -10,6 +10,7 @@ services:
         tags: ['controller.service_arguments']
         arguments:
             $newsService: "@ns_core.news_service"
+            $logger: "@logger"
 
     Com\Nairus\CoreBundle\Controller\ErrorController:
         public: true

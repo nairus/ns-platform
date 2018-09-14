@@ -4,6 +4,7 @@ namespace Com\Nairus\CoreBundle\Tests\Controller;
 
 use Com\Nairus\CoreBundle\NSCoreBundle;
 use Com\Nairus\UserBundle\Tests\AbstractUserWebTestCase;
+use Com\Nairus\CoreBundle\Tests\DataFixtures\Unit\LoadNewsPublished;
 
 /**
  * News controller tests.
@@ -248,7 +249,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->followRedirect();
 
         // Check the element contains an attribute with value equals "Foo"
-        $this->assertGreaterThan(0, $crawler->filter('h5:contains("Foo")')->count(), '3.1 Missing element [value="Foo"]');
+        $this->assertGreaterThan(0, $crawler->filter('h5:contains("Foo")')->count(), '3.1 Missing element ["Foo"]');
 
         // Check the flash message
         $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "3.2 The [edit] flash message is missing.");
@@ -272,6 +273,42 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $newsRepository = $em->getRepository(NSCoreBundle::NAME . ":News");
         $news = $newsRepository->findAll();
         $this->assertCount(0, $news, "No news has to remain in database.");
+    }
+
+    /**
+     * Test delete from index action.
+     *
+     * @return void
+     */
+    public function testDeleteFromIndexAction(): void {
+        // Load datas for tests.
+        $loadNewsPublished = new LoadNewsPublished();
+        $loadNewsPublished->load($this->getEntityManager());
+
+        // Login with good credential.
+        $crawler = $this->logInAdmin();
+
+        // Create a new client to browse the application
+        $client = $this->getClient();
+
+        // Create a new entry in the database
+        $crawler = $client->click($crawler->selectLink("Gestion des News")->link());
+
+        $this->assertEquals(1, $crawler->filter("#news-container > table > tbody > tr")->count(), "1. The table should contain 1 row");
+
+        // Delete the first entity.
+        $client->submit($crawler->selectButton('Supprimer')->form());
+        $crawler = $client->followRedirect();
+
+        // Check the entity has been delete on the list
+        $this->assertEquals(1, $crawler->filter("#news-container > table > tbody > tr")->count(), "2. The table should contain 1 row");
+
+        // Delete the second entity.
+        $client->submit($crawler->selectButton('Supprimer')->form());
+        $crawler = $client->followRedirect();
+
+        $this->assertContains("Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !",
+                $crawler->filter("#news-container")->text(), "3. The container should have the no-item message");
     }
 
     /**
@@ -375,7 +412,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         // Fill in the form
         $form = $crawler->selectButton('Sauvegarder')->form(array(
-            'com_nairus_corebundle_newscontent[title]' => ' ',
+            'com_nairus_corebundle_newscontent[title]' => 'Good Title',
             'com_nairus_corebundle_newscontent[description]' => ' ',
             'com_nairus_corebundle_newscontent[link]' => ' ',
             'com_nairus_corebundle_newscontent[locale]' => "fr",
@@ -386,8 +423,26 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->submit($form);
 
         // Verify if there are some errors
-        $this->assertCount(3, $crawler->filter(".is-invalid"), "2.1 The form has to show 3 inputs in error.");
-        $this->assertCount(3, $crawler->filter(".invalid-feedback"), "2.2 The form has to show 3 errors messages.");
+        $this->assertCount(2, $crawler->filter(".is-invalid"), "2.1 The form has to show 2 inputs in error.");
+        $this->assertCount(2, $crawler->filter(".invalid-feedback"), "2.2 The form has to show 2 errors messages.");
+        $this->assertCount(1, $crawler->filter(".is-valid"), "2.3 The form has to show 1 input valid.");
+
+        // Fill in the form
+        $form = $crawler->selectButton('Sauvegarder')->form(array(
+            'com_nairus_corebundle_newscontent[title]' => ' ',
+            'com_nairus_corebundle_newscontent[description]' => 'Good description',
+            'com_nairus_corebundle_newscontent[link]' => 'http://www.goodurl.com/',
+            'com_nairus_corebundle_newscontent[locale]' => "fr",
+            'com_nairus_corebundle_newscontent[news][published]' => false,
+        ));
+
+        // Submit the form
+        $crawler = $client->submit($form);
+
+        // Verify if there are some errors
+        $this->assertCount(1, $crawler->filter(".is-invalid"), "3.1 The form has to show 1 input in error.");
+        $this->assertCount(1, $crawler->filter(".invalid-feedback"), "3.2 The form has to show 1 error message.");
+        $this->assertCount(2, $crawler->filter(".is-valid"), "3.3 The form has to show 2 inputs valids.");
     }
 
 }

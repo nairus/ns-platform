@@ -6,6 +6,7 @@ use Com\Nairus\UserBundle\Tests\AbstractUserWebTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Skill;
 use Com\Nairus\ResumeBundle\Entity\ResumeSkill;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 
 /**
  * Skill controller tests.
@@ -315,6 +316,63 @@ class SkillControllerTest extends AbstractUserWebTestCase {
                 $crawler->filter("#skills-container")->text(), "7.1 The container should have the no-item message");
         $this->assertEquals("/en/admin/skill", $client->getRequest()->getRequestUri(), "7.2 The request uri expected is not ok.");
         $this->assertRegExp("~Skill No. [0-9]+ deleted successfully!~", $crawler->filter(".message-container")->text(), "7.3 The [delete] flash message expected is not ok.");
+    }
+
+    /**
+     * Test delete from index action.
+     *
+     * @return void
+     */
+    public function testDeleteFromIndexAction(): void {
+        // Load datas
+        $loadSkill = new LoadSkill();
+        $loadSkill->load($this->getEntityManager());
+
+        // Login and go to the index page.
+        $crawler = $this->logInAdmin();
+        $client = $this->getClient();
+        $crawler = $client->click($crawler->selectLink("Gestion des compétences")->link());
+
+        $this->assertEquals(2, $crawler->filter("#skills-container > table > tbody > tr")->count(), "1. The table should contain 2 rows");
+
+        // Delete the first entity.
+        $client->submit($crawler->selectButton('Supprimer')->form());
+        $crawler = $client->followRedirect();
+
+        // Check the entity has been delete on the list
+        $this->assertEquals(1, $crawler->filter("#skills-container > table > tbody > tr")->count(), "2. The table should contain 1 row");
+
+        // Delete the second entity.
+        $client->submit($crawler->selectButton('Supprimer')->form());
+        $crawler = $client->followRedirect();
+
+        $this->assertContains("Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !",
+                $crawler->filter("#skills-container")->text(), "3. The container should have the no-item message");
+    }
+
+    /**
+     * Test form validation.
+     *
+     * @return void
+     */
+    public function testFormValidation(): void {
+        // Login and go to the new page.
+        $crawler = $this->logInAdmin();
+        $client = $this->getClient();
+        $crawler = $client->click($crawler->selectLink("Gestion des compétences")->link());
+        $crawler = $client->click($crawler->selectLink("Ajouter une nouvelle compétence")->link());
+
+        // Fill in the form.
+        $form = $crawler->selectButton('Sauvegarder')->form(array(
+            'com_nairus_resumebundle_skill[title]' => ' '
+        ));
+
+        // Submit the form
+        $crawler = $client->submit($form);
+
+        // Verify if there are some errors
+        $this->assertCount(1, $crawler->filter(".is-invalid"), "1.1 The form has to show 2 inputs in error.");
+        $this->assertCount(1, $crawler->filter(".invalid-feedback"), "1.2 The form has to show 2 errors messages.");
     }
 
     /**

@@ -7,7 +7,8 @@
         <span class="ns-flag ns-flag-{{ locale }}"></span>
         {{ "news.form.labels.title" | trans({}, "NSCoreBundle") }}
     </label>
-    {{ form_widget(form.title) }}
+    {% set titleValidClass = form.title.vars.submitted ? (form.title.vars.valid ? "is-valid" : "is-invalid") : "" %}
+    {{ form_widget(form.title, {'attr': {'class': titleValidClass}}) }}
     {{ form_errors(form.title) }}
 </div>
 
@@ -16,7 +17,8 @@
         <span class="ns-flag ns-flag-{{ locale }}"></span>
         {{ "news.form.labels.description" | trans({}, "NSCoreBundle") }}
     </label>
-    {{ form_widget(form.description) }}
+    {% set descValidClass = form.description.vars.submitted ? (form.description.vars.valid ? "is-valid" : "is-invalid") : "" %}
+    {{ form_widget(form.description, {'attr': {'class': descValidClass}}) }}
     {{ form_errors(form.description) }}
 </div>
 
@@ -25,7 +27,8 @@
         <span class="ns-flag ns-flag-{{ locale }}"></span>
         {{ "news.form.labels.link" | trans({}, "NSCoreBundle") }}
     </label>
-    {{ form_widget(form.link) }}
+    {% set linkValidClass = form.link.vars.submitted ? (form.link.vars.valid ? "is-valid" : "is-invalid") : "" %}
+    {{ form_widget(form.link, {'attr': {'class': linkValidClass}}) }}
     {{ form_errors(form.link) }}
 </div>
 

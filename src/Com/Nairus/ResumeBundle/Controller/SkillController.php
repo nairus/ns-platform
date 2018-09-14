@@ -7,6 +7,7 @@ use Com\Nairus\CoreBundle\Exception\PaginatorException;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Skill;
 use Com\Nairus\ResumeBundle\Service\SkillServiceInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -31,12 +32,21 @@ class SkillController extends Controller {
     private $skillService;
 
     /**
+     * Logger service.
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Constructor.
      *
      * @param SkillServiceInterface $skillService The skill service.
+     * @parem LoggerInterface       $logger       The logger service.
      */
-    public function __construct(SkillServiceInterface $skillService) {
+    public function __construct(SkillServiceInterface $skillService, LoggerInterface $logger) {
         $this->skillService = $skillService;
+        $this->logger = $logger;
     }
 
     /**
@@ -200,9 +210,7 @@ class SkillController extends Controller {
      * @param \Exception $exc The exception to log.
      */
     private function logError(\Exception $exc, string $context): void {
-        /* @var $logger \Psr\Log\LoggerInterface */
-        $logger = $this->container->get("logger");
-        $logger->error($exc->getMessage(), [$context => $exc]);
+        $this->logger->error($exc->getMessage(), [$context => $exc]);
     }
 
 }
