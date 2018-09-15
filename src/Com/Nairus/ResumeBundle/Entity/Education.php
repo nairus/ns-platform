@@ -3,10 +3,10 @@
 namespace Com\Nairus\ResumeBundle\Entity;
 
 use Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity;
+use Com\Nairus\CoreBundle\Entity\TranslationEntityInterface;
 use Com\Nairus\ResumeBundle\Entity\Translation\EducationTranslation;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
+use Prezent\Doctrine\Translatable\Annotation as Prezent;
 
 /**
  * Education entity.
@@ -16,18 +16,8 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
  *
  * @ORM\Table(name="ns_education")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\EducationRepository")
- * @Gedmo\TranslationEntity(class="Com\Nairus\ResumeBundle\Entity\Translation\EducationTranslation")
  */
 class Education extends AbstractTranslatableEntity {
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
      * @var string
@@ -65,14 +55,6 @@ class Education extends AbstractTranslatableEntity {
     private $endYear;
 
     /**
-     * @var string
-     *
-     * @Gedmo\Translatable
-     * @ORM\Column(type="text")
-     */
-    private $description;
-
-    /**
      * @var Resume
      *
      * @ORM\ManyToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Resume", inversedBy="educations")
@@ -81,22 +63,9 @@ class Education extends AbstractTranslatableEntity {
     private $resume;
 
     /**
-     * @ORM\OneToMany(
-     *   targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\EducationTranslation",
-     *   mappedBy="object",
-     *   cascade={"persist", "remove"}
-     * )
+     * @Prezent\Translations(targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\EducationTranslation")
      */
     protected $translations;
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId(): int {
-        return $this->id;
-    }
 
     /**
      * Set institution
@@ -209,25 +178,27 @@ class Education extends AbstractTranslatableEntity {
     }
 
     /**
-     * Set description
+     * Set description for current locale (proxy method).
      *
      * @param string $description
      *
-     * @return Education
+     * @return EducationTranslation
      */
-    public function setDescription(string $description): Education {
-        $this->description = $description;
-
-        return $this;
+    public function setDescription(string $description) {
+        /* @var $translation EducationTranslation */
+        $translation = $this->translate();
+        return $translation->setDescription($description);
     }
 
     /**
-     * Get description
+     * Get description for current locale (proxy method).
      *
      * @return string
      */
     public function getDescription(): string {
-        return $this->description;
+        /* @var $translation EducationTranslation */
+        $translation = $this->translate();
+        return $translation->getDescription();
     }
 
     /**
@@ -255,7 +226,14 @@ class Education extends AbstractTranslatableEntity {
     /**
      * {@inheritDoc}
      */
-    protected function validateTranslationEntity(AbstractPersonalTranslation $translation): void {
+    public static function getTranslationEntityClass(): string {
+        return EducationTranslation::class;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function validateTranslationEntity(TranslationEntityInterface $translation): void {
         if (!$translation instanceof EducationTranslation) {
             throw new \TypeError("Instance of [EducationTranslation] expected!");
         }

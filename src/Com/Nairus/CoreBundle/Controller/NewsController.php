@@ -22,6 +22,8 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class NewsController extends Controller {
 
+    use \Com\Nairus\CoreBundle\Traits\CommonComponentsTrait;
+
     private const NAME = NSCoreBundle::NAME . ":News";
 
     /**
@@ -30,21 +32,16 @@ class NewsController extends Controller {
     private $newsService;
 
     /**
-     * Logger service.
-     *
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Constructor.
      *
      * @param NewsServiceInterface $newsService News service.
      * @param LoggerInterface      $logger      Logger service.
+     * @param TranslatorInterface  $translator  Translator service.
      */
-    public function __construct(NewsServiceInterface $newsService, LoggerInterface $logger) {
+    public function __construct(NewsServiceInterface $newsService, LoggerInterface $logger, TranslatorInterface $translator) {
         $this->newsService = $newsService;
         $this->logger = $logger;
+        $this->translator = $translator;
     }
 
     /**
@@ -320,28 +317,6 @@ class NewsController extends Controller {
                         ->setMethod('DELETE')
                         ->getForm()
         ;
-    }
-
-    /**
-     * Return the translation of a message.
-     *
-     * @param string $id     The id of the translation.
-     * @param array  $params The parameters for the translation.
-     * @param string $domain The file domain where the translations is stored.
-     *
-     * @return string
-     */
-    private function getTranslation($id, $params = [], $domain = NSCoreBundle::NAME): string {
-        return $this->get("translator")->trans($id, $params, $domain);
-    }
-
-    /**
-     * Log an error
-     *
-     * @param \Exception $exc The exception to log.
-     */
-    private function logError(\Exception $exc, string $context): void {
-        $this->logger->error($exc->getMessage(), [$context => $exc]);
     }
 
 }

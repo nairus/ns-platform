@@ -3,11 +3,11 @@
 namespace Com\Nairus\ResumeBundle\Entity;
 
 use Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity;
+use Com\Nairus\CoreBundle\Entity\TranslationEntityInterface;
 use Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Prezent\Doctrine\Translatable\Annotation as Prezent;
 
 /**
  * Experience
@@ -16,19 +16,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Table(name="ns_experience")
- * @Gedmo\TranslationEntity(class="Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ExperienceRepository")
  */
 class Experience extends AbstractTranslatableEntity {
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
      * @var string
@@ -43,14 +33,6 @@ class Experience extends AbstractTranslatableEntity {
      * @ORM\Column(type="string", length=255)
      */
     private $location;
-
-    /**
-     * @var string
-     *
-     * @Gedmo\Translatable
-     * @ORM\Column(type="text")
-     */
-    private $description;
 
     /**
      * @var int
@@ -96,11 +78,7 @@ class Experience extends AbstractTranslatableEntity {
     private $resume;
 
     /**
-     * @ORM\OneToMany(
-     *   targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation",
-     *   mappedBy="object",
-     *   cascade={"persist", "remove"}
-     * )
+     * @Prezent\Translations(targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation")
      */
     protected $translations;
 
@@ -111,15 +89,6 @@ class Experience extends AbstractTranslatableEntity {
         parent::__construct();
         $this->currentJob = false;
         $this->translations = new ArrayCollection();
-    }
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId(): int {
-        return $this->id;
     }
 
     /**
@@ -167,25 +136,28 @@ class Experience extends AbstractTranslatableEntity {
     }
 
     /**
-     * Set description
+     * Set description for current locale (proxy method).
      *
      * @param string $description
      *
-     * @return Experience
+     * @return ExperienceTranslation
      */
-    public function setDescription(string $description): Experience {
-        $this->description = $description;
+    public function setDescription(string $description): ExperienceTranslation {
+        /* @var $translation ExperienceTranslation */
+        $translation = $this->translate();
 
-        return $this;
+        return $translation->setDescription($description);
     }
 
     /**
-     * Get description
+     * Get description for the current locale (proxy method).
      *
      * @return string
      */
     public function getDescription(): string {
-        return $this->description;
+        /* @var $translation ExperienceTranslation */
+        $translation = $this->translate();
+        return $translation->getDescription();
     }
 
     /**
@@ -323,7 +295,14 @@ class Experience extends AbstractTranslatableEntity {
     /**
      * {@inheritDoc}
      */
-    protected function validateTranslationEntity(AbstractPersonalTranslation $translation): void {
+    public static function getTranslationEntityClass(): string {
+        return ExperienceTranslation::class;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function validateTranslationEntity(TranslationEntityInterface $translation): void {
         if (!$translation instanceof ExperienceTranslation) {
             throw new \TypeError("Instance of [ExperienceTranslation] expected!");
         }

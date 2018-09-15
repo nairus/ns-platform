@@ -5,6 +5,7 @@ namespace Com\Nairus\ResumeBundle\Tests\Controller;
 use Com\Nairus\UserBundle\Tests\AbstractUserWebTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Skill;
+use Com\Nairus\ResumeBundle\Entity\SkillLevel;
 use Com\Nairus\ResumeBundle\Entity\ResumeSkill;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 
@@ -15,6 +16,11 @@ use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class SkillControllerTest extends AbstractUserWebTestCase {
+
+    /**
+     * Load traits to manipulate test datas.
+     */
+    use \Com\Nairus\CoreBundle\Tests\Traits\DatasCleanerTrait;
 
     /**
      * Test index action with bad credentials.
@@ -93,11 +99,11 @@ class SkillControllerTest extends AbstractUserWebTestCase {
             $crawler = $client->followRedirect();
             $this->assertRegExp("~^/admin/skill/[0-9]+/show~", $client->getRequest()->getRequestUri(), '3. The request uri expected is not ok.');
             $this->assertGreaterThan(0, $crawler->filter(".message-container > .alert-danger")->count(), "4. Error flash messages has to be displayed.");
-            $this->assertRegExp("~La compétence n°[0-9]+ est associé à un ou plusieurs CV !~", $crawler->filter(".message-container")->text(), "5. The [delete] error flash message expected is not ok.");
+            $this->assertRegExp("~La compétence n°[0-9]+ est associée à un ou plusieurs CV !~", $crawler->filter(".message-container")->text(), "5. The [delete] error flash message expected is not ok.");
         } catch (\Exception $exc) {
             $this->fail("0. Unexpected exception: " . $exc->getMessage());
         } finally {
-            $this->cleanDatas();
+            $this->cleanDatas([ResumeSkill::class, Skill::class, SkillLevel::class]);
         }
     }
 
@@ -129,7 +135,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         } catch (\Exception $exc) {
             $this->fail("0. Unexpected exception: " . $exc->getMessage());
         } finally {
-            $this->cleanDatas();
+            $this->cleanDatas([ResumeSkill::class, Skill::class, SkillLevel::class]);
         }
     }
 
@@ -191,15 +197,16 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->click($crawler->selectLink('Retour à la liste')->link());
         $this->assertEquals("/admin/skill", $client->getRequest()->getRequestUri(), "4.1 The request uri expected is not ok.");
         $this->assertEquals(1, $crawler->filter("#skills-container > table > tbody > tr")->count(), "4.2 The table should contain 1 row");
-        $this->assertEquals(3, $crawler->filter("#skills-container > table > tbody > tr > td > .actions")->children()->count(), "4.3 Three actions buttons are expected");
 
-        $actionsRow = $crawler->filter("#skills-container > table > tbody > tr > td > .actions")->html();
-        $this->assertContains('<i class="far fa-eye"></i>', $actionsRow, "4.4 The see detail picto expected is not in the actions div");
-        $this->assertContains('Voir les détail', $actionsRow, "4.5 The return label expected is not ok");
-        $this->assertContains('<i class="fas fa-pencil-alt"></i>', $actionsRow, "4.6 The edit picto expected is not in the actions div");
-        $this->assertContains('Modifier', $actionsRow, "4.7 The edit label expected is not ok");
-        $this->assertContains('<i class="fas fa-trash-alt"></i>', $actionsRow, "4.8 The delete picto expected is not in the actions div");
-        $this->assertContains('Supprimer', $actionsRow, "4.9 The delete label expected is not ok");
+        // Vérify the actions button and their position.
+        $children = $crawler->filter("#skills-container > table > tbody > tr > td > .actions")->children();
+        $this->assertCount(3, $children, "4.3 Three actions buttons are expected");
+        $this->assertContains('<i class="far fa-eye"></i>', $children->eq(1)->html(), "4.4 The see detail picto expected is not in the actions div");
+        $this->assertContains('Voir les détail', $children->eq(1)->text(), "4.5 The return label expected is not ok");
+        $this->assertContains('<i class="fas fa-pencil-alt"></i>', $children->eq(0)->html(), "4.6 The edit picto expected is not in the actions div");
+        $this->assertContains('Modifier', $children->eq(0)->text(), "4.7 The edit label expected is not ok");
+        $this->assertContains('<i class="fas fa-trash-alt"></i>', $children->eq(2)->html(), "4.8 The delete picto expected is not in the actions div");
+        $this->assertContains('Supprimer', $children->eq(2)->text(), "4.9 The delete label expected is not ok");
 
         // Edit the entity
         $crawler = $client->click($crawler->selectLink('Modifier')->link());
@@ -208,7 +215,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $actionsRow = $crawler->filter("#admin-container > .jumbotron > form > .actions")->html();
         $this->assertContains('<i class="fas fa-chevron-left"></i>', $actionsRow, "5.3. The return picto expected is not in the actions div");
         $this->assertContains('Retour à la liste', $actionsRow, "5.4. The return label expected is not ok");
-        $this->assertContains('<i class="fas fa-chevron-up"></i>', $actionsRow, "5.5. The show  picto expected is not in the actions div");
+        $this->assertContains('<i class="far fa-eye"></i>', $actionsRow, "5.5. The show  picto expected is not in the actions div");
         $this->assertContains('Voir les détails', $actionsRow, "5.6. The show label expected is not ok");
         $this->assertContains('<i class="far fa-save"></i>', $actionsRow, "5.7. The save picto expected is not in the actions div");
         $this->assertContains('Sauvegarder', $actionsRow, "5.8. The save label expected is not ok");
@@ -220,7 +227,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $client->submit($form);
         $crawler = $client->followRedirect();
 
-        // Check the element contains an attribute with value equals "Foo"
+        // Check if the element contains an attribute with value equals "Foo"
         $this->assertRegExp('/Foo/', $client->getResponse()->getContent(), '6.1. Missing element "Foo"');
         $this->assertGreaterThan(0, $crawler->filter(".message-container > .alert-success")->count(), "6.2 Success flash messages has to be displayed.");
         $this->assertRegExp("~Compétence n°[0-9]+ modifiée avec succès !~", $crawler->filter(".message-container")->text(), "6.3 The [edit] flash message expected is not ok.");
@@ -229,7 +236,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $client->submit($crawler->selectButton('Supprimer')->form());
         $crawler = $client->followRedirect();
 
-        // Check the entity has been delete on the list
+        // Check if the entity has been deleted on the list
         $this->assertContains("Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !",
                 $crawler->filter("#skills-container")->text(), "7.1 The container should have the no-item message");
         $this->assertEquals("/admin/skill", $client->getRequest()->getRequestUri(), "7.2 The request uri expected is not ok.");
@@ -302,7 +309,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $client->submit($form);
         $crawler = $client->followRedirect();
 
-        // Check the element contains an attribute with value equals "Foo"
+        // Check if the element contains an attribute with value equals "Foo"
         $this->assertRegExp('/Foo/', $client->getResponse()->getContent(), '6.1. Missing element "Foo"');
         $this->assertRegExp("~Skill No. [0-9]+ modified successfully!~", $crawler->filter(".message-container")->text(), "6.2 The [edit] flash message expected is not ok.");
 
@@ -311,7 +318,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $client->submit($crawler->selectButton('Delete')->form());
         $crawler = $client->followRedirect();
 
-        // Check the entity has been delete on the list
+        // Check if the entity has been deleted on the list
         $this->assertContains("There is no item for now! Please add one clicking on the button above!",
                 $crawler->filter("#skills-container")->text(), "7.1 The container should have the no-item message");
         $this->assertEquals("/en/admin/skill", $client->getRequest()->getRequestUri(), "7.2 The request uri expected is not ok.");
@@ -384,56 +391,21 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         // Create new skill
         $skill = new Skill();
         $skill->setTitle("Symfony 3");
+        $skillLevel = new SkillLevel();
 
         // Link it to a resume
         $entityManager = $this->getEntityManager();
         $resume = $entityManager->find(NSResumeBundle::NAME . ":Resume", 1);
-        $skillLevel = $entityManager->find(NSResumeBundle::NAME . ":SkillLevel", 1);
         $resumeSkill = new ResumeSkill();
         $resumeSkill->setRank(1)
                 ->setResume($resume)
                 ->setSkill($skill)
                 ->setSkillLevel($skillLevel);
 
+        $entityManager->persist($skillLevel);
         $entityManager->persist($skill);
         $entityManager->persist($resumeSkill);
         $entityManager->flush();
-    }
-
-    /**
-     * Clean datas after test.
-     *
-     * @return void
-     *
-     * @throws \Exception
-     */
-    private function cleanDatas(): void {
-        // Reset the entity manager to prevent "Doctrine\ORM\ORMException".
-        static::$kernel->getContainer()
-                ->get("doctrine")
-                ->resetManager();
-
-        $entityManager = static::$kernel->getContainer()
-                ->get("doctrine")
-                ->getManager();
-
-        $skillClassMetadata = $entityManager->getClassMetadata(Skill::class);
-        $resumeSkillClassMetadata = $entityManager->getClassMetadata(ResumeSkill::class);
-        $connection = $entityManager->getConnection();
-        $databasePlatform = $connection->getDatabasePlatform();
-        $connection->beginTransaction();
-        try {
-            $connection->query('PRAGMA foreign_keys = OFF');
-            $q1 = $databasePlatform->getTruncateTableSql($resumeSkillClassMetadata->getTableName());
-            $connection->executeUpdate($q1);
-            $q2 = $databasePlatform->getTruncateTableSql($skillClassMetadata->getTableName());
-            $connection->executeUpdate($q2);
-            $connection->query('PRAGMA foreign_keys = ON');
-            $connection->commit();
-        } catch (\Exception $exc) {
-            $connection->rollBack();
-            throw $exc;
-        }
     }
 
 }

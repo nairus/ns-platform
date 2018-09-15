@@ -24,7 +24,7 @@ class ResumeTest extends KernelTestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->object = new Resume;
+        $this->object = new Resume();
     }
 
     /**
@@ -40,7 +40,7 @@ class ResumeTest extends KernelTestCase {
      */
     public function testImplementation() {
         $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity", $this->object, "1. The entity musts be of type [AbstractTranslatableEntity]");
-        $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\TranslatableEntity", $this->object, "2. The entity musts implement [TranslatableEntity] interface");
+        $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\TranslatableEntityInterface", $this->object, "2. The entity musts implement [TranslatableEntityInterface] interface");
     }
 
     /**
@@ -50,7 +50,7 @@ class ResumeTest extends KernelTestCase {
      * @expectedExceptionMessage Instance of [ResumeTranslation] expected!
      */
     public function testAddBadTranslation() {
-        $this->object->addTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity("en", "description", "bad translation"));
+        $this->object->addTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity());
     }
 
     /**
@@ -60,31 +60,7 @@ class ResumeTest extends KernelTestCase {
      * @expectedExceptionMessage Instance of [ResumeTranslation] expected!
      */
     public function testRemoveBadTranslation() {
-        $this->object->removeTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity("en", "description", "bad translation"));
-    }
-
-    /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Resume::setTitle
-     * @covers Com\Nairus\ResumeBundle\Entity\Resume::getTitle
-     */
-    public function testGetAndSetTitle() {
-        try {
-            $this->object->setTitle('Titre');
-            $this->assertSame("Titre", $this->object->getTitle());
-        } catch (\Exception $exc) {
-            $this->fail("No exception has to be thrown: " . $exc->getMessage());
-        } catch (\Error $err) {
-            $this->fail("No error has to be thrown:" . $err->getMessage());
-        }
-    }
-
-    /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Resume::setTitle
-     *
-     * @expectedException \TypeError
-     */
-    public function testSetTitleWithNullParam() {
-        $this->object->setTitle(null);
+        $this->object->removeTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity());
     }
 
     /**
@@ -290,6 +266,17 @@ class ResumeTest extends KernelTestCase {
         } catch (\Error $err) {
             $this->fail("No error has to be thrown:" . $err->getMessage());
         }
+    }
+
+    /**
+     * Test the <code>getTranslationEntityClass</code> static method.
+     *
+     * @covers Com\Nairus\ResumeBundle\Entity\Resume::getTranslationEntityClass
+     *
+     * @return void
+     */
+    public function testGetTranslationEntityClass(): void {
+        $this->assertSame(Translation\ResumeTranslation::class, Resume::getTranslationEntityClass(), "1. The translation class expected is not ok.");
     }
 
 }

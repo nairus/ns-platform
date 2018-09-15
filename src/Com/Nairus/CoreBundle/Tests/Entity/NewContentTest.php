@@ -143,4 +143,20 @@ class NewContentTest extends AbstractKernelTestCase {
         $this->assertCount(0, $errors, "1. no error is expected.");
     }
 
+    /**
+     * Test <code>__toString</code> method.
+     *
+     * @covers Com\Nairus\CoreBundle\Entity\NewsContent::__toString()
+     *
+     * @return void
+     */
+    public function testToString(): void {
+        $newsContent = new NewsContent();
+        $newsContent->setDescription("Good description")
+                ->setTitle("Good title")
+                ->setLink("http://www.goodurl.com")
+                ->setLocale("fr");
+        $this->assertEquals("[NewsContent] id:  - Good title - fr", $newsContent->__toString(), "1. The [__toString] method has to be overrided.");
+    }
+
 }

@@ -11,6 +11,7 @@ services:
         arguments:
             $newsService: "@ns_core.news_service"
             $logger: "@logger"
+            $translator: "@translator"
 
     Com\Nairus\CoreBundle\Controller\ErrorController:
         public: true

@@ -3,15 +3,15 @@
 namespace Com\Nairus\ResumeBundle\Entity;
 
 use Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity;
+use Com\Nairus\CoreBundle\Entity\TranslationEntityInterface;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation;
 use Com\Nairus\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
+use Prezent\Doctrine\Translatable\Annotation as Prezent;
 
 /**
  * Resume entity.
@@ -21,36 +21,9 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
  *
  * @ORM\Table(name="ns_resume")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ResumeRepository")
- * @Gedmo\TranslationEntity(class="Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation")
  * @ORM\HasLifecycleCallbacks()
  */
 class Resume extends AbstractTranslatableEntity {
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * @var string
-     *
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string", length=255)
-     */
-    private $title;
-
-    /**
-     * @var string
-     *
-     * @Gedmo\Slug(fields={"title"})
-     * @Gedmo\Translatable
-     * @ORM\Column(length=64, unique=true)
-     */
-    private $slug;
 
     /**
      * @var bool
@@ -103,11 +76,7 @@ class Resume extends AbstractTranslatableEntity {
     private $educations;
 
     /**
-     * @ORM\OneToMany(
-     *   targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation",
-     *   mappedBy="object",
-     *   cascade={"persist", "remove"}
-     * )
+     * @Prezent\Translations(targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation")
      */
     protected $translations;
 
@@ -118,12 +87,12 @@ class Resume extends AbstractTranslatableEntity {
     use TimestampableEntity;
 
     public function __construct() {
+        parent::__construct();
         $this->status = ResumeStatusEnum::OFFLINE_INCOMPLETE;
         $this->anonymous = false;
         $this->resumeSkills = new ArrayCollection();
         $this->experiences = new ArrayCollection();
         $this->educations = new ArrayCollection();
-        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -133,28 +102,6 @@ class Resume extends AbstractTranslatableEntity {
      */
     public function getId(): int {
         return $this->id;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Resume
-     */
-    public function setTitle(string $title): Resume {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle(): string {
-        return $this->title;
     }
 
     /**
@@ -339,31 +286,68 @@ class Resume extends AbstractTranslatableEntity {
     }
 
     /**
-     * Set slug.
+     * Set title for current locale (proxy method).
+     *
+     * @param string $title
+     *
+     * @return ResumeTranslation
+     */
+    public function setTitle(string $title): ResumeTranslation {
+        /* @var $translation ResumeTranslation */
+        $translation = $this->translate();
+
+        return $translation->setTitle($title);
+    }
+
+    /**
+     * Get title for current locale (proxy method).
+     *
+     * @return string
+     */
+    public function getTitle(): string {
+        /* @var $translation ResumeTranslation */
+        $translation = $this->translate();
+
+        return $translation->getTitle();
+    }
+
+    /**
+     * Set slug for current locale (proxy method).
      *
      * @param string $slug
      *
      * @return Resume
      */
     public function setSlug(string $slug): Resume {
-        $this->slug = $slug;
+        /* @var $translation ResumeTranslation */
+        $translation = $this->translate();
 
-        return $this;
+        return $translation->setSlug($slug);
     }
 
     /**
-     * Get slug.
+     * Get slug for current method (proxy method).
      *
      * @return string
      */
     public function getSlug(): string {
-        return $this->slug;
+        /* @var $translation ResumeTranslation */
+        $translation = $this->translate();
+
+        return $translation->getSlug();
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function validateTranslationEntity(AbstractPersonalTranslation $translation): void {
+    public static function getTranslationEntityClass(): string {
+        return ResumeTranslation::class;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function validateTranslationEntity(TranslationEntityInterface $translation): void {
         if (!$translation instanceof ResumeTranslation) {
             throw new \TypeError("Instance of [ResumeTranslation] expected!");
         }

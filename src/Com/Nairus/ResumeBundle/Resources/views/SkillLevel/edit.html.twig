@@ -1,26 +1,21 @@
 {% extends 'NSCoreBundle::admin.html.twig' %}
 
+{% block title %}{{ "skilllevel.edit.title" | trans({'%id%': skillLevel.id}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ '/bundles/nscore/css/forms.css' }}" type="text/css">
 {% endblock %}
 
 {% block ns_core_admin_body %}
-    <h1>Skilllevel edit</h1>
-
-    {{ form_start(edit_form) }}
-    {{ form_widget(edit_form) }}
-    <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('skilllevel_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-            <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <div class="jumbotron">
+        <h1 class="position-relative">{{ "skilllevel.edit.title" | trans({'%id%': skillLevel.id}, "NSResumeBundle") }}</h1>
+        {% include 'NSResumeBundle:SkillLevel:form.html.twig' %}
+        {{ form_start(delete_form) }}
+        <button class="btn btn-danger mx-1 my-1 float-right">
+            <i class="fas fa-trash-alt"></i>
+            {{ "actions.delete" | trans}}
+        </button>
+        {{ form_end(delete_form) }}
+    </div>
 {% endblock %}

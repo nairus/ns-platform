@@ -68,11 +68,13 @@ class LoadNewsPublished implements FixtureInterface {
      * Remove the tests set.
      *
      * @param EntityManagerInterface $manager The manager instance.
+     * @param @bool                  $all     Defines if we delete all entities or not.
      *
      * @return void
      */
-    public function remove(EntityManagerInterface $manager): void {
-        $dql = "SELECT n FROM " . NSCoreBundle::NAME . ":News n WHERE n.published = 1";
+    public function remove(EntityManagerInterface $manager, bool $all = FALSE): void {
+        $where = $all ? '' : ' WHERE n.published = 1';
+        $dql = "SELECT n FROM " . NSCoreBundle::NAME . ":News n" . $where;
         $newsList = $manager
                 ->createQuery($dql)
                 ->getResult();

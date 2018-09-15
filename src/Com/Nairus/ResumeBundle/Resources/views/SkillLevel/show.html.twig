@@ -1,32 +1,38 @@
 {% extends 'NSCoreBundle::admin.html.twig' %}
 
+{% block title %}{{ "skilllevel.show.title" | trans({"%id%": skillLevel.id}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
+
 {% block ns_core_admin_body %}
-    <h1>Skilllevel</h1>
+    <div class="jumbotron">
+        {{ include("NSCoreBundle::messages.html.twig") }}
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ skillLevel.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ skillLevel.title }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <h1>{{ "skilllevel.show.title" | trans({"%id%": skillLevel.id}, "NSResumeBundle") }}</h1>
 
-    <ul>
-        <li>
-            <a href="{{ path('skilllevel_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('skilllevel_edit', { 'id': skillLevel.id }) }}">Edit</a>
-        </li>
-        <li>
+        <div id="skilllevel-content" class="row">
+            {% for translation in skillLevel.translations %}
+                <div class="col-md-2 text-center p-2">
+                    <img width="80" src="/bundles/nscore/img/flags/{{ translation.locale }}.png"></span>
+                    {{ translation.title }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row actions">
+            <a class="btn btn-secondary mx-2 my-1" href="{{ path('skilllevel_index') }}">
+                <i class="fas fa-chevron-left"></i>
+                {{ "actions.list" | trans }}
+            </a>
+            <a class="btn btn-primary mx-2 my-1"
+               href="{{ path('skilllevel_edit', { 'id': skillLevel.id }) }}">
+                <i class="fas fa-pencil-alt"></i>
+                {{ "actions.edit" | trans }}
+            </a>
             {{ form_start(delete_form) }}
-            <input type="submit" value="Delete">
+            <button class="btn btn-danger mx-2 my-1">
+                <i class="fas fa-trash-alt"></i>
+                {{ "actions.delete" | trans}}
+            </button>
             {{ form_end(delete_form) }}
-        </li>
-    </ul>
+        </div>
+    </div>
 {% endblock %}

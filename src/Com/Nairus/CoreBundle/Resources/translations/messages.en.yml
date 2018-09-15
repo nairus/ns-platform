@@ -109,3 +109,8 @@ table:
         offline: Offline
         actions: Actions
         missing-translations: Missing translations
+
+# Labels for a2lix translation form template.
+"[Default]": "[Default]"
+Fr: French
+En: English

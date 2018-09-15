@@ -78,7 +78,7 @@ class SkillService implements SkillServiceInterface {
     /**
      * {@inheritDoc}
      */
-    public function removeSkill(Skill $skill) {
+    public function removeSkill(Skill $skill): void {
         // Check if no resume is linked to this skill.
         $resumeSkill = $this->resumeSkillRepository->findOneBy(["skill" => $skill]);
 
@@ -91,8 +91,13 @@ class SkillService implements SkillServiceInterface {
         try {
             $this->skillRepository->remove($skill);
         } catch (\Doctrine\ORM\ORMException | \Doctrine\ORM\ORMInvalidArgumentException $exc) {
+            $skillId = $skill->getId();
             throw new FunctionalException(
-                    "flashes.error.skill.delete.unknown",
+                    "flashes.error.skill.delete.failed",
+                    "The skill No. $skillId has not been deleted!", 0, $exc);
+        } catch (\Exception | \Error $exc) {
+            throw new FunctionalException(
+                    "flashes.error.unknown",
                     "An unkwnow error occured", 0, $exc);
         }
     }

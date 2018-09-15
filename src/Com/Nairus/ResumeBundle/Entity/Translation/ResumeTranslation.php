@@ -3,10 +3,11 @@
 namespace Com\Nairus\ResumeBundle\Entity\Translation;
 
 use Com\Nairus\ResumeBundle\Entity\Resume;
-use Com\Nairus\CoreBundle\Entity\TranslatableEntity;
+use Com\Nairus\CoreBundle\Entity\TranslatableEntityInterface;
 use Com\Nairus\CoreBundle\Entity\AbstractTranslationEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Sluggable\Util as Sluggable;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Prezent\Doctrine\Translatable\Annotation as Prezent;
 
 /**
  * ResumeTranslation entity.
@@ -15,54 +16,80 @@ use Gedmo\Sluggable\Util as Sluggable;
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Entity
- * @ORM\Table(name="ns_resume_translations",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="ns_resume_translations_lookup_unique_idx", columns={
- *         "locale", "object_id", "field"
- *     })}
- * )
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\Table(name="ns_resume_translations")
  */
 class ResumeTranslation extends AbstractTranslationEntity {
 
     /**
-     * @ORM\ManyToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Resume", inversedBy="translations")
-     * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var string
+     *
+     * @ORM\Column(type="string", length=100)
      */
-    protected $object;
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(length=100, unique=true)
+     */
+    private $slug;
+
+    /**
+     * @Prezent\Translatable(targetEntity="Com\Nairus\ResumeBundle\Entity\Resume")
+     */
+    protected $translatable;
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Resume
+     */
+    public function setTitle(string $title): self {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle(): string {
+        return $this->title;
+    }
+
+    /**
+     * Set slug.
+     *
+     * @param string $slug
+     *
+     * @return self
+     */
+    public function setSlug(string $slug): self {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug.
+     *
+     * @return string
+     */
+    public function getSlug(): string {
+        return $this->slug;
+    }
 
     /**
      * {@inheritDoc}
      */
-    protected function validObjectClass(TranslatableEntity $object): void {
+    protected function validObjectClass(TranslatableEntityInterface $object): void {
         if (!$object instanceof Resume) {
             throw new \TypeError("Instance of [Resume] expected!");
-        }
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist(): void {
-        $this->generateSlug();
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate(): void {
-        $this->generateSlug();
-    }
-
-    /**
-     * Generate slug for translation.
-     *
-     * @return void
-     */
-    private function generateSlug(): void {
-        // Ensure the slug generation for translation.
-        if ("slug" === $this->getField()) {
-            $slug = Sluggable\Urlizer::urlize($this->getContent());
-            $this->setContent($slug);
         }
     }
 

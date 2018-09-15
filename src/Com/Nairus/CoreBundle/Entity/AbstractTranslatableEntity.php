@@ -2,9 +2,13 @@
 
 namespace Com\Nairus\CoreBundle\Entity;
 
+use Com\Nairus\CoreBundle\Entity\Traits\IsNewTrait;
+use Com\Nairus\CoreBundle\Entity\TranslationEntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
+use Doctrine\ORM\Mapping as ORM;
+use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Entity\AbstractTranslatable;
+use Prezent\Doctrine\Translatable\TranslationInterface;
 
 /**
  * Abstract class for Translatable entities
@@ -12,14 +16,30 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-abstract class AbstractTranslatableEntity implements TranslatableEntity {
+abstract class AbstractTranslatableEntity extends AbstractTranslatable implements TranslatableEntityInterface {
 
     /**
-     * Collection of translations.
+     * @var int
      *
-     * This property has to be mapped in the child class.
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $translations;
+    protected $id;
+
+    /**
+     * Current locale (not mapped in database).
+     *
+     * @Prezent\CurrentLocale
+     */
+    private $currentLocale;
+
+    /**
+     * The current translation entity (not mapped in database).
+     *
+     * @var TranslationEntityInterface
+     */
+    private $currentTranslation;
 
     /**
      * Constructor.
@@ -28,65 +48,100 @@ abstract class AbstractTranslatableEntity implements TranslatableEntity {
         $this->translations = new ArrayCollection();
     }
 
+    use IsNewTrait;
+
     /**
-     * {@inheritDoc}
+     * Get id
+     *
+     * @return int
      */
-    public function addTranslation(AbstractPersonalTranslation $translation) {
-        $this->validateTranslationEntity($translation);
+    public function getId(): int {
+        return $this->id;
+    }
 
-        $this->translations[] = $translation;
+    /**
+     * Return the current locale of the entity.
+     *
+     * @return string|null
+     */
+    public function getCurrentLocale(): ?string {
+        return $this->currentLocale;
+    }
 
+    /**
+     * Define the current locale of the entity.
+     *
+     * @param string $currentLocale
+     */
+    public function setCurrentLocale(string $currentLocale) {
+        $this->currentLocale = $currentLocale;
         return $this;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function removeTranslation(AbstractPersonalTranslation $translation): bool {
+    public function addTranslation(TranslationInterface $translation) {
         $this->validateTranslationEntity($translation);
-
-        return $this->translations->removeElement($translation);
+        return parent::addTranslation($translation);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getTranslations(): Collection {
-        return $this->translations;
+    public function removeTranslation(TranslationInterface $translation) {
+        $this->validateTranslationEntity($translation);
+        return parent::removeTranslation($translation);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getTranslation(string $locale, string $field): string {
-        // Searching the translation.
-        foreach ($this->getTranslations() as /* @var $translation AbstractPersonalTranslation */ $translation) {
-            if ($translation->getField() === $field && $translation->getLocale() === $locale) {
-                return $translation->getContent();
-            }
+    public function translate($locale = null): TranslationEntityInterface {
+        if (null === $locale) {
+            $locale = $this->currentLocale;
         }
 
-        // Return the default value, if translation does not exist.
-        $getter = 'get' . ucfirst($field);
-        return $this->$getter();
+        if (!$locale) {
+            throw new \RuntimeException('No locale has been set and currentLocale is empty');
+        }
+
+        if ($this->currentTranslation && $this->currentTranslation->getLocale() === $locale) {
+            return $this->currentTranslation;
+        }
+
+        if (!$translation = $this->translations->get($locale)) {
+            $translationEntityClass = static::getTranslationEntityClass();
+            $translation = new $translationEntityClass();
+            $translation->setLocale($locale);
+            $this->addTranslation($translation);
+        }
+
+        $this->currentTranslation = $translation;
+        return $translation;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function hasTranslation(string $locale, string $field): bool {
-        foreach ($this->getTranslations() as /* @var $translation AbstractPersonalTranslation */ $translation) {
-            if ($translation->getField() === $field && $translation->getLocale() === $locale) {
-                return true;
-            }
-        }
-        return false;
+    public function hasTranslation(string $locale): bool {
+        $translations = $this->getTranslations();
+        return $translations->containsKey($locale);
     }
+
+    /**
+     * Return the entity class for translations.
+     *
+     * @return string
+     */
+    abstract public static function getTranslationEntityClass(): string;
 
     /**
      * Validate the translation entity.
      *
+     * @param TranslationEntityInterface $translation The translation entity to validate.
+     *
      * @throw \TypeError In case of bad translation type.
      */
-    abstract protected function validateTranslationEntity(AbstractPersonalTranslation $translation): void;
+    abstract protected function validateTranslationEntity(TranslationEntityInterface $translation): void;
 }

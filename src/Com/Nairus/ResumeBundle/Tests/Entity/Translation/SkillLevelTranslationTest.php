@@ -14,11 +14,12 @@ class SkillLevelTranslationTest extends KernelTestCase {
 
     /**
      * Test the implementation of the entity.
+     *
+     * @return void
      */
-    public function testImplementation() {
-        $entity = new SkillLevelTranslation("fr", "description", "Description FR");
+    public function testImplementation(): void {
+        $entity = new SkillLevelTranslation();
         $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\AbstractTranslationEntity", $entity, "1. The entity musts be an instance of [AbstractTranslationEntity].");
-        $this->assertInstanceOf("Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation", $entity, "2. The entity musts be an instance of [AbstractPersonalTranslation].");
     }
 
     /**
@@ -26,9 +27,12 @@ class SkillLevelTranslationTest extends KernelTestCase {
      *
      * @expectedException \TypeError
      * @expectedExceptionMessage Instance of [SkillLevel] expected!
+     *
+     * @return void
      */
-    public function testBadObjectInstance() {
-        new SkillLevelTranslation("fr", "description", "Description FR", new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslatableEntity());
+    public function testBadObjectInstance(): void {
+        $skillLevelTranslation = new SkillLevelTranslation();
+        $skillLevelTranslation->setTranslatable(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslatableEntity());
     }
 
 }

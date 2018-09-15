@@ -3,3 +3,8 @@ label.required:after {
     content: "*";
     color: red;
 }
+
+/* Override bootsrap classes to display correctly class above. */
+.invalid-feedback.d-block {
+    float: left;
+}

@@ -35,10 +35,12 @@ class EducationTest extends KernelTestCase {
 
     /**
      * Test the implementation of the entity.
+     *
+     * @return void
      */
-    public function testImplementation() {
+    public function testImplementation(): void {
         $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity", $this->object, "1. The entity musts be of type [AbstractTranslatableEntity]");
-        $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\TranslatableEntity", $this->object, "2. The entity musts implement [TranslatableEntity] interface");
+        $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\TranslatableEntityInterface", $this->object, "2. The entity musts implement [TranslatableEntityInterface] interface");
     }
 
     /**
@@ -46,9 +48,11 @@ class EducationTest extends KernelTestCase {
      *
      * @expectedException \TypeError
      * @expectedExceptionMessage Instance of [EducationTranslation] expected!
+     *
+     * @return void
      */
-    public function testAddBadTranslation() {
-        $this->object->addTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity("en", "description", "bad translation"));
+    public function testAddBadTranslation(): void {
+        $this->object->addTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity());
     }
 
     /**
@@ -56,16 +60,22 @@ class EducationTest extends KernelTestCase {
      *
      * @expectedException \TypeError
      * @expectedExceptionMessage Instance of [EducationTranslation] expected!
+     *
+     * @return void
      */
-    public function testRemoveBadTranslation() {
-        $this->object->removeTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity("en", "description", "bad translation"));
+    public function testRemoveBadTranslation(): void {
+        $this->object->removeTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity());
     }
 
     /**
+     * Test the getter/setter of institution property.
+     *
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setInstitution
      * @covers Com\Nairus\ResumeBundle\Entity\Education::getInstitution
+     *
+     * @return void
      */
-    public function testGetAndSetInstitution() {
+    public function testGetAndSetInstitution(): void {
         try {
             $this->object->setInstitution("AFPA");
             $this->assertSame("AFPA", $this->object->getInstitution());
@@ -80,16 +90,20 @@ class EducationTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setInstitution
      *
      * @expectedException \TypeError
+     *
+     * @return void
      */
-    public function testSetInstitutionWithNullParam() {
+    public function testSetInstitutionWithNullParam(): void {
         $this->object->setInstitution(null);
     }
 
     /**
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setDiploma
      * @covers Com\Nairus\ResumeBundle\Entity\Education::getDiploma
+     *
+     * @return void
      */
-    public function testGetAndSetDiploma() {
+    public function testGetAndSetDiploma(): void {
         try {
             $this->object->setDiploma("BTS");
             $this->assertSame("BTS", $this->object->getDiploma());
@@ -104,16 +118,20 @@ class EducationTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setDiploma
      *
      * @expectedException \TypeError
+     *
+     * @return void
      */
-    public function testSetDiplomaWithNullParam() {
+    public function testSetDiplomaWithNullParam(): void {
         $this->object->setDiploma(null);
     }
 
     /**
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setDomain
      * @covers Com\Nairus\ResumeBundle\Entity\Education::getDomain
+     *
+     * @return void
      */
-    public function testGetAndSetDomain() {
+    public function testGetAndSetDomain(): void {
         try {
             $this->object->setDomain("Web");
             $this->assertSame("Web", $this->object->getDomain());
@@ -128,16 +146,20 @@ class EducationTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setDomain
      *
      * @expectedException \TypeError
+     *
+     * @return void
      */
-    public function testSetDomainWithNullParam() {
+    public function testSetDomainWithNullParam(): void {
         $this->object->setDomain(null);
     }
 
     /**
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setStartYear
      * @covers Com\Nairus\ResumeBundle\Entity\Education::getStartYear
+     *
+     * @return void
      */
-    public function testGetAndSetStartYear() {
+    public function testGetAndSetStartYear(): void {
         try {
             $this->object->setStartYear(2017);
             $this->assertSame(2017, $this->object->getStartYear());
@@ -158,16 +180,20 @@ class EducationTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setStartYear
      *
      * @expectedException \TypeError
+     *
+     * @return void
      */
-    public function testSetStartYearWithNullParam() {
+    public function testSetStartYearWithNullParam(): void {
         $this->object->setStartYear(null);
     }
 
     /**
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setEndYear
      * @covers Com\Nairus\ResumeBundle\Entity\Education::getEndYear
+     *
+     * @return void
      */
-    public function testGetAndSetEndYear() {
+    public function testGetAndSetEndYear(): void {
         try {
             $this->object->setEndYear(2018);
             $this->assertSame(2018, $this->object->getEndYear());
@@ -182,41 +208,20 @@ class EducationTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setEndYear
      *
      * @expectedException \TypeError
-     */
-    public function testSetEndYearWithNullParam() {
-        $this->object->setEndYear(null);
-    }
-
-    /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Education::setDescription
-     * @covers Com\Nairus\ResumeBundle\Entity\Education::getDescription
-     */
-    public function testGetAndSetDescription() {
-        try {
-            $desc = "Lorem ipsum ...";
-            $this->object->setDescription($desc);
-            $this->assertSame($desc, $this->object->getDescription());
-        } catch (\Exception $exc) {
-            $this->fail("No exception has to be thrown: " . $exc->getMessage());
-        } catch (\Error $err) {
-            $this->fail("No error has to be thrown: " . $err->getMessage());
-        }
-    }
-
-    /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Education::setDescription
      *
-     * @expectedException \TypeError
+     * @return void
      */
-    public function testSetDescriptionWithNullParam() {
-        $this->object->setDescription(null);
+    public function testSetEndYearWithNullParam(): void {
+        $this->object->setEndYear(null);
     }
 
     /**
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setResume
      * @covers Com\Nairus\ResumeBundle\Entity\Education::getResume
+     *
+     * @return void
      */
-    public function testGetAndSetResume() {
+    public function testGetAndSetResume(): void {
         try {
             $resume = new Resume();
             $this->object->setResume($resume);
@@ -226,6 +231,17 @@ class EducationTest extends KernelTestCase {
         } catch (\Error $err) {
             $this->fail("No error has to be thrown: " . $err->getMessage());
         }
+    }
+
+    /**
+     * Test the <code>getTranslationEntityClass</code> static method.
+     *
+     * @covers Com\Nairus\ResumeBundle\Entity\Education::getTranslationEntityClass
+     *
+     * @return void
+     */
+    public function testGetTranslationEntityClass(): void {
+        $this->assertSame(Translation\EducationTranslation::class, Education::getTranslationEntityClass(), "1. The translation class expected is not ok.");
     }
 
 }

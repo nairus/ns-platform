@@ -3,11 +3,11 @@
 namespace Com\Nairus\ResumeBundle\Entity;
 
 use Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity;
-use Com\Nairus\CoreBundle\Entity\Traits\IsNewTrait;
+use Com\Nairus\CoreBundle\Entity\TranslationEntityInterface;
 use Com\Nairus\ResumeBundle\Entity\Translation\SkillLevelTranslation;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
+use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * SkillLevel entity.
@@ -16,74 +16,49 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Table(name="ns_skill_level")
- * @Gedmo\TranslationEntity(class="Com\Nairus\ResumeBundle\Entity\Translation\SkillLevelTranslation")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\SkillLevelRepository")
  */
 class SkillLevel extends AbstractTranslatableEntity {
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * @var string
-     *
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string", length=255)
-     */
-    private $title;
-
-    /**
-     * @ORM\OneToMany(
-     *   targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\SkillLevelTranslation",
-     *   mappedBy="object",
-     *   cascade={"persist", "remove"}
-     * )
+     * @Prezent\Translations(targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\SkillLevelTranslation")
+     * @Assert\Valid
      */
     protected $translations;
 
     /**
-     * Get id
+     * Return the title for current language (proxy getter).
      *
-     * @return int
-     */
-    public function getId(): int {
-        return $this->id;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return SkillLevel
-     */
-    public function setTitle(string $title): SkillLevel {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string| null
+     * @return string|null
      */
     public function getTitle(): ?string {
-        return $this->title;
+        return $this->translate()->getTitle();
     }
 
-    use IsNewTrait;
+    /**
+     * Set title for current language (proxy setter).
+     *
+     * @param string $title The title for the current language.
+     *
+     * @return SkillLevelTranslation
+     */
+    public function setTitle(string $title) {
+        return $this->translate()->setTitle($title);
+    }
+
+    /**
+     * Return the entity class for transalations.
+     *
+     * @return string
+     */
+    public static function getTranslationEntityClass(): string {
+        return SkillLevelTranslation::class;
+    }
 
     /**
      * {@inheritDoc}
      */
-    protected function validateTranslationEntity(AbstractPersonalTranslation $translation): void {
+    protected function validateTranslationEntity(TranslationEntityInterface $translation): void {
         if (!$translation instanceof SkillLevelTranslation) {
             throw new \TypeError("Instance of [SkillLevelTranslation] expected!");
         }

@@ -4,11 +4,21 @@ flashes:
             new: Compétence ajoutée avec succès !
             edit: Compétence n°%id% modifiée avec succès !
             delete: Compétence n°%id% supprimée avec succès !
+        skill-level:
+            new: Le niveau de compétence a été ajouté avec succès !
+            edit: Le niveau de compétence n°%id% a été modifié avec succès !
+            delete: Le niveau de compétence n°%id% a été supprimé avec succès !
+
     error:
+        unknown: Une erreur inconnue est survenue !
         skill:
             delete:
-                resume-linked: La compétence n°%id% est associé à un ou plusieurs CV !
-                unknown: Une erreur inconnue est survenue ! La compétence n°%id% n'a pas été supprimée !
+                resume-linked: La compétence n°%id% est associée à un ou plusieurs CV !
+                failed: La compétence n°%id% n'a pas été supprimée !
+        skill-level:
+            delete:
+                resume-linked: Le niveau de compétence n°%id% est associé à un ou plusieurs CV !
+                failed: Le niveau de compétence n°%id% n'a pas été supprimé !
 
 public:
     index:
@@ -36,7 +46,16 @@ skilllevel:
     index:
         title: Liste des niveaux de compétence
         add-new: Ajouter un nouveau niveau
+    new:
+        title: Ajout d'un niveau de compétence
+    edit:
+        title: Modification du niveau de compéténce n° %id%
+    show:
+        title: Détail du niveau de compétence n° %id%
 
 form:
+    translations:
+        errors: Il y a des erreurs dans le formulaire ! Regardez dans les champs de traductions non visibles !
     labels:
+        translations: Traductions
         title: Libellé

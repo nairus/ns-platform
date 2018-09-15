@@ -2,10 +2,11 @@
 
 namespace Com\Nairus\ResumeBundle\Entity\Translation;
 
-use Com\Nairus\CoreBundle\Entity\TranslatableEntity;
+use Com\Nairus\CoreBundle\Entity\TranslatableEntityInterface;
 use Com\Nairus\CoreBundle\Entity\AbstractTranslationEntity;
 use Com\Nairus\ResumeBundle\Entity\Experience;
 use Doctrine\ORM\Mapping as ORM;
+use Prezent\Doctrine\Translatable\Annotation as Prezent;
 
 /**
  * ExperienceTransalation Entity
@@ -14,24 +15,48 @@ use Doctrine\ORM\Mapping as ORM;
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Entity
- * @ORM\Table(name="ns_experience_translations",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="ns_experience_translations_lookup_unique_idx", columns={
- *         "locale", "object_id", "field"
- *     })}
- * )
+ * @ORM\Table(name="ns_experience_translations")
  */
 class ExperienceTranslation extends AbstractTranslationEntity {
 
     /**
-     * @ORM\ManyToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Experience", inversedBy="translations")
-     * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Prezent\Translatable(targetEntity="Com\Nairus\ResumeBundle\Entity\Experience")
      */
-    protected $object;
+    protected $translatable;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return ExperienceTranslation
+     */
+    public function setDescription(string $description): ExperienceTranslation {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription(): string {
+        return $this->description;
+    }
 
     /**
      * {@inheritDoc}
      */
-    protected function validObjectClass(TranslatableEntity $object): void {
+    protected function validObjectClass(TranslatableEntityInterface $object): void {
         if (!$object instanceof Experience) {
             throw new \TypeError("Instance of [Experience] expected!");
         }

@@ -13,6 +13,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Skill controller.
@@ -32,21 +33,21 @@ class SkillController extends Controller {
     private $skillService;
 
     /**
-     * Logger service.
-     *
-     * @var LoggerInterface
+     * Trait for internationalization behaviors.
      */
-    private $logger;
+    use \Com\Nairus\CoreBundle\Traits\CommonComponentsTrait;
 
     /**
      * Constructor.
      *
      * @param SkillServiceInterface $skillService The skill service.
-     * @parem LoggerInterface       $logger       The logger service.
+     * @param LoggerInterface       $logger       The logger service.
+     * @param TranslatorInterface   $translator   The translatorService.
      */
-    public function __construct(SkillServiceInterface $skillService, LoggerInterface $logger) {
+    public function __construct(SkillServiceInterface $skillService, LoggerInterface $logger, TranslatorInterface $translator) {
         $this->skillService = $skillService;
         $this->logger = $logger;
+        $this->translator = $translator;
     }
 
     /**
@@ -102,7 +103,7 @@ class SkillController extends Controller {
             $em->flush();
 
             // Add flash message
-            $this->addFlash("success", $this->getTranslation("flashes.success.skill.new"));
+            $this->addFlash("success", $this->getTranslation("flashes.success.skill.new", [], NSResumeBundle::NAME));
             return $this->redirectToRoute('skill_show', array('id' => $skill->getId()));
         }
 
@@ -139,7 +140,7 @@ class SkillController extends Controller {
             $this->getDoctrine()->getManager()->flush();
 
             // Add flash message
-            $this->addFlash("success", $this->getTranslation("flashes.success.skill.edit", ["%id%" => $skill->getId()]));
+            $this->addFlash("success", $this->getTranslation("flashes.success.skill.edit", ["%id%" => $skill->getId()], NSResumeBundle::NAME));
             return $this->redirectToRoute('skill_show', array('id' => $skill->getId()));
         }
 
@@ -165,10 +166,10 @@ class SkillController extends Controller {
                 $this->skillService->removeSkill($skill);
 
                 // Add flash message
-                $this->addFlash("success", $this->getTranslation("flashes.success.skill.delete", ["%id%" => $idDeleted]));
+                $this->addFlash("success", $this->getTranslation("flashes.success.skill.delete", ["%id%" => $idDeleted], NSResumeBundle::NAME));
             } catch (FunctionalException $exc) {
-                $this->addFlash("error", $this->getTranslation($exc->getTranslationKey(), ["%id%" => $idDeleted]));
-                $this->logError($exc, NSResumeBundle::NAME . ":deleteAction");
+                $this->addFlash("error", $this->getTranslation($exc->getTranslationKey(), ["%id%" => $idDeleted], NSResumeBundle::NAME));
+                $this->logError($exc, self::NAME . ":deleteAction");
                 return $this->redirectToRoute('skill_show', ['id' => $skill->getId()]);
             }
         }
@@ -189,28 +190,6 @@ class SkillController extends Controller {
                         ->setMethod('DELETE')
                         ->getForm()
         ;
-    }
-
-    /**
-     * Return the translation of a message.
-     *
-     * @param string $id     The id of the translation.
-     * @param array  $params The parameters for the translation.
-     * @param string $domain The file domain where the translations is stored.
-     *
-     * @return string
-     */
-    private function getTranslation($id, $params = [], $domain = NSResumeBundle::NAME): string {
-        return $this->get("translator")->trans($id, $params, $domain);
-    }
-
-    /**
-     * Log an error
-     *
-     * @param \Exception $exc The exception to log.
-     */
-    private function logError(\Exception $exc, string $context): void {
-        $this->logger->error($exc->getMessage(), [$context => $exc]);
     }
 
 }

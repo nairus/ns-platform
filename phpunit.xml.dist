@@ -27,13 +27,13 @@
                 <!--
                     Exclude this folders because they don't need unit tests or code coverage is wrong about this components.
                     For example controllers are testes with functional tests.
-                    We don't need the test classes in the code coverae report too.
+                    We don't need the test classes in the code coverage report too.
                     And the interfaces are tested with their implementations classes.
                 -->
                 <directory>src/Com/Nairus/*Bundle/Tests</directory>
                 <directory>src/Com/Nairus/*Bundle/Controller</directory>
                 <directory>src/Com/Nairus/*Bundle/DependencyInjection</directory>
-                <directory>src/Com/Nairus/*Bundle/*/*Interface</directory>
+                <file>src/Com/Nairus/*Bundle/*/*Interface.php</file>
                 <directory>src/Com/Nairus/*Bundle/Resources</directory>
             </exclude>
         </whitelist>

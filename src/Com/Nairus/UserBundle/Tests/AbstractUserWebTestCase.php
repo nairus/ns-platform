@@ -16,7 +16,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class AbstractUserWebTestCase extends WebTestCase {
+abstract class AbstractUserWebTestCase extends WebTestCase {
 
     /**
      * Client HTTP de test.

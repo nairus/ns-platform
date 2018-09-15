@@ -121,7 +121,7 @@ class NewsContent {
      * {@inheritDoc}
      */
     public function __toString() {
-        return "[NewsContent] id: " . $this->getId() . " - " . $this->getTitle() . " - " . $this->getLocale();
+        return "[NewsContent] id: " . $this->id . " - " . $this->getTitle() . " - " . $this->getLocale();
     }
 
 }

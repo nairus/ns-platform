@@ -7,18 +7,22 @@ class AppKernel extends Kernel {
 
     public function registerBundles() {
         $bundles = [
-            new Com\Nairus\CoreBundle\NSCoreBundle(),
-            new Com\Nairus\ResumeBundle\NSResumeBundle(),
-            new Com\Nairus\UserBundle\NSUserBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new FOS\UserBundle\FOSUserBundle(),
-            new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),
+            // Let the symfony bundle load first to prevent some errors when loading other bundle which depends on the framework bundle.
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new A2lix\AutoFormBundle\A2lixAutoFormBundle(),
+            new A2lix\TranslationFormBundle\A2lixTranslationFormBundle(),
+            new Com\Nairus\CoreBundle\NSCoreBundle(),
+            new Com\Nairus\ResumeBundle\NSResumeBundle(),
+            new Com\Nairus\UserBundle\NSUserBundle(),
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
+            new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),
+            new Prezent\Doctrine\TranslatableBundle\PrezentDoctrineTranslatableBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
         ];
 

@@ -8,7 +8,7 @@
 
         {{ include("NSCoreBundle::messages.html.twig") }}
 
-        <a id="skill-add-new" class="btn btn-primary" href="{{ path('skilllevel_new') }}">
+        <a id="skilllevel-add-new" class="btn btn-primary" href="{{ path('skilllevel_new') }}">
             <i class="fas fa-plus"></i>
             {{ "skilllevel.index.add-new" | trans({}, "NSResumeBundle")  }}
         </a>
@@ -21,29 +21,31 @@
                 {% for item in items %}
                     {% set skillLevel = item['entity'] %}
                     {% set delete_form = item['deleteForm'] %}
-                    <div class="col-md-3 col-sm-6 border border-primary rounded mr-2 mb-2">
-                        <p class="text-center">{{ skillLevel.title }}</p>
-                        <div class="p-2 bd-highlight">
-                            <a class="btn btn-primary"
-                               href="{{ path('skilllevel_edit', { 'id': skillLevel.id }) }}">
-                                <i class="fas fa-pencil-alt"></i>
-                                {{ "actions.edit" | trans }}
-                            </a>
-                        </div>
-                        <div class="p-2 bd-highlight">
-                            <a class="btn btn-secondary"
-                               href="{{ path('skilllevel_show', { 'id': skillLevel.id }) }}">
-                                <i class="far fa-eye"></i>
-                                {{ "actions.show" | trans}}
-                            </a>
-                        </div>
-                        <div class="p-2 bd-highlight">
-                            {{ form_start(delete_form) }}
-                            <button class="btn btn-danger">
-                                <i class="fas fa-trash-alt"></i>
-                                {{ "actions.delete" | trans}}
-                            </button>
-                            {{ form_end(delete_form) }}
+                    <div class="col-md-3 col-sm-6 p-0">
+                        <div class="shadow p-3 mb-5 mx-1 bg-white rounded border border-primary">
+                            <p class="text-center">{{ skillLevel.title }}</p>
+                            <div class="actions p-2 bd-highlight">
+                                <a class="btn btn-primary"
+                                   href="{{ path('skilllevel_edit', { 'id': skillLevel.id }) }}">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    {{ "actions.edit" | trans }}
+                                </a>
+                            </div>
+                            <div class="actions p-2 bd-highlight">
+                                <a class="btn btn-secondary"
+                                   href="{{ path('skilllevel_show', { 'id': skillLevel.id }) }}">
+                                    <i class="far fa-eye"></i>
+                                    {{ "actions.show" | trans}}
+                                </a>
+                            </div>
+                            <div class="actions p-2 bd-highlight">
+                                {{ form_start(delete_form) }}
+                                <button class="btn btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                    {{ "actions.delete" | trans}}
+                                </button>
+                                {{ form_end(delete_form) }}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

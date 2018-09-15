@@ -35,10 +35,12 @@ class ExperienceTest extends KernelTestCase {
 
     /**
      * Test the implementation of the entity.
+     *
+     * @return void
      */
-    public function testImplementation() {
+    public function testImplementation(): void {
         $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity", $this->object, "1. The entity musts be of type [AbstractTranslatableEntity]");
-        $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\TranslatableEntity", $this->object, "2. The entity musts implement [TranslatableEntity] interface");
+        $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\TranslatableEntityInterface", $this->object, "2. The entity musts implement [TranslatableEntityInterface] interface");
     }
 
     /**
@@ -46,9 +48,11 @@ class ExperienceTest extends KernelTestCase {
      *
      * @expectedException \TypeError
      * @expectedExceptionMessage Instance of [ExperienceTranslation] expected!
+     *
+     * @return void
      */
-    public function testAddBadTranslation() {
-        $this->object->addTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity("en", "description", "bad translation"));
+    public function testAddBadTranslation(): void {
+        $this->object->addTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity());
     }
 
     /**
@@ -56,23 +60,27 @@ class ExperienceTest extends KernelTestCase {
      *
      * @expectedException \TypeError
      * @expectedExceptionMessage Instance of [ExperienceTranslation] expected!
+     *
+     * @return void
      */
-    public function testRemoveBadTranslation() {
-        $this->object->removeTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity("en", "description", "bad translation"));
+    public function testRemoveBadTranslation(): void {
+        $this->object->removeTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity());
     }
 
     /**
+     * Test the getter/setter of the company property.
+     *
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setCompany
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::getCompany
+     *
+     * @return void
      */
-    public function testGetAndSetCompany() {
+    public function testGetAndSetCompany(): void {
         try {
             $this->object->setCompany("Nairus");
             $this->assertSame("Nairus", $this->object->getCompany());
-        } catch (\Exception $exc) {
-            $this->fail("No exception has to be thrown: " . $exc->getMessage());
-        } catch (\Error $err) {
-            $this->fail("No error has to be thrown: " . $err->getMessage());
+        } catch (\Throwable $err) {
+            $this->fail("No exception or error has to be thrown: " . $err->getMessage());
         }
     }
 
@@ -80,23 +88,27 @@ class ExperienceTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setCompany
      *
      * @expectedException \TypeError
+     *
+     * @return void
      */
-    public function testSetCompanyWithNullParam() {
+    public function testSetCompanyWithNullParam(): void {
         $this->object->setCompany(null);
     }
 
     /**
+     * Test the getter/setter of the location property.
+     *
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setLocation
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::getLocation
+     *
+     * @return void
      */
-    public function testGetAndSetLocation() {
+    public function testGetAndSetLocation(): void {
         try {
             $this->object->setLocation("Marseille");
             $this->assertSame("Marseille", $this->object->getLocation());
-        } catch (\Exception $exc) {
-            $this->fail("No exception has to be thrown: " . $exc->getMessage());
-        } catch (\Error $err) {
-            $this->fail("No error has to be thrown: " . $err->getMessage());
+        } catch (\Throwable $err) {
+            $this->fail("No exception or error has to be thrown: " . $err->getMessage());
         }
     }
 
@@ -104,47 +116,27 @@ class ExperienceTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setLocation
      *
      * @expectedException \TypeError
+     *
+     * @return void
      */
     public function testSetLocationWithNullParam() {
         $this->object->setLocation(null);
     }
 
     /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Experience::setDescription
-     * @covers Com\Nairus\ResumeBundle\Entity\Experience::getDescription
-     */
-    public function testGetAndSetSetDescription() {
-        try {
-            $this->object->setDescription("Description");
-            $this->assertSame("Description", $this->object->getDescription());
-        } catch (\Exception $exc) {
-            $this->fail("No exception has to be thrown: " . $exc->getMessage());
-        } catch (\Error $err) {
-            $this->fail("No error has to be thrown: " . $err->getMessage());
-        }
-    }
-
-    /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Experience::setDescription
+     * Test the getter/setter of startMonth property.
      *
-     * @expectedException \TypeError
-     */
-    public function testSetDescriptionWithNullParam() {
-        $this->object->setDescription(null);
-    }
-
-    /**
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setStartMonth
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::getStartMonth
+     *
+     * @return void
      */
-    public function testGetAndSetSetStartMonth() {
+    public function testGetAndSetSetStartMonth(): void {
         try {
             $this->object->setStartMonth(1);
             $this->assertSame(1, $this->object->getStartMonth());
-        } catch (\Exception $exc) {
-            $this->fail("No exception has to be thrown: " . $exc->getMessage());
-        } catch (\Error $err) {
-            $this->fail("No error has to be thrown: " . $err->getMessage());
+        } catch (\Throwable $err) {
+            $this->fail("No exception or error has to be thrown: " . $err->getMessage());
         }
     }
 
@@ -152,23 +144,25 @@ class ExperienceTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setStartMonth
      *
      * @expectedException \TypeError
+     *
+     * @return void
      */
-    public function testSetStartMonthWithNullParam() {
+    public function testSetStartMonthWithNullParam(): void {
         $this->object->setStartMonth(null);
     }
 
     /**
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setEndMonth
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::getEndMonth
+     *
+     * @return void
      */
-    public function testGetAndSetSetEndMonth() {
+    public function testGetAndSetSetEndMonth(): void {
         try {
             $this->object->setEndMonth(12);
             $this->assertSame(12, $this->object->getEndMonth());
-        } catch (\Exception $exc) {
-            $this->fail("No exception has to be thrown: " . $exc->getMessage());
-        } catch (\Error $err) {
-            $this->fail("No error has to be thrown: " . $err->getMessage());
+        } catch (\Throwable $err) {
+            $this->fail("No exception or error has to be thrown: " . $err->getMessage());
         }
     }
 
@@ -176,23 +170,25 @@ class ExperienceTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setEndMonth
      *
      * @expectedException \TypeError
+     *
+     * @return void
      */
-    public function testSetEndMonthWithNullParam() {
+    public function testSetEndMonthWithNullParam(): void {
         $this->object->setEndMonth(null);
     }
 
     /**
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setStartYear
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::getStartYear
+     *
+     * @return void
      */
-    public function testGetAndSetSetStartYear() {
+    public function testGetAndSetSetStartYear(): void {
         try {
             $this->object->setStartYear(2017);
             $this->assertSame(2017, $this->object->getStartYear());
-        } catch (\Exception $exc) {
-            $this->fail("No exception has to be thrown: " . $exc->getMessage());
-        } catch (\Error $err) {
-            $this->fail("No error has to be thrown: " . $err->getMessage());
+        } catch (\Throwable $err) {
+            $this->fail("No exception or error has to be thrown: " . $err->getMessage());
         }
     }
 
@@ -200,23 +196,25 @@ class ExperienceTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setStartYear
      *
      * @expectedException \TypeError
+     *
+     * @return void
      */
-    public function testSetStartYearWithNullParam() {
+    public function testSetStartYearWithNullParam(): void {
         $this->object->setStartYear(null);
     }
 
     /**
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setEndYear
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::getEndYear
+     *
+     * @return void
      */
-    public function testGetAndSetSetEndYear() {
+    public function testGetAndSetSetEndYear(): void {
         try {
             $this->object->setEndYear(2017);
             $this->assertSame(2017, $this->object->getEndYear());
-        } catch (\Exception $exc) {
-            $this->fail("No exception has to be thrown: " . $exc->getMessage());
-        } catch (\Error $err) {
-            $this->fail("No error has to be thrown: " . $err->getMessage());
+        } catch (\Throwable $exc) {
+            $this->fail("No exception or error has to be thrown: " . $exc->getMessage());
         }
     }
 
@@ -224,24 +222,26 @@ class ExperienceTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setEndYear
      *
      * @expectedException \TypeError
+     *
+     * @return void
      */
-    public function testSetEndYearWithNullParam() {
+    public function testSetEndYearWithNullParam(): void {
         $this->object->setEndYear(null);
     }
 
     /**
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setCurrentJob
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::getCurrentJob
+     *
+     * @return void
      */
-    public function testGetAndSetCurrentJob() {
+    public function testGetAndSetCurrentJob(): void {
         try {
             $this->assertSame(false, $this->object->getCurrentJob());
             $this->object->setCurrentJob(true);
             $this->assertSame(true, $this->object->getCurrentJob());
-        } catch (\Exception $exc) {
-            $this->fail("No exception has to be thrown: " . $exc->getMessage());
-        } catch (\Error $err) {
-            $this->fail("No error has to be thrown: " . $err->getMessage());
+        } catch (\Throwable $exc) {
+            $this->fail("No exception or error has to be thrown: " . $exc->getMessage());
         }
     }
 
@@ -249,25 +249,38 @@ class ExperienceTest extends KernelTestCase {
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setCurrentJob
      *
      * @expectedException \TypeError
+     *
+     * @return void
      */
-    public function testSetCurrentJobWithNullParam() {
+    public function testSetCurrentJobWithNullParam(): void {
         $this->object->setCurrentJob(null);
     }
 
     /**
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setResume
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::getResume
+     *
+     * @return void
      */
-    public function testGetAndSetSetResume() {
+    public function testGetAndSetSetResume(): void {
         try {
             $resume = new Resume();
             $this->object->setResume($resume);
             $this->assertSame($resume, $this->object->getResume());
-        } catch (\Exception $exc) {
-            $this->fail("No exception has to be thrown: " . $exc->getMessage());
-        } catch (\Error $err) {
-            $this->fail("No error has to be thrown: " . $err->getMessage());
+        } catch (\Throwable $exc) {
+            $this->fail("No exception or error has to be thrown: " . $exc->getMessage());
         }
+    }
+
+    /**
+     * Test the <code>getTranslationEntityClass</code> static method.
+     *
+     * @covers Com\Nairus\ResumeBundle\Entity\Experience::getTranslationEntityClass
+     *
+     * @return void
+     */
+    public function testGetTranslationEntityClass(): void {
+        $this->assertSame(Translation\ExperienceTranslation::class, Experience::getTranslationEntityClass(), "1. The translation class expected is not ok.");
     }
 
 }

@@ -119,10 +119,12 @@ class EducationCollectionTest extends KernelTestCase {
      */
     public function testOffsetGetAndSet() {
         $entity1 = new Education();
-        $entity1->setDescription("Description 1");
+        $entity1->setCurrentLocale("fr")
+                ->setDescription("Description 1");
 
         $entity2 = new Education();
-        $entity2->setDescription("Description 2");
+        $entity2->setCurrentLocale("fr")
+                ->setDescription("Description 2");
 
         $this->object[] = $entity1;
         $this->object[] = $entity2;

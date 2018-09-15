@@ -22,9 +22,10 @@ class LoadResume extends AbstractFixture implements OrderedFixtureInterface {
         $author = $this->getReference("user_" . UserRolesEnum::AUTHOR);
         $resume = new Resume();
         $resume
-                ->setTitle("Default title")
                 ->setIp("127.0.0.1")
-                ->setAuthor($author);
+                ->setAuthor($author)
+                ->setCurrentLocale("fr")
+                ->setTitle("Titre par défaut");
 
         $manager->persist($resume);
         $manager->flush();

@@ -31,7 +31,7 @@ interface SkillServiceInterface {
      *
      * @param Skill $skill The current skill.
      *
-     * @throw <code>FunctionalException</code> in case of deletion error.
+     * @throw <code>FunctionalException</code> if an errror occured.
      */
-    public function removeSkill(Skill $skill);
+    public function removeSkill(Skill $skill): void;
 }

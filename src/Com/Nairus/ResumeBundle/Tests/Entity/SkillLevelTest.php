@@ -2,7 +2,9 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Test for SkillLevel entity.
@@ -10,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class SkillLevelTest extends KernelTestCase {
+class SkillLevelTest extends AbstractKernelTestCase {
 
     /**
      * @var SkillLevel
@@ -36,12 +38,18 @@ class SkillLevelTest extends KernelTestCase {
     /**
      * Test the implementation of the entity.
      *
-     * @covers \Com\Nairus\ResumeBundle\Entity\SkillLevel::isNew
      */
     public function testImplementation() {
         $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity", $this->object, "1. The entity musts be of type [AbstractTranslatableEntity]");
-        $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\TranslatableEntity", $this->object, "2. The entity musts implement [TranslatableEntity] interface");
-        $this->assertTrue($this->object->isNew(), "3. The entity has to be new.");
+    }
+
+    /**
+     * Test if the entity has the IsNew Trait.
+     *
+     * @covers \Com\Nairus\ResumeBundle\Entity\SkillLevel::isNew
+     */
+    public function testIsNew() {
+        $this->assertTrue($this->object->isNew(), "1. The entity has to be new.");
     }
 
     /**
@@ -51,7 +59,7 @@ class SkillLevelTest extends KernelTestCase {
      * @expectedExceptionMessage Instance of [SkillLevelTranslation] expected!
      */
     public function testAddBadTranslation() {
-        $this->object->addTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity("en", "description", "bad translation"));
+        $this->object->addTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity());
     }
 
     /**
@@ -61,31 +69,47 @@ class SkillLevelTest extends KernelTestCase {
      * @expectedExceptionMessage Instance of [SkillLevelTranslation] expected!
      */
     public function testRemoveBadTranslation() {
-        $this->object->removeTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity("en", "description", "bad translation"));
+        $this->object->removeTranslation(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslationEntity());
     }
 
     /**
-     * @covers Com\Nairus\ResumeBundle\Entity\SkillLevel::setTitle
-     * @covers Com\Nairus\ResumeBundle\Entity\SkillLevel::getTitle
-     */
-    public function testGetAndSetTitle() {
-        try {
-            $title = $this->object->getTitle();
-            $this->assertNull($title, "1. The title has to be null.");
-            $this->object->setTitle("Title");
-            $this->assertSame("Title", $this->object->getTitle());
-        } catch (\Exception $exc) {
-            $this->fail("2. No exception expected:" . $exc->getMessage());
-        }
-    }
-
-    /**
-     * @covers Com\Nairus\ResumeBundle\Entity\SkillLevel::setTitle
+     * Test the <code>getTranslationEntityClass</code> static method.
      *
-     * @expectedException \TypeError
+     * @covers Com\Nairus\ResumeBundle\Entity\SkillLevel::getTranslationEntityClass
+     *
+     * @return void
      */
-    public function testSetTitleWithNullParam() {
-        $this->object->setTitle(null);
+    public function testGetTranslationEntityClass(): void {
+        $this->assertSame(Translation\SkillLevelTranslation::class, SkillLevel::getTranslationEntityClass(), "1. The translation class expected is not ok.");
+    }
+
+    /**
+     * Test the validation of the entity with his translation.
+     *
+     * @return void
+     */
+    public function testValidationWithTranslation(): void {
+        /* @var $validator \Symfony\Component\Validator\Validator\ValidatorInterface */
+        $validator = static::$container->get("validator");
+
+        $skillLevel = new SkillLevel();
+        $skillLevel->translate("fr")->setTitle("Bad");
+        $skillLevel->translate("en")->setTitle("");
+        $skillLevel->translate("ru")->setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tempus, nulla a congue viverra metus. Too long!");
+
+        $errors = $validator->validate($skillLevel);
+        $this->assertCount(3, $errors, "1.1. 3 errors is expected.");
+
+        /* @var $error1 \Symfony\Component\Validator\ConstraintViolation */
+        $error1 = $errors[0];
+        /* @var $error2 \Symfony\Component\Validator\ConstraintViolation */
+        $error2 = $errors[1];
+        /* @var $error3 \Symfony\Component\Validator\ConstraintViolation */
+        $error3 = $errors[2];
+
+        $this->assertInstanceOf(Length::class, $error1->getConstraint(), "1.2. The first error has to be a Length constraint.");
+        $this->assertInstanceOf(NotBlank::class, $error2->getConstraint(), "1.3. The second error has to be a NotNull constraint.");
+        $this->assertInstanceOf(Length::class, $error3->getConstraint(), "1.4. The third error has to be a Length constraint.");
     }
 
 }

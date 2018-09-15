@@ -2,11 +2,15 @@
 
 namespace Com\Nairus\ResumeBundle\Controller;
 
+use Com\Nairus\CoreBundle\Exception\FunctionalException;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\SkillLevel;
+use Com\Nairus\ResumeBundle\Service\SkillLevelServiceInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Skilllevel controller.
@@ -19,13 +23,38 @@ class SkillLevelController extends Controller {
     private const NAME = NSResumeBundle::NAME . ":SkillLevel";
 
     /**
+     * Skill level service.
+     *
+     * @var SkillLevelServiceInterface
+     */
+    private $skillLevelService;
+
+    /**
+     * Trait for internationalization behaviors.
+     */
+    use \Com\Nairus\CoreBundle\Traits\CommonComponentsTrait;
+
+    /**
+     * Constructor.
+     *
+     * @param SkillLevelServiceInterface $skillLevelService The skill level service.
+     * @param LoggerInterface            $logger             The logger service.
+     * @param TranslatorInterface        $translator         The translatorService.
+     */
+    public function __construct(SkillLevelServiceInterface $skillLevelService, LoggerInterface $logger, TranslatorInterface $translator) {
+        $this->skillLevelService = $skillLevelService;
+        $this->logger = $logger;
+        $this->translator = $translator;
+    }
+
+    /**
      * Lists all skillLevel entities.
      *
      * @return Response
      */
     public function indexAction(): Response {
+        // Get the collection of SkillLevel.
         $em = $this->getDoctrine()->getManager();
-
         $skillLevels = $em->getRepository(static::NAME)->findAll();
 
         // Foreach entity, we create a delete form.
@@ -45,6 +74,9 @@ class SkillLevelController extends Controller {
      * @return Response
      */
     public function newAction(Request $request): Response {
+        // Get the defaultLocale
+        $defaultLocale = $this->container->getParameter('kernel.default_locale');
+
         $skillLevel = new Skilllevel();
         $form = $this->createForm('Com\Nairus\ResumeBundle\Form\SkillLevelType', $skillLevel);
         $form->handleRequest($request);
@@ -54,12 +86,15 @@ class SkillLevelController extends Controller {
             $em->persist($skillLevel);
             $em->flush();
 
+            $this->addFlash("success", $this->getTranslation("flashes.success.skill-level.new", [], NSResumeBundle::NAME));
+
             return $this->redirectToRoute('skilllevel_index');
         }
 
         return $this->render(static::NAME . ':new.html.twig', array(
                     'skillLevel' => $skillLevel,
                     'form' => $form->createView(),
+                    'defaultLocale' => $defaultLocale,
         ));
     }
 
@@ -83,6 +118,9 @@ class SkillLevelController extends Controller {
      * @return Response
      */
     public function editAction(Request $request, SkillLevel $skillLevel): Response {
+        // Get the defaultLocale
+        $defaultLocale = $this->container->getParameter('kernel.default_locale');
+
         $deleteForm = $this->createDeleteForm($skillLevel);
         $editForm = $this->createForm('Com\Nairus\ResumeBundle\Form\SkillLevelType', $skillLevel);
         $editForm->handleRequest($request);
@@ -90,13 +128,15 @@ class SkillLevelController extends Controller {
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash("success", $this->getTranslation("flashes.success.skill-level.edit", ["%id%" => $skillLevel->getId()], NSResumeBundle::NAME));
             return $this->redirectToRoute('skilllevel_index');
         }
 
         return $this->render(static::NAME . ':edit.html.twig', array(
                     'skillLevel' => $skillLevel,
-                    'edit_form' => $editForm->createView(),
+                    'form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
+                    'defaultLocale' => $defaultLocale,
         ));
     }
 
@@ -110,9 +150,14 @@ class SkillLevelController extends Controller {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($skillLevel);
-            $em->flush();
+            $id = $skillLevel->getId();
+            try {
+                $this->skillLevelService->removeSkillLevel($skillLevel);
+                $this->addFlash("success", $this->getTranslation("flashes.success.skill-level.delete", ["%id%" => $id], NSResumeBundle::NAME));
+            } catch (FunctionalException $exc) {
+                $this->addFlash("error", $this->getTranslation($exc->getTranslationKey(), ["%id%" => $id], NSResumeBundle::NAME));
+                $this->logError($exc, self::NAME . ":deleteAction");
+            }
         }
 
         return $this->redirectToRoute('skilllevel_index');

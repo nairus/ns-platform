@@ -7,6 +7,7 @@ use Com\Nairus\ResumeBundle\Exception\ResumeListException;
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeOnline;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
 
 /**
  * Test of ResumeService.
@@ -39,6 +40,8 @@ class ResumeServiceTest extends AbstractKernelTestCase {
         // Load test fixtures.
         $loadSkill = new LoadSkill();
         $loadSkill->load(static::$em);
+        $loadSkillLevel = new LoadSkillLevel();
+        $loadSkillLevel->load(static::$em);
     }
 
     /**
@@ -48,6 +51,8 @@ class ResumeServiceTest extends AbstractKernelTestCase {
         // Remove test fixtures.
         $loadSkill = new LoadSkill();
         $loadSkill->remove(static::$em);
+        $loadSkillLevel = new LoadSkillLevel();
+        $loadSkillLevel->remove(static::$em);
     }
 
     /**

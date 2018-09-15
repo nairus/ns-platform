@@ -4,11 +4,20 @@ flashes:
             new: Skill added successfully!
             edit: Skill No. %id% modified successfully!
             delete: Skill No. %id% deleted successfully!
+        skill-level:
+            new: Skill level added successfully!
+            edit: Skill level No. %id% modified successfully!
+            delete: Skill level No. %id% deleted successfully!
     error:
+        unknown: An unknown error occured!
         skill:
             delete:
                 resume-linked: The skill No. %id% is linked to one or many resumes!
-                unknown: An unknown error occured! The skill No. %id% has not been deleted!
+                failed: The skill No. %id% has not been deleted!
+        skill-level:
+            delete:
+                resume-linked: The skill level No. %id% is linked to one or many resumes!
+                failed: The skill level No. %id% has not been deleted!
 
 public:
     index:
@@ -36,7 +45,16 @@ skilllevel:
     index:
         title: Skill levels list
         add-new: Add a new level
+    new:
+        title: Add a Skill level
+    edit:
+        title: Modification of the skill level No. %id%
+    show:
+        title: Detail of the skill level No. %id%
 
 form:
+    translations:
+        errors: There is some errors in the form! See in the hidden translation fields!
     labels:
+        translations: Translations
         title: Label

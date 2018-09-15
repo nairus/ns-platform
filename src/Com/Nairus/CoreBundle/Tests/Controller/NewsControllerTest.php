@@ -15,6 +15,18 @@ use Com\Nairus\CoreBundle\Tests\DataFixtures\Unit\LoadNewsPublished;
 class NewsControllerTest extends AbstractUserWebTestCase {
 
     /**
+     * {@inheritDoc}
+     */
+    protected function tearDown() {
+        // Clean fixtures after each tests.
+        $entityManager = $this->getEntityManager();
+        $loadNewsPublished = new LoadNewsPublished();
+        $loadNewsPublished->remove($entityManager, TRUE);
+
+        parent::tearDown();
+    }
+
+    /**
      * Test the access control on "/admin/news" routes for user.
      *
      * @covers Com\Nairus\CoreBundle\Controller\NewsController::indexAction
@@ -218,6 +230,14 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals("/admin/news", $client->getRequest()->getRequestUri(), "1.2 Unexpected Request URI");
         $crawler = $client->click($crawler->selectLink('Ajouter une news')->link());
 
+        // Check the actions block.
+        $this->assertEquals(2, $crawler->filter("#admin-container .actions")->children()->count(), "1.3 The actions div has to contain 2 buttons");
+        $actionsRow = $crawler->filter("#admin-container .actions")->html();
+        $this->assertContains('<i class="fas fa-chevron-left"></i>', $actionsRow, "1.4 The [return] flag is expected.");
+        $this->assertContains('<i class="far fa-save"></i>', $actionsRow, "1.5 The [save] flag is expected.");
+        $this->assertContains('Retour à la liste', $actionsRow, "1.6 The return label in fr is not ok.");
+        $this->assertContains('Sauvegarder', $actionsRow, "1.7 The save label in fr is not ok .");
+
         // Fill in the form and submit it
         $form = $crawler->selectButton('Sauvegarder')->form(array(
             'com_nairus_corebundle_newscontent[title]' => 'Test titre',
@@ -229,21 +249,29 @@ class NewsControllerTest extends AbstractUserWebTestCase {
 
         $client->submit($form);
         $crawler = $client->followRedirect();
-        $this->assertRegExp("~^/admin/news/[0-9]+/show$~", $client->getRequest()->getRequestUri(), "1.3 Unexpected Request URI");
+        $this->assertRegExp("~^/admin/news/[0-9]+/show$~", $client->getRequest()->getRequestUri(), "2.1 Unexpected Request URI");
 
         // Check data in the show view
-        $this->assertGreaterThan(0, $crawler->filter('h5:contains("Test titre")')->count(), '2.1 Missing element td:contains("Test titre")');
+        $this->assertGreaterThan(0, $crawler->filter('h5:contains("Test titre")')->count(), '2.2 Missing element td:contains("Test titre")');
 
         // Check the flash message
-        $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "2.2 The [add] flash message is missing.");
-        $this->assertContains("News ajoutée avec succès !", $crawler->filter('.message-container')->text(), "2.3 The [add] flash message is not ok.");
+        $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "2.3 The [add] flash message is missing.");
+        $this->assertContains("News ajoutée avec succès !", $crawler->filter('.message-container')->text(), "2.4 The [add] flash message is not ok.");
 
         // Edit the entity
         $crawler = $client->click($crawler->selectLink('Modifier')->link());
-        $this->assertRegExp("~^/admin/news/[0-9]+/edit~", $client->getRequest()->getRequestUri(), "2.4 The request uri expected is not ok");
+        $this->assertRegExp("~^/admin/news/[0-9]+/edit~", $client->getRequest()->getRequestUri(), "2.5 The request uri expected is not ok");
         $form = $crawler->selectButton('Sauvegarder')->form(array(
             'com_nairus_corebundle_newscontent[title]' => 'Foo'
         ));
+
+        // Check the actions block.
+        $this->assertEquals(3, $crawler->filter("#admin-container .actions")->children()->count(), "2.6 The actions div has to contain 3 buttons");
+        $actionsRow = $crawler->filter("#admin-container .actions")->html();
+        $this->assertContains('Voir les détails', $actionsRow, "2.7 The show label is not ok.");
+        $this->assertContains('Retour à la liste', $actionsRow, "2.8 The return label in fr is not ok.");
+        $this->assertContains('Sauvegarder', $actionsRow, "2.9 The save label in fr is not ok .");
+        $this->assertContains('<i class="far fa-eye"></i>', $actionsRow, "2.10 The [show] flag is expected.");
 
         $client->submit($form);
         $crawler = $client->followRedirect();
@@ -301,8 +329,15 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->followRedirect();
 
         // Check the entity has been delete on the list
-        $this->assertEquals(1, $crawler->filter("#news-container > table > tbody > tr")->count(), "2. The table should contain 1 row");
-
+        $this->assertEquals(1, $crawler->filter("#news-container > table > tbody > tr")->count(), "2.1 The table should contain 1 row");
+        $children = $crawler->filter("#news-container > table > tbody > tr > td > .actions")->children();
+        $this->assertCount(3, $children, "2.2 Three actions buttons are expected.");
+        $this->assertContains('Voir les détails', $children->eq(1)->text(), "2.7 The show label is not ok.");
+        $this->assertContains('Modifier', $children->eq(0)->text(), "2.8 The edit label in fr is not ok.");
+        $this->assertContains('Supprimer', $children->eq(2)->text(), "2.9 The delete label in fr is not ok .");
+        $this->assertContains('<i class="far fa-eye"></i>', $children->eq(1)->html(), "2.10 The [show] flag is expected.");
+        $this->assertContains('<i class="fas fa-pencil-alt"></i>', $children->eq(0)->html(), "2.11 The [edit] flag is expected.");
+        $this->assertContains('<i class="fas fa-trash-alt"></i>', $children->eq(2)->html(), "2.12 The [delete] flag is expected.");
         // Delete the second entity.
         $client->submit($crawler->selectButton('Supprimer')->form());
         $crawler = $client->followRedirect();

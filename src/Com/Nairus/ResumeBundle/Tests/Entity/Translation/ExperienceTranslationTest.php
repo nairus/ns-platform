@@ -13,12 +13,32 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class ExperienceTranslationTest extends KernelTestCase {
 
     /**
-     * Test the implementation of the entity.
+     * @var ExperienceTranslation
      */
-    public function testImplementation() {
-        $entity = new ExperienceTranslation("fr", "description", "Description FR");
-        $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\AbstractTranslationEntity", $entity, "1. The entity musts be an instance of [AbstractTranslationEntity].");
-        $this->assertInstanceOf("Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation", $entity, "2. The entity musts be an instance of [AbstractPersonalTranslation].");
+    private $object;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown() {
+        parent::tearDown();
+        unset($this->object);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp() {
+        $this->object = new ExperienceTranslation();
+    }
+
+    /**
+     * Test the implementation of the entity.
+     *
+     * @return void
+     */
+    public function testImplementation(): void {
+        $this->assertInstanceOf("Com\Nairus\CoreBundle\Entity\AbstractTranslationEntity", $this->object, "1. The entity musts be an instance of [AbstractTranslationEntity].");
     }
 
     /**
@@ -26,9 +46,39 @@ class ExperienceTranslationTest extends KernelTestCase {
      *
      * @expectedException \TypeError
      * @expectedExceptionMessage Instance of [Experience] expected!
+     *
+     * @return void
      */
-    public function testBadObjectInstance() {
-        new ExperienceTranslation("fr", "description", "Description FR", new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslatableEntity());
+    public function testBadObjectInstance(): void {
+        $this->object->setTranslatable(new \Com\Nairus\CoreBundle\Tests\Entity\Mock\BadTranslatableEntity());
+    }
+
+    /**
+     * Test the getter/setter of description property.
+     *
+     * @covers Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation::setDescription
+     * @covers Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation::getDescription
+     *
+     * @return void
+     */
+    public function testGetAndSetSetDescription(): void {
+        try {
+            $this->object->setDescription("Description");
+            $this->assertSame("Description", $this->object->getDescription());
+        } catch (\Throwable $err) {
+            $this->fail("No exception or error has to be thrown: " . $err->getMessage());
+        }
+    }
+
+    /**
+     * @covers Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation::setDescription
+     *
+     * @expectedException \TypeError
+     *
+     * @return void
+     */
+    public function testSetDescriptionWithNullParam() {
+        $this->object->setDescription(null);
     }
 
 }

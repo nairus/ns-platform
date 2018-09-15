@@ -9,6 +9,7 @@ use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeOnline;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
 
 /**
  * Test of ResumeRepository.
@@ -42,13 +43,15 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
      */
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
+        // Load test fixtures.
+        $loadSkill = new LoadSkill();
+        $loadSkillLevel = new LoadSkillLevel();
+        $loadSkill->load(static::$em);
+        $loadSkillLevel->load(static::$em);
+
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":Resume");
         static::$userManager = static::$container->get("fos_user.user_manager");
         static::$loadResumeOnline = new LoadResumeOnline(static::$userManager);
-
-        // Load test fixtures.
-        $loadSkill = new LoadSkill();
-        $loadSkill->load(static::$em);
     }
 
     /**
@@ -56,6 +59,9 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
      */
     public static function tearDownAfterClass() {
         // Remove test fixtures.
+        $loadSkillLevel = new LoadSkillLevel();
+        $loadSkillLevel->remove(static::$em);
+
         $loadSkill = new LoadSkill();
         $result = $loadSkill->remove(static::$em);
         if ($result <= 0) {
@@ -70,9 +76,12 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
         /* @var $author UserInterface */
         $author = static::$userManager->findUserByUsername("author");
         $newResume = new Resume();
-        $newResume->setIp("127.0.0.1")
+        $newResume
+                ->setCurrentLocale("fr")
+                ->setIp("127.0.0.1")
+                ->setAuthor($author)
                 ->setTitle("Test")
-                ->setAuthor($author);
+        ;
         static::$em->persist($newResume);
         static::$em->flush();
         static::$em->clear();
@@ -81,16 +90,16 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
         $resumes = static::$repository->findAll();
         /* @var $entity Resume */
         $entity = $resumes[1];
+        $entity->setCurrentLocale("fr");
         $this->assertCount(2, $resumes, "1.1. Two entities are expected in database.");
         $this->assertSame($newResume->getId(), $entity->getId(), "1.2. The entity id has to be the identical.");
-        $this->assertSame("test", $entity->getSlug(), "1.3. The [slug] field has to be set automaticaly.");
-        $this->assertTrue($entity->hasTranslation("fr", "title"), "1.4. The entity musts have a default translation for [title] field and [fr] locale.");
-        $this->assertSame("Test", $entity->getTranslation("fr", "title"), "1.5 The translation for [title] field has to be identical.");
-        $this->assertTrue($entity->hasTranslation("fr", "slug"), "1.6. The entity musts have a default translation for [slug] field and [fr] locale.");
-        $this->assertSame("test", $entity->getTranslation("fr", "slug"), "1.7 The translation for [slug] field has to be identical.");
+        $this->assertTrue($entity->hasTranslation("fr"), "1.3. The entity musts have a default translation for [title] field and [fr] locale.");
+        $this->assertSame("test", $entity->getSlug(), "1.4. The [slug] field has to be set automaticaly.");
+        $this->assertSame("Test", $entity->getTitle(), "1.5 The translation for [title] field has to be identical.");
 
         // Update test.
-        $entity->setAnonymous(true)
+        $entity
+                ->setAnonymous(true)
                 ->setStatus(ResumeStatusEnum::OFFLINE_TO_PUBLISHED)
                 ->setTitle("Test MAJ");
         static::$em->flush();
@@ -98,24 +107,21 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
 
         /* @var $resume Resume */
         $resume = static::$repository->find($entity->getId());
+        $resume->setCurrentLocale("fr");
         $this->assertSame(true, $resume->getAnonymous(), "2.1. The [anomymous] fiels has to be updated.");
         $this->assertSame(ResumeStatusEnum::OFFLINE_TO_PUBLISHED, $resume->getStatus(), "2.2. The [status] field has to be updated.");
         $this->assertSame("Test MAJ", $resume->getTitle(), "2.3. The [title] field has to be updated.");
         $this->assertInstanceOf(\DateTimeInterface::class, $resume->getUpdatedAt(), "2.4. The update date has to be automaticaly updated.");
-        $this->assertSame("Test MAJ", $resume->getTranslation("fr", "title"), "2.5 The translation for [title] field has to be updated.");
-        $this->assertSame("test-maj", $resume->getTranslation("fr", "slug"), "2.6 The translation for [slug] field has to be updated.");
+        $this->assertSame("test-maj", $resume->getSlug("slug"), "2.5 The translation for [slug] field has to be updated.");
 
         // Test translations
-        $this->assertFalse($resume->hasTranslation("en", "title"), "3.1. The entity musts not have a [en] translation for [title] field.");
-        $this->assertFalse($resume->hasTranslation("en", "slug"), "3.2. The entity musts not have a [en] translation for [slug] field.");
-        $resume->addTranslation(new ResumeTranslation("en", "title", "Title in EN", $resume))
-                ->addTranslation(new ResumeTranslation("en", "slug", "Title in EN", $resume));
+        $this->assertFalse($resume->hasTranslation("en"), "3.1. The entity musts not have a [en] translation for [title] field.");
+        $resume->translate("en")->setTitle("Title in EN");
         static::$em->flush($resume);
         static::$em->refresh($resume);
-        $this->assertTrue($resume->hasTranslation("en", "title"), "3.3. The entity musts have a [en] translation for [title] field.");
-        $this->assertSame("Title in EN", $resume->getTranslation("en", "title"), "3.4. The translation in [en] for [title] field has to be identical.");
-        $this->assertTrue($resume->hasTranslation("en", "slug"), "3.5. The entity musts have a [en] translation for [slug] field.");
-        $this->assertSame("title-in-en", $resume->getTranslation("en", "slug"), "3.6. The translation in [en] for [slug] field has to be identical.");
+        $this->assertTrue($resume->hasTranslation("en"), "3.3. The entity musts have a [en] translation for [title] field.");
+        $this->assertSame("Title in EN", $resume->translate("en")->getTitle(), "3.4. The translation in [en] for [title] field has to be identical.");
+        $this->assertSame("title-in-en", $resume->translate("en")->getSlug(), "3.5. The translation in [en] for [slug] field has to be identical.");
 
         // Delete test
         $id = $resume->getId();
@@ -134,8 +140,11 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
      */
     public function testInsertResumeWithoutAuthor() {
         $resume = new Resume();
-        $resume->setIp("127.0.0.1")
-                ->setTitle("Test");
+        $resume
+                ->setCurrentLocale("fr")
+                ->setIp("127.0.0.1")
+                ->setTitle("Test")
+        ;
         static::$em->persist($resume);
         static::$em->flush();
     }

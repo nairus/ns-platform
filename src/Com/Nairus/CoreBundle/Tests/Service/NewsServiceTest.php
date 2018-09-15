@@ -25,16 +25,25 @@ class NewsServiceTest extends AbstractKernelTestCase {
      */
     private static $loadNewsPublished;
 
+    /**
+     * {@inheritDoc}
+     */
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$loadNewsPublished = new LoadNewsPublished();
         static::$loadNewsPublished->load(static::$em);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public static function tearDownAfterClass() {
         static::$loadNewsPublished->remove(static::$em);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp() {
         $this->object = new NewsService(static::$em);
         $this->object->setAvailableLocales(["fr", "en", "ru"]);

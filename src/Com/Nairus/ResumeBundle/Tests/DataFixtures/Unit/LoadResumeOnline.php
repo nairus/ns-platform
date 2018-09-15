@@ -126,18 +126,19 @@ class LoadResumeOnline implements FixtureInterface {
         /* @var $skill Skill */
         $skill = $manager->getRepository(NSResumeBundle::NAME . ":Skill")->findOneBy(["title" => "PHP 7"]);
         /* @var $skillLevel SkillLevel */
-        $skillLevel = $manager->find(NSResumeBundle::NAME . ":SkillLevel", 1);
+        $skillLevel = $manager->getRepository(NSResumeBundle::NAME . ":SkillLevel")->findAll()[0];
 
         for ($index = 0; $index < 3; $index++) {
             $creationDate = new \DateTime("7 days ago");
             $creationDate->add(new \DateInterval("P" . ($index + 1) . "D"));
             $resume = new Resume();
             $resume
+                    ->setCurrentLocale("fr")
                     ->setIp("127.0.0.1")
-                    ->setTitle("Test" . $index)
                     ->setAuthor($user)
                     ->setStatus(ResumeStatusEnum::ONLINE)
-                    ->setCreatedAt($creationDate);
+                    ->setCreatedAt($creationDate)
+                    ->setTitle("Test" . $index);
             $manager->persist($resume);
 
             // On insère des données nécessaires pour les 2 premiers cv uniquement.
@@ -150,23 +151,27 @@ class LoadResumeOnline implements FixtureInterface {
     private function buildDependencies(EntityManagerInterface $manager, Resume $resume, Skill $skill, SkillLevel $skillLevel): void {
         $education = new Education();
         $education
-                ->setDescription("Description")
+                ->setCurrentLocale("fr")
                 ->setDiploma("BTS")
                 ->setDomain("Informatique")
                 ->setEndYear(2006)
                 ->setInstitution("AFPA")
                 ->setStartYear(2005)
-                ->setResume($resume);
+                ->setResume($resume)
+                ->setDescription("Description")
+        ;
 
         $experience = new Experience();
-        $experience->setCompany("Société")
-                ->setDescription("Description")
+        $experience
+                ->setCompany("Société")
+                ->setCurrentLocale("fr")
                 ->setEndMonth(12)
                 ->setEndYear(2017)
                 ->setLocation("Marseille")
                 ->setStartMonth(1)
                 ->setStartYear(2017)
-                ->setResume($resume);
+                ->setResume($resume)
+                ->setDescription("Description");
 
         $resumeSkill = new ResumeSkill();
         $resumeSkill

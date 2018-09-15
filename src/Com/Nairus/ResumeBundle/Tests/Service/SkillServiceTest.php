@@ -8,9 +8,10 @@ use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\ResumeSkill;
 use Com\Nairus\ResumeBundle\Entity\Skill;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
 
 /**
- * Test of SkillService.
+ * Test of Skill service.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -33,6 +34,8 @@ class SkillServiceTest extends AbstractKernelTestCase {
         // Load test fixtures.
         $loadSkill = new LoadSkill();
         $loadSkill->load(static::$em);
+        $loadSkillLevel = new LoadSkillLevel();
+        $loadSkillLevel->load(static::$em);
     }
 
     /**
@@ -42,6 +45,8 @@ class SkillServiceTest extends AbstractKernelTestCase {
         // Remove test fixtures.
         $loadSkill = new LoadSkill();
         $loadSkill->remove(static::$em);
+        $loadSkillLevel = new LoadSkillLevel();
+        $loadSkillLevel->remove(static::$em);
     }
 
     /**
@@ -64,7 +69,7 @@ class SkillServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the implemenation of SkillServiceInterface from IoC.
+     * Test the implementation of SkillServiceInterface from IoC.
      *
      * @return void
      */
@@ -137,7 +142,7 @@ class SkillServiceTest extends AbstractKernelTestCase {
         static::$em->persist($skill);
         static::$em->flush($skill);
 
-        $this->assertFalse($skill->isNew(), "1. The entity has nt to be new.");
+        $this->assertFalse($skill->isNew(), "1. The entity hasn't to be new.");
         $id = $skill->getId();
 
         $this->object->removeSkill($skill);
@@ -158,7 +163,7 @@ class SkillServiceTest extends AbstractKernelTestCase {
 
             // Link it to a resume
             $resume = static::$em->find(NSResumeBundle::NAME . ":Resume", 1);
-            $skillLevel = static::$em->find(NSResumeBundle::NAME . ":SkillLevel", 1);
+            $skillLevel = static::$em->getRepository(NSResumeBundle::NAME . ":SkillLevel")->findAll()[0];
             $resumeSkill = new ResumeSkill();
             $resumeSkill->setRank(1)
                     ->setResume($resume)
@@ -177,6 +182,94 @@ class SkillServiceTest extends AbstractKernelTestCase {
             $this->fail("2. Unexpected exception: " . $exc->getMessage());
         } finally {
             $this->cleanDatas();
+        }
+    }
+
+    /**
+     * Test doctrine errors management.
+     *
+     * @return void
+     */
+    public function testRemoveSkillWithADoctrineError(): void {
+        // Create mocks for the test.
+        // First mock the entity to return.
+        $skill = $this->createMock(Skill::class);
+        $skill->expects($this->any())
+                ->method("getId")
+                ->willReturn(1);
+
+        // Now, mock the repositories
+        $resumeSkillRepository = $this->createMock(\Com\Nairus\ResumeBundle\Repository\ResumeRepository::class);
+        $resumeSkillRepository->expects($this->once())
+                ->method('findOneBy')
+                ->willReturn(null);
+
+        $skillRepository = $this->createMock(\Com\Nairus\ResumeBundle\Repository\SkillRepository::class);
+        $skillRepository->expects($this->once())
+                ->method('remove')
+                ->willThrowException(new \Doctrine\ORM\ORMException("An Error occured!"));
+
+        // Last, mock the EntityManager to return the mock of the repositories
+        $datas = [
+            [NSResumeBundle::NAME . ":Skill", $skillRepository],
+            [NSResumeBundle::NAME . ":ResumeSkill", $resumeSkillRepository]
+        ];
+        $objectManager = $this->createMock(\Doctrine\ORM\EntityManagerInterface::class);
+        $objectManager->expects($this->any())
+                ->method('getRepository')
+                ->willReturnMap($datas);
+
+        try {
+            $service = new SkillService($objectManager);
+            $service->removeSkill($skill);
+        } catch (FunctionalException $exc) {
+            $this->assertEquals("flashes.error.skill.delete.failed", $exc->getTranslationKey(), "1. The translation key expected is not ok.");
+        } catch (\Error | \Exception $exc) {
+            $this->fail("2. Unexpected exception! " . $exc->getMessage());
+        }
+    }
+
+    /**
+     * Test <code>removeSkill</code> with unknown error.
+     *
+     * @return void
+     */
+    public function testRemoveSkillWithAnUnknownError(): void {
+        // Create mocks for the test.
+        // First mock the entity to return.
+        $skill = $this->createMock(Skill::class);
+        $skill->expects($this->any())
+                ->method("getId")
+                ->willReturn(1);
+
+        // Now, mock the repositories
+        $resumeSkillRepository = $this->createMock(\Com\Nairus\ResumeBundle\Repository\ResumeRepository::class);
+        $resumeSkillRepository->expects($this->once())
+                ->method('findOneBy')
+                ->willReturn(null);
+
+        $skillRepository = $this->createMock(\Com\Nairus\ResumeBundle\Repository\SkillRepository::class);
+        $skillRepository->expects($this->once())
+                ->method('remove')
+                ->willThrowException(new \Exception("An Error occured!"));
+
+        // Last, mock the EntityManager to return the mock of the repositories
+        $objectManager = $this->createMock(\Doctrine\ORM\EntityManagerInterface::class);
+        $datas = [
+            [NSResumeBundle::NAME . ":Skill", $skillRepository],
+            [NSResumeBundle::NAME . ":ResumeSkill", $resumeSkillRepository]
+        ];
+        $objectManager->expects($this->any())
+                ->method('getRepository')
+                ->willReturnMap($datas);
+
+        try {
+            $service = new SkillService($objectManager);
+            $service->removeSkill($skill);
+        } catch (FunctionalException $exc) {
+            $this->assertEquals("flashes.error.unknown", $exc->getTranslationKey(), "1. The translation key expected is not ok.");
+        } catch (\Error | \Exception $exc) {
+            $this->fail("2. Unexpected exception! " . $exc->getMessage());
         }
     }
 

@@ -6,7 +6,7 @@ use Com\Nairus\ResumeBundle\Entity\Skill;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
- * SkillRepository.
+ * Skill repository.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)

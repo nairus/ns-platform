@@ -1,0 +1,33 @@
+{# NSResumeBundle:SkillLevel:form.html.twig #}
+{% trans_default_domain 'NSResumeBundle' %}
+
+{{ form_start(form) }}
+
+{% if not form.vars.valid %}
+    <div id="global-errors-container" class="alert alert-danger fade show">
+        <i class="fas fa-exclamation-triangle"></i>
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>{{ "flashes.error" | trans({}, 'messages') }}</strong> {{ "form.translations.errors" | trans }}
+    </div>
+{% endif %}
+
+{{ form_widget(form) }}
+
+<div class="row actions">
+    <a href="{{ path('skilllevel_index') }}" class="btn btn-secondary mx-1 my-1">
+        <i class="fas fa-chevron-left"></i>
+        {{ "actions.list" | trans({}, 'messages')}}
+    </a>
+    {% if not skillLevel.isNew %}
+        <a class="btn btn-secondary mx-1 my-1"
+           href="{{ path('skilllevel_show', { 'id': skillLevel.id }) }}">
+            <i class="far fa-eye"></i>
+            {{ "actions.show" | trans({}, 'messages')}}
+        </a>
+    {% endif %}
+    <button class="btn btn-primary mx-1 my-1" formnovalidate="formnovalidate">
+        <i class="far fa-save"></i>
+        {{ "actions.save" | trans({}, 'messages') }}
+    </button>
+</div>
+{{ form_end(form) }}

@@ -107,7 +107,7 @@ class News {
      * {@inheritDoc}
      */
     public function __toString() {
-        return "[News] id: " . $this->getId();
+        return "[News] id: " . $this->id . " (isNew=" . $this->isNew() . ")";
     }
 
 }

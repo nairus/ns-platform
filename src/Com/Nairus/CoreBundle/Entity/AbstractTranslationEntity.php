@@ -2,7 +2,11 @@
 
 namespace Com\Nairus\CoreBundle\Entity;
 
-use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
+use Com\Nairus\CoreBundle\Entity\TranslationEntityInterface;
+use Doctrine\ORM\Mapping as ORM;
+use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\TranslatableInterface;
+use Prezent\Doctrine\Translatable\Entity\AbstractTranslation;
 
 /**
  * Abstract Translation Entity.
@@ -10,26 +14,27 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-abstract class AbstractTranslationEntity extends AbstractPersonalTranslation {
+abstract class AbstractTranslationEntity extends AbstractTranslation implements TranslationEntityInterface {
 
     /**
-     * Convinient constructor
+     * Locale (Only language code in ISO 639-1).
      *
-     * @param string             $locale The locale of the translation.
-     * @param string             $field  The field of the translation.
-     * @param string             $value  The value of the translation.
-     * @param TranslatableEntity $object The parent entity (required only in case of update).
+     * @example fr for french language.
+     *
+     * @ORM\Column(name="locale", type="string", length=2)
+     * @Prezent\Locale
      */
-    public function __construct(string $locale, string $field, string $value, TranslatableEntity $object = null) {
-        // Validate the instance of parent object if not null.
-        if (null !== $object) {
-            $this->validObjectClass($object);
-        }
+    protected $locale;
 
-        $this->setLocale($locale);
-        $this->setField($field);
-        $this->setContent($value);
-        $this->setObject($object);
+    /**
+     * {@inheritDoc}
+     */
+    public function setTranslatable(TranslatableInterface $translatable = null) {
+        // Prevent error in case of null args when remove method called from translatable object.
+        if (null !== $translatable) {
+            $this->validObjectClass($translatable);
+        }
+        return parent::setTranslatable($translatable);
     }
 
     /**
@@ -37,5 +42,5 @@ abstract class AbstractTranslationEntity extends AbstractPersonalTranslation {
      *
      * @throws \TypeError In case of bad type.
      */
-    abstract protected function validObjectClass(TranslatableEntity $object): void;
+    abstract protected function validObjectClass(TranslatableEntityInterface $object): void;
 }
