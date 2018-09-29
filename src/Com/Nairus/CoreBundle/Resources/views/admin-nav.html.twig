@@ -12,6 +12,12 @@
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ path("news_index") }}">{{ "nav.authentication.news" | trans }}</a>
+            {% endif %}
+            {% if is_granted('ROLE_AUTHOR') %}
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{{ path("resume_index") }}">{{ "nav.authentication.resume.my-resumes" | trans }}</a>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ path("skill_index") }}">{{ "nav.authentication.resume.skills" | trans }}</a>
                 <a class="dropdown-item" href="{{ path("skilllevel_index") }}">{{ "nav.authentication.resume.skilllevels" | trans }}</a>

@@ -10,7 +10,9 @@
 {% block ns_core_admin_body %}
     <div class="jumbotron">
         <h1 class="position-relative">{{ "skilllevel.edit.title" | trans({'%id%': skillLevel.id}, "NSResumeBundle") }}</h1>
+
         {% include 'NSResumeBundle:SkillLevel:form.html.twig' %}
+
         {{ form_start(delete_form) }}
         <button class="btn btn-danger mx-1 my-1 float-right">
             <i class="fas fa-trash-alt"></i>

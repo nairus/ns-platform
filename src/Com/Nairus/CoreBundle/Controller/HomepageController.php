@@ -33,6 +33,8 @@ class HomepageController extends Controller {
     /**
      * Homepage controller.
      *
+     * @param Request $request The current request.
+     *
      * @return Response
      */
     public function indexAction(Request $request): Response {
@@ -45,7 +47,7 @@ class HomepageController extends Controller {
     /**
      * Contact controller.
      *
-     * @param Request $request
+     * @param Request $request The current request.
      *
      * @return Response
      */

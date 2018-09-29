@@ -47,6 +47,9 @@ class NewsController extends Controller {
     /**
      * Lists all news entities.
      *
+     * @param integer $page The current page.
+     *
+     * @return Response
      */
     public function indexAction($page): Response {
         // Bug chrome
@@ -84,6 +87,9 @@ class NewsController extends Controller {
     /**
      * Creates a new news entity.
      *
+     * @param Request $request The current request.
+     *
+     * @return Response
      */
     public function newAction(Request $request): Response {
         // Get the default locale.
@@ -125,6 +131,9 @@ class NewsController extends Controller {
     /**
      * Finds and displays a news entity.
      *
+     * @param News $news The news to display.
+     *
+     * @return Response
      */
     public function showAction(News $news): Response {
         // Get the default content.
@@ -142,6 +151,10 @@ class NewsController extends Controller {
     /**
      * Displays a form to edit an existing news entity.
      *
+     * @param Request $request The current request.
+     * @param News    $news    The news to edit.
+     *
+     * @return Response
      */
     public function editAction(Request $request, News $news): Response {
         // Get the default content.
@@ -185,6 +198,10 @@ class NewsController extends Controller {
     /**
      * Deletes a news entity.
      *
+     * @param Request $request The current request.
+     * @param News    $news    The news to delete.
+     *
+     * @return Response
      */
     public function deleteAction(Request $request, News $news): Response {
         $form = $this->createDeleteForm($news);
@@ -214,8 +231,9 @@ class NewsController extends Controller {
     /**
      * Manage news translation action.
      *
-     * @param News $news     The current news.
-     * @param string $locale The locale to manage.
+     * @param Request $request The current request.
+     * @param News    $news    The current news.
+     * @param string  $locale  The locale to manage.
      *
      * @return Response
      */

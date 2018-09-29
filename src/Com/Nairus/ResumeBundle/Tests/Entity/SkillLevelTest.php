@@ -32,6 +32,7 @@ class SkillLevelTest extends AbstractKernelTestCase {
      * This method is called after a test is executed.
      */
     protected function tearDown() {
+        parent::tearDown();
         unset($this->object);
     }
 

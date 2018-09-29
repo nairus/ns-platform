@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Resume entity.
@@ -77,6 +78,7 @@ class Resume extends AbstractTranslatableEntity {
 
     /**
      * @Prezent\Translations(targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation")
+     * @Assert\Valid
      */
     protected $translations;
 
@@ -302,9 +304,9 @@ class Resume extends AbstractTranslatableEntity {
     /**
      * Get title for current locale (proxy method).
      *
-     * @return string
+     * @return string|null
      */
-    public function getTitle(): string {
+    public function getTitle(): ?string {
         /* @var $translation ResumeTranslation */
         $translation = $this->translate();
 
@@ -318,7 +320,7 @@ class Resume extends AbstractTranslatableEntity {
      *
      * @return Resume
      */
-    public function setSlug(string $slug): Resume {
+    public function setSlug(string $slug): ResumeTranslation {
         /* @var $translation ResumeTranslation */
         $translation = $this->translate();
 

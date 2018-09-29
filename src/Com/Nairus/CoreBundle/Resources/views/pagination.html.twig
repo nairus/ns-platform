@@ -1,6 +1,6 @@
 {# NSCoreBundle::pagination.html.twig #}
 
-<nav aria-label="{{ paginationLabel }}">
+<nav class="m-auto" aria-label="{{ paginationLabel }}">
     <ul class="pagination">
         {% set previousUrl = currentPage == 1 ? "#" : path(routeName, {"page": currentPage - 1}) %}
         {% set nextUrl = currentPage == pages ? "#" : path(routeName, {"page": currentPage + 1}) %}

@@ -14,7 +14,7 @@
         </a>
     </div>
 
-    <div id="news-container" class="container-fluid">
+    <div id="news-container">
         {% if items | length > 0 %}
             <table class="table table-hover table-light table-bordered">
                 <thead class="thead-dark">
@@ -112,13 +112,15 @@
             </table>
 
             {% if pages > 1 %}
-                {#
-                    We set the specific variables for the pagination template.
-                    See NewsController for the generic variables (pages and currentPage).
-                #}
-                {% set paginationLabel = ("news.index.pagination-label" | trans({}, "NSCoreBundle")) %}
-                {% set routeName = "news_index" %}
-                {% include "NSCoreBundle::pagination.html.twig" %}
+                <div class="row">
+                    {#
+                        We set the specific variables for the pagination template.
+                        See NewsController for the generic variables (pages and currentPage).
+                    #}
+                    {% set paginationLabel = ("news.index.pagination-label" | trans({}, "NSCoreBundle")) %}
+                    {% set routeName = "news_index" %}
+                    {% include "NSCoreBundle::pagination.html.twig" %}
+                </div>
             {% endif %}
 
         {% else %}

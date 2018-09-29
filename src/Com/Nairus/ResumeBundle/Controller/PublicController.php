@@ -20,6 +20,9 @@ class PublicController extends Controller {
     /**
      * Index controller.
      *
+     * @param Request $request The current request.
+     * @param integer $page    The current page.
+     *
      * @return Response
      */
     public function indexAction(Request $request, $page): Response {

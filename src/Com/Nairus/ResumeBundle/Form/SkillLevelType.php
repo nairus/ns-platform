@@ -7,6 +7,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * SkillLevel form.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
 class SkillLevelType extends AbstractType {
 
     /**

@@ -1,4 +1,11 @@
 services:
+    Com\Nairus\ResumeBundle\Controller\ResumeController:
+        public: true
+        tags: ['controller.service_arguments']
+        arguments:
+            $resumeService: "@ns_resume.resume_service"
+            $logger: "@logger"
+            $translator: "@translator"
     Com\Nairus\ResumeBundle\Controller\SkillController:
         public: true
         tags: ['controller.service_arguments']
@@ -14,6 +21,13 @@ services:
             $skillLevelService: "@ns_resume.skill_level_service"
             $logger: "@logger"
             $translator: "@translator"
+
+    Com\Nairus\ResumeBundle\Listener\ResumeStatusListener:
+        public: false
+        arguments:
+            $entityManager: "@doctrine.orm.entity_manager"
+        tags:
+            - {name: kernel.event_listener, event: nsresume.update.resume.status, method: onUpdateStatus}
 
     ns_resume.resume_service:
         public: true

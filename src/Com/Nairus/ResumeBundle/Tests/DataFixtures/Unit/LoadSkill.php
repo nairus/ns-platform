@@ -8,9 +8,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Jeu de test des compétences.
+ * Skills datas test set.
  *
- * @author nairus
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class LoadSkill implements FixtureInterface {
 

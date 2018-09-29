@@ -1,6 +1,6 @@
 <?php
 
-namespace Com\Nairus\UserBundle\EventListener;
+namespace Com\Nairus\UserBundle\Listener;
 
 use PHPUnit\Framework\TestCase;
 
@@ -15,7 +15,7 @@ class UserProfileListenerTest extends TestCase {
     /**
      * Test <code>getSubscribedEvents</code> method.
      *
-     * @covers Com\Nairus\UserBundle\EventListener\UserProfileListener::getSubscribedEvents
+     * @covers Com\Nairus\UserBundle\Listener\UserProfileListener::getSubscribedEvents
      *
      * @return void
      */

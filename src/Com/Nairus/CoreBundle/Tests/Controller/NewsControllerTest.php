@@ -165,8 +165,8 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $client = $this->getClient();
         $crawler = $client->request("GET", "/admin/news");
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 200 status code expected");
-        $noNewsMessage = "Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !";
-        $body = $crawler->filter(".container-fluid > em")->text();
+        $noNewsMessage = "Il n'y a aucune donnée pour le moment !";
+        $body = $crawler->filter("#news-container > em")->text();
         $this->assertContains($noNewsMessage, $body, "1.2 The [no-news] message has to be displayed");
 
         // Non existing second page 404 error.
@@ -187,8 +187,8 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $client = $this->getClient();
         $crawler = $client->request("GET", "/en/admin/news");
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 200 status code expected");
-        $noNewsMessage = "There is no item for now! Please add one clicking on the button above!";
-        $body = $crawler->filter(".container-fluid > em")->text();
+        $noNewsMessage = "There is no item for now!";
+        $body = $crawler->filter("#news-container > em")->text();
         $this->assertContains($noNewsMessage, $body, "1.2 The [no-news] message has to be displayed");
     }
 
@@ -342,7 +342,7 @@ class NewsControllerTest extends AbstractUserWebTestCase {
         $client->submit($crawler->selectButton('Supprimer')->form());
         $crawler = $client->followRedirect();
 
-        $this->assertContains("Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !",
+        $this->assertContains("Il n'y a aucune donnée pour le moment !",
                 $crawler->filter("#news-container")->text(), "3. The container should have the no-item message");
     }
 

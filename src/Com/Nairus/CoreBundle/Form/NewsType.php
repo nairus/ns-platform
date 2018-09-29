@@ -14,9 +14,9 @@ class NewsType extends AbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('published', CheckboxType::class, [
-            "label" => "news.form.labels.published",
-            "required" => false,
-            "translation_domain" => "NSCoreBundle"
+            'label' => 'news.form.labels.published',
+            'required' => false,
+            'translation_domain' => 'NSCoreBundle'
         ]);
     }
 

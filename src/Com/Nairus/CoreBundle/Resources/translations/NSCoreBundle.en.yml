@@ -29,10 +29,10 @@ homepage:
         head:
             title: Home
         titles:
-            h1: Welcome !
+            h1: Welcome!
+            h2: I am an <strong>IT developper</strong> since 2006.
 
         description: >
-            I am an <strong>Web developper</strong> since 2006.<br>
             I work with several programming languages such as <strong>PHP, Python, Javascript, Java</strong>.<br>
             I'm a <strong>web</strong> passionate and I decided to build this platform to share my experiences and show my works.
         github-profile: See my Github profile

@@ -3,9 +3,13 @@
 {% block title %}{{ "profile.show.title" | trans({}, "NSUserBundle") }} - {{ parent() }}{% endblock %}
 
 {% block fos_user_content %}
-    {{ include("NSCoreBundle::messages.html.twig") }}
 
-    <h1>{{ "profile.show.title" | trans({}, "NSUserBundle") }}</h1>
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "profile.show.title" | trans({}, "NSUserBundle") }}</h1>
+
+        {{ include("NSCoreBundle::messages.html.twig") }}
+    </div>
+
     {% include "@FOSUser/Profile/show_content.html.twig" %}
     <div id="actions">
         <a href="{{ path("fos_user_profile_edit") }}" id="user-profile-edit" class="btn btn-primary">

@@ -9,10 +9,24 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\TwigBundle\Controller\ExceptionController as TwigErrorController;
 
 /**
- * Override the TwigBundle error controller to set the correct locale to the view.
+ * Error controller.
+ *
+ * Overrided TwigBundle error controller to set the correct locale to the view.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class ErrorController extends TwigErrorController {
 
+    /**
+     * Display an error page.
+     *
+     * @param Request              $request   The current service.
+     * @param FlattenException     $exception The caught exception.
+     * @param DebugLoggerInterface $logger    The logger service.
+     *
+     * @return Response
+     */
     public function showAction(Request $request, FlattenException $exception, DebugLoggerInterface $logger = null): Response {
         // Force the locale to test transalation.
         $locale = $request->get("lg", null);

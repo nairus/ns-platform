@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
- * Skill fom.
+ * Skill form.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)

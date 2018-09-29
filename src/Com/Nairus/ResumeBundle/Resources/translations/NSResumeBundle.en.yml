@@ -1,5 +1,11 @@
 flashes:
     success:
+        resume:
+            new: Resume added successfully!
+            edit: Resume No. %id% modified successfully!
+            delete: Resume No. %id% deleted successfully!
+            published: Resume No. %id% has been published successfully!
+            unpublished: Resume No. %id% has been unpublished successfully!
         skill:
             new: Skill added successfully!
             edit: Skill No. %id% modified successfully!
@@ -10,6 +16,11 @@ flashes:
             delete: Skill level No. %id% deleted successfully!
     error:
         unknown: An unknown error occured!
+        resume:
+            delete: The resume No. %id% has not been deleted!
+            already-published: The resume No. %id% is already published!
+            incomplete: The resume No. %id% is incomplete!
+            no-profile: There is no profile for the resume No. %id%! You can make the CV anonymous or add a profile.
         skill:
             delete:
                 resume-linked: The skill No. %id% is linked to one or many resumes!
@@ -21,12 +32,43 @@ flashes:
 
 public:
     index:
-        head:
-            title: 'Resumes platform'
+        title: 'Resumes platform'
+        subtitle: Efficient and modern
+        description: |
+            Publish <strong>your CV</strong> and highlight <strong>your talents</strong>. <br>
+            <strong>Recruiter</strong>, Search and Retrieve at a glance <strong>your rare pearl</strong>here.
         pagination-label: 'Resumes list Pagination'
         show-detail: Show Resume
         published-at: Published at
         skills-title: "Skills:"
+resume:
+    created-at: "Created on "
+    updated-at: "Updated on "
+    form:
+        anonymous: Anonymous?
+    status:
+        offline: Uncomplete Offline
+        to-published: Complete Offline
+        online: Online
+    index:
+        title: My resumes list
+        add-new: Add a new resume
+    new:
+        title: Add a resume
+    edit:
+        title: Modification of the resume No %id%
+    publish:
+        title: Publishing the resume No %id%
+        message: 'If you still want to publish it, force publishing clicking on the <strong>"Publish"</strong> button.'
+    show:
+        title: Detail of the resume No %id%
+        details: Detailed informations
+        skills: My Skills
+        add-skill: Add a skill
+        educations: My Educations
+        add-education: Add an education
+        experiences: My Experiences
+        add-experience: Add an experience
 
 skill:
     index:

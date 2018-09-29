@@ -8,6 +8,7 @@ use Com\Nairus\CoreBundle\Entity\AbstractTranslationEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * ResumeTranslation entity.
@@ -24,6 +25,10 @@ class ResumeTranslation extends AbstractTranslationEntity {
      * @var string
      *
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      max = 100
+     * )
      */
     private $title;
 
@@ -56,9 +61,9 @@ class ResumeTranslation extends AbstractTranslationEntity {
     /**
      * Get title
      *
-     * @return string
+     * @return string|null
      */
-    public function getTitle(): string {
+    public function getTitle(): ?string {
         return $this->title;
     }
 

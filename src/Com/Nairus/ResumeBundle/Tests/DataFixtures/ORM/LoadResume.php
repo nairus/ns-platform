@@ -9,9 +9,10 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * Jeu de test des cv.
+ * Resumes datas test set.
  *
- * @author nairus
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class LoadResume extends AbstractFixture implements OrderedFixtureInterface {
 

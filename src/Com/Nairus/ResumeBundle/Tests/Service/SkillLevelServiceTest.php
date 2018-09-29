@@ -223,6 +223,7 @@ class SkillLevelServiceTest extends AbstractKernelTestCase {
                 ->method('getRepository')
                 ->willReturnMap($datas);
 
+        // The test.
         try {
             $service = new SkillLevelService($objectManager);
             $service->removeSkillLevel($skillLevel);

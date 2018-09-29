@@ -9,9 +9,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Jeu de test des niveaux de compétence.
+ * SkillLevels datas test set.
  *
- * @author nairus
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class LoadSkillLevel implements FixtureInterface {
 

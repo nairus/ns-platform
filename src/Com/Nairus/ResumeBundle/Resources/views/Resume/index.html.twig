@@ -1,0 +1,100 @@
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block title %}{{ "resume.index.title" | trans({}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "resume.index.title" | trans({}, "NSResumeBundle") }}</h1>
+
+        {{ include("NSCoreBundle::messages.html.twig") }}
+
+        <a id="resume-add-new" class="btn btn-primary" href="{{ path('resume_new') }}">
+            <i class="fas fa-plus"></i>
+            {{ "resume.index.add-new" | trans({}, "NSResumeBundle")  }}
+        </a>
+    </div>
+
+    <div id="resume-container">
+        {% if items | length > 0 %}
+            <div class="row">
+                {% for item in items %}
+                    {% set resume = item['entity'] %}
+                    {% set delete_form = item['delete_form'] %}
+                    <div class="col-lg-6 mb-2">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                {# if the title is not set for the current locale, we get the default title for the default locale #}
+                                {% set title = resume.title ? resume.title : resume.translate(defaultLocale).title %}
+                                {% set locale = resume.title ? app.request.getLocale() : defaultLocale %}
+                                <h2 class="card-title text-center">
+                                    <img width="30" src="/bundles/nscore/img/flags/{{ locale }}.png"></span>
+                                    {{ title }}
+                                </h2>
+                                <p class="card-text">
+                                    <strong>
+                                        {{ item['statusKey'] | trans({}, "NSResumeBundle") }}
+                                    </strong>
+                                    <i class="{{ item['statusIcon'] }}"></i>
+                                    {% if resume.anonymous %}<i class="fas fa-user-secret"></i>{% endif %}
+                                    {% if resume.createdAt %}
+                                    <div>
+                                        <em>
+                                            {{"resume.created-at" | trans({}, "NSResumeBundle")}}
+                                            {{ resume.createdAt | localizeddate('short', 'short', null, null, dateFormat) }}
+
+                                            {% if resume.updatedAt %}
+                                                <br>{{"resume.updated-at" | trans({}, "NSResumeBundle")}}
+                                                {{ resume.updatedAt | localizeddate('short', 'short', null, null, dateFormat) }}
+                                            {% endif %}
+                                        </em>
+                                    </div>
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <a class="actions d-inline-block mb-2 p-2 btn btn-secondary"
+                                   href="{{ path('resume_show', { 'id': resume.id }) }}">
+                                    <i class="far fa-eye"></i>
+                                    {{ "actions.show" | trans}}
+                                </a>
+
+                                <a class="actions d-inline-block mb-2 p-2 btn btn-primary"
+                                   href="{{ path('resume_edit', { 'id': resume.id }) }}">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    {{ "actions.edit" | trans }}
+                                </a>
+
+                                {{ form_start(delete_form, {'attr': {'class': 'actions d-inline-block mb-2'}}) }}
+                                <button class="mb-2 p-2 btn btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                    {{ "actions.delete" | trans}}
+                                </button>
+                                {{ form_end(delete_form) }}
+
+                                {% if resume.status is constant('Com\\Nairus\\ResumeBundle\\Enums\\ResumeStatusEnum::ONLINE') %}
+                                    {% set unpublish_form = item['unpublish_form'] %}
+                                    {{ form_start(unpublish_form, {'attr': {'class': 'actions d-inline-block mb-2'}}) }}
+                                    <button class="mb-2 p-2 btn btn-success">
+                                        <i class="fas fa-low-vision"></i>
+                                        {{ "actions.unpublish" | trans}}
+                                    </button>
+                                    {{ form_end(unpublish_form) }}
+                                {% else %}
+                                    {% set publish_form = item['publish_form'] %}
+                                    {{ form_start(publish_form, {'attr': {'class': 'actions d-inline-block mb-2'}}) }}
+                                    <button class="mb-2 p-2 btn btn-success">
+                                        <i class="fas fa-globe"></i>
+                                        {{ "actions.publish" | trans}}
+                                    </button>
+                                    {{ form_end(publish_form) }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <em>{{ "table.no-item" | trans }}</em>
+        {% endif %}
+    </div>
+{% endblock %}

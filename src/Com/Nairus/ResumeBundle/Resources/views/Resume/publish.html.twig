@@ -1,0 +1,38 @@
+{# NSResumeBundle:Resume:publish.html.twig #}
+
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block title %}{{ "resume.publish.title" | trans({"%id%": resume.id}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "resume.publish.title" | trans({"%id%": resume.id}, "NSResumeBundle") }}</h1>
+
+        {{ include("NSCoreBundle::messages.html.twig") }}
+
+        <p>{{"resume.publish.message" | trans({}, "NSResumeBundle") | raw}}</p>
+
+        <div class="row">
+            <a class="actions d-inline-block mb-2 p-2 mx-1 btn btn-secondary"
+               href="{{ path('resume_show', { 'id': resume.id }) }}">
+                <i class="far fa-eye"></i>
+                {{ "actions.show" | trans}}
+            </a>
+
+            <a class="actions d-inline-block mb-2 p-2 mx-1 btn btn-primary"
+               href="{{ path('resume_edit', { 'id': resume.id }) }}">
+                <i class="fas fa-pencil-alt"></i>
+                {{ "actions.edit" | trans }}
+            </a>
+
+            {{ form_start(publish_form) }}
+            {{ form_widget(publish_form) }}
+            <button class="actions d-inline-block mb-2 p-2 mx-1 btn btn-success">
+                <i class="fas fa-globe"></i>
+                {{ "actions.publish" | trans }}
+            </button>
+            {{ form_end(publish_form) }}
+        </div>
+    </div>
+
+{% endblock %}

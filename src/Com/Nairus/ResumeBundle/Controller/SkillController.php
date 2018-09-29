@@ -53,6 +53,8 @@ class SkillController extends Controller {
     /**
      * Lists all skill entities.
      *
+     * @param integer $page The current page.
+     *
      * @return Response
      */
     public function indexAction($page): Response {
@@ -90,6 +92,8 @@ class SkillController extends Controller {
     /**
      * Creates a new skill entity.
      *
+     * @param Request $request The current request.
+     *
      * @return Response
      */
     public function newAction(Request $request): Response {
@@ -116,6 +120,8 @@ class SkillController extends Controller {
     /**
      * Finds and displays a skill entity.
      *
+     * @param Skill $skill The skill to display.
+     *
      * @return Response
      */
     public function showAction(Skill $skill): Response {
@@ -129,6 +135,9 @@ class SkillController extends Controller {
 
     /**
      * Displays a form to edit an existing skill entity.
+     *
+     * @param Request $request The current request.
+     * @param Skill $skill The skill to display.
      *
      * @return Response
      */
@@ -152,6 +161,9 @@ class SkillController extends Controller {
 
     /**
      * Deletes a skill entity.
+     *
+     * @param Request $request The current request.
+     * @param Skill $skill The skill to delete.
      *
      * @return Response
      */

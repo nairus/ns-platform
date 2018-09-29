@@ -31,9 +31,9 @@ homepage:
             title: Accueil
         titles:
             h1: Bienvenue !
+            h2: Je suis un <strong>développeur Web</strong> depuis 2006.
 
         description: >
-            Je suis un <strong>développeur Web</strong> depuis 2006.<br>
             Je travaille avec plusieurs languages de programmation tel que <strong>PHP, Pyhon, Javascript, Java</strong>.<br>
             Je suis un passionné du <strong>web</strong> et j'ai décidé de construire cette plateforme afin de partager et de montrer mon travail.
         github-profile: Voir mon profil Github

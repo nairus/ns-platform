@@ -3,6 +3,8 @@
 namespace Com\Nairus\ResumeBundle\Entity\Translation;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Test of ResumeTranslation
@@ -29,6 +31,7 @@ class ResumeTranslationTest extends KernelTestCase {
      * {@inheritDoc}
      */
     protected function setUp() {
+        static::bootKernel();
         $this->object = new ResumeTranslation();
     }
 
@@ -81,6 +84,45 @@ class ResumeTranslationTest extends KernelTestCase {
      */
     public function testSetTitleWithNullParam(): void {
         $this->object->setTitle(null);
+    }
+
+    /**
+     * Test the NotBlank constraint of the entity.
+     *
+     * @return void
+     */
+    public function testValidationNotBlank(): void {
+        /* @var $validator \Symfony\Component\Validator\Validator\ValidatorInterface */
+        $validator = static::$kernel->getContainer()->get("validator");
+
+        $resumeTranslation = new ResumeTranslation();
+        $errors = $validator->validate($resumeTranslation);
+        $this->assertCount(1, $errors, "1. One error is expected.");
+
+        /* @var $error1 \Symfony\Component\Validator\ConstraintViolation */
+        $error1 = $errors[0];
+
+        $this->assertInstanceOf(NotBlank::class, $error1->getConstraint(), "2. The error has to be a NotNull constraint.");
+    }
+
+    /**
+     * Test the Length constraint of the entity.
+     *
+     * @return void
+     */
+    public function testValidationLength(): void {
+        /* @var $validator \Symfony\Component\Validator\Validator\ValidatorInterface */
+        $validator = static::$kernel->getContainer()->get("validator");
+
+        $resumeTranslation = new ResumeTranslation();
+        $resumeTranslation->setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam luctus tincidunt elit vel cras amet bad.");
+        $errors = $validator->validate($resumeTranslation);
+        $this->assertCount(1, $errors, "1. One error is expected.");
+
+        /* @var $error1 \Symfony\Component\Validator\ConstraintViolation */
+        $error1 = $errors[0];
+
+        $this->assertInstanceOf(Length::class, $error1->getConstraint(), "2. The error has to be a Length constraint.");
     }
 
 }

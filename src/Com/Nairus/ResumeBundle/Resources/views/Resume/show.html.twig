@@ -1,0 +1,140 @@
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block title %}{{ "resume.show.title" | trans({"%id%": resume.id}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "resume.show.title" | trans({"%id%": resume.id}, "NSResumeBundle") }}</h1>
+
+        {{ include("NSCoreBundle::messages.html.twig") }}
+    </div>
+
+    <div class="card shadow">
+        {# if the title is not set for the current locale, we get the default title for the default locale #}
+        {% set title = resume.title ? resume.title : resume.translate(defaultLocale).title %}
+        {% set locale = resume.title ? app.request.getLocale() : defaultLocale %}
+        <h2 class="card-header text-center">
+            <img width="50" src="/bundles/nscore/img/flags/{{ locale }}.png"></span>
+            {{ title }}
+        </h2>
+        <div class="card-body">
+            <div class="card-text row">
+                <div class="col-6">
+                    <strong>
+                        {{ statusKey | trans({}, "NSResumeBundle") }}
+                    </strong>
+                    <i class="{{ statusIcon }}"></i>
+                    {% if resume.anonymous %}<i class="fas fa-user-secret"></i>{% endif %}
+                    {% if resume.createdAt %}
+                        <div>
+                            <em>
+                                {{"resume.created-at" | trans({}, "NSResumeBundle")}} {{ resume.createdAt | localizeddate('short', 'short', null, null, dateFormat) }}
+                                {% if resume.updatedAt %}
+                                    <br>{{"resume.updated-at" | trans({}, "NSResumeBundle")}} {{ resume.updatedAt | localizeddate('short', 'short', null, null, dateFormat) }}
+                                {% endif %}
+                            </em>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a class="actions d-inline-block mb-2 p-2 btn btn-secondary"
+               href="{{ path('resume_index') }}">
+                <i class="fas fa-chevron-left"></i>
+                {{ "actions.list" | trans}}
+            </a>
+
+            <a class="actions d-inline-block mb-2 p-2 btn btn-primary"
+               href="{{ path('resume_edit', { 'id': resume.id }) }}">
+                <i class="fas fa-pencil-alt"></i>
+                {{ "actions.edit" | trans }}
+            </a>
+
+            {{ form_start(delete_form, {'attr': {'class': 'actions d-inline-block mb-2'}}) }}
+            <button class="mb-2 p-2 btn btn-danger">
+                <i class="fas fa-trash-alt"></i>
+                {{ "actions.delete" | trans}}
+            </button>
+            {{ form_end(delete_form) }}
+
+            {% if resume.status is constant('Com\\Nairus\\ResumeBundle\\Enums\\ResumeStatusEnum::ONLINE') %}
+                {{ form_start(unpublish_form, {'attr': {'class': 'actions d-inline-block mb-2'}}) }}
+                <button class="mb-2 p-2 btn btn-success">
+                    <i class="fas fa-low-vision"></i>
+                    {{ "actions.unpublish" | trans}}
+                </button>
+                {{ form_end(unpublish_form) }}
+            {% else %}
+                {{ form_start(publish_form, {'attr': {'class': 'actions d-inline-block mb-2'}}) }}
+                <button class="mb-2 p-2 btn btn-success">
+                    <i class="fas fa-globe"></i>
+                    {{ "actions.publish" | trans}}
+                </button>
+                {{ form_end(publish_form) }}
+            {% endif %}
+        </div>
+    </div>
+
+    <hr />
+
+    <div id="resume-detailed-contents">
+        <h3>{{ "resume.show.details" | trans({}, "NSResumeBundle")}}</h3>
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="skills-tab"
+                           data-toggle="tab" href="#skills" role="tab"
+                           aria-controls="skills" aria-selected="true">
+                            {{ "resume.show.skills" | trans({}, "NSResumeBundle") }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="educations-tab"
+                           data-toggle="tab" href="#educations" role="tab"
+                           aria-controls="educations" aria-selected="true">
+                            {{ "resume.show.educations" | trans({}, "NSResumeBundle") }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="experiences-tab"
+                           data-toggle="tab" href="#experiences" role="tab"
+                           aria-controls="experiences" aria-selected="true">
+                            {{ "resume.show.experiences" | trans({}, "NSResumeBundle") }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body tab-content" id="datas-contents">
+                <div class="tab-pane fade show active" id="skills" role="tabpanel" aria-labelledby="skills-tab">
+                    <div id="skills-content" class="mb-3">
+                        <em>{{ "table.no-item" | trans }}</em>
+                    </div>
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        {{ "resume.show.add-skill" | trans({}, "NSResumeBundle") }}
+                    </a>
+                </div>
+                <div class="tab-pane fade" id="educations" role="tabpanel" aria-labelledby="educations-tab">
+                    <div id="educations-content" class="mb-3">
+                        <em>{{ "table.no-item" | trans }}</em>
+                    </div>
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        {{ "resume.show.add-education" | trans({}, "NSResumeBundle") }}
+                    </a>
+                </div>
+                <div class="tab-pane fade" id="experiences" role="tabpanel" aria-labelledby="experiences-tab">
+                    <div id="experiences-content" class="mb-3">
+                        <em>{{ "table.no-item" | trans }}</em>
+                    </div>
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        {{ "resume.show.add-experience" | trans({}, "NSResumeBundle") }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -75,6 +75,7 @@ nav:
         user:
             account: Mon compte
         resume:
+            my-resumes: Mes CV
             skills: Gestion des compétences
             skilllevels: Gestion des niveaux de compétence
 actions:
@@ -86,6 +87,7 @@ actions:
     add: Ajouter
     delete: Supprimer
     publish: Publier
+    unpublish: Dépublier
     change-password: Changer mon mot de passe
     return: Retour
 
@@ -99,7 +101,7 @@ pagination:
     next: Suiv.
 
 table:
-    no-item: Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !
+    no-item: Il n'y a aucune donnée pour le moment !
     cols:
         titles: Titres
         creation-date: Date de création

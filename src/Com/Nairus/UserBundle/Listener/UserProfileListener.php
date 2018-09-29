@@ -1,6 +1,6 @@
 <?php
 
-namespace Com\Nairus\UserBundle\EventListener;
+namespace Com\Nairus\UserBundle\Listener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use FOS\UserBundle\FOSUserEvents;

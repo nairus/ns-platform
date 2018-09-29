@@ -6,7 +6,6 @@ use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Resume;
-use Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeOnline;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;

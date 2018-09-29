@@ -44,10 +44,11 @@ class SecurityControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2.1 Unexpected HTTP status code for GET / with admin login");
         $this->assertContains('Bienvenue user', $crawler->filter("#navbar")->text(), "2.2 The navbar has to contain authentication username");
         $this->assertEquals(1, $crawler->filter("#admin-menu")->count(), "2.3 The navbar has to contain admin dropdown button.");
-        $this->assertEquals(2, $crawler->filter(".nav-item > .dropdown-menu > .dropdown-item")->count(), "2.4 The admin dropdown menu has to contain 2 items.");
+        $this->assertEquals(3, $crawler->filter(".nav-item > .dropdown-menu > .dropdown-item")->count(), "2.4 The admin dropdown menu has to contain 2 items.");
         $dropdownMenu = $crawler->filter(".nav-item > .dropdown-menu")->text();
         $this->assertContains("Mon compte", $dropdownMenu, "2.5. The dropdown menu has to contain this item.");
         $this->assertContains("Changer mon mot de passe", $dropdownMenu, "2.6. The dropdown menu has to contain this item.");
+        $this->assertContains("Mes CV", $dropdownMenu, "2.7. The dropdown menu has to contain this item.");
     }
 
     /**
@@ -80,10 +81,11 @@ class SecurityControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2.1 Unexpected HTTP status code for GET / with admin login");
         $this->assertContains('Welcome author', $crawler->filter("#navbar")->text(), "2.2 The navbar has to contain authentication username");
         $this->assertEquals(1, $crawler->filter("#admin-menu")->count(), "2.3 The navbar has to contain admin dropdown button.");
-        $this->assertEquals(2, $crawler->filter(".nav-item > .dropdown-menu > .dropdown-item")->count(), "2.4 The admin dropdown menu has to contain 2 items.");
+        $this->assertEquals(3, $crawler->filter(".nav-item > .dropdown-menu > .dropdown-item")->count(), "2.4 The admin dropdown menu has to contain 2 items.");
         $dropdownMenu = $crawler->filter(".nav-item > .dropdown-menu")->text();
         $this->assertContains("My account", $dropdownMenu, "2.5. The dropdown menu has to contain this item.");
         $this->assertContains("Change my password", $dropdownMenu, "2.6. The dropdown menu has to contain this item.");
+        $this->assertContains("My Resumes", $dropdownMenu, "2.7. The dropdown menu has to contain this item.");
     }
 
     /**
@@ -112,10 +114,11 @@ class SecurityControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2.1 Unexpected HTTP status code for GET / with admin login");
         $this->assertContains('Bienvenue moderator', $crawler->filter("#navbar")->text(), "2.2 The navbar has to contain authentication username");
         $this->assertEquals(1, $crawler->filter("#admin-menu")->count(), "2.3 The navbar has to contain admin dropdown button.");
-        $this->assertEquals(2, $crawler->filter(".nav-item > .dropdown-menu > .dropdown-item")->count(), "2.4 The admin dropdown menu has to contain 2 items.");
+        $this->assertEquals(3, $crawler->filter(".nav-item > .dropdown-menu > .dropdown-item")->count(), "2.4 The admin dropdown menu has to contain 2 items.");
         $dropdownMenu = $crawler->filter(".nav-item > .dropdown-menu")->text();
         $this->assertContains("Mon compte", $dropdownMenu, "2.5. The dropdown menu has to contain this item.");
         $this->assertContains("Changer mon mot de passe", $dropdownMenu, "2.6. The dropdown menu has to contain this item.");
+        $this->assertContains("Mes CV", $dropdownMenu, "2.7. The dropdown menu has to contain this item.");
     }
 
     /**
@@ -144,13 +147,14 @@ class SecurityControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2.1 Unexpected HTTP status code for GET / with admin login");
         $this->assertContains('Welcome admin', $crawler->filter("#navbar")->text(), "2.2 The navbar has to contain authentication username");
         $this->assertEquals(1, $crawler->filter("#admin-menu")->count(), "2.3 The navbar has to contain admin dropdown button.");
-        $this->assertEquals(5, $crawler->filter(".nav-item > .dropdown-menu > .dropdown-item")->count(), "2.4 The admin dropdown menu has to contain 2 items.");
+        $this->assertEquals(6, $crawler->filter(".nav-item > .dropdown-menu > .dropdown-item")->count(), "2.4 The admin dropdown menu has to contain 2 items.");
         $dropdownMenu = $crawler->filter(".nav-item > .dropdown-menu")->text();
         $this->assertContains("My account", $dropdownMenu, "2.5. The dropdown menu has to contain this item.");
         $this->assertContains("Change my password", $dropdownMenu, "2.6. The dropdown menu has to contain this item.");
         $this->assertContains("Manage News", $dropdownMenu, "2.7. The dropdown menu has to contain this item.");
         $this->assertContains("Manage Skills", $dropdownMenu, "2.8. The dropdown menu has to contain this item.");
         $this->assertContains("Manage Skill levels", $dropdownMenu, "2.9. The dropdown menu has to contain this item.");
+        $this->assertContains("My Resumes", $dropdownMenu, "2.10. The dropdown menu has to contain this item.");
     }
 
     /**
@@ -179,13 +183,14 @@ class SecurityControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), "2.1 Unexpected HTTP status code for GET / with admin login");
         $this->assertContains('Bienvenue sadmin', $crawler->filter("#navbar")->text(), "2.2 The navbar has to contain authentication username");
         $this->assertEquals(1, $crawler->filter("#admin-menu")->count(), "2.3 The navbar has to contain admin dropdown button.");
-        $this->assertEquals(5, $crawler->filter(".nav-item > .dropdown-menu > .dropdown-item")->count(), "2.4 The admin dropdown menu has to contain 2 items.");
+        $this->assertEquals(6, $crawler->filter(".nav-item > .dropdown-menu > .dropdown-item")->count(), "2.4 The admin dropdown menu has to contain 2 items.");
         $dropdownMenu = $crawler->filter(".nav-item > .dropdown-menu")->text();
         $this->assertContains("Mon compte", $dropdownMenu, "2.5. The dropdown menu has to contain this item.");
         $this->assertContains("Changer mon mot de passe", $dropdownMenu, "2.6. The dropdown menu has to contain this item.");
         $this->assertContains("Gestion des News", $dropdownMenu, "2.7. The dropdown menu has to contain this item.");
         $this->assertContains("Gestion des compétences", $dropdownMenu, "2.8. The dropdown menu has to contain this item.");
         $this->assertContains("Gestion des niveaux de compétence", $dropdownMenu, "2.9. The dropdown menu has to contain this item.");
+        $this->assertContains("Mes CV", $dropdownMenu, "2.10. The dropdown menu has to contain this item.");
     }
 
 }

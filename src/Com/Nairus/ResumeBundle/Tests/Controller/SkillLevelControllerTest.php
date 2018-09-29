@@ -8,7 +8,6 @@ use Com\Nairus\ResumeBundle\Entity\Skill;
 use Com\Nairus\ResumeBundle\Entity\SkillLevel;
 use Com\Nairus\UserBundle\Tests\AbstractUserWebTestCase;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
-use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
 
 /**
  * Functional tests for SkillLevel controller.
@@ -141,7 +140,7 @@ class SkillLevelControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals("Liste des niveaux de compétence", $crawler->filter("h1")->text(), "1.5 The h1 title expected is not ok.");
         $this->assertContains('<i class="fas fa-plus"></i>', $crawler->filter("#skilllevel-add-new")->html(), "1.6 The add button has not the picto expected.");
         $this->assertContains("Ajouter un nouveau niveau", $crawler->filter("#skilllevel-add-new")->text(), "1.7 The add button has not the content expected.");
-        $this->assertContains("Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !",
+        $this->assertContains("Il n'y a aucune donnée pour le moment !",
                 $crawler->filter("#skilllevel-container")->text(), "1.8 The page has to contain the no-item message.");
 
         // Clic on add new skill button
@@ -229,7 +228,7 @@ class SkillLevelControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->followRedirect();
 
         // Check if the entity has been deleted on the list
-        $this->assertContains("Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !",
+        $this->assertContains("Il n'y a aucune donnée pour le moment !",
                 $crawler->filter("#skilllevel-container")->text(), "7.1 The container should have the no-item message");
         $this->assertEquals("/admin/skilllevel/", $client->getRequest()->getRequestUri(), "7.2 The request uri expected is not ok.");
         $this->assertGreaterThan(0, $crawler->filter(".message-container > .alert-success")->count(), "7.3 Success flash messages has to be displayed.");
@@ -255,7 +254,7 @@ class SkillLevelControllerTest extends AbstractUserWebTestCase {
         $this->assertContains("Skill levels list", $crawler->filter("html > head > title")->text(), "1.4 The title page expected is not ok.");
         $this->assertEquals("Skill levels list", $crawler->filter("h1")->text(), "1.5 The h1 title expected is not ok.");
         $this->assertContains("Add a new level", $crawler->filter("#skilllevel-add-new")->text(), "1.6 The add button has not the content expected.");
-        $this->assertContains("There is no item for now! Please add one clicking on the button above!", $crawler->filter("#skilllevel-container")->text(),
+        $this->assertContains("There is no item for now!", $crawler->filter("#skilllevel-container")->text(),
                 "1.7 The page has to contain the no-item message.");
 
         // Clic on add new skill button
@@ -308,7 +307,7 @@ class SkillLevelControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->followRedirect();
 
         // Check if the entity has been deleted on the list
-        $this->assertContains("There is no item for now! Please add one clicking on the button above!",
+        $this->assertContains("There is no item for now!",
                 $crawler->filter("#skilllevel-container")->text(), "7.1 The container should have the no-item message");
         $this->assertEquals("/en/admin/skilllevel/", $client->getRequest()->getRequestUri(), "7.2 The request uri expected is not ok.");
         $this->assertGreaterThan(0, $crawler->filter(".message-container > .alert-success")->count(), "7.3 Success flash messages has to be displayed.");
@@ -339,7 +338,7 @@ class SkillLevelControllerTest extends AbstractUserWebTestCase {
         $client->submit($crawler->selectButton('Supprimer')->form());
         $crawler = $client->followRedirect();
 
-        $this->assertContains("Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !",
+        $this->assertContains("Il n'y a aucune donnée pour le moment !",
                 $crawler->filter("#skilllevel-container")->text(), "2. The container should have the no-item message");
     }
 

@@ -10,27 +10,30 @@
 {% endblock %}
 
 {% block ns_core_admin_body %}
-    <h1 class="position-relative">{{ pageTitle | trans({"%news_id%": news.id, "%locale%": locale}, "NSCoreBundle") }}</h1>
+    <div class="jumbotron">
+        <h1 class="text-center">{{ pageTitle | trans({"%news_id%": news.id, "%locale%": locale}, "NSCoreBundle") }}</h1>
 
-    {% if originalContent is not null %}
-        <div class="card">
-            <div class="class-body p-3">
-                <h5 class="card-title">{{ "news.translation.original-content" | trans({"%locale%": originalContent.locale}, "NSCoreBundle") }}</h5>
-                <p class="card-text">
-                    <strong>{{"news.form.labels.title" | trans({"%locale%": originalContent.locale}, "NSCoreBundle")}}: </strong>
-                    {{ originalContent.title }}
-                </p>
-                <p class="card-text text-justify">
-                    <strong>{{"news.form.labels.description" | trans({"%locale%": originalContent.locale}, "NSCoreBundle")}}: </strong>
-                    {{ originalContent.description }}
-                </p>
-                <p class="card-text">
-                    <strong>{{"news.form.labels.link" | trans({"%locale%": originalContent.locale}, "NSCoreBundle")}}: </strong>
-                    {{ originalContent.link }}
-                </p>
+        {% if originalContent is not null %}
+            <div class="card">
+                <div class="class-body p-3">
+                    <h5 class="card-title">{{ "news.translation.original-content" | trans({"%locale%": originalContent.locale}, "NSCoreBundle") }}</h5>
+                    <p class="card-text">
+                        <strong>{{"news.form.labels.title" | trans({"%locale%": originalContent.locale}, "NSCoreBundle")}}: </strong>
+                        {{ originalContent.title }}
+                    </p>
+                    <p class="card-text text-justify">
+                        <strong>{{"news.form.labels.description" | trans({"%locale%": originalContent.locale}, "NSCoreBundle")}}: </strong>
+                        {{ originalContent.description }}
+                    </p>
+                    <p class="card-text">
+                        <strong>{{"news.form.labels.link" | trans({"%locale%": originalContent.locale}, "NSCoreBundle")}}: </strong>
+                        {{ originalContent.link }}
+                    </p>
+                </div>
             </div>
-        </div>
-        <hr>
-    {% endif %}
-    {% include 'NSCoreBundle:News:form.html.twig' %}
+            <hr>
+        {% endif %}
+
+        {% include 'NSCoreBundle:News:form.html.twig' %}
+    </div>
 {% endblock %}

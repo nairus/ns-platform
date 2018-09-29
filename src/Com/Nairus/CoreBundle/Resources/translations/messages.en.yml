@@ -76,6 +76,7 @@ nav:
         user:
             account: My account
         resume:
+            my-resumes: My Resumes
             skills: Manage Skills
             skilllevels: Manage Skill levels
 
@@ -88,6 +89,7 @@ actions:
     add: Add
     delete: Delete
     publish: Publish
+    unpublish: Unpublish
     change-password: Change my password
     return: Return
 
@@ -101,7 +103,7 @@ pagination:
     next: Next
 
 table:
-    no-item: There is no item for now! Please add one clicking on the button above!
+    no-item: There is no item for now!
     cols:
         titles: News titles
         creation-date: Creation date

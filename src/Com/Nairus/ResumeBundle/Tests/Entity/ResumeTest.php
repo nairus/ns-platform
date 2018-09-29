@@ -3,8 +3,10 @@
 namespace Com\Nairus\ResumeBundle\Entity;
 
 use Com\Nairus\UserBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Test of Resume entity.
@@ -24,6 +26,7 @@ class ResumeTest extends KernelTestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
+        static::bootKernel();
         $this->object = new Resume();
     }
 
@@ -32,6 +35,7 @@ class ResumeTest extends KernelTestCase {
      * This method is called after a test is executed.
      */
     protected function tearDown() {
+        parent::tearDown();
         unset($this->object);
     }
 
@@ -277,6 +281,33 @@ class ResumeTest extends KernelTestCase {
      */
     public function testGetTranslationEntityClass(): void {
         $this->assertSame(Translation\ResumeTranslation::class, Resume::getTranslationEntityClass(), "1. The translation class expected is not ok.");
+    }
+
+    /**
+     * Test the validation of the entity and its translations.
+     *
+     * @return void
+     */
+    public function testValidationWithTranslations(): void {
+        /* @var $validator \Symfony\Component\Validator\Validator\ValidatorInterface */
+        $validator = static::$kernel->getContainer()->get("validator");
+
+        $resume = new Resume();
+        $resume->setCurrentLocale("fr")
+                ->setTitle("");
+        $resume->translate("en")->setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam luctus tincidunt elit vel cras amet bad.");
+
+        $errors = $validator->validate($resume);
+        $this->assertCount(2, $errors, "1. Two errors are expected.");
+
+        /* @var $error1 \Symfony\Component\Validator\ConstraintViolation */
+        $error1 = $errors[0];
+
+        /* @var $error2 \Symfony\Component\Validator\ConstraintViolation */
+        $error2 = $errors[1];
+
+        $this->assertInstanceOf(NotBlank::class, $error1->getConstraint(), "2.1 The error has to be a NotNull constraint.");
+        $this->assertInstanceOf(Length::class, $error2->getConstraint(), "2.2. The error has to be a Length constraint.");
     }
 
 }

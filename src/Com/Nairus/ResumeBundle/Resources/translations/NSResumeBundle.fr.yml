@@ -1,5 +1,11 @@
 flashes:
     success:
+        resume:
+            new: CV ajoutée avec succès !
+            edit: CV n°%id% modifié avec succès !
+            delete: CV n°%id% supprimé avec succès !
+            published: CV n°%id% publié avec succès !
+            unpublished: CV n°%id% dépublié avec succès !
         skill:
             new: Compétence ajoutée avec succès !
             edit: Compétence n°%id% modifiée avec succès !
@@ -11,6 +17,12 @@ flashes:
 
     error:
         unknown: Une erreur inconnue est survenue !
+        resume:
+            delete: Le CV n°%id% n'a pas été supprimée !
+            already-published: Le CV n°%id% est déjà publié !
+            incomplete: Le CV n°%id% est incomplet !
+            no-profile: Il n'y a pas de profil pour le CV n°%id% ! Vous pouvez rendre le CV anonyme ou ajouter un profil.
+
         skill:
             delete:
                 resume-linked: La compétence n°%id% est associée à un ou plusieurs CV !
@@ -22,13 +34,43 @@ flashes:
 
 public:
     index:
-        head:
-            title: 'Plateforme des CV'
+        title: 'Plateforme des CV'
+        subtitle: Performante et moderne
+        description: |
+            Publier <strong>vos CV</strong> et Mettez <strong>vos talents</strong> en évidence.<br>
+            <strong>Recruteurs</strong>, Chercher et Retrouver en un clin d'oeil <strong>votre perle rare</strong> ici.
         pagination-label: 'Pagination de liste des CV'
         show-detail: Voir le CV
         published-at: Publié le
         skills-title: "Compétences :"
-
+resume:
+    created-at: "Créé le "
+    updated-at: "Mis à jour le "
+    form:
+        anonymous: Anonyme ?
+    status:
+        offline: Incomplet Hors ligne
+        to-published: Complet Hors ligne
+        online: En ligne
+    index:
+        title: Liste de mes CV
+        add-new: Ajouter un nouveau CV
+    new:
+        title: Ajout d'un CV
+    edit:
+        title: Modification du CV n° %id%
+    publish:
+        title: Publication du CV n° %id%
+        message: 'Si vous souhaitez quand même le publier, forcez la publication en cliquant sur le bouton "Publier".'
+    show:
+        title: Détail du CV n° %id%
+        details: Informations détaillées
+        skills: Mes compétences
+        add-skill: Ajouter une compétence
+        educations: Mes formations
+        add-education: Ajouter une formation
+        experiences: Mes expériences
+        add-experience: Ajouter une expérience
 skill:
     index:
         title: Liste des compétences

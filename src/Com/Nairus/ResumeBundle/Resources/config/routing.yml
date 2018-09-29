@@ -1,4 +1,11 @@
-# Routing configuration for admin pages.
+## Base routing for the NSResume bundle.
+
+# Routing for restricted users.
+ns_resume_restricted:
+    resource: "@NSResumeBundle/Resources/config/routing/restricted.yml"
+    prefix:   /restricted
+
+# Routing for admin users.
 ns_resume_admin:
     resource: "@NSResumeBundle/Resources/config/routing/admin.yml"
     prefix:   /admin

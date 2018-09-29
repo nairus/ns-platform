@@ -1,0 +1,34 @@
+resume_index:
+    path:     /
+    defaults: { _controller: "NSResumeBundle:Resume:index" }
+    methods:  GET
+
+resume_show:
+    path:     /{id}/show
+    defaults: { _controller: "NSResumeBundle:Resume:show" }
+    methods:  GET
+
+resume_new:
+    path:     /new
+    defaults: { _controller: "NSResumeBundle:Resume:new" }
+    methods:  [GET, POST]
+
+resume_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "NSResumeBundle:Resume:edit" }
+    methods:  [GET, POST]
+
+resume_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "NSResumeBundle:Resume:delete" }
+    methods:  DELETE
+
+resume_publish:
+    path: /{id}/publish
+    defaults: { _controller: "NSResumeBundle:Resume:publish" }
+    methods: PATCH
+
+resume_unpublish:
+    path: /{id}/unpublish
+    defaults: { _controller: "NSResumeBundle:Resume:unpublish" }
+    methods: PATCH

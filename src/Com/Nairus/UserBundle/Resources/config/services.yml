@@ -18,7 +18,7 @@ services:
         arguments:
             $tokenManager: "@security.csrf.token_manager"
 
-    Com\Nairus\UserBundle\EventListener\UserProfileListener:
+    Com\Nairus\UserBundle\Listener\UserProfileListener:
         public: false
         arguments:
             $translator: "@translator"

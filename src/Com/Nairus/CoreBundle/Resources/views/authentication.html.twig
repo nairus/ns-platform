@@ -6,7 +6,7 @@
         {{ "nav.authentication.welcome" | trans({"%username%": app.user.username}) }}
     </span>
     <a class="mx-1 btn btn-dark connect-btn" href="{{path("fos_user_security_logout")}}">
-        <i class="fas fa-user-secret"></i>
+        <i class="fas fa-door-open"></i>
         {{ "nav.authentication.disconnect"|trans }}
     </a>
 {% else %}

@@ -157,7 +157,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals("Liste des compétences", $crawler->filter("h1")->text(), "1.5 The h1 title expected is not ok.");
         $this->assertContains('<i class="fas fa-plus"></i>', $crawler->filter("#skill-add-new")->html(), "1.6 The add button has not the picto expected.");
         $this->assertContains("Ajouter une nouvelle compétence", $crawler->filter("#skill-add-new")->text(), "1.7 The add button has not the content expected.");
-        $this->assertContains("Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !",
+        $this->assertContains("Il n'y a aucune donnée pour le moment !",
                 $crawler->filter("#skills-container")->text(), "1.8 The container should have the no-item message");
 
         // Clic on add new skill button
@@ -237,7 +237,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->followRedirect();
 
         // Check if the entity has been deleted on the list
-        $this->assertContains("Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !",
+        $this->assertContains("Il n'y a aucune donnée pour le moment !",
                 $crawler->filter("#skills-container")->text(), "7.1 The container should have the no-item message");
         $this->assertEquals("/admin/skill", $client->getRequest()->getRequestUri(), "7.2 The request uri expected is not ok.");
         $this->assertGreaterThan(0, $crawler->filter(".message-container > .alert-success")->count(), "7.3 Success flash messages has to be displayed.");
@@ -261,7 +261,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $this->assertContains("Skills list", $crawler->filter("html > head > title")->text(), "1.4 The title page expected is not ok.");
         $this->assertEquals("Skills list", $crawler->filter("h1")->text(), "1.5 The h1 title expected is not ok.");
         $this->assertContains("Add a new skill", $crawler->filter("#skill-add-new")->text(), "1.6 The add button has not the content expected.");
-        $this->assertContains("There is no item for now! Please add one clicking on the button above!",
+        $this->assertContains("There is no item for now!",
                 $crawler->filter("#skills-container")->text(), "1.8 The container should have the no-item message");
 
         // Clic on add new skill button
@@ -319,7 +319,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->followRedirect();
 
         // Check if the entity has been deleted on the list
-        $this->assertContains("There is no item for now! Please add one clicking on the button above!",
+        $this->assertContains("There is no item for now!",
                 $crawler->filter("#skills-container")->text(), "7.1 The container should have the no-item message");
         $this->assertEquals("/en/admin/skill", $client->getRequest()->getRequestUri(), "7.2 The request uri expected is not ok.");
         $this->assertRegExp("~Skill No. [0-9]+ deleted successfully!~", $crawler->filter(".message-container")->text(), "7.3 The [delete] flash message expected is not ok.");
@@ -353,7 +353,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $client->submit($crawler->selectButton('Supprimer')->form());
         $crawler = $client->followRedirect();
 
-        $this->assertContains("Il n'y a aucune donnée pour le moment ! S'il vous plait ajouter en une en cliquant sur le bouton ci-dessous !",
+        $this->assertContains("Il n'y a aucune donnée pour le moment !",
                 $crawler->filter("#skills-container")->text(), "3. The container should have the no-item message");
     }
 
@@ -378,8 +378,8 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->submit($form);
 
         // Verify if there are some errors
-        $this->assertCount(1, $crawler->filter(".is-invalid"), "1.1 The form has to show 2 inputs in error.");
-        $this->assertCount(1, $crawler->filter(".invalid-feedback"), "1.2 The form has to show 2 errors messages.");
+        $this->assertCount(1, $crawler->filter(".is-invalid"), "1.1 The form has to show 1 input in error.");
+        $this->assertCount(1, $crawler->filter(".invalid-feedback"), "1.2 The form has to show 1 error message.");
     }
 
     /**

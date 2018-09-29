@@ -40,6 +40,7 @@ security:
                 secret: "%secret%"
 
     access_control:
+        - { path: "^/([a-z]{2}\/)?restricted", role: ROLE_AUTHOR }
         - { path: "^/([a-z]{2}\/)?admin", role: ROLE_ADMIN }
         - { path: "^/([a-z]{2}\/)?login$", role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: "^/([a-z]{2}\/)?account/change-password$", role: IS_AUTHENTICATED_FULLY }

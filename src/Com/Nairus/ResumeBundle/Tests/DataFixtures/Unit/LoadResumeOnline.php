@@ -13,7 +13,6 @@ use Com\Nairus\ResumeBundle\Entity\ResumeSkill;
 use Com\Nairus\UserBundle\Entity\User;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\UserBundle\NSUserBundle;
-use Com\Nairus\UserBundle\Enums\UserRolesEnum;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,7 +20,8 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Management of tests set for online resumes (one shot).
  *
- * @author nairus
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class LoadResumeOnline implements FixtureInterface {
 
@@ -29,15 +29,7 @@ class LoadResumeOnline implements FixtureInterface {
      * {@inheritDoc}
      */
     public function load(ObjectManager $manager): void {
-        $user = new User();
-        $user
-                ->setUsername("me")
-                ->setEmail("test@nairus.fr")
-                ->setPassword("testpass")
-                ->setEmailCanonical("test@nairus.fr")
-                ->setEnabled(true)
-                ->addRole(UserRolesEnum::AUTHOR);
-
+        $user = $manager->getRepository(NSUserBundle::NAME . ":User")->findOneByUsername('moderator');
         $profile = new Profile();
         $profile->setAddress("Adresse 4")
                 ->setAddressAddition("Adresse 5")
@@ -76,7 +68,7 @@ class LoadResumeOnline implements FixtureInterface {
         /* @var $userRepository ObjectRepository */
         $userRepository = $manager->getRepository(NSUserBundle::NAME . ":User");
 
-        // Récupération des Resume à supprimer.
+        // Get the Resume to remove.
         $dql = "SELECT r FROM NSResumeBundle:Resume r WHERE r.status = :status";
         $resumes = $manager
                 ->createQuery($dql)
@@ -87,17 +79,19 @@ class LoadResumeOnline implements FixtureInterface {
             /* @var $resume Resume */
             $resume;
 
-            // Suppression des entités [Education].
+            // Remove [Education] entities linked to the current resume.
             $educations = $educationRepository->findByResume($resume);
             foreach ($educations as $education) {
                 $manager->remove($education);
             }
 
+            // Remove [Experiences] entities linked to the current resume.
             $experiences = $experienceRepository->findByResume($resume);
             foreach ($experiences as $experience) {
                 $manager->remove($experience);
             }
 
+            // Remove [ResumeSkill] entities linked to the current resume.
             $resumeSkills = $resumeSkillRepository->findByResume($resume);
             foreach ($resumeSkills as $resumeSkill) {
                 $manager->remove($resumeSkill);
@@ -107,12 +101,11 @@ class LoadResumeOnline implements FixtureInterface {
         }
 
         /* @var $user User */
-        $user = $userRepository->findOneByUsername("me");
+        $user = $userRepository->findOneByUsername('moderator');
 
         /* @var $profile Profile */
-        $profile = $profileRepository->findOneBy(["user" => $user]);
+        $profile = $profileRepository->findOneByUser($user);
         $manager->remove($profile);
-        $manager->remove($user);
         $manager->flush();
         $manager->clear();
     }
@@ -124,7 +117,7 @@ class LoadResumeOnline implements FixtureInterface {
      */
     private function prepareResumeDatas(EntityManagerInterface $manager, User $user): void {
         /* @var $skill Skill */
-        $skill = $manager->getRepository(NSResumeBundle::NAME . ":Skill")->findOneBy(["title" => "PHP 7"]);
+        $skill = $manager->getRepository(NSResumeBundle::NAME . ":Skill")->findOneByTitle("PHP 7");
         /* @var $skillLevel SkillLevel */
         $skillLevel = $manager->getRepository(NSResumeBundle::NAME . ":SkillLevel")->findAll()[0];
 
@@ -148,6 +141,16 @@ class LoadResumeOnline implements FixtureInterface {
         }
     }
 
+    /**
+     * Build the dependencies of the resume.
+     *
+     * @param EntityManagerInterface $manager    The entity manager.
+     * @param Resume                 $resume     The current resume.
+     * @param Skill                  $skill      The skill entity linked.
+     * @param SkillLevel             $skillLevel The skill level entity.
+     *
+     * @return void
+     */
     private function buildDependencies(EntityManagerInterface $manager, Resume $resume, Skill $skill, SkillLevel $skillLevel): void {
         $education = new Education();
         $education

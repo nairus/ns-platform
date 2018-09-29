@@ -71,6 +71,8 @@ class SkillLevelController extends Controller {
     /**
      * Creates a new skillLevel entity.
      *
+     * @param Request $request The current request.
+     *
      * @return Response
      */
     public function newAction(Request $request): Response {
@@ -101,6 +103,8 @@ class SkillLevelController extends Controller {
     /**
      * Finds and displays a skillLevel entity.
      *
+     * @param SkillLevel $skillLevel The skill level to display.
+     *
      * @return Response
      */
     public function showAction(SkillLevel $skillLevel): Response {
@@ -114,6 +118,9 @@ class SkillLevelController extends Controller {
 
     /**
      * Displays a form to edit an existing skillLevel entity.
+     *
+     * @param Request    $request    The current request.
+     * @param SkillLevel $skillLevel The skill level to edit.
      *
      * @return Response
      */
@@ -142,6 +149,9 @@ class SkillLevelController extends Controller {
 
     /**
      * Deletes a skillLevel entity.
+     *
+     * @param Request    $request    The current request.
+     * @param SkillLevel $skillLevel The skill level to delete.
      *
      * @return Response
      */

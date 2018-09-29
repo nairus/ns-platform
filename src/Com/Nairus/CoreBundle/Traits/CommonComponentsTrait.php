@@ -43,12 +43,13 @@ trait CommonComponentsTrait {
     }
 
     /**
-     * Log an error
+     * Log an error.
      *
-     * @param \Exception $exc The exception to log.
+     * @param \Throwable $error   The error to log.
+     * @param string     $context The error context (name of the service, controller, bundle ...).
      */
-    protected function logError(\Exception $exc, string $context): void {
-        $this->logger->error($exc->getMessage(), [$context => $exc]);
+    protected function logError(\Throwable $error, string $context): void {
+        $this->logger->error($error->getMessage(), [$context => $error]);
     }
 
 }

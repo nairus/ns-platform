@@ -1,0 +1,4 @@
+## Restricted routing for the NSResumeBundle.
+ns_resume_restricted_resume:
+    resource: "@NSResumeBundle/Resources/config/routing/restricted/resume.yml"
+    prefix: /resume
