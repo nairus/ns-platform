@@ -25,10 +25,50 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
     use \Com\Nairus\CoreBundle\Tests\Traits\DatasLoaderTrait;
 
     /**
+     * @var NSResumeEntity\Resume
+     */
+    private $resume;
+
+    /**
      * {@inheritDoc}
      */
-    public static function setUpBeforeClass() {
-        parent::setUpBeforeClass();
+    protected function tearDown() {
+        // Clean the datas properly .
+        foreach ($this->resume->getEducations() as $education) {
+            $this->resume->removeEducation($education);
+            static::$em->remove($education);
+        }
+        foreach ($this->resume->getExperiences() as $experience) {
+            $this->resume->removeExperience($experience);
+            static::$em->remove($experience);
+        }
+        foreach ($this->resume->getResumeSkills() as $resumeSkill) {
+            $this->resume->removeResumeSkill($resumeSkill);
+            static::$em->remove($resumeSkill);
+        }
+        static::$em->remove($this->resume);
+        static::$em->flush();
+
+        unset($this->resume);
+        parent::tearDown();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp() {
+        parent::setUp();
+        // Get the author of the resume.
+        /* @var $author UserInterface */
+        $author = static::$em->getRepository(User::class)->findOneBy(["username" => "author"]);
+
+        // Create the new resume.
+        $this->resume = new NSResumeEntity\Resume();
+        $this->resume->setAnonymous(true)
+                ->setIp("127.0.0.1")
+                ->setStatus(ResumeStatusEnum::OFFLINE_INCOMPLETE)
+                ->setAuthor($author);
+        $this->loadDatas(static::$em, [new LoadSkill(), new LoadSkillLevel(), $this->resume]);
     }
 
     /**
@@ -62,119 +102,78 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
      * @return void
      */
     public function testOnUpdateStatus(): void {
-        // Prepare test data.
-        $resume = $this->prepareDatas();
-
         // Case 1: Create a new resume.
         /* @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = static::$container->get("event_dispatcher");
-        $resumeStatusEventCase1 = new ResumeStatusEvent($resume);
+        $resumeStatusEventCase1 = new ResumeStatusEvent($this->resume);
         $dispatcher->dispatch(NSResumeEvents::UPDATE_STATUS, $resumeStatusEventCase1);
-        static::$em->refresh($resume);
-        $this->assertEquals(ResumeStatusEnum::OFFLINE_INCOMPLETE, $resume->getStatus(), "1. The status has to remain unchanged.");
+        static::$em->refresh($this->resume);
+        $this->assertEquals(ResumeStatusEnum::OFFLINE_INCOMPLETE, $this->resume->getStatus(), "1. The status has to remain unchanged.");
 
         // Case 2: Add education entity.
         $education = new NSResumeEntity\Education();
         $education->setDiploma("Diplôme")
-                ->setDomain("Domaine")
                 ->setEndYear(2017)
                 ->setInstitution("Institution")
-                ->setResume($resume)
+                ->setResume($this->resume)
                 ->setStartYear(2016);
         static::$em->persist($education);
         static::$em->flush($education);
-        $resumeStatusEventCase2 = new ResumeStatusEvent($resume);
+        $resumeStatusEventCase2 = new ResumeStatusEvent($this->resume);
         $dispatcher->dispatch(NSResumeEvents::UPDATE_STATUS, $resumeStatusEventCase2);
-        static::$em->refresh($resume);
-        $this->assertEquals(ResumeStatusEnum::OFFLINE_INCOMPLETE, $resume->getStatus(), "2.1 The status has to remain unchanged.");
-        $this->assertCount(1, $resume->getEducations(), "2.2 The resume has to contain one [Education] entity.");
+        static::$em->refresh($this->resume);
+        $this->assertEquals(ResumeStatusEnum::OFFLINE_INCOMPLETE, $this->resume->getStatus(), "2.1 The status has to remain unchanged.");
+        $this->assertCount(1, $this->resume->getEducations(), "2.2 The resume has to contain one [Education] entity.");
 
         // Case 3: Add experience entity.
         $experience = new NSResumeEntity\Experience();
         $experience->setCompany("Company")
                 ->setCurrentJob(true)
                 ->setLocation("Location")
-                ->setResume($resume)
+                ->setResume($this->resume)
                 ->setStartMonth(10)
                 ->setStartYear(2018);
         static::$em->persist($experience);
         static::$em->flush($experience);
-        $resumeStatusEventCase3 = new ResumeStatusEvent($resume);
+        $resumeStatusEventCase3 = new ResumeStatusEvent($this->resume);
         $dispatcher->dispatch(NSResumeEvents::UPDATE_STATUS, $resumeStatusEventCase3);
-        static::$em->refresh($resume);
-        $this->assertEquals(ResumeStatusEnum::OFFLINE_INCOMPLETE, $resume->getStatus(), "3.1 The status has to remain unchanged.");
-        $this->assertCount(1, $resume->getExperiences(), "3.2 The resume has to contain one [Experience] entity.");
+        static::$em->refresh($this->resume);
+        $this->assertEquals(ResumeStatusEnum::OFFLINE_INCOMPLETE, $this->resume->getStatus(), "3.1 The status has to remain unchanged.");
+        $this->assertCount(1, $this->resume->getExperiences(), "3.2 The resume has to contain one [Experience] entity.");
 
         // Case 4: Add resume skill entity.
         $skill = static::$em->getRepository(NSResumeEntity\Skill::class)->findAll()[0];
         $skillLevel = static::$em->getRepository(NSResumeEntity\SkillLevel::class)->findAll()[0];
         $resumeSkill = new NSResumeEntity\ResumeSkill();
         $resumeSkill->setRank(1)
-                ->setResume($resume)
+                ->setResume($this->resume)
                 ->setSkill($skill)
                 ->setSkillLevel($skillLevel);
         static::$em->persist($resumeSkill);
         static::$em->flush($resumeSkill);
-        $resumeStatusEventCase4 = new ResumeStatusEvent($resume);
+        $resumeStatusEventCase4 = new ResumeStatusEvent($this->resume);
         $dispatcher->dispatch(NSResumeEvents::UPDATE_STATUS, $resumeStatusEventCase4);
-        static::$em->refresh($resume);
-        $this->assertEquals(ResumeStatusEnum::OFFLINE_TO_PUBLISHED, $resume->getStatus(), "4.1 The status has to be changed.");
-        $this->assertCount(1, $resume->getResumeSkills(), "4.2 The resume has to contain one [ResumeSkill] entity.");
+        static::$em->refresh($this->resume);
+        $this->assertEquals(ResumeStatusEnum::OFFLINE_TO_PUBLISHED, $this->resume->getStatus(), "4.1 The status has to be changed.");
+        $this->assertCount(1, $this->resume->getResumeSkills(), "4.2 The resume has to contain one [ResumeSkill] entity.");
 
         // Case 5: Add another experience entity.
         $experience2 = new NSResumeEntity\Experience();
         $experience2->setCompany("Company 2")
                 ->setCurrentJob(false)
                 ->setLocation("Location 2")
-                ->setResume($resume)
+                ->setResume($this->resume)
                 ->setStartMonth(1)
                 ->setStartYear(2016)
                 ->setEndMonth(9)
                 ->setEndYear(2018);
         static::$em->persist($experience2);
         static::$em->flush($experience2);
-        $resumeStatusEventCase5 = new ResumeStatusEvent($resume);
+        $resumeStatusEventCase5 = new ResumeStatusEvent($this->resume);
         $dispatcher->dispatch(NSResumeEvents::UPDATE_STATUS, $resumeStatusEventCase5);
-        static::$em->refresh($resume);
-        $this->assertEquals(ResumeStatusEnum::OFFLINE_TO_PUBLISHED, $resume->getStatus(), "5.1 The status has not to be changed.");
-        $this->assertCount(2, $resume->getExperiences(), "5.2 The resume has to contain two [Experience] entities.");
-
-        // Clean the datas properly .
-        foreach ($resume->getEducations() as $education) {
-            $resume->removeEducation($education);
-            static::$em->remove($education);
-        }
-        foreach ($resume->getExperiences() as $experience) {
-            $resume->removeExperience($experience);
-            static::$em->remove($experience);
-        }
-        foreach ($resume->getResumeSkills() as $resumeSkill) {
-            $resume->removeResumeSkill($resumeSkill);
-            static::$em->remove($resumeSkill);
-        }
-        static::$em->remove($resume);
-        static::$em->flush();
-    }
-
-    /**
-     * Prepare the datas for the test.
-     *
-     * @return NSResumeEntity\Resume
-     */
-    private function prepareDatas(): NSResumeEntity\Resume {
-        // Get the author of the resume.
-        /* @var $author UserInterface */
-        $author = static::$em->getRepository(User::class)->findOneBy(["username" => "author"]);
-
-        // Create the new resume.
-        $resume = new NSResumeEntity\Resume();
-        $resume->setAnonymous(true)
-                ->setIp("127.0.0.1")
-                ->setStatus(ResumeStatusEnum::OFFLINE_INCOMPLETE)
-                ->setAuthor($author);
-        $this->loadDatas(static::$em, [new LoadSkill(), new LoadSkillLevel(), $resume]);
-
-        return $resume;
+        static::$em->refresh($this->resume);
+        $this->assertEquals(ResumeStatusEnum::OFFLINE_TO_PUBLISHED, $this->resume->getStatus(), "5.1 The status has not to be changed.");
+        $this->assertCount(2, $this->resume->getExperiences(), "5.2 The resume has to contain two [Experience] entities.");
     }
 
 }

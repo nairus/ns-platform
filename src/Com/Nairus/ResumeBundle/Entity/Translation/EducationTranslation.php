@@ -7,6 +7,7 @@ use Com\Nairus\CoreBundle\Entity\AbstractTranslationEntity;
 use Com\Nairus\ResumeBundle\Entity\Education;
 use Doctrine\ORM\Mapping as ORM;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * EducationTranslation entity.
@@ -23,8 +24,20 @@ class EducationTranslation extends AbstractTranslationEntity {
      * @var string
      *
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
      */
     private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      max = 100
+     * )
+     */
+    private $domain;
 
     /**
      * @Prezent\Translatable(targetEntity="Com\Nairus\ResumeBundle\Entity\Education")
@@ -47,10 +60,28 @@ class EducationTranslation extends AbstractTranslationEntity {
     /**
      * Get description
      *
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string {
+    public function getDescription(): ?string {
         return $this->description;
+    }
+
+    /**
+     * Get the education domain.
+     *
+     * @return string|null
+     */
+    public function getDomain() {
+        return $this->domain;
+    }
+
+    /**
+     * Set the resume domain.
+     *
+     * @param string $domain
+     */
+    public function setDomain(string $domain) {
+        $this->domain = $domain;
     }
 
     /**

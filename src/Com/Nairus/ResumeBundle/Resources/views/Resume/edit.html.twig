@@ -11,7 +11,7 @@
     <div class="jumbotron">
         <h1 class="text-center">{{ "resume.edit.title" | trans({"%id%": resume.id}, "NSResumeBundle") }}</h1>
 
-        {% include 'NSResumeBundle:Resume:form.html.twig' %}
+        {% include '@NSResume/Resume/partials/form.html.twig' %}
 
         {{ form_start(delete_form) }}
         <button class="btn btn-danger mx-1 my-1 float-right">

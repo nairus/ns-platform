@@ -1,0 +1,21 @@
+education_show:
+    path:     /{id}/show
+    defaults: { _controller: "NSResumeBundle:Education:show" }
+    methods:  GET
+
+education_new:
+    path:     /{resume_id}/new
+    defaults: { _controller: "NSResumeBundle:Education:new" }
+    methods:  [GET, POST]
+    requirements:
+        resume_id: \d+
+
+education_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "NSResumeBundle:Education:edit" }
+    methods:  [GET, POST]
+
+education_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "NSResumeBundle:Education:delete" }
+    methods:  [GET,DELETE]

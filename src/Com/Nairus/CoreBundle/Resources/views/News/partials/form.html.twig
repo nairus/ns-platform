@@ -1,4 +1,4 @@
-{# NSCoreBundle:News:form.html.twig #}
+{# @NSCore/News/partials/form.html.twig #}
 
 {{ form_start(form) }}
 
@@ -44,7 +44,7 @@
         {{ "actions.list" | trans}}
     </a>
     {% if not news.isNew %}
-        <a href="{{ path('news_show', {"id": news.id}) }}" class="btn btn-secondary mx-1 my-1">
+        <a href="{{ path('news_show', {"id": news.id}) }}" class="btn btn-info mx-1 my-1">
             <i class="far fa-eye"></i>
             {{ "actions.show" | trans}}
         </a>

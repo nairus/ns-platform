@@ -7,6 +7,7 @@ use Com\Nairus\CoreBundle\Entity\TranslationEntityInterface;
 use Com\Nairus\ResumeBundle\Entity\Translation\EducationTranslation;
 use Doctrine\ORM\Mapping as ORM;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Education entity.
@@ -23,6 +24,7 @@ class Education extends AbstractTranslatableEntity {
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $institution;
 
@@ -30,20 +32,15 @@ class Education extends AbstractTranslatableEntity {
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $diploma;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255)
-     */
-    private $domain;
 
     /**
      * @var int
      *
      * @ORM\Column(type="smallint")
+     * @Assert\NotBlank()
      */
     private $startYear;
 
@@ -51,6 +48,9 @@ class Education extends AbstractTranslatableEntity {
      * @var int
      *
      * @ORM\Column(type="smallint")
+     * @Assert\NotBlank()
+     * @Assert\Expression("this.getStartYear() <= this.getEndYear()",
+     *                     message="education.errors.end-year")
      */
     private $endYear;
 
@@ -64,6 +64,7 @@ class Education extends AbstractTranslatableEntity {
 
     /**
      * @Prezent\Translations(targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\EducationTranslation")
+     * @Assert\Valid
      */
     protected $translations;
 
@@ -83,9 +84,9 @@ class Education extends AbstractTranslatableEntity {
     /**
      * Get institution
      *
-     * @return string
+     * @return string|null
      */
-    public function getInstitution(): string {
+    public function getInstitution(): ?string {
         return $this->institution;
     }
 
@@ -105,32 +106,36 @@ class Education extends AbstractTranslatableEntity {
     /**
      * Get diploma
      *
-     * @return string
+     * @return string|null
      */
-    public function getDiploma(): string {
+    public function getDiploma(): ?string {
         return $this->diploma;
     }
 
     /**
-     * Set domain
+     * Set domain (proxy method).
      *
      * @param string $domain
      *
      * @return Education
      */
     public function setDomain(string $domain): Education {
-        $this->domain = $domain;
+        /* @var $translation EducationTranslation */
+        $translation = $this->translate();
+        $translation->setDomain($domain);
 
         return $this;
     }
 
     /**
-     * Get domain
+     * Get domain (proxy method).
      *
-     * @return string
+     * @return string|null
      */
-    public function getDomain(): string {
-        return $this->domain;
+    public function getDomain(): ?string {
+        /* @var $translation EducationTranslation */
+        $translation = $this->translate();
+        return $translation->getDomain();
     }
 
     /**
@@ -149,9 +154,9 @@ class Education extends AbstractTranslatableEntity {
     /**
      * Get startYear
      *
-     * @return int
+     * @return int|null
      */
-    public function getStartYear(): int {
+    public function getStartYear(): ?int {
         return $this->startYear;
     }
 
@@ -171,9 +176,9 @@ class Education extends AbstractTranslatableEntity {
     /**
      * Get endYear
      *
-     * @return int
+     * @return int|null
      */
-    public function getEndYear(): int {
+    public function getEndYear(): ?int {
         return $this->endYear;
     }
 
@@ -182,20 +187,22 @@ class Education extends AbstractTranslatableEntity {
      *
      * @param string $description
      *
-     * @return EducationTranslation
+     * @return Education
      */
-    public function setDescription(string $description) {
+    public function setDescription(string $description): Education {
         /* @var $translation EducationTranslation */
         $translation = $this->translate();
-        return $translation->setDescription($description);
+        $translation->setDescription($description);
+
+        return $this;
     }
 
     /**
      * Get description for current locale (proxy method).
      *
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string {
+    public function getDescription(): ?string {
         /* @var $translation EducationTranslation */
         $translation = $this->translate();
         return $translation->getDescription();

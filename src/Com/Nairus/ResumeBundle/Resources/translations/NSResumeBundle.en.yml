@@ -1,5 +1,9 @@
 flashes:
     success:
+        education:
+            new: Education added successfully!
+            edit: Education No. %id% modified successfully!
+            delete: Education No. %id% deleted successfully!
         resume:
             new: Resume added successfully!
             edit: Resume No. %id% modified successfully!
@@ -41,9 +45,27 @@ public:
         show-detail: Show Resume
         published-at: Published at
         skills-title: "Skills:"
+education:
+    labels:
+        institution: Institution
+        diploma: Diploma
+        domain: Domain
+        start-year: Start year
+        end-year: End year
+        details: "%institution% from %startYear% to %endYear%"
+    new:
+        title: Add an education
+    edit:
+        title: Modification of the education No %id%
+    show:
+        title: Detail of the education No %id%
+    delete:
+        title: Deletion of education No %id%
+        confirm: Are you sure you want to remove the "%diploma% %domain%" education?
 resume:
     created-at: "Created on "
     updated-at: "Updated on "
+    return: Return to the resume
     form:
         anonymous: Anonymous?
     status:
@@ -100,3 +122,4 @@ form:
     labels:
         translations: Translations
         title: Label
+        description: Description

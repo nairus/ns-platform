@@ -1,0 +1,4 @@
+# Custom form error messages
+education:
+    errors:
+        end-year: The end year must be greater than the beginning year

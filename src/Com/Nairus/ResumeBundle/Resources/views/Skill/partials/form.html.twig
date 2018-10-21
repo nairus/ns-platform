@@ -1,4 +1,4 @@
-{# NSResumeBundle:Skill:form.html.twig #}
+{# @NSResume/Skill/partials/form.html.twig #}
 
 {{ form_start(form) }}
 
@@ -16,7 +16,7 @@
         {{ "actions.list" | trans}}
     </a>
     {% if not skill.isNew %}
-        <a href="{{ path('skill_show', {"id": skill.id}) }}" class="btn btn-secondary mx-1 my-1">
+        <a href="{{ path('skill_show', {"id": skill.id}) }}" class="btn btn-info mx-1 my-1">
             <i class="far fa-eye"></i>
             {{ "actions.show" | trans}}
         </a>

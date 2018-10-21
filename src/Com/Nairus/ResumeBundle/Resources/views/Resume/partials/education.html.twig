@@ -1,0 +1,35 @@
+{# @NSResume/partials/education.html.twig #}
+<div class="col-4">
+    <div class="card">
+        <div class="card-body">
+            {% set domain = education.domain ? education.domain : education.translate(defaultLocale).domain %}
+            <h4>{{ education.diploma }} {{ domain }}</h4>
+            <em>
+                {{ "education.labels.details" |
+                    trans(
+                        {"%institution%": education.institution,
+                        "%startYear%": education.startYear,
+                        "%endYear%": education.endYear},
+                    "NSResumeBundle")
+                }}
+            </em>
+        </div>
+        <div class="card-footer">
+            <a class="actions mb-2 p-2 btn btn-secondary"
+               href="{{ path("education_show", {"id": education.id}) }}">
+                <i class="far fa-eye"></i>
+                {{ "actions.show" | trans}}
+            </a>
+            <a class="actions mb-2 p-2 btn btn-primary"
+               href="{{ path("education_edit", {"id": education.id}) }}">
+                <i class="fas fa-pencil-alt"></i>
+                {{ "actions.edit" | trans }}
+            </a>
+            <a class="actions mb-2 p-2 btn btn-danger"
+               href="{{ path("education_delete", {"id": education.id}) }}">
+                <i class="fas fa-trash-alt"></i>
+                {{ "actions.delete" | trans }}
+            </a>
+        </div>
+    </div>
+</div>

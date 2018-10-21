@@ -1,0 +1,56 @@
+{# NSResumeBundle:Education:show.html.twig #}
+
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block title %}{{ "education.show.title" | trans({"%id%": education.id}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "education.show.title" | trans({"%id%": education.id}, "NSResumeBundle") }}</h1>
+
+        {{ include("NSCoreBundle::messages.html.twig") }}
+    </div>
+
+    {% set domain = education.domain ? education.domain : education.translate(defaultLocale).domain %}
+    {% set description = education.description ? education.description : education.translate(defaultLocale).description %}
+    <div class="card shadow">
+        <h2 class="card-header text-center">
+            {{ education.diploma }} {{ domain }}
+        </h2>
+        <div class="card-body">
+            <p class="card-text">
+                {{ description }}
+            </p>
+            <p class="card-text">
+                {{ "education.labels.details" |
+                    trans(
+                        {"%institution%": education.institution,
+                        "%startYear%": education.startYear,
+                        "%endYear%": education.endYear},
+                    "NSResumeBundle")
+                }}
+            </p>
+        </div>
+        <div class="card-footer">
+            <a class="actions d-inline-block mb-2 p-2 btn btn-secondary"
+               href="{{ path('resume_show', {'id': education.resume.id}) }}#educations">
+                <i class="fas fa-chevron-left"></i>
+                {{ "resume.return" | trans({}, "NSResumeBundle")}}
+            </a>
+
+            <a class="actions d-inline-block mb-2 p-2 btn btn-primary"
+               href="{{ path('education_edit', { 'id': education.id }) }}">
+                <i class="fas fa-pencil-alt"></i>
+                {{ "actions.edit" | trans }}
+            </a>
+
+            {{ form_start(delete_form, {'attr': {'class': 'actions d-inline-block mb-2'}}) }}
+            <button class="mb-2 p-2 btn btn-danger">
+                <i class="fas fa-trash-alt"></i>
+                {{ "actions.delete" | trans}}
+            </button>
+            {{ form_end(delete_form) }}
+        </div>
+    </div>
+
+{% endblock %}

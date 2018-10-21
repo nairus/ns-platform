@@ -1,0 +1,18 @@
+{# NSResumeBundle:Education:new.html.twig #}
+
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block title %}{{ "education.new.title" | trans({}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ '/bundles/nscore/css/forms.css' }}" type="text/css">
+{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "education.new.title" | trans({}, "NSResumeBundle") }}</h1>
+
+        {% include '@NSResume/Education/partials/form.html.twig' %}
+    </div>
+{% endblock %}

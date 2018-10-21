@@ -1,0 +1,4 @@
+# Custom form error messages
+education:
+    errors:
+        end-year: L'année de fin doit être supérieure à celle de début

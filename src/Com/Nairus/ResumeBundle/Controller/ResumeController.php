@@ -3,17 +3,15 @@
 namespace Com\Nairus\ResumeBundle\Controller;
 
 use Com\Nairus\CoreBundle\Exception\FunctionalException;
+use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Exception as NSResumeException;
 use Com\Nairus\ResumeBundle\Service\ResumeServiceInterface;
-use Com\Nairus\ResumeBundle\NSResumeBundle;
-use Com\Nairus\UserBundle\Entity\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -23,7 +21,6 @@ use Symfony\Component\Translation\TranslatorInterface;
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
- *
  */
 class ResumeController extends Controller {
 
@@ -40,6 +37,11 @@ class ResumeController extends Controller {
      * Trait for internationalization behaviors.
      */
     use \Com\Nairus\CoreBundle\Traits\CommonComponentsTrait;
+
+/**
+     * Trait for security check.
+     */
+    use \Com\Nairus\ResumeBundle\Traits\ResumeSecurityTrait;
 
     /**
      * Constructor.
@@ -120,9 +122,12 @@ class ResumeController extends Controller {
             return $this->redirectToRoute('resume_show', array('id' => $resume->getId()));
         }
 
+        // Get the defaultLocale
+        $defaultLocale = $this->container->getParameter('kernel.default_locale');
         return $this->render(self::NAME . ':new.html.twig', array(
                     'resume' => $resume,
                     'form' => $form->createView(),
+                    'defaultLocale' => $defaultLocale,
         ));
     }
 
@@ -135,12 +140,14 @@ class ResumeController extends Controller {
      * @return Response
      */
     public function showAction(Request $request, Resume $resume): Response {
+        // Check security.
+        $this->check($resume, $this->getUser());
+
         // Get the defaultLocale
         $defaultLocale = $this->container->getParameter('kernel.default_locale');
         // Get the dates format
         $datesFormat = $this->container->getParameter("dates_format");
 
-        $this->securityCheck($resume);
         $deleteForm = $this->createDeleteForm($resume);
 
         $parameters = ['resume' => $resume,
@@ -169,7 +176,7 @@ class ResumeController extends Controller {
      * @return Response
      */
     public function editAction(Request $request, Resume $resume): Response {
-        $this->securityCheck($resume);
+        $this->check($resume, $this->getUser());
         $deleteForm = $this->createDeleteForm($resume);
         $editForm = $this->createForm('Com\Nairus\ResumeBundle\Form\ResumeType', $resume);
         $editForm->handleRequest($request);
@@ -198,7 +205,7 @@ class ResumeController extends Controller {
      * @return Response
      */
     public function deleteAction(Request $request, Resume $resume): Response {
-        $this->securityCheck($resume);
+        $this->check($resume, $this->getUser());
         $form = $this->createDeleteForm($resume);
         $form->handleRequest($request);
 
@@ -228,7 +235,7 @@ class ResumeController extends Controller {
      * @return Response
      */
     public function publishAction(Request $request, Resume $resume): Response {
-        $this->securityCheck($resume);
+        $this->check($resume, $this->getUser());
         $form = $this->createPublishForm($resume);
         $form->handleRequest($request);
 
@@ -258,7 +265,7 @@ class ResumeController extends Controller {
      * @return Response
      */
     public function unpublishAction(Request $request, Resume $resume): Response {
-        $this->securityCheck($resume);
+        $this->check($resume, $this->getUser());
         $form = $this->createUnpublishForm($resume);
         $form->handleRequest($request);
 
@@ -317,22 +324,6 @@ class ResumeController extends Controller {
                         ->setAction($this->generateUrl('resume_unpublish', ['id' => $resume->getId()]))
                         ->setMethod(Request::METHOD_PATCH)
                         ->getForm();
-    }
-
-    /**
-     * Check if the current resume owns the current user.
-     *
-     * @param Resume $resume The current resume.
-     *
-     * @return void
-     * @throws AccessDeniedException In case of security violation.
-     */
-    private function securityCheck(Resume $resume): void {
-        /* @var $user User */
-        $user = $this->getUser();
-        if ($user->getUsername() !== $resume->getAuthor()->getUsername()) {
-            throw $this->createAccessDeniedException();
-        }
     }
 
     /**

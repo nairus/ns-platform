@@ -1,4 +1,12 @@
 services:
+    Com\Nairus\ResumeBundle\Controller\EducationController:
+        public: true
+        tags: ['controller.service_arguments']
+        arguments:
+            $logger: "@logger"
+            $translator: "@translator"
+            $eventDispatcher: "@event_dispatcher"
+
     Com\Nairus\ResumeBundle\Controller\ResumeController:
         public: true
         tags: ['controller.service_arguments']

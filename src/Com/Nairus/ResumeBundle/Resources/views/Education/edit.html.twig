@@ -1,6 +1,8 @@
+{# NSResumeBundle:Education:edit.html.twig #}
+
 {% extends 'NSCoreBundle::admin.html.twig' %}
 
-{% block title %}{{ "skilllevel.edit.title" | trans({'%id%': skillLevel.id}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
+{% block title %}{{ "education.edit.title" | trans({"%id%": education.id}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -9,9 +11,9 @@
 
 {% block ns_core_admin_body %}
     <div class="jumbotron">
-        <h1 class="position-relative">{{ "skilllevel.edit.title" | trans({'%id%': skillLevel.id}, "NSResumeBundle") }}</h1>
+        <h1 class="text-center">{{ "education.edit.title" | trans({"%id%": education.id}, "NSResumeBundle") }}</h1>
 
-        {% include '@NSResume/SkillLevel/partials/form.html.twig' %}
+        {% include '@NSResume/Education/partials/form.html.twig' %}
 
         {{ form_start(delete_form) }}
         <button class="btn btn-danger mx-1 my-1 float-right">

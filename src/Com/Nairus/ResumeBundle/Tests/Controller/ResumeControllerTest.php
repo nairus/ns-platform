@@ -5,13 +5,11 @@ namespace Com\Nairus\ResumeBundle\Tests\Controller;
 use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Entity\Skill;
 use Com\Nairus\ResumeBundle\Entity\SkillLevel;
-use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeOnline;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
 use Com\Nairus\UserBundle\Tests\AbstractUserWebTestCase;
 use Com\Nairus\UserBundle\Entity\User;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

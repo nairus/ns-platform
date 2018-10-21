@@ -82,4 +82,32 @@ class EducationTranslationTest extends KernelTestCase {
         $this->object->setDescription(null);
     }
 
+    /**
+     * @covers Com\Nairus\ResumeBundle\Entity\Education::setDomain
+     * @covers Com\Nairus\ResumeBundle\Entity\Education::getDomain
+     *
+     * @return void
+     */
+    public function testGetAndSetDomain(): void {
+        try {
+            $this->object->setDomain("Web");
+            $this->assertSame("Web", $this->object->getDomain());
+        } catch (\Exception $exc) {
+            $this->fail("No exception has to be thrown: " . $exc->getMessage());
+        } catch (\Error $err) {
+            $this->fail("No error has to be thrown: " . $err->getMessage());
+        }
+    }
+
+    /**
+     * @covers Com\Nairus\ResumeBundle\Entity\Education::setDomain
+     *
+     * @expectedException \TypeError
+     *
+     * @return void
+     */
+    public function testSetDomainWithNullParam(): void {
+        $this->object->setDomain(null);
+    }
+
 }

@@ -1,5 +1,9 @@
 flashes:
     success:
+        education:
+            new: Formation ajoutée avec succès !
+            edit: Formation n°%id% modifiée avec succès !
+            delete: Formation n°%id% supprimée avec succès !
         resume:
             new: CV ajoutée avec succès !
             edit: CV n°%id% modifié avec succès !
@@ -43,9 +47,27 @@ public:
         show-detail: Voir le CV
         published-at: Publié le
         skills-title: "Compétences :"
+education:
+    labels:
+        institution: Organisme
+        diploma: Diplôme
+        domain: Domaine
+        start-year: Année de début
+        end-year: Année de fin
+        details: "%institution% de %startYear% à %endYear%"
+    new:
+        title: Ajout d'une formation
+    edit:
+        title: Modification de la formation n°%id%
+    show:
+        title: Détail de la formation n°%id%
+    delete:
+        title: Suppression de la formation n°%id%
+        confirm: Êtes-vous sûr de vouloir supprimer la formation "%diploma% %domain%" ?
 resume:
     created-at: "Créé le "
     updated-at: "Mis à jour le "
+    return: Retour au CV
     form:
         anonymous: Anonyme ?
     status:
@@ -101,3 +123,4 @@ form:
     labels:
         translations: Traductions
         title: Libellé
+        description: Description

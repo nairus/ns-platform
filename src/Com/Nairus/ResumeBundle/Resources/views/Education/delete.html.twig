@@ -1,0 +1,33 @@
+{# NSResumeBundle:Education:delete.html.twig #}
+
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block title %}{{ "education.delete.title" | trans({"%id%": education.id}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron text-center">
+        <h1>{{ "education.delete.title" | trans({"%id%": education.id}, "NSResumeBundle") }}</h1>
+
+        {% set domain = education.domain ? education.domain : education.translate(defaultLocale).domain %}
+        <p>{{ "education.delete.confirm" | trans({"%diploma%": education.diploma, "%domain%": domain}, "NSResumeBundle")}}</p>
+
+        {{ form_start(delete_form) }}
+        <div class="actions">
+            <a class="btn btn-secondary mx-1 my-1"
+               href="{{ path('resume_show', {'id': education.resume.id}) }}#educations">
+                <i class="fas fa-chevron-left"></i>
+                {{ "actions.return" | trans({}, 'messages') }}
+            </a>
+            <a class="btn btn-info mx-1 my-1"
+               href="{{ path('education_show', { 'id': education.id }) }}">
+                <i class="far fa-eye"></i>
+                {{ "actions.show" | trans({}, 'messages')}}
+            </a>
+            <button class="btn btn-danger mx-1 my-1">
+                <i class="fas fa-trash-alt"></i>
+                {{ "actions.delete" | trans}}
+            </button>
+        </div>
+        {{ form_end(delete_form) }}
+    </div>
+{% endblock %}

@@ -17,6 +17,9 @@ parameters:
      - en
     app_webmaster: Nicolas Surian AKA Nairus
 
+    # with this option the container won't try to create a service class with arguments that are not available as services and you will get a decisive error.
+    # This is the default setting for sf4
+    container.autowiring.strict_mode: true
 framework:
     #esi: ~
     translator: { fallbacks: ['%locale%'] }

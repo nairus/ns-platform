@@ -1,3 +1,5 @@
+{# NSResumeBundle:Resume:show.html.twig #}
+
 {% extends 'NSCoreBundle::admin.html.twig' %}
 
 {% block title %}{{ "resume.show.title" | trans({"%id%": resume.id}, "NSResumeBundle") }} - {{ parent() }}{% endblock %}
@@ -118,9 +120,17 @@
                 </div>
                 <div class="tab-pane fade" id="educations" role="tabpanel" aria-labelledby="educations-tab">
                     <div id="educations-content" class="mb-3">
-                        <em>{{ "table.no-item" | trans }}</em>
+                        {% if resume.educations | length > 0 %}
+                            <div class="row">
+                                {% for education in resume.educations %}
+                                    {% include '@NSResume/Resume/partials/education.html.twig' %}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <em>{{ "table.no-item" | trans }}</em>
+                        {% endif %}
                     </div>
-                    <a href="#" class="btn btn-primary">
+                    <a href="{{ path('education_new', {'resume_id': resume.id}) }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i>
                         {{ "resume.show.add-education" | trans({}, "NSResumeBundle") }}
                     </a>
@@ -137,4 +147,17 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function init() {
+            let hash = window.location.hash.substr(1);
+            // If there is a hash in the url, we simulate the click on the tab link.
+            if (hash) {
+                $("#" + hash + "-tab").click();
+            }
+        })();
+    </script>
 {% endblock %}

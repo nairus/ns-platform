@@ -84,7 +84,9 @@ class EducationRepositoryTest extends AbstractKernelTestCase {
 
         // Test translation.
         $this->assertFalse($educationUpdated->hasTranslation("en"), "3.1 The entity musts not have a [en] translation for [description] field.");
-        $educationUpdated->translate("en")->setDescription("Description EN");
+        $educationUpdated->translate("en")
+                ->setDescription("Description EN")
+                ->setDomain("IT");
         static::$em->flush($educationUpdated);
         static::$em->refresh($educationUpdated);
         $this->assertTrue($educationUpdated->hasTranslation("en"), "3.2 The entity musts have a [en] translation for [description] field.");

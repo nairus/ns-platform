@@ -1,0 +1,65 @@
+{# @NSResume/Education/partials/form.html.twig #}
+
+{% trans_default_domain 'NSResumeBundle' %}
+
+{% if not form.vars.valid %}
+    <div id="global-errors-container" class="alert alert-danger fade show">
+        <i class="fas fa-exclamation-triangle"></i>
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>{{ "flashes.error" | trans({}, 'messages') }}</strong> {{ "form.translations.errors" | trans }}
+    </div>
+{% endif %}
+
+{{ form_start(form) }}
+
+<div class="form-group">
+    <label for="com_nairus_resumebundle_education_diploma" class="required">{{ "education.labels.diploma" | trans }}</label>
+    {{ form_errors(form.diploma) }}
+    {{ form_widget(form.diploma) }}
+</div>
+
+<div class="form-group">
+    <label for="com_nairus_resumebundle_education_institution" class="required">{{ "education.labels.institution" | trans }}</label>
+    {{ form_errors(form.institution) }}
+    {{ form_widget(form.institution) }}
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <div class="form-inline">
+            <label for="com_nairus_resumebundle_education_startYear" class="required mr-2">{{ "education.labels.start-year" | trans }}</label>
+            {{ form_widget(form.startYear) }}
+        </div>
+        {{ form_errors(form.startYear) }}
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="form-inline">
+            <label for="com_nairus_resumebundle_education_endYear" class="required mr-2">{{ "education.labels.end-year" | trans }}</label>
+            {{ form_widget(form.endYear) }}
+        </div>
+        {{ form_errors(form.endYear) }}
+    </div>
+</div>
+
+<hr>
+
+{{ form_rest(form) }}
+<div class="row actions">
+    <a class="btn btn-secondary mx-1 my-1"
+       href="{{ path('resume_show', {'id': education.resume.id}) }}#educations">
+        <i class="fas fa-chevron-left"></i>
+        {{ "actions.return" | trans({}, 'messages') }}
+    </a>
+    {% if not education.isNew %}
+        <a class="btn btn-info mx-1 my-1"
+           href="{{ path('education_show', { 'id': education.id }) }}">
+            <i class="far fa-eye"></i>
+            {{ "actions.show" | trans({}, 'messages')}}
+        </a>
+    {% endif %}
+    <button class="btn btn-primary mx-1 my-1" formnovalidate="formnovalidate">
+        <i class="far fa-save"></i>
+        {{ "actions.save" | trans({}, 'messages') }}
+    </button>
+</div>
+{{ form_end(form) }}

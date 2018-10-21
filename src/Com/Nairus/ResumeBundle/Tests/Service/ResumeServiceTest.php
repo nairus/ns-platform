@@ -195,13 +195,13 @@ class ResumeServiceTest extends AbstractKernelTestCase {
         $experience = new Experience();
         $resumeSkill = new ResumeSkill();
         $education
+                ->setCurrentLocale("fr")
                 ->setDiploma("Diplome")
                 ->setDomain("Domaine")
                 ->setEndYear(2017)
                 ->setInstitution("Institution")
                 ->setResume($resume)
                 ->setStartYear(2016)
-                ->setCurrentLocale("fr")
                 ->setDescription("Description");
         $experience
                 ->setCompany("Société")

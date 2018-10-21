@@ -1,6 +1,7 @@
-{# NSREsumeBundle:Resume:form.html.twig #}
-
+{# @NSResume/SkillLevel/partials/form.html.twig #}
 {% trans_default_domain 'NSResumeBundle' %}
+
+{{ form_start(form) }}
 
 {% if not form.vars.valid %}
     <div id="global-errors-container" class="alert alert-danger fade show">
@@ -10,18 +11,16 @@
     </div>
 {% endif %}
 
-{{ form_start(form) }}
-
 {{ form_widget(form) }}
 
 <div class="row actions">
-    <a href="{{ path('resume_index') }}" class="btn btn-secondary mx-1 my-1">
+    <a href="{{ path('skilllevel_index') }}" class="btn btn-secondary mx-1 my-1">
         <i class="fas fa-chevron-left"></i>
         {{ "actions.list" | trans({}, 'messages')}}
     </a>
-    {% if not resume.isNew %}
-        <a class="btn btn-secondary mx-1 my-1"
-           href="{{ path('resume_show', { 'id': resume.id }) }}">
+    {% if not skillLevel.isNew %}
+        <a class="btn btn-info mx-1 my-1"
+           href="{{ path('skilllevel_show', { 'id': skillLevel.id }) }}">
             <i class="far fa-eye"></i>
             {{ "actions.show" | trans({}, 'messages')}}
         </a>
@@ -30,5 +29,5 @@
         <i class="far fa-save"></i>
         {{ "actions.save" | trans({}, 'messages') }}
     </button>
-    {{ form_end(form) }}
 </div>
+{{ form_end(form) }}

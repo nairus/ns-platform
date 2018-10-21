@@ -10,6 +10,6 @@
 {% block ns_core_admin_body %}
     <div class="jumbotron">
         <h1 class="text-center">{{ "news.edit.title" | trans({"%news_id%": news.id}, "NSCoreBundle") }}</h1>
-        {% include 'NSCoreBundle:News:form.html.twig' %}
+        {% include '@NSCore/News/partials/form.html.twig' %}
     </div>
 {% endblock %}

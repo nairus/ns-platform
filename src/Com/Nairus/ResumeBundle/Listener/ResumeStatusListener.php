@@ -42,7 +42,7 @@ class ResumeStatusListener implements EventSubscriberInterface {
     }
 
     /**
-     * Update the status.
+     * Update the status when adding a content.
      *
      * @param ResumeStatusEvent $event The event dispatched.
      *
