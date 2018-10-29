@@ -7,6 +7,7 @@ use Com\Nairus\CoreBundle\Entity\AbstractTranslationEntity;
 use Com\Nairus\ResumeBundle\Entity\Experience;
 use Doctrine\ORM\Mapping as ORM;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * ExperienceTransalation Entity
@@ -28,6 +29,7 @@ class ExperienceTranslation extends AbstractTranslationEntity {
      * @var string
      *
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
      */
     private $description;
 
@@ -47,9 +49,9 @@ class ExperienceTranslation extends AbstractTranslationEntity {
     /**
      * Get description
      *
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string {
+    public function getDescription(): ?string {
         return $this->description;
     }
 

@@ -7,6 +7,14 @@ services:
             $translator: "@translator"
             $eventDispatcher: "@event_dispatcher"
 
+    Com\Nairus\ResumeBundle\Controller\ExperienceController:
+        public: true
+        tags: ['controller.service_arguments']
+        arguments:
+            $logger: "@logger"
+            $translator: "@translator"
+            $eventDispatcher: "@event_dispatcher"
+
     Com\Nairus\ResumeBundle\Controller\ResumeController:
         public: true
         tags: ['controller.service_arguments']
@@ -14,6 +22,7 @@ services:
             $resumeService: "@ns_resume.resume_service"
             $logger: "@logger"
             $translator: "@translator"
+
     Com\Nairus\ResumeBundle\Controller\SkillController:
         public: true
         tags: ['controller.service_arguments']

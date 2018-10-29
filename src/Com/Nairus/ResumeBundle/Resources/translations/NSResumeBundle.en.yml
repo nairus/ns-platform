@@ -4,6 +4,10 @@ flashes:
             new: Education added successfully!
             edit: Education No. %id% modified successfully!
             delete: Education No. %id% deleted successfully!
+        experience:
+            new: Experience added successfully!
+            edit: Experience No. %id% modified successfully!
+            delete: Experience No. %id% deleted successfully!
         resume:
             new: Resume added successfully!
             edit: Resume No. %id% modified successfully!
@@ -50,8 +54,6 @@ education:
         institution: Institution
         diploma: Diploma
         domain: Domain
-        start-year: Start year
-        end-year: End year
         details: "%institution% from %startYear% to %endYear%"
     new:
         title: Add an education
@@ -62,6 +64,22 @@ education:
     delete:
         title: Deletion of education No %id%
         confirm: Are you sure you want to remove the "%diploma% %domain%" education?
+experience:
+    labels:
+        company: Company
+        location: Location
+        start-month: Start month
+        end-month: End month
+        current-job: Current job?
+    new:
+        title: Add an experience
+    edit:
+        title: Modification of the experience No %id%
+    show:
+        title: Detail of the experience No %id%
+    delete:
+        title: Deletion of the experience No %id%
+        confirm: Are you sure you want to remove the "%company% %location%" experience?
 resume:
     created-at: "Created on "
     updated-at: "Updated on "
@@ -123,3 +141,5 @@ form:
         translations: Translations
         title: Label
         description: Description
+        start-year: Start year
+        end-year: End year

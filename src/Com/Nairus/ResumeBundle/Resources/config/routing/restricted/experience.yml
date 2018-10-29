@@ -1,0 +1,21 @@
+experience_show:
+    path:     /{id}/show
+    defaults: { _controller: "NSResumeBundle:Experience:show" }
+    methods:  GET
+
+experience_new:
+    path:     /{resume_id}/new
+    defaults: { _controller: "NSResumeBundle:Experience:new" }
+    methods:  [GET, POST]
+    requirements:
+        resume_id: \d+
+
+experience_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "NSResumeBundle:Experience:edit" }
+    methods:  [GET, POST]
+
+experience_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "NSResumeBundle:Experience:delete" }
+    methods:  [GET, DELETE]

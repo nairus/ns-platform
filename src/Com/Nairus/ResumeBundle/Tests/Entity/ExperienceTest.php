@@ -3,6 +3,7 @@
 namespace Com\Nairus\ResumeBundle\Entity;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Validator\Constraints as SFConstaints;
 
 /**
  * Test of Experience entity.
@@ -22,6 +23,7 @@ class ExperienceTest extends KernelTestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
+        static::bootKernel();
         $this->object = new Experience();
     }
 
@@ -30,6 +32,7 @@ class ExperienceTest extends KernelTestCase {
      * This method is called after a test is executed.
      */
     protected function tearDown() {
+        parent::tearDown();
         unset($this->object);
     }
 
@@ -141,17 +144,6 @@ class ExperienceTest extends KernelTestCase {
     }
 
     /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Experience::setStartMonth
-     *
-     * @expectedException \TypeError
-     *
-     * @return void
-     */
-    public function testSetStartMonthWithNullParam(): void {
-        $this->object->setStartMonth(null);
-    }
-
-    /**
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setEndMonth
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::getEndMonth
      *
@@ -164,17 +156,6 @@ class ExperienceTest extends KernelTestCase {
         } catch (\Throwable $err) {
             $this->fail("No exception or error has to be thrown: " . $err->getMessage());
         }
-    }
-
-    /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Experience::setEndMonth
-     *
-     * @expectedException \TypeError
-     *
-     * @return void
-     */
-    public function testSetEndMonthWithNullParam(): void {
-        $this->object->setEndMonth(null);
     }
 
     /**
@@ -193,17 +174,6 @@ class ExperienceTest extends KernelTestCase {
     }
 
     /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Experience::setStartYear
-     *
-     * @expectedException \TypeError
-     *
-     * @return void
-     */
-    public function testSetStartYearWithNullParam(): void {
-        $this->object->setStartYear(null);
-    }
-
-    /**
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setEndYear
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::getEndYear
      *
@@ -216,17 +186,6 @@ class ExperienceTest extends KernelTestCase {
         } catch (\Throwable $exc) {
             $this->fail("No exception or error has to be thrown: " . $exc->getMessage());
         }
-    }
-
-    /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Experience::setEndYear
-     *
-     * @expectedException \TypeError
-     *
-     * @return void
-     */
-    public function testSetEndYearWithNullParam(): void {
-        $this->object->setEndYear(null);
     }
 
     /**
@@ -281,6 +240,95 @@ class ExperienceTest extends KernelTestCase {
      */
     public function testGetTranslationEntityClass(): void {
         $this->assertSame(Translation\ExperienceTranslation::class, Experience::getTranslationEntityClass(), "1. The translation class expected is not ok.");
+    }
+
+    /**
+     * Test the validation of the entity.
+     *
+     * @return void
+     */
+    public function testValidationWithTranslationsCase1(): void {
+        /* @var $validator \Symfony\Component\Validator\Validator\ValidatorInterface */
+        $validator = static::$kernel->getContainer()->get("validator");
+
+        $this->object->setCurrentLocale('fr')
+                ->setCurrentJob(true)
+                ->setCompany("")
+                ->setDescription("")
+                ->setLocation("");
+
+        $errors = $validator->validate($this->object);
+
+        $this->assertCount(5, $errors, "1. Five error messages are expected.");
+
+        $num = 2;
+        $errorFieldsExpected = ["company", "location", "startMonth", "startYear", "translations[fr].description"];
+        foreach ($errors as /* @var $error \Symfony\Component\Validator\ConstraintViolation */ $error) {
+            $this->assertInstanceOf(SFConstaints\NotBlank::class, $error->getConstraint(), "$num.1 The constraint expected is not valid.");
+            $this->assertContains($error->getPropertyPath(), $errorFieldsExpected, "$num.2 The field expected is not ok.");
+            $num ++;
+        }
+    }
+
+    /**
+     * Test the validation of the entity.
+     *
+     * @return void
+     */
+    public function testValidationWithTranslationsCase2(): void {
+        /* @var $validator \Symfony\Component\Validator\Validator\ValidatorInterface */
+        $validator = static::$kernel->getContainer()->get("validator");
+
+        $this->object->setCurrentLocale('fr')
+                ->setCurrentJob(false)
+                ->setCompany("Company")
+                ->setDescription("Description")
+                ->setLocation("Location")
+                ->setStartMonth(10)
+                ->setStartYear(2005)
+                ->setEndMonth("")
+                ->setEndYear("");
+
+        $errors = $validator->validate($this->object);
+
+        $this->assertCount(2, $errors, "1. Two error messages are expected.");
+
+        $num = 2;
+        $errorFieldsExpected = ["endYear", "currentJob"];
+        foreach ($errors as /* @var $error \Symfony\Component\Validator\ConstraintViolation */ $error) {
+            $this->assertInstanceOf(SFConstaints\Expression::class, $error->getConstraint(), "2.$num The constraint expected is not valid.");
+            $this->assertContains($error->getPropertyPath(), $errorFieldsExpected, "$num.2 The field expected is not ok.");
+            $num ++;
+        }
+    }
+
+    /**
+     * Test the validation of the entity.
+     *
+     * @return void
+     */
+    public function testValidationWithTranslationsCase3(): void {
+        /* @var $validator \Symfony\Component\Validator\Validator\ValidatorInterface */
+        $validator = static::$kernel->getContainer()->get("validator");
+
+        $this->object->setCurrentLocale('fr')
+                ->setCurrentJob(false)
+                ->setCompany("Company")
+                ->setDescription("Description")
+                ->setLocation("Location")
+                ->setStartMonth(10)
+                ->setStartYear(2005)
+                ->setEndMonth(9)
+                ->setEndYear(2005);
+
+        $errors = $validator->validate($this->object);
+
+        $this->assertCount(1, $errors, "1. One error message is expected.");
+
+        /* @var $error \Symfony\Component\Validator\ConstraintViolation */
+        $error = $errors[0];
+        $this->assertInstanceOf(SFConstaints\Expression::class, $error->getConstraint(), "2.1 The constraint expected is not valid.");
+        $this->assertEquals("endMonth", $error->getPropertyPath(), "2.2 The field expected is not ok.");
     }
 
 }

@@ -4,18 +4,13 @@ namespace Com\Nairus\ResumeBundle\Form;
 
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Education form type.
- *
- * @author nairus <nicolas.surian@gmail.com>
- * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
- */
-class EducationType extends AbstractType {
+class ExperienceType extends AbstractType {
 
     /**
      * {@inheritdoc}
@@ -23,30 +18,62 @@ class EducationType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $currentYear = date('Y');
         $years = range($currentYear - 50, $currentYear);
-        $choices = [];
+        $yearChoices = [
+            "----" => ""
+        ];
+
         foreach (array_reverse($years) as $year) {
-            $choices[$year] = $year;
+            $yearChoices[$year] = $year;
         }
 
-        $builder->add('institution', TextType::class, [
-                    'label' => 'education.labels.institution',
-                    'translation_domain' => 'NSResumeBundle',
+        $monthChoices = [
+            "monthes.choose-label" => ""
+        ];
+        for ($i = 0; $i < 12; $i++) {
+            $monthNumber = $i + 1;
+            $monthKey = "monthes." . $monthNumber;
+            $monthChoices[$monthKey] = $monthNumber;
+        }
+
+        $builder->add('company', TextType::class, [
+                    'label' => 'experience.labels.company',
+                    'translation_domain' => 'NSResumeBundle'
                 ])
-                ->add('diploma', TextType::class, [
-                    'label' => 'education.labels.diploma',
+                ->add('location', TextType::class, [
+                    'label' => 'experience.labels.location',
+                    'translation_domain' => 'NSResumeBundle'
+                ])
+                ->add('startMonth', ChoiceType::class, [
+                    'label' => 'experience.labels.start-month',
                     'translation_domain' => 'NSResumeBundle',
+                    'choices' => $monthChoices,
+                    'choice_translation_domain' => 'messages'
+                ])
+                ->add('endMonth', ChoiceType::class, [
+                    'label' => 'experience.labels.end-month',
+                    'translation_domain' => 'NSResumeBundle',
+                    'choices' => $monthChoices,
+                    'choice_translation_domain' => 'messages',
+                    'required' => false
                 ])
                 ->add('startYear', ChoiceType::class, [
                     'label' => 'form.labels.start-year',
                     'translation_domain' => 'NSResumeBundle',
-                    'choices' => $choices,
+                    'choices' => $yearChoices,
                     'choice_translation_domain' => false,
                 ])
                 ->add('endYear', ChoiceType::class, [
                     'label' => 'form.labels.end-year',
                     'translation_domain' => 'NSResumeBundle',
-                    'choices' => $choices,
+                    'choices' => $yearChoices,
                     'choice_translation_domain' => false,
+                    'required' => false
+                ])
+                ->add('currentJob', CheckboxType::class, [
+                    'label' => 'experience.labels.current-job',
+                    'required' => false,
+                    'translation_domain' => 'NSResumeBundle',
+                    'label_attr' => ['class' => 'checkbox-custom']
                 ])
                 ->add('translations', TranslationsType::class, [
                     'label' => 'form.labels.translations',
@@ -58,12 +85,6 @@ class EducationType extends AbstractType {
                                 'en' => ['label' => 'form.labels.description'],
                             ]
                         ],
-                        'domain' => [
-                            'locale_options' => [
-                                'fr' => ['label' => 'education.labels.domain'],
-                                'en' => ['label' => 'education.labels.domain'],
-                            ]
-                        ],
                     ]
         ]);
     }
@@ -73,7 +94,7 @@ class EducationType extends AbstractType {
      */
     public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Com\Nairus\ResumeBundle\Entity\Education'
+            'data_class' => 'Com\Nairus\ResumeBundle\Entity\Experience'
         ));
     }
 
@@ -81,7 +102,7 @@ class EducationType extends AbstractType {
      * {@inheritdoc}
      */
     public function getBlockPrefix() {
-        return 'com_nairus_resumebundle_education';
+        return 'com_nairus_resumebundle_experience';
     }
 
 }

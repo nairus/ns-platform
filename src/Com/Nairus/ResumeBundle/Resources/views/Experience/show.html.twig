@@ -1,0 +1,52 @@
+{# NSResumeBundle:Experience:show.html.twig #}
+
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block title %}{{ "experience.show.title" | trans({'%id%': experience.id}, 'NSResumeBundle') }} - {{ parent() }}{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "experience.show.title" | trans({'%id%': experience.id}, 'NSResumeBundle') }}</h1>
+
+        {{ include("NSCoreBundle::messages.html.twig") }}
+    </div>
+
+    <div class="card shadow">
+        <h2 class="card-header text-center">{{ experience.company }}&nbsp;-&nbsp;{{ experience.location }}</h2>
+        <div class="card-body" >
+            <div class="card-text text-muted">
+                {% set startMonth = ('monthes.' ~ experience.startMonth) | trans %}
+                {{ startMonth }}&nbsp;{{ experience.startYear }}
+                &nbsp;-&nbsp;
+                {% if not experience.currentJob %}
+                    {% set endMonth = ('monthes.' ~ experience.endMonth) | trans %}
+                    {{ endMonth }}&nbsp;{{ experience.endYear}}
+                {% endif %}
+            </div>
+            <div class="card-text">
+                {% set description = experience.description ? experience.description : experience.translate(defaultLocale).description %}
+                {{ description }}
+            </div>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-secondary mx-1 my-1"
+               href="{{ path('resume_show', {'id': experience.resume.id}) }}#experiences">
+                <i class="fas fa-chevron-left"></i>
+                {{ "resume.return" | trans({}, "NSResumeBundle")}}
+            </a>
+
+            <a class="actions mx-1 my-1 btn btn-primary"
+               href="{{ path("experience_edit", {"id": experience.id}) }}">
+                <i class="fas fa-pencil-alt"></i>
+                {{ "actions.edit" | trans }}
+            </a>
+
+            {{ form_start(delete_form) }}
+            <button class="btn btn-danger mx-1 my-1">
+                <i class="fas fa-trash-alt"></i>
+                {{ "actions.delete" | trans}}
+            </button>
+            {{ form_end(delete_form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -3,25 +3,26 @@
 namespace Com\Nairus\ResumeBundle\Controller;
 
 use Com\Nairus\ResumeBundle\NSResumeBundle;
-use Com\Nairus\ResumeBundle\Entity\Education;
 use Com\Nairus\ResumeBundle\Entity\Resume;
+use Com\Nairus\ResumeBundle\Entity\Experience;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Education restricted controller.
+ * Experience restricted controller.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class EducationController extends Controller {
+class ExperienceController extends Controller {
 
-    private const NAME = NSResumeBundle::NAME . ":Education";
+    private const NAME = NSResumeBundle::NAME . ":Experience";
 
     /**
      * Traits for internationalization behaviors and security check.
@@ -44,7 +45,7 @@ class EducationController extends Controller {
     }
 
     /**
-     * Creates a new education entity.
+     * Creates a new experience entity.
      *
      * @ParamConverter("resume", options={"mapping": {"resume_id": "id"}})
      *
@@ -52,131 +53,136 @@ class EducationController extends Controller {
      * @param Resume  $resume  The parent resume.
      *
      * @return Response
+     *
      */
     public function newAction(Request $request, Resume $resume): Response {
         // Security check.
         $this->check($resume, $this->getUser());
 
-        $education = new Education();
-        $education->setResume($resume);
-        $form = $this->createForm('Com\Nairus\ResumeBundle\Form\EducationType', $education);
+        $experience = new Experience();
+        $experience->setResume($resume);
+        $form = $this->createForm('Com\Nairus\ResumeBundle\Form\ExperienceType', $experience);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($education);
+            $em->persist($experience);
             $em->flush();
 
             // Dispatch event for updating the resume's status.
             $this->dispatch($resume);
 
-            $this->addFlash("success", $this->getTranslation("flashes.success.education.new", [], NSResumeBundle::NAME));
-            return $this->redirectToRoute('education_show', array('id' => $education->getId()));
+            $this->addFlash("success", $this->getTranslation("flashes.success.experience.new", [], NSResumeBundle::NAME));
+
+            return $this->redirectToRoute('experience_show', array('id' => $experience->getId()));
         }
 
         return $this->render(self::NAME . ':new.html.twig', array(
-                    'education' => $education,
+                    'experience' => $experience,
                     'form' => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a education entity.
+     * Finds and displays a experience entity.
      *
-     * @param Education $education The current entity.
+     * @param Experience $experience The current entity.
      *
      * @return Response
+     *
      */
-    public function showAction(Education $education): Response {
+    public function showAction(Experience $experience): Response {
         // Security check.
-        $this->check($education->getResume(), $this->getUser());
+        $this->check($experience->getResume(), $this->getUser());
 
-        $deleteForm = $this->createDeleteForm($education);
+        $deleteForm = $this->createDeleteForm($experience);
 
         // Get the defaultLocale
         $defaultLocale = $this->container->getParameter('kernel.default_locale');
-        return $this->render(self::NAME . ':show.html.twig', array(
-                    'education' => $education,
+        return $this->render(self::NAME . ':show.html.twig', [
+                    'experience' => $experience,
                     'delete_form' => $deleteForm->createView(),
                     'defaultLocale' => $defaultLocale,
-        ));
+        ]);
     }
 
     /**
-     * Displays a form to edit an existing education entity.
+     * Displays a form to edit an existing experience entity.
      *
-     * @param Request   $request   The current request.
-     * @param Education $education The current entity.
+     * @param Request    $request    The current request.
+     * @param Experience $experience The current entity.
      *
      * @return Response
+     *
      */
-    public function editAction(Request $request, Education $education): Response {
+    public function editAction(Request $request, Experience $experience): Response {
         // Security check.
-        $this->check($education->getResume(), $this->getUser());
+        $this->check($experience->getResume(), $this->getUser());
 
-        $deleteForm = $this->createDeleteForm($education);
-        $editForm = $this->createForm('Com\Nairus\ResumeBundle\Form\EducationType', $education);
+        $deleteForm = $this->createDeleteForm($experience);
+        $editForm = $this->createForm('Com\Nairus\ResumeBundle\Form\ExperienceType', $experience);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash("success", $this->getTranslation("flashes.success.education.edit", ["%id%" => $education->getId()], NSResumeBundle::NAME));
-            return $this->redirectToRoute('education_show', array('id' => $education->getId()));
+            $this->addFlash("success", $this->getTranslation("flashes.success.experience.edit", ["%id%" => $experience->getId()], NSResumeBundle::NAME));
+
+            return $this->redirectToRoute('experience_show', array('id' => $experience->getId()));
         }
 
         return $this->render(self::NAME . ':edit.html.twig', array(
-                    'education' => $education,
+                    'experience' => $experience,
                     'form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Deletes a education entity.
+     * Deletes a experience entity.
      *
-     * @param Request   $request   The current request.
-     * @param Education $education The current entity.
+     * @param Request    $request    The current request.
+     * @param Experience $experience The current entity.
      *
      * @return Response
+     *
      */
-    public function deleteAction(Request $request, Education $education): Response {
+    public function deleteAction(Request $request, Experience $experience): Response {
         // Security check.
-        $this->check($education->getResume(), $this->getUser());
+        $resume = $experience->getResume();
+        $this->check($resume, $this->getUser());
 
-        $form = $this->createDeleteForm($education);
+        $form = $this->createDeleteForm($experience);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $resume = $education->getResume();
-            $educationId = $education->getId();
+            $experienceId = $experience->getId();
             $em = $this->getDoctrine()->getManager();
-            $em->remove($education);
+            $em->remove($experience);
             $em->flush();
 
-            $this->addFlash("success", $this->getTranslation("flashes.success.education.delete", ["%id%" => $educationId], NSResumeBundle::NAME));
+            $this->addFlash("success", $this->getTranslation("flashes.success.experience.delete", ["%id%" => $experienceId], NSResumeBundle::NAME));
+
             return $this->redirectToRoute('resume_show', ['id' => $resume->getId()]);
         }
 
-        // Get the defaultLocale
-        $defaultLocale = $this->container->getParameter('kernel.default_locale');
+        // Go to the confirm form
         return $this->render(self::NAME . ':delete.html.twig', [
-                    'education' => $education,
+                    'experience' => $experience,
                     'delete_form' => $form->createView(),
-                    'defaultLocale' => $defaultLocale,
         ]);
     }
 
     /**
-     * Creates a form to delete a education entity.
+     * Creates a form to delete a experience entity.
      *
-     * @param Education $education The education entity
+     * @param Experience $experience The experience entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
-    private function createDeleteForm(Education $education): \Symfony\Component\Form\Form {
+    private function createDeleteForm(Experience $experience): Form {
         return $this->createFormBuilder()
-                        ->setAction($this->generateUrl('education_delete', array('id' => $education->getId())) . "#educations")
+                        ->setAction($this->generateUrl('experience_delete', array('id' => $experience->getId())) . "#experiences")
                         ->setMethod(Request::METHOD_DELETE)
                         ->getForm()
         ;

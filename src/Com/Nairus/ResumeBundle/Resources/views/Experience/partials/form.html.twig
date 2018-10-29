@@ -1,0 +1,71 @@
+{# @NSResume/Experience/partials/form.html.twig #}
+
+{% trans_default_domain 'NSResumeBundle' %}
+
+{% if not form.vars.valid %}
+    <div id="global-errors-container" class="alert alert-danger fade show">
+        <i class="fas fa-exclamation-triangle"></i>
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>{{ "flashes.error" | trans({}, 'messages') }}</strong> {{ "form.translations.errors" | trans }}
+    </div>
+{% endif %}
+
+{{ form_start(form) }}
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="com_nairus_resumebundle_experience_company" class="required">{{ "experience.labels.company" | trans}}</label>
+        {{ form_widget(form.company) }}
+        {{ form_errors(form.company) }}
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="com_nairus_resumebundle_experience_location" class="required">{{ "experience.labels.location" | trans}}</label>
+        {{ form_widget(form.location) }}
+        {{ form_errors(form.location) }}
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label for="com_nairus_resumebundle_experience_startMonth" class="required">{{ "experience.labels.start-month" | trans }}</label>
+        {{ form_widget(form.startMonth) }}
+        {{ form_errors(form.startMonth) }}
+    </div>
+    <div class="form-group col-md-3">
+        <label for="com_nairus_resumebundle_experience_startYear" class="required">{{ "form.labels.start-year" | trans }}</label>
+        {{ form_widget(form.startYear) }}
+        {{ form_errors(form.startYear) }}
+    </div>
+    <div class="form-group col-md-3">
+        <label for="com_nairus_resumebundle_experience_endMonth">{{ "experience.labels.end-month" | trans }}</label>
+        {{ form_widget(form.endMonth) }}
+        {{ form_errors(form.endMonth) }}
+    </div>
+    <div class="form-group col-md-3">
+        <label for="com_nairus_resumebundle_experience_endYear">{{ "form.labels.end-year" | trans }}</label>
+        {{ form_widget(form.endYear) }}
+        {{ form_errors(form.endYear) }}
+    </div>
+</div>
+
+{{ form_rest(form) }}
+<div class="row actions">
+    <a class="btn btn-secondary mx-1 my-1"
+       href="{{ path('resume_show', {'id': experience.resume.id}) }}#experiences">
+        <i class="fas fa-chevron-left"></i>
+        {{ "resume.return" | trans}}
+    </a>
+    {% if not experience.isNew %}
+        <a class="btn btn-info mx-1 my-1"
+           href="{{ path('experience_show', { 'id': experience.id }) }}">
+            <i class="far fa-eye"></i>
+            {{ "actions.show" | trans({}, 'messages')}}
+        </a>
+    {% endif %}
+    <button class="btn btn-primary mx-1 my-1" formnovalidate="formnovalidate">
+        <i class="far fa-save"></i>
+        {{ "actions.save" | trans({}, 'messages') }}
+    </button>
+</div>
+{{ form_end(form) }}

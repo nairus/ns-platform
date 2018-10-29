@@ -50,7 +50,7 @@ class Education extends AbstractTranslatableEntity {
      * @ORM\Column(type="smallint")
      * @Assert\NotBlank()
      * @Assert\Expression("this.getStartYear() <= this.getEndYear()",
-     *                     message="education.errors.end-year")
+     *                     message="form.errors.end-year")
      */
     private $endYear;
 

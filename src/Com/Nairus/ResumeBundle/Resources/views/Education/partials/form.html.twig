@@ -27,14 +27,14 @@
 <div class="row">
     <div class="col-md-6 mb-3">
         <div class="form-inline">
-            <label for="com_nairus_resumebundle_education_startYear" class="required mr-2">{{ "education.labels.start-year" | trans }}</label>
+            <label for="com_nairus_resumebundle_education_startYear" class="required mr-2">{{ "form.labels.start-year" | trans }}</label>
             {{ form_widget(form.startYear) }}
         </div>
         {{ form_errors(form.startYear) }}
     </div>
     <div class="col-md-6 mb-3">
         <div class="form-inline">
-            <label for="com_nairus_resumebundle_education_endYear" class="required mr-2">{{ "education.labels.end-year" | trans }}</label>
+            <label for="com_nairus_resumebundle_education_endYear" class="required mr-2">{{ "form.labels.end-year" | trans }}</label>
             {{ form_widget(form.endYear) }}
         </div>
         {{ form_errors(form.endYear) }}
@@ -48,7 +48,7 @@
     <a class="btn btn-secondary mx-1 my-1"
        href="{{ path('resume_show', {'id': education.resume.id}) }}#educations">
         <i class="fas fa-chevron-left"></i>
-        {{ "actions.return" | trans({}, 'messages') }}
+        {{ "resume.return" | trans({}, "NSResumeBundle")}}
     </a>
     {% if not education.isNew %}
         <a class="btn btn-info mx-1 my-1"

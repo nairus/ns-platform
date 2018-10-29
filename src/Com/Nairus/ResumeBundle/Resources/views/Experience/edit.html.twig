@@ -1,0 +1,25 @@
+{# NSResumeBundle:Experience:edit.html.twig #}
+
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block title %}{{ "experience.edit.title" | trans({'%id%': experience.id}, 'NSResumeBundle') }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ '/bundles/nscore/css/forms.css' }}" type="text/css">
+{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "experience.edit.title" | trans({'%id%': experience.id}, 'NSResumeBundle') }}</h1>
+
+        {% include '@NSResume/Experience/partials/form.html.twig' %}
+
+        {{ form_start(delete_form) }}
+        <button class="btn btn-danger mx-1 my-1 float-right">
+            <i class="fas fa-trash-alt"></i>
+            {{ "actions.delete" | trans}}
+        </button>
+        {{ form_end(delete_form) }}
+    </div>
+{% endblock %}

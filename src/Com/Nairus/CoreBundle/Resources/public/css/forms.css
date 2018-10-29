@@ -4,7 +4,16 @@ label.required:after {
     color: red;
 }
 
-/* Override bootsrap classes to display correctly class above. */
+/* Override bootstrap classes to display correctly class above. */
 .invalid-feedback.d-block {
     float: left;
+}
+
+/* customize a2lix form style */
+.a2lix_translationsFields {
+    background-color: white;
+    padding: 10px 15px 5px;
+    border-bottom: 1px solid #dee2e6;
+    border-left: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
 }

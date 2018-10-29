@@ -68,8 +68,6 @@ class ExperienceRepositoryTest extends AbstractKernelTestCase {
         $experience
                 ->setCurrentLocale("fr")
                 ->setCompany("Société 2")
-                ->setEndMonth(11)
-                ->setEndYear(2016)
                 ->setLocation("Aix")
                 ->setStartMonth(2)
                 ->setStartYear(2016)
@@ -85,8 +83,8 @@ class ExperienceRepositoryTest extends AbstractKernelTestCase {
         $this->assertSame("Société 2", $experienceUpdated->getCompany(), "2.2. La société field has to be identical.");
         $this->assertSame(true, $experienceUpdated->getCurrentJob(), "2.3. The [currentJob] field has to be identical.");
         $this->assertSame("Description 2", $experienceUpdated->getDescription(), "1.4. The [description] field has to be identical.");
-        $this->assertSame(11, $experienceUpdated->getEndMonth(), "2.5. The [endMonth] field has to be identical.");
-        $this->assertSame(2016, $experienceUpdated->getEndYear(), "2.6. The [endYear] field has to be identical.");
+        $this->assertNull($experienceUpdated->getEndMonth(), "2.5. The [endMonth] field has to be null.");
+        $this->assertNull($experienceUpdated->getEndYear(), "2.6. The [endYear] field has to be null.");
         $this->assertSame("Aix", $experienceUpdated->getLocation(), "2.7. The [location] field has to be identical.");
         $this->assertSame(2, $experienceUpdated->getStartMonth(), "2.8. The [startMonth] field has to be identical.");
         $this->assertSame("Description 2", $experienceUpdated->getDescription(), "2.9 The default translation for [description] field has to be updated.");

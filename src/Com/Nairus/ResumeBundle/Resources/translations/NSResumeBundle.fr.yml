@@ -4,6 +4,10 @@ flashes:
             new: Formation ajoutée avec succès !
             edit: Formation n°%id% modifiée avec succès !
             delete: Formation n°%id% supprimée avec succès !
+        experience:
+            new: Expérience ajoutée avec succès !
+            edit: Expérience n°%id% modifiée avec succès !
+            delete: Expérience n°%id% supprimée avec succès !
         resume:
             new: CV ajoutée avec succès !
             edit: CV n°%id% modifié avec succès !
@@ -64,6 +68,22 @@ education:
     delete:
         title: Suppression de la formation n°%id%
         confirm: Êtes-vous sûr de vouloir supprimer la formation "%diploma% %domain%" ?
+experience:
+    labels:
+        company: Société
+        location: Lieu
+        start-month: Mois de début
+        end-month: Mois de fin
+        current-job: En poste ?
+    new:
+        title: Ajout d'une expérience
+    edit:
+        title: Modification de l'expérience n°%id%
+    show:
+        title: Détail de l'expérience n°%id%
+    delete:
+        title: Suppression de l'expérience n°%id%
+        confirm: Êtes-vous sûr de vouloir supprimer l'expérience "%company% %location%" ?
 resume:
     created-at: "Créé le "
     updated-at: "Mis à jour le "
@@ -117,6 +137,7 @@ skilllevel:
     show:
         title: Détail du niveau de compétence n° %id%
 
+# Commons labels.
 form:
     translations:
         errors: Il y a des erreurs dans le formulaire ! Regardez dans les champs de traductions non visibles !
@@ -124,3 +145,5 @@ form:
         translations: Traductions
         title: Libellé
         description: Description
+        start-year: Année de début
+        end-year: Année de fin

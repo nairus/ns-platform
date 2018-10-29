@@ -137,9 +137,17 @@
                 </div>
                 <div class="tab-pane fade" id="experiences" role="tabpanel" aria-labelledby="experiences-tab">
                     <div id="experiences-content" class="mb-3">
-                        <em>{{ "table.no-item" | trans }}</em>
+                        {% if resume.experiences | length > 0 %}
+                            <div class="row">
+                                {% for experience in resume.experiences %}
+                                    {% include '@NSResume/Resume/partials/experience.html.twig' %}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <em>{{ "table.no-item" | trans }}</em>
+                        {% endif %}
                     </div>
-                    <a href="#" class="btn btn-primary">
+                    <a href="{{ path('experience_new', {'resume_id': resume.id}) }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i>
                         {{ "resume.show.add-experience" | trans({}, "NSResumeBundle") }}
                     </a>

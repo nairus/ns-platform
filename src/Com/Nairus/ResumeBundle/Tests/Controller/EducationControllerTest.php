@@ -154,7 +154,7 @@ class EducationControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals("Ajout d'une formation", $crawler->filter("h1")->text(), "1.4 The h1 expected is not ok");
         // Get the form.
         $form = $crawler->filterXPath('//html/body/main/div/div/form[@name="com_nairus_resumebundle_education"]');
-        $this->assertEquals(7, $form->filter(".form-group")->count(), "1.5 Three form group elements are expected");
+        $this->assertEquals(7, $form->filter(".form-group")->count(), "1.5 seven form group elements are expected");
         $this->assertEquals(2, $form->filter(".form-inline")->count(), "1.6 Two form inline elements are expected");
         $this->assertContains("Diplôme", $form->text(), "1.7 The form has to contain diploma label.");
         $this->assertContains("Organisme", $form->text(), "1.8 The form has to contain institution label.");
@@ -165,10 +165,10 @@ class EducationControllerTest extends AbstractUserWebTestCase {
         $this->assertContains("Domaine", $form->text(), "1.13 The form has to contain domain label.");
         $actionsElements = $form->filter(".actions")->children();
         $this->assertCount(2, $actionsElements, "1.14 Two cta buttons are expected.");
-        $this->assertContains("Retour", $actionsElements->eq(0)->text(), "1.15 The first button label is not ok.");
+        $this->assertContains("Retour au CV", $actionsElements->eq(0)->text(), "1.15 The first button label is not ok.");
         $this->assertContains('<i class="fas fa-chevron-left"></i>', $actionsElements->eq(0)->html(), "1.16 The first button pico is missing.");
-        $this->assertContains("Sauvegarder", $actionsElements->eq(1)->text(), "1.18 The second button label is not ok.");
-        $this->assertContains('<i class="far fa-save"></i>', $actionsElements->eq(1)->html(), "1.19 The second button pico is missing.");
+        $this->assertContains("Sauvegarder", $actionsElements->eq(1)->text(), "1.17 The second button label is not ok.");
+        $this->assertContains('<i class="far fa-save"></i>', $actionsElements->eq(1)->html(), "1.18 The second button pico is missing.");
         $form = $crawler->selectButton('Sauvegarder')->form([
             "com_nairus_resumebundle_education[diploma]" => "Diplôme",
             "com_nairus_resumebundle_education[institution]" => "Organisme",
@@ -283,7 +283,7 @@ class EducationControllerTest extends AbstractUserWebTestCase {
         $this->assertContains("Domain", $form->text(), "1.13 The form has to contain domain label.");
         $actionsElements = $form->filter(".actions")->children();
         $this->assertCount(2, $actionsElements, "1.14 Two cta buttons are expected.");
-        $this->assertContains("Return", $actionsElements->eq(0)->text(), "1.15 The first button label is not ok.");
+        $this->assertContains("Return to the resume", $actionsElements->eq(0)->text(), "1.15 The first button label is not ok.");
         $this->assertContains("Save", $actionsElements->eq(1)->text(), "1.16 The second button label is not ok.");
         $form = $crawler->selectButton('Save')->form([
             "com_nairus_resumebundle_education[diploma]" => "Dip.",
@@ -387,7 +387,7 @@ class EducationControllerTest extends AbstractUserWebTestCase {
         $this->assertRegExp('~Êtes\-vous sûr de vouloir supprimer la formation ".*" \?~', $crawler->filter("#admin-container")->text(), "2.4 The confirm label expected is not ok");
         $actionButtons = $crawler->filter("#admin-container .actions")->children();
         $this->assertCount(3, $actionButtons, "2.5 Three action buttons are expected.");
-        $this->assertContains("Retour", $actionButtons->eq(0)->text(), "2.6 The first button label is not ok.");
+        $this->assertContains("Retour au CV", $actionButtons->eq(0)->text(), "2.6 The first button label is not ok.");
         $this->assertContains('<i class="fas fa-chevron-left"></i>', $actionButtons->eq(0)->html(), "2.7 The first button pico is missing.");
         $this->assertContains("Voir les détails", $actionButtons->eq(1)->text(), "2.8 The second button label is not ok.");
         $this->assertContains('<i class="far fa-eye"></i>', $actionButtons->eq(1)->html(), "2.9 The second button pico is missing.");

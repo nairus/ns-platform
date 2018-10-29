@@ -8,6 +8,7 @@ use Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Experience
@@ -15,8 +16,10 @@ use Prezent\Doctrine\Translatable\Annotation as Prezent;
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
+ *
  * @ORM\Table(name="ns_experience")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ExperienceRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Experience extends AbstractTranslatableEntity {
 
@@ -24,6 +27,7 @@ class Experience extends AbstractTranslatableEntity {
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $company;
 
@@ -31,6 +35,7 @@ class Experience extends AbstractTranslatableEntity {
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $location;
 
@@ -38,13 +43,23 @@ class Experience extends AbstractTranslatableEntity {
      * @var int
      *
      * @ORM\Column(type="smallint")
+     * @Assert\NotBlank()
      */
     private $startMonth;
 
     /**
+     * End month field
+     *
+     * This field is not valid if:
+     *  - it's not a current job
+     *  - and the end year is equal to the start year
+     *  - and the end month is not greater or equal than the start month
+     *
      * @var int
      *
      * @ORM\Column(type="smallint", nullable=true)
+     * @Assert\Expression("this.getCurrentJob() or this.getEndYear() != this.getStartYear() or (this.getEndYear() == this.getStartYear() and this.getEndMonth() >= this.getStartMonth())",
+     *                     message="form.errors.end-month")
      */
     private $endMonth;
 
@@ -52,6 +67,7 @@ class Experience extends AbstractTranslatableEntity {
      * @var int
      *
      * @ORM\Column(name="startYear", type="smallint")
+     * @Assert\NotBlank()
      */
     private $startYear;
 
@@ -59,6 +75,8 @@ class Experience extends AbstractTranslatableEntity {
      * @var int
      *
      * @ORM\Column(type="smallint", nullable=true)
+     * @Assert\Expression("this.getCurrentJob() or this.getEndYear() >= this.getStartYear()",
+     *                     message="form.errors.end-year")
      */
     private $endYear;
 
@@ -66,6 +84,8 @@ class Experience extends AbstractTranslatableEntity {
      * @var bool
      *
      * @ORM\Column(type="boolean")
+     * @Assert\Expression("this.getCurrentJob() or (this.getEndMonth() > 0 and this.getEndYear() > 0)",
+     *                     message="form.errors.current-job")
      */
     private $currentJob;
 
@@ -79,6 +99,7 @@ class Experience extends AbstractTranslatableEntity {
 
     /**
      * @Prezent\Translations(targetEntity="Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation")
+     * @Assert\Valid
      */
     protected $translations;
 
@@ -107,9 +128,9 @@ class Experience extends AbstractTranslatableEntity {
     /**
      * Get company
      *
-     * @return string
+     * @return string|null
      */
-    public function getCompany(): string {
+    public function getCompany(): ?string {
         return $this->company;
     }
 
@@ -129,9 +150,9 @@ class Experience extends AbstractTranslatableEntity {
     /**
      * Get location
      *
-     * @return string
+     * @return string|null
      */
-    public function getLocation(): string {
+    public function getLocation(): ?string {
         return $this->location;
     }
 
@@ -140,21 +161,22 @@ class Experience extends AbstractTranslatableEntity {
      *
      * @param string $description
      *
-     * @return ExperienceTranslation
+     * @return Experience
      */
-    public function setDescription(string $description): ExperienceTranslation {
+    public function setDescription(string $description): Experience {
         /* @var $translation ExperienceTranslation */
         $translation = $this->translate();
+        $translation->setDescription($description);
 
-        return $translation->setDescription($description);
+        return $this;
     }
 
     /**
      * Get description for the current locale (proxy method).
      *
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string {
+    public function getDescription(): ?string {
         /* @var $translation ExperienceTranslation */
         $translation = $this->translate();
         return $translation->getDescription();
@@ -167,7 +189,7 @@ class Experience extends AbstractTranslatableEntity {
      *
      * @return Experience
      */
-    public function setStartMonth(int $startMonth): Experience {
+    public function setStartMonth($startMonth): Experience {
         $this->startMonth = $startMonth;
 
         return $this;
@@ -178,7 +200,7 @@ class Experience extends AbstractTranslatableEntity {
      *
      * @return int
      */
-    public function getStartMonth(): int {
+    public function getStartMonth() {
         return $this->startMonth;
     }
 
@@ -189,7 +211,7 @@ class Experience extends AbstractTranslatableEntity {
      *
      * @return Experience
      */
-    public function setEndMonth(int $endMonth): Experience {
+    public function setEndMonth($endMonth): Experience {
         $this->endMonth = $endMonth;
 
         return $this;
@@ -200,7 +222,7 @@ class Experience extends AbstractTranslatableEntity {
      *
      * @return int
      */
-    public function getEndMonth(): int {
+    public function getEndMonth() {
         return $this->endMonth;
     }
 
@@ -211,7 +233,7 @@ class Experience extends AbstractTranslatableEntity {
      *
      * @return Experience
      */
-    public function setStartYear(int $startYear): Experience {
+    public function setStartYear($startYear): Experience {
         $this->startYear = $startYear;
 
         return $this;
@@ -222,7 +244,7 @@ class Experience extends AbstractTranslatableEntity {
      *
      * @return int
      */
-    public function getStartYear(): int {
+    public function getStartYear() {
         return $this->startYear;
     }
 
@@ -233,7 +255,7 @@ class Experience extends AbstractTranslatableEntity {
      *
      * @return Experience
      */
-    public function setEndYear(int $endYear): Experience {
+    public function setEndYear($endYear): Experience {
         $this->endYear = $endYear;
 
         return $this;
@@ -242,9 +264,9 @@ class Experience extends AbstractTranslatableEntity {
     /**
      * Get endYear
      *
-     * @return int
+     * @return int|null
      */
-    public function getEndYear(): int {
+    public function getEndYear() {
         return $this->endYear;
     }
 
@@ -290,6 +312,22 @@ class Experience extends AbstractTranslatableEntity {
      */
     public function getResume(): Resume {
         return $this->resume;
+    }
+
+    /**
+     * Invoked before persist or update the entity.
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     *
+     * @return void
+     */
+    public function preSave(): void {
+        // Clean endMonth and endYear fields if this is a current job.
+        if ($this->currentJob) {
+            $this->endMonth = null;
+            $this->endYear = null;
+        }
     }
 
     /**

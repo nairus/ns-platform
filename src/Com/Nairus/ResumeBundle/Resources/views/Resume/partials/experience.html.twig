@@ -1,0 +1,37 @@
+{# @NSResume/Resume/partials/experience.html.twig #}
+
+<div class="col-lg-4 col-md-6 col-sm-12 mb-2">
+    <div class="card">
+        <div class="card-body">
+            <h4>{{ experience.company }} - {{ experience.location }}</h4>
+            <p class="text-muted">
+                {% set startMonth = ('monthes.' ~ experience.startMonth) | trans %}
+                {{ startMonth }}&nbsp;{{ experience.startYear }}
+                &nbsp;-&nbsp;
+                {% if not experience.currentJob %}
+                    {% set endMonth = ('monthes.' ~ experience.endMonth) | trans %}
+                    {{ endMonth }}&nbsp;{{ experience.endYear}}
+                {% endif %}
+            </p>
+            {% set description = experience.description ? experience.description : experience.translate(defaultLocale).description %}
+            <em style="height: 50px; display: block;">{{ description | truncate(70, true, '<i class="fas fa-ellipsis-h"></i>') | raw }}</em>
+        </div>
+        <div class="card-footer">
+            <a class="actions mb-2 p-2 btn btn-secondary"
+               href="{{ path("experience_show", {"id": experience.id}) }}">
+                <i class="far fa-eye"></i>
+                {{ "actions.show" | trans}}
+            </a>
+            <a class="actions mb-2 p-2 btn btn-primary"
+               href="{{ path("experience_edit", {"id": experience.id}) }}">
+                <i class="fas fa-pencil-alt"></i>
+                {{ "actions.edit" | trans }}
+            </a>
+            <a class="actions mb-2 p-2 btn btn-danger"
+               href="{{ path("experience_delete", {"id": experience.id}) }}">
+                <i class="fas fa-trash-alt"></i>
+                {{ "actions.delete" | trans }}
+            </a>
+        </div>
+    </div>
+</div>
