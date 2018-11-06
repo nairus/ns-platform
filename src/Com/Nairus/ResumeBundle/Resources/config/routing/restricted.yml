@@ -10,3 +10,7 @@ ns_resume_restricted_education:
 ns_resume_restricted_resume:
     resource: "@NSResumeBundle/Resources/config/routing/restricted/resume.yml"
     prefix: /resume
+
+ns_resume_resumeskill:
+   resource: "@NSResumeBundle/Resources/config/routing/restricted/resumeskill.yml"
+   prefix:   /resumeskill

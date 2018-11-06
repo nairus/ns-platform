@@ -28,9 +28,21 @@ trait ResumeUpdateStatusTrait {
      *
      * @return void
      */
-    protected function dispatch(Resume $resume): void {
+    protected function dispatchUpdateEvent(Resume $resume): void {
         $resumeStatusEvent = new ResumeStatusEvent($resume);
         $this->eventDispatcher->dispatch(NSResumeEvents::UPDATE_STATUS, $resumeStatusEvent);
+    }
+
+    /**
+     * Dispatch DELETE_STATUS event when deleting resume contens.
+     *
+     * @param Resume $resume The resume to update.
+     *
+     * @return void
+     */
+    protected function dispatchDeleteEvent(Resume $resume): void {
+        $resumeStatusEvent = new ResumeStatusEvent($resume);
+        $this->eventDispatcher->dispatch(NSResumeEvents::DELETE_STATUS, $resumeStatusEvent);
     }
 
 }

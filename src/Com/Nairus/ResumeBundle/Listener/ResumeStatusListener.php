@@ -2,8 +2,9 @@
 
 namespace Com\Nairus\ResumeBundle\Listener;
 
-use Com\Nairus\ResumeBundle\Event\NSResumeEvents;
+use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
+use Com\Nairus\ResumeBundle\Event\NSResumeEvents;
 use Com\Nairus\ResumeBundle\Event\ResumeStatusEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -37,7 +38,8 @@ class ResumeStatusListener implements EventSubscriberInterface {
      */
     public static function getSubscribedEvents(): array {
         return [
-            NSResumeEvents::UPDATE_STATUS
+            NSResumeEvents::UPDATE_STATUS,
+            NSResumeEvents::DELETE_STATUS
         ];
     }
 
@@ -72,7 +74,56 @@ class ResumeStatusListener implements EventSubscriberInterface {
         }
 
         // If the resume is OFFLINE_INCOMPLETE and all dependencies has been added
-        $resume->setStatus(ResumeStatusEnum::OFFLINE_TO_PUBLISHED);
+        $this->updateStatus($resume->getId(), ResumeStatusEnum::OFFLINE_TO_PUBLISHED);
+    }
+
+    /**
+     * Update the resume status when deleting a content.
+     *
+     * @param ResumeStatusEvent $event The event dispatched.
+     *
+     * @return void
+     */
+    public function onDeleteStatus(ResumeStatusEvent $event): void {
+        $resume = $event->getResume();
+
+        // If the status is equal to ONLINE, we do nothing.
+        if ($resume->getStatus() === ResumeStatusEnum::ONLINE) {
+            return;
+        }
+
+        // If no education is added, we downgrade the status.
+        if ($resume->getEducations()->count() === 0) {
+            $this->updateStatus($resume->getId(), ResumeStatusEnum::OFFLINE_INCOMPLETE);
+            return;
+        }
+
+        // If no experience is added, we downgrade the status.
+        if ($resume->getExperiences()->count() === 0) {
+            $this->updateStatus($resume->getId(), ResumeStatusEnum::OFFLINE_INCOMPLETE);
+            return;
+        }
+
+        // If no resume skill is added, we downgrade the status.
+        if ($resume->getResumeSkills()->count() === 0) {
+            $this->updateStatus($resume->getId(), ResumeStatusEnum::OFFLINE_INCOMPLETE);
+            return;
+        }
+    }
+
+    /**
+     * Update the resume status.
+     *
+     * @param int    $resumeId The current resume id.
+     * @param string $status   The status to update.
+     *
+     * @return void
+     */
+    private function updateStatus(int $resumeId, string $status): void {
+        // Refresh the entity if necessary (avoid InvalidArgumentException: Entity has to be managed or scheduled for removal for single computation).
+        $resume = $this->entityManager->getRepository(Resume::class)->find($resumeId);
+        // Set the new status.
+        $resume->setStatus($status);
         // Update the status.
         $this->entityManager->flush($resume);
     }

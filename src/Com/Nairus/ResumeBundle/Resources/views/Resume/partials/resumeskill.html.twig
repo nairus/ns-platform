@@ -1,0 +1,26 @@
+{# @NSResume/Resume/partials/resumeskill.html.twig #}
+
+<div class="col-4">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="text-center">{{ resumeSkill.skill.title }}</h4>
+            {% set skillLevel = resumeSkill.skillLevel.title ? resumeSkill.skillLevel.title : resumeSkill.skillLevel.translate(defaultLocale).title %}
+            <p class="text-center text-muted">
+                <em>{{ skillLevel }}</em>
+            </p>
+            <p>{{ "resume-skill.ranking" | trans({"%rank%": resumeSkill.rank}, "NSResumeBundle") | raw }}
+        </div>
+        <div class="card-footer">
+            <a class="actions mb-2 p-2 btn btn-primary"
+               href="{{ path("resumeskill_edit", {"id": resumeSkill.id}) }}">
+                <i class="fas fa-pencil-alt"></i>
+                {{ "actions.edit" | trans }}
+            </a>
+            <a class="actions mb-2 p-2 btn btn-danger"
+               href="{{ path("resumeskill_delete", {"id": resumeSkill.id}) }}">
+                <i class="fas fa-trash-alt"></i>
+                {{ "actions.delete" | trans }}
+            </a>
+        </div>
+    </div>
+</div>

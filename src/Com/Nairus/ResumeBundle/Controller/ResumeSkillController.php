@@ -4,25 +4,24 @@ namespace Com\Nairus\ResumeBundle\Controller;
 
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Resume;
-use Com\Nairus\ResumeBundle\Entity\Experience;
+use Com\Nairus\ResumeBundle\Entity\ResumeSkill;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Experience restricted controller.
+ * ResumeSkill restricted controller.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class ExperienceController extends Controller {
+class ResumeSkillController extends Controller {
 
-    private const NAME = NSResumeBundle::NAME . ":Experience";
+    private const NAME = NSResumeBundle::NAME . ":ResumeSkill";
 
     /**
      * Traits for internationalization behaviors and security check.
@@ -45,7 +44,7 @@ class ExperienceController extends Controller {
     }
 
     /**
-     * Creates a new experience entity.
+     * Creates a new resumeSkill entity.
      *
      * @ParamConverter("resume", options={"mapping": {"resume_id": "id"}})
      *
@@ -53,139 +52,134 @@ class ExperienceController extends Controller {
      * @param Resume  $resume  The parent resume.
      *
      * @return Response
-     *
      */
     public function newAction(Request $request, Resume $resume): Response {
         // Security check.
         $this->check($resume, $this->getUser());
 
-        $experience = new Experience();
-        $experience->setResume($resume);
-        $form = $this->createForm('Com\Nairus\ResumeBundle\Form\ExperienceType', $experience);
+        // Get the defaultLocale
+        $defaultLocale = $this->container->getParameter('kernel.default_locale');
+
+        // Define the next rank.
+        $rank = $resume->getResumeSkills()->count() + 1;
+
+        $resumeSkill = new ResumeSkill();
+        $resumeSkill->setResume($resume);
+        $resumeSkill->setRank($rank);
+        $form = $this->createForm(
+                'Com\Nairus\ResumeBundle\Form\ResumeSkillType',
+                $resumeSkill,
+                ['currentLocale' => $request->getLocale(), 'defaultLocale' => $defaultLocale]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($experience);
+            $em->persist($resumeSkill);
             $em->flush();
 
             // Dispatch event for updating the resume's status.
             $this->dispatchUpdateEvent($resume);
 
-            $this->addFlash("success", $this->getTranslation("flashes.success.experience.new", [], NSResumeBundle::NAME));
+            $this->addFlash("success", $this->getTranslation("flashes.success.resume-skill.new", [], NSResumeBundle::NAME));
 
-            return $this->redirectToRoute('experience_show', array('id' => $experience->getId()));
+            return $this->redirectToRoute('resume_show', array('id' => $resume->getId()));
         }
 
         return $this->render(self::NAME . ':new.html.twig', array(
-                    'experience' => $experience,
+                    'resumeSkill' => $resumeSkill,
                     'form' => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a experience entity.
+     * Displays a form to edit an existing resumeSkill entity.
      *
-     * @param Experience $experience The current entity.
+     * @param Request     $request     The current request.
+     * @param ResumeSkill $resumeSkill The current entity.
      *
      * @return Response
-     *
      */
-    public function showAction(Experience $experience): Response {
-        // Security check.
-        $this->check($experience->getResume(), $this->getUser());
+    public function editAction(Request $request, ResumeSkill $resumeSkill): Response {
+        // Check the credential.
+        $this->check($resumeSkill->getResume(), $this->getUser());
 
-        $deleteForm = $this->createDeleteForm($experience);
+        $deleteForm = $this->createDeleteForm($resumeSkill);
 
         // Get the defaultLocale
         $defaultLocale = $this->container->getParameter('kernel.default_locale');
-        return $this->render(self::NAME . ':show.html.twig', [
-                    'experience' => $experience,
-                    'delete_form' => $deleteForm->createView(),
-                    'defaultLocale' => $defaultLocale,
-        ]);
-    }
 
-    /**
-     * Displays a form to edit an existing experience entity.
-     *
-     * @param Request    $request    The current request.
-     * @param Experience $experience The current entity.
-     *
-     * @return Response
-     *
-     */
-    public function editAction(Request $request, Experience $experience): Response {
-        // Security check.
-        $this->check($experience->getResume(), $this->getUser());
+        $editForm = $this->createForm(
+                'Com\Nairus\ResumeBundle\Form\ResumeSkillType',
+                $resumeSkill,
+                ['currentLocale' => $request->getLocale(), 'defaultLocale' => $defaultLocale]);
 
-        $deleteForm = $this->createDeleteForm($experience);
-        $editForm = $this->createForm('Com\Nairus\ResumeBundle\Form\ExperienceType', $experience);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash("success", $this->getTranslation("flashes.success.experience.edit", ["%id%" => $experience->getId()], NSResumeBundle::NAME));
+            $this->addFlash("success", $this->getTranslation("flashes.success.resume-skill.edit", ["%id%" => $resumeSkill->getId()], NSResumeBundle::NAME));
 
-            return $this->redirectToRoute('experience_show', array('id' => $experience->getId()));
+            return $this->redirectToRoute('resume_show', array('id' => $resumeSkill->getResume()->getId()));
         }
 
-        return $this->render(self::NAME . ':edit.html.twig', array(
-                    'experience' => $experience,
+        return $this->render(self::NAME . ':/edit.html.twig', array(
+                    'resumeSkill' => $resumeSkill,
                     'form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Deletes a experience entity.
+     * Deletes a resumeSkill entity.
      *
-     * @param Request    $request    The current request.
-     * @param Experience $experience The current entity.
+     * @param Request     $request     The current request.
+     * @param ResumeSkill $resumeSkill The current entity.
      *
      * @return Response
-     *
      */
-    public function deleteAction(Request $request, Experience $experience): Response {
-        // Security check.
-        $resume = $experience->getResume();
+    public function deleteAction(Request $request, ResumeSkill $resumeSkill): Response {
+        // Get the linked resume
+        $resume = $resumeSkill->getResume();
+
+        // Check the credential.
         $this->check($resume, $this->getUser());
 
-        $form = $this->createDeleteForm($experience);
+        $form = $this->createDeleteForm($resumeSkill);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $experienceId = $experience->getId();
+            $resumeSkillId = $resumeSkill->getId();
             $em = $this->getDoctrine()->getManager();
-            $em->remove($experience);
+            $em->remove($resumeSkill);
             $em->flush();
 
             // Dispatch the delete event to update the status.
             $this->dispatchDeleteEvent($resume);
 
-            $this->addFlash("success", $this->getTranslation("flashes.success.experience.delete", ["%id%" => $experienceId], NSResumeBundle::NAME));
+            $this->addFlash("success", $this->getTranslation("flashes.success.resume-skill.delete", ["%id%" => $resumeSkillId], NSResumeBundle::NAME));
 
-            return $this->redirectToRoute('resume_show', ['id' => $resume->getId()]);
+            return $this->redirectToRoute('resume_show', array('id' => $resume->getId()));
         }
 
-        // Go to the confirm form
+        // Go to confirm form
         return $this->render(self::NAME . ':delete.html.twig', [
-                    'experience' => $experience,
-                    'delete_form' => $form->createView(),
+                    'resumeSkill' => $resumeSkill,
+                    'delete_form' => $form->createView()
         ]);
     }
 
     /**
-     * Creates a form to delete a experience entity.
+     * Creates a form to delete a resumeSkill entity.
      *
-     * @param Experience $experience The experience entity
+     * @param ResumeSkill $resumeSkill The resumeSkill entity
      *
-     * @return Form The form
+     * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Experience $experience): Form {
+    private function createDeleteForm(ResumeSkill $resumeSkill): \Symfony\Component\Form\Form {
         return $this->createFormBuilder()
-                        ->setAction($this->generateUrl('experience_delete', array('id' => $experience->getId())) . "#experiences")
+                        ->setAction($this->generateUrl('resumeskill_delete', array('id' => $resumeSkill->getId())))
                         ->setMethod(Request::METHOD_DELETE)
                         ->getForm()
         ;

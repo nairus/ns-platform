@@ -20,12 +20,25 @@ services:
         resource: '../../src/Com/Nairus/CoreBundle/*'
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
-        exclude: '../../src/Com/Nairus/CoreBundle/{Entity,Repository,Tests}'
+        exclude: '../../src/Com/Nairus/CoreBundle/{Constants,Dto,Entity,Exception,Repository,Tests}'
 
     # controllers are imported separately to make sure they're public
     # and have a tag that allows actions to type-hint services
     Com\Nairus\CoreBundle\Controller\:
         resource: '../../src/Com/Nairus/CoreBundle/Controller'
+        public: true
+        tags: ['controller.service_arguments']
+
+    Com\Nairus\ResumeBundle\:
+        resource: '../../src/Com/Nairus/ResumeBundle/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../../src/Com/Nairus/ResumeBundle/{Collection,Dto,Entity,Enums,Exception,Repository,Tests}'
+
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    Com\Nairus\ResumeBundle\Controller\:
+        resource: '../../src/Com/Nairus/ResumeBundle/Controller'
         public: true
         tags: ['controller.service_arguments']
 

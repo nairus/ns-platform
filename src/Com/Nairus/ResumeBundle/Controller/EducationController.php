@@ -68,7 +68,7 @@ class EducationController extends Controller {
             $em->flush();
 
             // Dispatch event for updating the resume's status.
-            $this->dispatch($resume);
+            $this->dispatchUpdateEvent($resume);
 
             $this->addFlash("success", $this->getTranslation("flashes.success.education.new", [], NSResumeBundle::NAME));
             return $this->redirectToRoute('education_show', array('id' => $education->getId()));
@@ -153,6 +153,9 @@ class EducationController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $em->remove($education);
             $em->flush();
+
+            // Dispatch the delete event to update the status.
+            $this->dispatchDeleteEvent($resume);
 
             $this->addFlash("success", $this->getTranslation("flashes.success.education.delete", ["%id%" => $educationId], NSResumeBundle::NAME));
             return $this->redirectToRoute('resume_show', ['id' => $resume->getId()]);

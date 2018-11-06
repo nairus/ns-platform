@@ -8,6 +8,10 @@ flashes:
             new: Experience added successfully!
             edit: Experience No. %id% modified successfully!
             delete: Experience No. %id% deleted successfully!
+        resume-skill:
+            new: Resume skill added successfully!
+            edit: Resume skill No. %id% modified successfully!
+            delete: Resume skill No. %id% deleted successfully!
         resume:
             new: Resume added successfully!
             edit: Resume No. %id% modified successfully!
@@ -109,7 +113,21 @@ resume:
         add-education: Add an education
         experiences: My Experiences
         add-experience: Add an experience
-
+resume-skill:
+    labels:
+        rank: Rank
+        skill: Skill
+        skill-level: Level
+    ranking: "<strong>Ranking:</strong> %rank%"
+    new:
+        title: Add a skill for the resume No. %resume_id%
+    edit:
+        title: Modification of the skill No. %id% for the resume No. %resume_id%
+    delete:
+        title: Deletion of the skill No. %id% for the resume No. %resume_id%
+        confirm: Are you sure you want to remove the "%skill%" skill from the rank No. %rank%?
+    show:
+        title: Detail of the skill No. %id% for the resume No. %resume_id%
 skill:
     index:
         title: Skills list

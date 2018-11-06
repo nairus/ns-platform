@@ -4,3 +4,4 @@ form:
         end-month: Le mois de fin doit supérieur ou égal à celui de début
         end-year: L'année de fin doit être supérieure ou égale à celle de début
         current-job: L'année et le mois de fin doivent être renseignés pour un emploi passé
+        rank-not-unique: Classement déjà utilisé

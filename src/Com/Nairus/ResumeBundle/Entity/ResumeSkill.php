@@ -2,13 +2,21 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
+use Com\Nairus\CoreBundle\Entity\Traits\IsNewTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * ResumeSkill
  *
  * @ORM\Table(name="ns_resume_skill")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ResumeSkillRepository")
+ * @UniqueEntity(
+ *     fields={"rank", "resume"},
+ *     errorPath="rank",
+ *     message="form.errors.rank-not-unique"
+ * )
  */
 class ResumeSkill {
 
@@ -25,6 +33,9 @@ class ResumeSkill {
      * @var int
      *
      * @ORM\Column(type="smallint")
+     * @Assert\GreaterThan(
+     *      value = 0
+     * )
      */
     private $rank;
 
@@ -33,6 +44,7 @@ class ResumeSkill {
      *
      * @ORM\ManyToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Resume", inversedBy="resumeSkills")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull
      */
     private $resume;
 
@@ -41,6 +53,7 @@ class ResumeSkill {
      *
      * @ORM\ManyToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Skill")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull
      */
     private $skill;
 
@@ -49,26 +62,36 @@ class ResumeSkill {
      *
      * @ORM\ManyToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\SkillLevel")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull
      */
     private $skillLevel;
+
+    use IsNewTrait;
+
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        $this->rank = 0;
+    }
 
     /**
      * Get id
      *
-     * @return int
+     * @return int|null
      */
-    public function getId(): int {
+    public function getId(): ?int {
         return $this->id;
     }
 
     /**
      * Set rank
      *
-     * @param int $rank
+     * @param int|null $rank
      *
      * @return ResumeSkill
      */
-    public function setRank(int $rank): ResumeSkill {
+    public function setRank(?int $rank): ResumeSkill {
         $this->rank = $rank;
 
         return $this;
@@ -123,7 +146,7 @@ class ResumeSkill {
      *
      * @return Skill
      */
-    public function getSkill(): Skill {
+    public function getSkill(): ?Skill {
         return $this->skill;
     }
 
@@ -145,7 +168,7 @@ class ResumeSkill {
      *
      * @return SkillLevel
      */
-    public function getSkillLevel(): SkillLevel {
+    public function getSkillLevel(): ?SkillLevel {
         return $this->skillLevel;
     }
 

@@ -57,14 +57,8 @@ class LoadResumeOnline implements FixtureInterface {
      * @return void
      */
     public function remove(EntityManagerInterface $manager): void {
-        /* @var $educationRepository EntityRepository */
-        $educationRepository = $manager->getRepository(NSResumeBundle::NAME . ":Education");
-        /* @var $experienceRepository EntityRepository */
-        $experienceRepository = $manager->getRepository(NSResumeBundle::NAME . ":Experience");
         /* @var $profileRepository ProfileRepository */
         $profileRepository = $manager->getRepository(NSResumeBundle::NAME . ":Profile");
-        /* @var $resumeSkillRepository EntityRepository */
-        $resumeSkillRepository = $manager->getRepository(NSResumeBundle::NAME . ":ResumeSkill");
         /* @var $userRepository ObjectRepository */
         $userRepository = $manager->getRepository(NSUserBundle::NAME . ":User");
 
@@ -75,25 +69,23 @@ class LoadResumeOnline implements FixtureInterface {
                 ->setParameter("status", ResumeStatusEnum::ONLINE)
                 ->getResult();
 
-        foreach ($resumes as $resume) {
-            /* @var $resume Resume */
-            $resume;
+        foreach ($resumes as /* @var $resume Resume */ $resume) {
 
             // Remove [Education] entities linked to the current resume.
-            $educations = $educationRepository->findByResume($resume);
-            foreach ($educations as $education) {
+            foreach ($resume->getEducations() as $education) {
+                $resume->removeEducation($education);
                 $manager->remove($education);
             }
 
             // Remove [Experiences] entities linked to the current resume.
-            $experiences = $experienceRepository->findByResume($resume);
-            foreach ($experiences as $experience) {
+            foreach ($resume->getExperiences() as $experience) {
+                $resume->removeExperience($experience);
                 $manager->remove($experience);
             }
 
             // Remove [ResumeSkill] entities linked to the current resume.
-            $resumeSkills = $resumeSkillRepository->findByResume($resume);
-            foreach ($resumeSkills as $resumeSkill) {
+            foreach ($resume->getResumeSkills() as $resumeSkill) {
+                $resume->removeResumeSkill($resumeSkill);
                 $manager->remove($resumeSkill);
             }
 

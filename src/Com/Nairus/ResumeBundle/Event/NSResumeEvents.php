@@ -15,4 +15,9 @@ final class NSResumeEvents {
      */
     const UPDATE_STATUS = 'nsresume.update.resume.status';
 
+    /**
+     * The DELETE_STATUS event occurs when the user delete an informations (Education, Experience, ResumeSkill) for a resume.
+     */
+    const DELETE_STATUS = 'nsresume.delete.resume.status';
+
 }

@@ -1,0 +1,35 @@
+{# @NSResume/ResumeSkill/partials/form.html.twig #}
+
+{% trans_default_domain 'NSResumeBundle' %}
+
+{{ form_start(form) }}
+
+<div class="form-row">
+    <div class="form-group col-md-4">
+        {{ form_label(form.rank) }}
+        {{ form_widget(form.rank) }}
+    </div>
+    <div class="form-group col-md-4">
+        {{ form_label(form.skill) }}
+        {{ form_widget(form.skill) }}
+    </div>
+    <div class="form-group col-md-4">
+        {{ form_label(form.skillLevel) }}
+        {{ form_widget(form.skillLevel) }}
+    </div>
+</div>
+
+{{ form_rest(form) }}
+
+<div class="row actions">
+    <a href="{{ path('resume_show', {'id': resumeSkill.resume.id}) }}" class="btn btn-secondary mx-1 my-1">
+        <i class="fas fa-chevron-left"></i>
+        {{ "resume.return" | trans}}
+    </a>
+    <button class="btn btn-primary mx-1 my-1" formnovalidate="formnovalidate">
+        <i class="far fa-save"></i>
+        {{ "actions.save" | trans({}, 'messages') }}
+    </button>
+    {{ form_end(form) }}
+</div>
+{{ form_end(form) }}

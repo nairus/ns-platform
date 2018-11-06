@@ -1,0 +1,27 @@
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% set titlePage = ("resume-skill.delete.title" | trans({"%id%": resumeSkill.id, "%resume_id%": resumeSkill.resume.id}, "NSResumeBundle")) %}
+
+{% block title %}{{ titlePage }} - {{ parent() }}{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron text-center">
+        <h1>{{ titlePage }}</h1>
+
+        <p>{{ "resume-skill.delete.confirm" | trans({"%skill%": resumeSkill.skill.title, "%rank%": resumeSkill.rank}, "NSResumeBundle") }}</p>
+
+        {{ form_start(delete_form) }}
+        <div class="actions">
+            <a class="btn btn-secondary mx-1 my-1"
+               href="{{ path('resume_show', {'id': resumeSkill.resume.id}) }}#experiences">
+                <i class="fas fa-chevron-left"></i>
+                {{ "resume.return" | trans({}, "NSResumeBundle")}}
+            </a>
+            <button class="btn btn-danger mx-1 my-1">
+                <i class="fas fa-trash-alt"></i>
+                {{ "actions.delete" | trans}}
+            </button>
+        </div>
+        {{ form_end(delete_form) }}
+    </div>
+{% endblock %}

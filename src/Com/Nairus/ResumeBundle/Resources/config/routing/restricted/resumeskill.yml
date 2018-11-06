@@ -1,0 +1,16 @@
+resumeskill_new:
+    path:     /{resume_id}/new
+    defaults: { _controller: "NSResumeBundle:ResumeSkill:new" }
+    methods:  [GET, POST]
+    requirements:
+        resume_id: \d+
+
+resumeskill_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "NSResumeBundle:ResumeSkill:edit" }
+    methods:  [GET, POST]
+
+resumeskill_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "NSResumeBundle:ResumeSkill:delete" }
+    methods:  [GET,DELETE]

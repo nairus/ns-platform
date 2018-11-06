@@ -1,0 +1,27 @@
+{# NSResumeBundle:ResumeSkill:edit.html.twig #}
+
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% set titlePage = ("resume-skill.edit.title" | trans({"%id%": resumeSkill.id, "%resume_id%": resumeSkill.resume.id}, "NSResumeBundle")) %}
+
+{% block title %}{{ titlePage }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ '/bundles/nscore/css/forms.css' }}" type="text/css">
+{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ titlePage }}</h1>
+
+        {% include '@NSResume/ResumeSkill/partials/form.html.twig' %}
+
+        {{ form_start(delete_form) }}
+        <button class="btn btn-danger mx-1 my-1 float-right">
+            <i class="fas fa-trash-alt"></i>
+            {{ "actions.delete" | trans}}
+        </button>
+        {{ form_end(delete_form) }}
+    </div>
+{% endblock %}

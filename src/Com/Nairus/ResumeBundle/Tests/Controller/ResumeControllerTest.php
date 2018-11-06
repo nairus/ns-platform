@@ -11,6 +11,7 @@ use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
 use Com\Nairus\UserBundle\Tests\AbstractUserWebTestCase;
 use Com\Nairus\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Resume controller functional tests.
@@ -258,7 +259,7 @@ class ResumeControllerTest extends AbstractUserWebTestCase {
         $this->assertContains("Ajouter une expérience", $crawler->filter("#experiences")->text(), "3.32 The add experience button label is expected");
         $this->assertContains('<i class="fas fa-plus"></i>', $crawler->filter("#experiences")->html(), "3.33 The add experience button picto is missing");
         $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "3.34 The [add] flash message is missing.");
-        $this->assertContains("CV ajoutée avec succès !", $crawler->filter('.message-container')->text(), "3.35 The [add] flash message is not ok.");
+        $this->assertContains("CV ajouté avec succès !", $crawler->filter('.message-container')->text(), "3.35 The [add] flash message is not ok.");
 
         // Case 4: edit the resume
         $crawler = $client->click($crawler->selectLink("Modifier")->link());
@@ -609,6 +610,167 @@ class ResumeControllerTest extends AbstractUserWebTestCase {
     }
 
     /**
+     * Test the dispatching of update status event.
+     *
+     * @return void
+     */
+    public function testUpdateResumeStatus(): void {
+        $crawler = $this->logInAdmin();
+        $client = $this->getClient();
+
+        // Case 1: Add a resume and go to the show page
+        $crawler = $client->click($crawler->selectLink("Mes CV")->link());
+        $crawler = $client->click($crawler->selectLink("Ajouter un nouveau CV")->link());
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            'com_nairus_resumebundle_resume[anonymous]' => true,
+            'com_nairus_resumebundle_resume[translations][fr][title]' => 'Titre FR',
+        ]);
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        $adminContainer = $crawler->filter("#admin-container")->html();
+        $this->assertContains('Incomplet Hors ligne', $adminContainer, '1.1 The label status is missing or incorrect');
+        $this->assertContains('<i class="fas fa-thermometer-quarter"></i>', $adminContainer, '1.2 The status picto is missing or incorrect');
+
+        // Case 2: Add a resume skill
+        $crawler = $client->click($crawler->selectLink("Ajouter une compétence")->link());
+        /* @var $skill Skill */
+        $skill = $this->getEntityManager()->getRepository(Skill::class)->findAll()[0];
+        /* @var $skillLevel SkillLevel */
+        $skillLevel = $this->getEntityManager()->getRepository(SkillLevel::class)->findAll()[0];
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            "com_nairus_resumebundle_resumeskill[rank]" => 1,
+            "com_nairus_resumebundle_resumeskill[skill]" => $skill->getId(),
+            "com_nairus_resumebundle_resumeskill[skillLevel]" => $skillLevel->getId()
+        ]);
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $adminContainer = $crawler->filter("#admin-container")->html();
+        $this->assertContains('Incomplet Hors ligne', $adminContainer, '2.1 The label status has to remain the same');
+        $this->assertContains('<i class="fas fa-thermometer-quarter"></i>', $adminContainer, '2.2 The status picto has to remain the same');
+
+        // Case 3: Add an education
+        $crawler = $client->click($crawler->selectLink("Ajouter une formation")->link());
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            "com_nairus_resumebundle_education[diploma]" => "Diplôme",
+            "com_nairus_resumebundle_education[institution]" => "Organisme",
+            "com_nairus_resumebundle_education[startYear]" => "2005",
+            "com_nairus_resumebundle_education[endYear]" => "2006",
+            "com_nairus_resumebundle_education[translations][fr][description]" => "Description",
+            "com_nairus_resumebundle_education[translations][fr][domain]" => "Domaine",
+        ]);
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $crawler = $client->click($crawler->selectLink("Retour au CV")->link());
+        $adminContainer = $crawler->filter("#admin-container")->html();
+        $this->assertContains('Incomplet Hors ligne', $adminContainer, '3.1 The label status has to remain the same');
+        $this->assertContains('<i class="fas fa-thermometer-quarter"></i>', $adminContainer, '3.2 The status picto has to remain the same');
+
+        // Case 4: Add an experience
+        $crawler = $client->click($crawler->selectLink("Ajouter une expérience")->link());
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            "com_nairus_resumebundle_experience[company]" => "Company",
+            "com_nairus_resumebundle_experience[location]" => "Location",
+            "com_nairus_resumebundle_experience[startYear]" => "2018",
+            "com_nairus_resumebundle_experience[startMonth]" => "1",
+            "com_nairus_resumebundle_experience[endYear]" => "2018",
+            "com_nairus_resumebundle_experience[endMonth]" => "2",
+            "com_nairus_resumebundle_experience[currentJob]" => false,
+            "com_nairus_resumebundle_experience[translations][fr][description]" => "Description",
+        ]);
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $crawler = $client->click($crawler->selectLink("Retour au CV")->link());
+        $adminContainer = $crawler->filter("#admin-container")->html();
+        $this->assertContains('Complet Hors ligne', $adminContainer, '4.1 The label status is incorrect');
+        $this->assertContains('<i class="fas fa-thermometer-half"></i>', $adminContainer, '4.2 The status picto is incorrect');
+    }
+
+    /**
+     * Test the dispatching of delete status event in resume skill delete action.
+     *
+     * @return void
+     */
+    public function testDeleteResumeStatusWithResumeSkillDeleteAction(): void {
+        $crawler = $this->logInAdmin();
+        $client = $this->getClient();
+
+        // Go to resume show page with all content (offline incomplete)
+        $crawler = $this->addCompleteOfflineResume($crawler);
+        $adminContainer = $crawler->filter("#admin-container")->html();
+        $this->assertContains('Complet Hors ligne', $adminContainer, '1.1 The label status is incorrect');
+        $this->assertContains('<i class="fas fa-thermometer-half"></i>', $adminContainer, '1.2 The status picto is incorrect');
+
+        // Case 1: Delete a resume skill
+        $cardFooterElements = $crawler->filter("#skills-content .card")->first()->filter(".card-footer")->children();
+        $crawler = $client->click($cardFooterElements->selectLink("Supprimer")->link());
+        $client->submit($crawler->selectButton('Supprimer')->form());
+        $crawler = $client->followRedirect();
+
+        $this->assertRegExp("~^/restricted/resume/[0-9]+/show~", $client->getRequest()->getRequestUri(), "2.1 The request uri expected is not ok.");
+        $adminContainer = $crawler->filter("#admin-container")->html();
+        $this->assertContains('Incomplet Hors ligne', $adminContainer, '2.2 The label status is incorrect');
+        $this->assertContains('<i class="fas fa-thermometer-quarter"></i>', $adminContainer, '2.3 The status picto is incorrect');
+    }
+
+    /**
+     * Test the dispatching of delete status event in education delete action.
+     *
+     * @return void
+     */
+    public function testDeleteResumeStatusWithEducationDeleteAction(): void {
+        $crawler = $this->logInAdmin();
+        $client = $this->getClient();
+
+        // Go to resume show page with all content (offline incomplete)
+        $crawler = $this->addCompleteOfflineResume($crawler);
+        $adminContainer = $crawler->filter("#admin-container")->html();
+        $this->assertContains('Complet Hors ligne', $adminContainer, '1.1 The label status is incorrect');
+        $this->assertContains('<i class="fas fa-thermometer-half"></i>', $adminContainer, '1.2 The status picto is incorrect');
+
+        // Case 1: Delete an education
+        $cardFooterElements = $crawler->filter("#educations-content .card")->first()->filter(".card-footer")->children();
+        $crawler = $client->click($cardFooterElements->selectLink("Supprimer")->link());
+        $client->submit($crawler->selectButton('Supprimer')->form());
+        $crawler = $client->followRedirect();
+
+        $this->assertRegExp("~^/restricted/resume/[0-9]+/show~", $client->getRequest()->getRequestUri(), "2.1 The request uri expected is not ok.");
+        $adminContainer = $crawler->filter("#admin-container")->html();
+        $this->assertContains('Incomplet Hors ligne', $adminContainer, '2.2 The label status is incorrect');
+        $this->assertContains('<i class="fas fa-thermometer-quarter"></i>', $adminContainer, '2.3 The status picto is incorrect');
+    }
+
+    /**
+     * Test the dispatching of delete status event in experience delete action.
+     *
+     * @return void
+     */
+    public function testDeleteResumeStatusWithExperienceDeleteAction(): void {
+        $crawler = $this->logInAdmin();
+        $client = $this->getClient();
+
+        // Go to resume show page with all content (offline incomplete)
+        $crawler = $this->addCompleteOfflineResume($crawler);
+        $adminContainer = $crawler->filter("#admin-container")->html();
+        $this->assertContains('Complet Hors ligne', $adminContainer, '1.1 The label status is incorrect');
+        $this->assertContains('<i class="fas fa-thermometer-half"></i>', $adminContainer, '1.2 The status picto is incorrect');
+
+        // Case 1: Delete an education
+        $cardFooterElements = $crawler->filter("#experiences-content .card")->first()->filter(".card-footer")->children();
+        $crawler = $client->click($cardFooterElements->selectLink("Supprimer")->link());
+        $client->submit($crawler->selectButton('Supprimer')->form());
+        $crawler = $client->followRedirect();
+
+        $this->assertRegExp("~^/restricted/resume/[0-9]+/show~", $client->getRequest()->getRequestUri(), "2.1 The request uri expected is not ok.");
+        $adminContainer = $crawler->filter("#admin-container")->html();
+        $this->assertContains('Incomplet Hors ligne', $adminContainer, '2.2 The label status is incorrect');
+        $this->assertContains('<i class="fas fa-thermometer-quarter"></i>', $adminContainer, '2.3 The status picto is incorrect');
+    }
+
+    /**
      * Remove all datas set
      *
      * @return void
@@ -636,7 +798,95 @@ class ResumeControllerTest extends AbstractUserWebTestCase {
             }
             $this->getEntityManager()->remove($resume);
         }
+
+        // Get all author's resumes datas remaining and remove them.
+        $author = $this->getEntityManager()->getRepository(User::class)->findOneByUsername("author");
+        $resumes = $this->getEntityManager()->getRepository(Resume::class)->findByAuthor($author);
+        foreach ($resumes as /* @var $resume Resume */ $resume) {
+            foreach ($resume->getEducations() as $education) {
+                $this->getEntityManager()->remove($education);
+                $resume->removeEducation($education);
+            }
+            foreach ($resume->getExperiences() as $experience) {
+                $this->getEntityManager()->remove($experience);
+                $resume->removeExperience($experience);
+            }
+            foreach ($resume->getResumeSkills() as $resumeSkill) {
+                $this->getEntityManager()->remove($resumeSkill);
+                $resume->removeResumeSkill($resumeSkill);
+            }
+        }
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * Add a resume with all dependencies.
+     *
+     * @param Crawler $crawler The crawler instance.
+     *
+     * @return Crawler The current crawler.
+     */
+    private function addCompleteOfflineResume(Crawler $crawler): Crawler {
+        // Get the client
+        $client = $this->getClient();
+
+        // Go to admin resumes page
+        $crawler = $client->click($crawler->selectLink("Mes CV")->link());
+
+        // Add a new reume
+        $crawler = $client->click($crawler->selectLink("Ajouter un nouveau CV")->link());
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            'com_nairus_resumebundle_resume[anonymous]' => true,
+            'com_nairus_resumebundle_resume[translations][fr][title]' => 'Titre FR',
+        ]);
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        // Add a new resume skill
+        $crawler = $client->click($crawler->selectLink("Ajouter une compétence")->link());
+        /* @var $skill Skill */
+        $skill = $this->getEntityManager()->getRepository(Skill::class)->findAll()[0];
+        /* @var $skillLevel SkillLevel */
+        $skillLevel = $this->getEntityManager()->getRepository(SkillLevel::class)->findAll()[0];
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            "com_nairus_resumebundle_resumeskill[rank]" => 1,
+            "com_nairus_resumebundle_resumeskill[skill]" => $skill->getId(),
+            "com_nairus_resumebundle_resumeskill[skillLevel]" => $skillLevel->getId()
+        ]);
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        // Add a new education
+        $crawler = $client->click($crawler->selectLink("Ajouter une formation")->link());
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            "com_nairus_resumebundle_education[diploma]" => "Diplôme",
+            "com_nairus_resumebundle_education[institution]" => "Organisme",
+            "com_nairus_resumebundle_education[startYear]" => "2005",
+            "com_nairus_resumebundle_education[endYear]" => "2006",
+            "com_nairus_resumebundle_education[translations][fr][description]" => "Description",
+            "com_nairus_resumebundle_education[translations][fr][domain]" => "Domaine",
+        ]);
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $crawler = $client->click($crawler->selectLink("Retour au CV")->link());
+
+        // Add a new experience
+        $crawler = $client->click($crawler->selectLink("Ajouter une expérience")->link());
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            "com_nairus_resumebundle_experience[company]" => "Company",
+            "com_nairus_resumebundle_experience[location]" => "Location",
+            "com_nairus_resumebundle_experience[startYear]" => "2018",
+            "com_nairus_resumebundle_experience[startMonth]" => "1",
+            "com_nairus_resumebundle_experience[endYear]" => "2018",
+            "com_nairus_resumebundle_experience[endMonth]" => "2",
+            "com_nairus_resumebundle_experience[currentJob]" => false,
+            "com_nairus_resumebundle_experience[translations][fr][description]" => "Description",
+        ]);
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        return $client->click($crawler->selectLink("Retour au CV")->link());
     }
 
 }

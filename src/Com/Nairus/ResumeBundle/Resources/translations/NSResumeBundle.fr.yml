@@ -9,11 +9,15 @@ flashes:
             edit: Expérience n°%id% modifiée avec succès !
             delete: Expérience n°%id% supprimée avec succès !
         resume:
-            new: CV ajoutée avec succès !
+            new: CV ajouté avec succès !
             edit: CV n°%id% modifié avec succès !
             delete: CV n°%id% supprimé avec succès !
             published: CV n°%id% publié avec succès !
             unpublished: CV n°%id% dépublié avec succès !
+        resume-skill:
+            new: Compétence de CV ajoutée avec succès !
+            edit: Compétence de CV n°%id% modifiée avec succès !
+            delete: Compétence de CV n°%id% supprimée avec succès !
         skill:
             new: Compétence ajoutée avec succès !
             edit: Compétence n°%id% modifiée avec succès !
@@ -125,7 +129,21 @@ skill:
     show:
         title: Détail de la compétence n° %id%
         label: "Libellé&nbsp;:&nbsp;"
-
+resume-skill:
+    labels:
+        rank: Classement
+        skill: Compétence
+        skill-level: Niveau
+    ranking: "<strong>Classement :</strong> %rank%"
+    new:
+        title: Ajout d'une compétence pour le CV n°%resume_id%
+    edit:
+        title: Modification de la compétence n°%id% du CV n°%resume_id%
+    delete:
+        title: Suppression de la compétence n°%id% du CV n°%resume_id%
+        confirm: Êtes-vous sûr de vouloir supprimer la compétence "%skill%" au rang n°%rank% ?
+    show:
+        title: Détail de la compétence n°%id% du CV n°%resume_id%
 skilllevel:
     index:
         title: Liste des niveaux de compétence
