@@ -290,11 +290,11 @@ class Resume extends AbstractTranslatableEntity {
     /**
      * Set title for current locale (proxy method).
      *
-     * @param string $title
+     * @param string|null $title
      *
      * @return ResumeTranslation
      */
-    public function setTitle(string $title): ResumeTranslation {
+    public function setTitle(?string $title): ResumeTranslation {
         /* @var $translation ResumeTranslation */
         $translation = $this->translate();
 

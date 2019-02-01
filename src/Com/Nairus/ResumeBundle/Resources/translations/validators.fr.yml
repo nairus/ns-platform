@@ -5,3 +5,4 @@ form:
         end-year: L'année de fin doit être supérieure ou égale à celle de début
         current-job: L'année et le mois de fin doivent être renseignés pour un emploi passé
         rank-not-unique: Classement déjà utilisé
+        phone: Un numéro de téléphone doit être renseigné (fixe ou mobile)

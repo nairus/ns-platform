@@ -70,15 +70,4 @@ class ExperienceTranslationTest extends KernelTestCase {
         }
     }
 
-    /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation::setDescription
-     *
-     * @expectedException \TypeError
-     *
-     * @return void
-     */
-    public function testSetDescriptionWithNullParam() {
-        $this->object->setDescription(null);
-    }
-
 }

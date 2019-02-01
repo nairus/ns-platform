@@ -71,11 +71,11 @@ class Education extends AbstractTranslatableEntity {
     /**
      * Set institution
      *
-     * @param string $institution
+     * @param string|null $institution
      *
      * @return Education
      */
-    public function setInstitution(string $institution): Education {
+    public function setInstitution(?string $institution): Education {
         $this->institution = $institution;
 
         return $this;
@@ -93,11 +93,11 @@ class Education extends AbstractTranslatableEntity {
     /**
      * Set diploma
      *
-     * @param string $diploma
+     * @param string|null $diploma
      *
      * @return Education
      */
-    public function setDiploma(string $diploma): Education {
+    public function setDiploma(?string $diploma): Education {
         $this->diploma = $diploma;
 
         return $this;
@@ -115,11 +115,11 @@ class Education extends AbstractTranslatableEntity {
     /**
      * Set domain (proxy method).
      *
-     * @param string $domain
+     * @param string|null $domain
      *
      * @return Education
      */
-    public function setDomain(string $domain): Education {
+    public function setDomain(?string $domain): Education {
         /* @var $translation EducationTranslation */
         $translation = $this->translate();
         $translation->setDomain($domain);
@@ -185,11 +185,11 @@ class Education extends AbstractTranslatableEntity {
     /**
      * Set description for current locale (proxy method).
      *
-     * @param string $description
+     * @param string|null $description
      *
      * @return Education
      */
-    public function setDescription(string $description): Education {
+    public function setDescription(?string $description): Education {
         /* @var $translation EducationTranslation */
         $translation = $this->translate();
         $translation->setDescription($description);

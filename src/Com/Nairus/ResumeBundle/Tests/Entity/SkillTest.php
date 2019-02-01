@@ -49,15 +49,6 @@ class SkillTest extends AbstractKernelTestCase {
     }
 
     /**
-     * @covers Com\Nairus\ResumeBundle\Entity\SkillLevel::setTitle
-     *
-     * @expectedException \TypeError
-     */
-    public function testSetTitleWithNullParam() {
-        $this->object->setTitle(null);
-    }
-
-    /**
      * Test isNew method.
      *
      * @covers \Com\Nairus\ResumeBundle\Entity\Skill::isNew

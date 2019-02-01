@@ -115,11 +115,11 @@ class Experience extends AbstractTranslatableEntity {
     /**
      * Set company
      *
-     * @param string $company
+     * @param string|null $company
      *
      * @return Experience
      */
-    public function setCompany(string $company): Experience {
+    public function setCompany(?string $company): Experience {
         $this->company = $company;
 
         return $this;
@@ -137,11 +137,11 @@ class Experience extends AbstractTranslatableEntity {
     /**
      * Set location
      *
-     * @param string $location
+     * @param string|null $location
      *
      * @return Experience
      */
-    public function setLocation(string $location): Experience {
+    public function setLocation(?string $location): Experience {
         $this->location = $location;
 
         return $this;
@@ -159,11 +159,11 @@ class Experience extends AbstractTranslatableEntity {
     /**
      * Set description for current locale (proxy method).
      *
-     * @param string $description
+     * @param string|null $description
      *
      * @return Experience
      */
-    public function setDescription(string $description): Experience {
+    public function setDescription(?string $description): Experience {
         /* @var $translation ExperienceTranslation */
         $translation = $this->translate();
         $translation->setDescription($description);

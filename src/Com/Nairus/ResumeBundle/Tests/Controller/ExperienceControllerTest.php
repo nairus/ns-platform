@@ -423,11 +423,11 @@ class ExperienceControllerTest extends AbstractUserWebTestCase {
     }
 
     /**
-     * Test the validation of the form.
+     * Test the validation of the new form.
      *
      * @return void
      */
-    public function testValidateForm(): void {
+    public function testValidateNewForm(): void {
         $crawler = $this->logInAuthor();
         $client = $this->getClient();
 
@@ -454,7 +454,47 @@ class ExperienceControllerTest extends AbstractUserWebTestCase {
 
         $crawler = $client->submit($form);
 
-        $this->assertRegExp("~/restricted/experience/[0-9]+/new~", $client->getRequest()->getRequestUri(), "1. The request uri expected is not ok.");
+        $this->assertRegExp("~/restricted/experience/[0-9]+/new~", $client->getRequest()->getRequestUri(), "1.1 The request uri expected is not ok.");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.2 The response status code expected is not ok.");
+
+        // Verify if there are some errors
+        $this->assertCount(5, $crawler->filter(".is-invalid"), "2.1 The form has to show 5 inputs in error.");
+        $this->assertCount(5, $crawler->filter(".invalid-feedback"), "2.2 The form has to show 5 errors message.");
+    }
+
+    /**
+     * Test the validation of edit form.
+     *
+     * @return void
+     */
+    public function testValidateEditForm(): void {
+        $crawler = $this->logInModerator();
+        $client = $this->getClient();
+
+        // Go the resume page
+        $crawler = $client->click($crawler->selectLink("Mes CV")->link());
+
+        // Go on the resume detail page
+        $crawler = $client->click($crawler->selectLink("Voir les détails")->link());
+
+        // Click on the add experience button.
+        $crawler = $client->click($crawler->filter("#experiences-content")->selectLink("Modifier")->link());
+
+        // Submit form with bad values
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            "com_nairus_resumebundle_experience[company]" => " ",
+            "com_nairus_resumebundle_experience[location]" => " ",
+            "com_nairus_resumebundle_experience[startYear]" => "2018",
+            "com_nairus_resumebundle_experience[startMonth]" => "1",
+            "com_nairus_resumebundle_experience[endYear]" => "2017",
+            "com_nairus_resumebundle_experience[endMonth]" => "",
+            "com_nairus_resumebundle_experience[currentJob]" => false,
+            "com_nairus_resumebundle_experience[translations][fr][description]" => " ",
+        ]);
+
+        $crawler = $client->submit($form);
+        $this->assertRegExp("~^/restricted/experience/[0-9]+/edit~", $client->getRequest()->getRequestUri(), "1.1 The request uri expected is not ok.");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.2 The response status code expected is not ok.");
 
         // Verify if there are some errors
         $this->assertCount(5, $crawler->filter(".is-invalid"), "2.1 The form has to show 5 inputs in error.");

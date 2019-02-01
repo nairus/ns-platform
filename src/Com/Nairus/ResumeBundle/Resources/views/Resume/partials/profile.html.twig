@@ -1,0 +1,41 @@
+{# @NSResume/Resume/partials/profile.html.twig #}
+
+<div id="profile-card" class="mt-2 card bg-light ">
+    {% if not profile %}
+        <div class="card-body">
+            <a href="{{ path("profile_new", {"resume_id": resume.id}) }}" class="btn btn-success btn-sm">
+                <i class="fas fa-plus"></i>
+                {{ "resume.show.add-profile" | trans({}, "NSResumeBundle") }}
+            </a>
+        </div>
+    {% else %}
+        <div class="card-body">
+            <p class="font-weight-bold">
+                {{ profile.firstName }} {{ profile.lastName }}
+            </p>
+            <p>
+                {{ profile.address }}<br>
+                {% if profile.addressAddition %}{{ profile.addressAddition }}<br>{% endif %}
+                {{"profile.show.city" | trans({"%city%": profile.city, "%zip%": profile.zip}, "NSResumeBundle")}}
+                {% if profile.country %}<br>{{ profile.country }}{% endif %}
+            </p>
+            <p>
+                {% if profile.phone %}<i class="fas fa-phone"></i>&nbsp;{{profile.phone}}{% endif %}
+                {% if profile.phone and profile.cell %}&nbsp;/&nbsp;{% endif %}
+                {% if profile.cell %}<i class="fas fa-mobile-alt"></i>&nbsp;{{profile.cell}}{% endif %}
+            </p>
+        </div>
+        <div class="card-footer text-center">
+            <a href="{{ path("profile_edit", {"id": profile.id, "resume_id": resume.id}) }}" class="d-inline-block p-1 btn btn-primary btn-sm">
+                <i class="fas fa-pencil-alt"></i>
+                {{ "resume.show.edit-profile" | trans({}, "NSResumeBundle") }}
+            </a>
+            {{ form_start(profile_delete_form, {'attr': {'class': 'd-inline-block'}}) }}
+            <button class="btn btn-danger btn-sm p-1">
+                <i class="fas fa-trash-alt"></i>
+                {{ "resume.show.delete-profile" | trans({}, "NSResumeBundle")}}
+            </button>
+            {{ form_end(profile_delete_form) }}
+        </div>
+    {% endif %}
+</div>

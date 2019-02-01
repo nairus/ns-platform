@@ -21,6 +21,16 @@ class SkillControllerTest extends AbstractUserWebTestCase {
      * Load traits to manipulate test datas.
      */
     use \Com\Nairus\CoreBundle\Tests\Traits\DatasCleanerTrait;
+    use \Com\Nairus\CoreBundle\Tests\Traits\DatasLoaderTrait;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown() {
+        // Clean the datas.
+        $this->cleanDatas([Skill::class]);
+        parent::tearDown();
+    }
 
     /**
      * Test index action with bad credentials.
@@ -358,11 +368,11 @@ class SkillControllerTest extends AbstractUserWebTestCase {
     }
 
     /**
-     * Test form validation.
+     * Test new form validation.
      *
      * @return void
      */
-    public function testFormValidation(): void {
+    public function testValidateNewForm(): void {
         // Login and go to the new page.
         $crawler = $this->logInAdmin();
         $client = $this->getClient();
@@ -378,8 +388,40 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->submit($form);
 
         // Verify if there are some errors
-        $this->assertCount(1, $crawler->filter(".is-invalid"), "1.1 The form has to show 1 input in error.");
-        $this->assertCount(1, $crawler->filter(".invalid-feedback"), "1.2 The form has to show 1 error message.");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 The status code expected is not ok.");
+        $this->assertEquals("/admin/skill/new", $client->getRequest()->getRequestUri(), "1.2 The request uri expected is not ok.");
+        $this->assertCount(1, $crawler->filter(".is-invalid"), "1.3 The form has to show 1 input in error.");
+        $this->assertCount(1, $crawler->filter(".invalid-feedback"), "1.4 The form has to show 1 error message.");
+    }
+
+    /**
+     * Test the validation of edit form.
+     *
+     * @return void
+     */
+    public function testValidateEditForm(): void {
+        // Add datas.
+        $this->loadDatas($this->getEntityManager(), [new LoadSkill()]);
+
+        // Login and go to the edit page.
+        $crawler = $this->logInAdmin();
+        $client = $this->getClient();
+        $crawler = $client->click($crawler->selectLink("Gestion des compétences")->link());
+        $crawler = $client->click($crawler->selectLink("Modifier")->link());
+
+        // Fill in the form.
+        $form = $crawler->selectButton('Sauvegarder')->form(array(
+            'com_nairus_resumebundle_skill[title]' => ' '
+        ));
+
+        // Submit the form
+        $crawler = $client->submit($form);
+
+        // Verify if there are some errors
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 The status code expected is not ok.");
+        $this->assertRegExp("~^/admin/skill/[0-9]+/edit$~", $client->getRequest()->getRequestUri(), '1.2 The request uri expected is not ok.');
+        $this->assertCount(1, $crawler->filter(".is-invalid"), "1.3 The form has to show 1 input in error.");
+        $this->assertCount(1, $crawler->filter(".invalid-feedback"), "1.4 The form has to show 1 error message.");
     }
 
     /**

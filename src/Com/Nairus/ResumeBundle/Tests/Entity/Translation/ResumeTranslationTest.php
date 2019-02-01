@@ -76,17 +76,6 @@ class ResumeTranslationTest extends KernelTestCase {
     }
 
     /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation::setTitle
-     *
-     * @return void
-     *
-     * @expectedException \TypeError
-     */
-    public function testSetTitleWithNullParam(): void {
-        $this->object->setTitle(null);
-    }
-
-    /**
      * Test the NotBlank constraint of the entity.
      *
      * @return void

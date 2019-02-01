@@ -8,6 +8,10 @@ flashes:
             new: Experience added successfully!
             edit: Experience No. %id% modified successfully!
             delete: Experience No. %id% deleted successfully!
+        profile:
+            new: Profile added successfully!
+            edit: Profile modified successfully!
+            delete: Profile deleted successfully!
         resume-skill:
             new: Resume skill added successfully!
             edit: Resume skill No. %id% modified successfully!
@@ -84,6 +88,23 @@ experience:
     delete:
         title: Deletion of the experience No %id%
         confirm: Are you sure you want to remove the "%company% %location%" experience?
+profile:
+    labels:
+        first-name: First name
+        last-name: Last name
+        phone: Landline phone
+        cell: Mobile phone
+        address: Address
+        address-addition: Additional address
+        city: City
+        zip: Zip code
+        country: Country
+    new:
+        title: Add a profile for my resumes
+    edit:
+        title: Modification of my resumes's profile
+    show:
+        city: "%city% %zip%"
 resume:
     created-at: "Created on "
     updated-at: "Updated on "
@@ -113,6 +134,10 @@ resume:
         add-education: Add an education
         experiences: My Experiences
         add-experience: Add an experience
+        add-profile: Add a profile
+        edit-profile: Edit the profile
+        show-profile: Show the profile
+        delete-profile: Delete the profile
 resume-skill:
     labels:
         rank: Rank

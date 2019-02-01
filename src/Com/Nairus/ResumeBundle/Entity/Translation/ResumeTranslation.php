@@ -48,11 +48,11 @@ class ResumeTranslation extends AbstractTranslationEntity {
     /**
      * Set title
      *
-     * @param string $title
+     * @param string|null $title
      *
      * @return Resume
      */
-    public function setTitle(string $title): self {
+    public function setTitle(?string $title): self {
         $this->title = $title;
 
         return $this;

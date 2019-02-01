@@ -5,8 +5,10 @@ namespace Com\Nairus\ResumeBundle\Controller;
 use Com\Nairus\CoreBundle\Exception\FunctionalException;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Resume;
+use Com\Nairus\ResumeBundle\Entity\Profile;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Exception as NSResumeException;
+use Com\Nairus\ResumeBundle\Form\ResumeType;
 use Com\Nairus\ResumeBundle\Service\ResumeServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -109,7 +111,7 @@ class ResumeController extends Controller {
         $resume
                 ->setIp($request->getClientIp())
                 ->setAuthor($this->getUser());
-        $form = $this->createForm('Com\Nairus\ResumeBundle\Form\ResumeType', $resume);
+        $form = $this->createForm(ResumeType::class, $resume);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -150,13 +152,32 @@ class ResumeController extends Controller {
 
         $deleteForm = $this->createDeleteForm($resume);
 
+        // If the resume is not anonymous, we try to get the profile.
+        $profile = null;
+        if (!$resume->getAnonymous()) {
+            $em = $this->getDoctrine()->getManager();
+            $profile = $em->getRepository(Profile::class)->findOneByUser($this->getUser());
+        }
+
         $parameters = ['resume' => $resume,
             'delete_form' => $deleteForm->createView(),
             'statusIcon' => ResumeStatusEnum::getIconClass($resume->getStatus()),
             'statusKey' => ResumeStatusEnum::getLabelKey($resume->getStatus()),
             'defaultLocale' => $defaultLocale,
-            'dateFormat' => $datesFormat[$request->getLocale()]
+            'dateFormat' => $datesFormat[$request->getLocale()],
+            'profile' => $profile
         ];
+
+        // If a profile is found, we generate the delete form.
+        if ($profile) {
+            $parameters["profile_delete_form"] = $this->createFormBuilder()
+                            ->setAction($this->generateUrl('profile_delete', [
+                                        'id' => $profile->getId(),
+                                        'resume_id' => $resume->getId()
+                            ]))
+                            ->setMethod(Request::METHOD_DELETE)
+                            ->getForm()->createView();
+        }
 
         if (ResumeStatusEnum::ONLINE === $resume->getStatus()) {
             $parameters['unpublish_form'] = $this->createUnpublishForm($resume)->createView();
@@ -178,7 +199,7 @@ class ResumeController extends Controller {
     public function editAction(Request $request, Resume $resume): Response {
         $this->check($resume, $this->getUser());
         $deleteForm = $this->createDeleteForm($resume);
-        $editForm = $this->createForm('Com\Nairus\ResumeBundle\Form\ResumeType', $resume);
+        $editForm = $this->createForm(ResumeType::class, $resume);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

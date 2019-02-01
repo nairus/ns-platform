@@ -49,11 +49,11 @@ class Skill {
     /**
      * Set title
      *
-     * @param string $title
+     * @param string|null $title
      *
      * @return Skill
      */
-    public function setTitle(string $title): Skill {
+    public function setTitle(?string $title): Skill {
         $this->title = $title;
 
         return $this;

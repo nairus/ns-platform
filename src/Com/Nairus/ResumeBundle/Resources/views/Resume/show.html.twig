@@ -26,7 +26,9 @@
                         {{ statusKey | trans({}, "NSResumeBundle") }}
                     </strong>
                     <i class="{{ statusIcon }}"></i>
-                    {% if resume.anonymous %}<i class="fas fa-user-secret"></i>{% endif %}
+                    {% if resume.anonymous %}
+                        <i class="fas fa-user-secret"></i>
+                    {% endif %}
                     {% if resume.createdAt %}
                         <div>
                             <em>
@@ -38,6 +40,11 @@
                         </div>
                     {% endif %}
                 </div>
+                {% if not resume.anonymous %}
+                    <div class="col-6">
+                        {% include '@NSResume/Resume/partials/profile.html.twig' %}
+                    </div>
+                {% endif %}
             </div>
         </div>
         <div class="card-footer">

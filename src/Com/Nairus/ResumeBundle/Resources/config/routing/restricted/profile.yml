@@ -1,0 +1,20 @@
+profile_new:
+    path:     /new/{resume_id}/resume
+    defaults: { _controller: "NSResumeBundle:Profile:new" }
+    methods:  [GET, POST]
+    requirements:
+        resume_id: \d+
+
+profile_edit:
+    path:     /{id}/edit/{resume_id}/resume
+    defaults: { _controller: "NSResumeBundle:Profile:edit" }
+    methods:  [GET, POST]
+    requirements:
+        resume_id: \d+
+
+profile_delete:
+    path:     /{id}/delete/{resume_id}/resume
+    defaults: { _controller: "NSResumeBundle:Profile:delete" }
+    methods:  DELETE
+    requirements:
+        resume_id: \d+

@@ -90,17 +90,6 @@ class EducationTest extends KernelTestCase {
     }
 
     /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Education::setInstitution
-     *
-     * @expectedException \TypeError
-     *
-     * @return void
-     */
-    public function testSetInstitutionWithNullParam(): void {
-        $this->object->setInstitution(null);
-    }
-
-    /**
      * @covers Com\Nairus\ResumeBundle\Entity\Education::setDiploma
      * @covers Com\Nairus\ResumeBundle\Entity\Education::getDiploma
      *
@@ -115,17 +104,6 @@ class EducationTest extends KernelTestCase {
         } catch (\Error $err) {
             $this->fail("No error has to be thrown:" . $err->getMessage());
         }
-    }
-
-    /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Education::setDiploma
-     *
-     * @expectedException \TypeError
-     *
-     * @return void
-     */
-    public function testSetDiplomaWithNullParam(): void {
-        $this->object->setDiploma(null);
     }
 
     /**

@@ -462,11 +462,11 @@ class ResumeSkillControllerTest extends AbstractUserWebTestCase {
     }
 
     /**
-     * Test the validation of the form.
+     * Test the validation of the new form.
      *
      * @return void
      */
-    public function testValidateForm(): void {
+    public function testValidateNewForm(): void {
         $crawler = $this->logInAuthor();
         $client = $this->getClient();
 
@@ -493,7 +493,48 @@ class ResumeSkillControllerTest extends AbstractUserWebTestCase {
 
         $crawler = $client->submit($form);
 
-        $this->assertRegExp("~/restricted/resumeskill/[0-9]+/new~", $client->getRequest()->getRequestUri(), "1. The request uri expected is not ok.");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 The status code expected is not ok.");
+        $this->assertRegExp("~/restricted/resumeskill/[0-9]+/new~", $client->getRequest()->getRequestUri(), "1.2 The request uri expected is not ok.");
+
+        // Verify if there are some errors
+        $this->assertCount(1, $crawler->filter(".is-invalid"), "2.1 The form has to show 1 inputs in error.");
+        $this->assertCount(1, $crawler->filter(".invalid-feedback"), "2.2 The form has to show 1 errors message.");
+    }
+
+    /**
+     * Test the validation of edit form.
+     *
+     * @return void
+     */
+    public function testValidateEditForm(): void {
+        $crawler = $this->logInModerator();
+        $client = $this->getClient();
+
+        // Go the resume page
+        $crawler = $client->click($crawler->selectLink("Mes CV")->link());
+
+        // Go on the resume detail page
+        $crawler = $client->click($crawler->selectLink("Voir les détails")->link());
+
+        // Click on the add experience button.
+        $crawler = $client->click($crawler->filter("#skills-content")->selectLink("Modifier")->link());
+
+        /* @var $skill Skill */
+        $skill = $this->getEntityManager()->getRepository(Skill::class)->findOneByTitle("Python 2/3");
+        /* @var $skillLevel SkillLevel */
+        $skillLevel = $this->getEntityManager()->getRepository(SkillLevel::class)->findAll()[2];
+
+        // Submit form
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            "com_nairus_resumebundle_resumeskill[rank]" => 0,
+            "com_nairus_resumebundle_resumeskill[skill]" => $skill->getId(),
+            "com_nairus_resumebundle_resumeskill[skillLevel]" => $skillLevel->getId()
+        ]);
+
+        $crawler = $client->submit($form);
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 The status code expected is not ok.");
+        $this->assertRegExp("~/restricted/resumeskill/[0-9]+/edit~", $client->getRequest()->getRequestUri(), "1.2 The request uri expected is not ok.");
 
         // Verify if there are some errors
         $this->assertCount(1, $crawler->filter(".is-invalid"), "2.1 The form has to show 1 inputs in error.");

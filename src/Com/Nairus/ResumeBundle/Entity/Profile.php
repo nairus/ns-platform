@@ -4,9 +4,10 @@ namespace Com\Nairus\ResumeBundle\Entity;
 
 use Com\Nairus\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Profile
+ * Profile entity.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -29,6 +30,8 @@ class Profile {
      * @var string
      *
      * @ORM\Column(name="firstName", type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 100)
      */
     private $firstName;
 
@@ -36,20 +39,28 @@ class Profile {
      * @var string
      *
      * @ORM\Column(name="lastName", type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 100)
      */
     private $lastName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=50)
+     * @ORM\Column(name="phone", type="string", length=50, nullable=true)
+     * @Assert\Length(max = 50)
+     * @Assert\Regex("/^\d+[\d\s]+?\d+$/")
+     * @Assert\Expression("this.getPhone() || this.getCell()",
+     *                    message="form.errors.phone")
      */
     private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cell", type="string", length=50)
+     * @ORM\Column(name="cell", type="string", length=50, nullable=true)
+     * @Assert\Length(max = 50)
+     * @Assert\Regex(pattern = "/^\d+[\d\s]+?\d+$/")
      */
     private $cell;
 
@@ -57,13 +68,14 @@ class Profile {
      * @var string
      *
      * @ORM\Column(name="address", type="text")
+     * @Assert\NotBlank()
      */
     private $address;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="addressAddition", type="text")
+     * @ORM\Column(name="addressAddition", type="text", nullable=true)
      */
     private $addressAddition;
 
@@ -71,6 +83,8 @@ class Profile {
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 100)
      */
     private $city;
 
@@ -78,13 +92,17 @@ class Profile {
      * @var string
      *
      * @ORM\Column(name="zip", type="string", length=50)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 50)
+     * @Assert\Regex(pattern = "/^[\dA-Z]{1,}([\s\dA-Z]+)?[\dA-Z]+$/")
      */
     private $zip;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="country", type="string", length=100)
+     * @ORM\Column(name="country", type="string", length=100, nullable=true)
+     * @Assert\Length(max = 100)
      */
     private $country;
 
@@ -95,6 +113,20 @@ class Profile {
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @var Avatar
+     *
+     * @ORM\OneToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Avatar")
+     * @ORM\JoinColumn(nullable=true)
+     * @Assert\Valid()
+     */
+    private $avatar;
+
+    /**
+     * Trait to define new entity.
+     */
+    use \Com\Nairus\CoreBundle\Entity\Traits\IsNewTrait;
 
     /**
      * Get id
@@ -108,11 +140,11 @@ class Profile {
     /**
      * Set phone
      *
-     * @param string $phone
+     * @param string|null $phone
      *
      * @return Profile
      */
-    public function setPhone(string $phone): Profile {
+    public function setPhone(?string $phone): Profile {
         $this->phone = $phone;
 
         return $this;
@@ -121,20 +153,20 @@ class Profile {
     /**
      * Get phone
      *
-     * @return string
+     * @return string|null
      */
-    public function getPhone(): string {
+    public function getPhone(): ?string {
         return $this->phone;
     }
 
     /**
      * Set cell
      *
-     * @param string $cell
+     * @param string|null $cell
      *
      * @return Profile
      */
-    public function setCell(string $cell): Profile {
+    public function setCell(?string $cell): Profile {
         $this->cell = $cell;
 
         return $this;
@@ -143,20 +175,20 @@ class Profile {
     /**
      * Get cell
      *
-     * @return string
+     * @return string|null
      */
-    public function getCell(): string {
+    public function getCell(): ?string {
         return $this->cell;
     }
 
     /**
      * Set address
      *
-     * @param string $address
+     * @param string|null $address
      *
      * @return Profile
      */
-    public function setAddress(string $address): Profile {
+    public function setAddress(?string $address): Profile {
         $this->address = $address;
 
         return $this;
@@ -165,20 +197,20 @@ class Profile {
     /**
      * Get address
      *
-     * @return string
+     * @return string|null
      */
-    public function getAddress(): string {
+    public function getAddress(): ?string {
         return $this->address;
     }
 
     /**
      * Set addressAddition
      *
-     * @param string $addressAddition
+     * @param string|null $addressAddition
      *
      * @return Profile
      */
-    public function setAddressAddition(string $addressAddition): Profile {
+    public function setAddressAddition(?string $addressAddition): Profile {
         $this->addressAddition = $addressAddition;
 
         return $this;
@@ -187,20 +219,20 @@ class Profile {
     /**
      * Get addressAddition
      *
-     * @return string
+     * @return string|null
      */
-    public function getAddressAddition(): string {
+    public function getAddressAddition(): ?string {
         return $this->addressAddition;
     }
 
     /**
      * Set city
      *
-     * @param string $city
+     * @param string|null $city
      *
      * @return Profile
      */
-    public function setCity(string $city): Profile {
+    public function setCity(?string $city): Profile {
         $this->city = $city;
 
         return $this;
@@ -209,20 +241,20 @@ class Profile {
     /**
      * Get city
      *
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string {
+    public function getCity(): ?string {
         return $this->city;
     }
 
     /**
      * Set zip
      *
-     * @param string $zip
+     * @param string|null $zip
      *
      * @return Profile
      */
-    public function setZip(string $zip): Profile {
+    public function setZip(?string $zip): Profile {
         $this->zip = $zip;
 
         return $this;
@@ -231,20 +263,20 @@ class Profile {
     /**
      * Get zip
      *
-     * @return string
+     * @return string|null
      */
-    public function getZip(): string {
+    public function getZip(): ?string {
         return $this->zip;
     }
 
     /**
      * Set country
      *
-     * @param string $country
+     * @param string|null $country
      *
      * @return Profile
      */
-    public function setCountry(string $country): Profile {
+    public function setCountry(?string $country): Profile {
         $this->country = $country;
 
         return $this;
@@ -253,9 +285,9 @@ class Profile {
     /**
      * Get country
      *
-     * @return string
+     * @return string|null
      */
-    public function getCountry(): string {
+    public function getCountry(): ?string {
         return $this->country;
     }
 
@@ -284,11 +316,11 @@ class Profile {
     /**
      * Set firstName
      *
-     * @param string $firstName
+     * @param string|null $firstName
      *
      * @return Profile
      */
-    public function setFirstName(string $firstName): Profile {
+    public function setFirstName(?string $firstName): Profile {
         $this->firstName = $firstName;
 
         return $this;
@@ -297,20 +329,20 @@ class Profile {
     /**
      * Get firstName
      *
-     * @return string
+     * @return string|null
      */
-    public function getFirstName(): string {
+    public function getFirstName(): ?string {
         return $this->firstName;
     }
 
     /**
      * Set lastName
      *
-     * @param string $lastName
+     * @param string|null $lastName
      *
      * @return Profile
      */
-    public function setLastName(string $lastName): Profile {
+    public function setLastName(?string $lastName): Profile {
         $this->lastName = $lastName;
 
         return $this;
@@ -319,10 +351,32 @@ class Profile {
     /**
      * Get lastName
      *
-     * @return string
+     * @return string|null
      */
-    public function getLastName(): string {
+    public function getLastName(): ?string {
         return $this->lastName;
+    }
+
+    /**
+     * Set avatar
+     *
+     * @param Avatar $avatar
+     *
+     * @return Profile
+     */
+    public function setAvatar(Avatar $avatar): Profile {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * Get avatar
+     *
+     * @return Avatar|null
+     */
+    public function getAvatar(): ?Avatar {
+        return $this->avatar;
     }
 
 }

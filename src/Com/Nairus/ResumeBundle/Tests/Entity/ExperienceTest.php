@@ -88,17 +88,6 @@ class ExperienceTest extends KernelTestCase {
     }
 
     /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Experience::setCompany
-     *
-     * @expectedException \TypeError
-     *
-     * @return void
-     */
-    public function testSetCompanyWithNullParam(): void {
-        $this->object->setCompany(null);
-    }
-
-    /**
      * Test the getter/setter of the location property.
      *
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::setLocation
@@ -113,17 +102,6 @@ class ExperienceTest extends KernelTestCase {
         } catch (\Throwable $err) {
             $this->fail("No exception or error has to be thrown: " . $err->getMessage());
         }
-    }
-
-    /**
-     * @covers Com\Nairus\ResumeBundle\Entity\Experience::setLocation
-     *
-     * @expectedException \TypeError
-     *
-     * @return void
-     */
-    public function testSetLocationWithNullParam() {
-        $this->object->setLocation(null);
     }
 
     /**

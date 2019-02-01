@@ -5,3 +5,4 @@ form:
         end-year: The end year must be greater or equal than the beginning year
         current-job: The year and month of end must be entered for a previous job
         rank-not-unique: Rank already used
+        phone: A phone number must be provided (landline or mobile)

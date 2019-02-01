@@ -25,11 +25,11 @@ class LoadProfile extends AbstractFixture implements OrderedFixtureInterface {
         $profile
                 ->setAddress("Adresse 1")
                 ->setAddressAddition("Adresse 2")
-                ->setCell("06.01.01.01.01")
+                ->setCell("06 01 01 01 01")
                 ->setCity("Marseille")
                 ->setCountry("France")
                 ->setFirstName("Prénom")
-                ->setPhone("04.01.01.01.01")
+                ->setPhone("04 01 01 01 01")
                 ->setLastName("Nom")
                 ->setZip("13004")
                 ->setUser($author);

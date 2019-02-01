@@ -8,6 +8,10 @@ flashes:
             new: Expérience ajoutée avec succès !
             edit: Expérience n°%id% modifiée avec succès !
             delete: Expérience n°%id% supprimée avec succès !
+        profile:
+            new: Profil ajouté avec succès !
+            edit: Profil modifié avec succès !
+            delete: Profil supprimé avec succès !
         resume:
             new: CV ajouté avec succès !
             edit: CV n°%id% modifié avec succès !
@@ -88,6 +92,23 @@ experience:
     delete:
         title: Suppression de l'expérience n°%id%
         confirm: Êtes-vous sûr de vouloir supprimer l'expérience "%company% %location%" ?
+profile:
+    labels:
+        first-name: Prénom
+        last-name: Nom
+        phone: Tél. fixe
+        cell: Tél. portable
+        address: Adresse
+        address-addition: Complément d'adresse
+        city: Ville
+        zip: Code postal
+        country: Pays
+    new:
+        title: Ajout du profil pour mes CVs
+    edit:
+        title: Modification de mon profil de CV
+    show:
+        city: "%zip% %city%"
 resume:
     created-at: "Créé le "
     updated-at: "Mis à jour le "
@@ -117,6 +138,10 @@ resume:
         add-education: Ajouter une formation
         experiences: Mes expériences
         add-experience: Ajouter une expérience
+        add-profile: Ajouter un profil
+        edit-profile: Modifier le profil
+        show-profile: Voir le profil
+        delete-profile: Supprimer le profil
 skill:
     index:
         title: Liste des compétences

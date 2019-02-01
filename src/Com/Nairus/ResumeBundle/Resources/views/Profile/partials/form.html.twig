@@ -1,0 +1,75 @@
+{# @NSResume/Profile/partials/form.html.twig #}
+
+{% trans_default_domain 'NSResumeBundle' %}
+
+{{ form_start(form) }}
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="com_nairus_resumebundle_profile_lastName" class="required">{{ "profile.labels.last-name" | trans }}</label>
+        {{ form_widget(form.lastName) }}
+        {{ form_errors(form.lastName) }}
+    </div>
+    <div class="form-group col-md-6">
+        <label for="com_nairus_resumebundle_profile_firstName" class="required">{{ "profile.labels.first-name" | trans }}</label>
+        {{ form_widget(form.firstName) }}
+        {{ form_errors(form.firstName) }}
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="com_nairus_resumebundle_profile_phone">{{ "profile.labels.phone" | trans }}</label>
+        {{ form_widget(form.phone) }}
+        {{ form_errors(form.phone) }}
+    </div>
+    <div class="form-group col-md-6">
+        <label for="com_nairus_resumebundle_profile_cell">{{ "profile.labels.cell" | trans }}</label>
+        {{ form_widget(form.cell) }}
+        {{ form_errors(form.cell) }}
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="com_nairus_resumebundle_profile_address" class="required">{{ "profile.labels.address" | trans }}</label>
+        {{ form_widget(form.address) }}
+        {{ form_errors(form.address) }}
+    </div>
+    <div class="form-group col-md-6">
+        <label for="com_nairus_resumebundle_profile_addressAddition">{{ "profile.labels.address-addition" | trans }}</label>
+        {{ form_widget(form.addressAddition) }}
+        {{ form_errors(form.addressAddition) }}
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label for="com_nairus_resumebundle_profile_city" class="required">{{ "profile.labels.city" | trans }}</label>
+        {{ form_widget(form.city) }}
+        {{ form_errors(form.city) }}
+    </div>
+    <div class="form-group col-md-4">
+        <label for="com_nairus_resumebundle_profile_zip" class="required">{{ "profile.labels.zip" | trans }}</label>
+        {{ form_widget(form.zip) }}
+        {{ form_errors(form.zip) }}
+    </div>
+    <div class="form-group col-md-4">
+        <label for="com_nairus_resumebundle_profile_country">{{ "profile.labels.country" | trans }}</label>
+        {{ form_widget(form.country) }}
+        {{ form_errors(form.country) }}
+    </div>
+</div>
+
+<div class="row actions">
+    <a class="btn btn-secondary mx-1 my-1"
+       href="{{ path('resume_show', {'id': resume_id}) }}">
+        <i class="fas fa-chevron-left"></i>
+        {{ "resume.return" | trans}}
+    </a>
+    <button class="btn btn-primary mx-1 my-1" formnovalidate="formnovalidate">
+        <i class="far fa-save"></i>
+        {{ "actions.save" | trans({}, 'messages') }}
+    </button>
+</div>
+{{ form_end(form) }}

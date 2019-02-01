@@ -36,11 +36,11 @@ class ExperienceTranslation extends AbstractTranslationEntity {
     /**
      * Set description
      *
-     * @param string $description
+     * @param string|null $description
      *
      * @return ExperienceTranslation
      */
-    public function setDescription(string $description): ExperienceTranslation {
+    public function setDescription(?string $description): ExperienceTranslation {
         $this->description = $description;
 
         return $this;

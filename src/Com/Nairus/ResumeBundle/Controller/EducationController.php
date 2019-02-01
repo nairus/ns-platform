@@ -5,6 +5,7 @@ namespace Com\Nairus\ResumeBundle\Controller;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Education;
 use Com\Nairus\ResumeBundle\Entity\Resume;
+use Com\Nairus\ResumeBundle\Form\EducationType;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -59,7 +60,7 @@ class EducationController extends Controller {
 
         $education = new Education();
         $education->setResume($resume);
-        $form = $this->createForm('Com\Nairus\ResumeBundle\Form\EducationType', $education);
+        $form = $this->createForm(EducationType::class, $education);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -115,7 +116,7 @@ class EducationController extends Controller {
         $this->check($education->getResume(), $this->getUser());
 
         $deleteForm = $this->createDeleteForm($education);
-        $editForm = $this->createForm('Com\Nairus\ResumeBundle\Form\EducationType', $education);
+        $editForm = $this->createForm(EducationType::class, $education);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

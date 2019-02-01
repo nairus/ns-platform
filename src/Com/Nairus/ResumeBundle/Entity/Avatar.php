@@ -2,7 +2,9 @@
 
 namespace Com\Nairus\ResumeBundle\Entity;
 
+use Com\Nairus\CoreBundle\Entity\ImageInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Avatar
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ns_avatar")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\AvatarRepository")
  */
-class Avatar {
+class Avatar implements ImageInterface {
 
     /**
      * @var int
@@ -25,6 +27,8 @@ class Avatar {
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 255)
      */
     private $imageSrcPath;
 
@@ -32,16 +36,10 @@ class Avatar {
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 255)
      */
     private $imageThbPath;
-
-    /**
-     * @var Profile
-     *
-     * @ORM\OneToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Profile")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $profile;
 
     /**
      * Get id
@@ -57,9 +55,9 @@ class Avatar {
      *
      * @param string $imageSrcPath
      *
-     * @return Avatar
+     * @return ImageInterface
      */
-    public function setImageSrcPath(string $imageSrcPath): Avatar {
+    public function setImageSrcPath(string $imageSrcPath): ImageInterface {
         $this->imageSrcPath = $imageSrcPath;
 
         return $this;
@@ -79,9 +77,9 @@ class Avatar {
      *
      * @param string $imageThbPath
      *
-     * @return Avatar
+     * @return ImageInterface
      */
-    public function setImageThbPath(string $imageThbPath): Avatar {
+    public function setImageThbPath(string $imageThbPath): ImageInterface {
         $this->imageThbPath = $imageThbPath;
 
         return $this;
@@ -94,28 +92,6 @@ class Avatar {
      */
     public function getImageThbPath(): string {
         return $this->imageThbPath;
-    }
-
-    /**
-     * Set profile
-     *
-     * @param Profile $profile
-     *
-     * @return Avatar
-     */
-    public function setProfile(Profile $profile): Avatar {
-        $this->profile = $profile;
-
-        return $this;
-    }
-
-    /**
-     * Get profile
-     *
-     * @return Profile
-     */
-    public function getProfile(): Profile {
-        return $this->profile;
     }
 
 }

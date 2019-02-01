@@ -14,3 +14,7 @@ ns_resume_restricted_resume:
 ns_resume_resumeskill:
    resource: "@NSResumeBundle/Resources/config/routing/restricted/resumeskill.yml"
    prefix:   /resumeskill
+
+ns_resume_profile:
+     resource: "@NSResumeBundle/Resources/config/routing/restricted/profile.yml"
+     prefix:   /profile

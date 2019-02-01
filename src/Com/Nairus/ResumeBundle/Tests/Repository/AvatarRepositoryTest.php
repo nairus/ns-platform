@@ -5,7 +5,6 @@ namespace Com\Nairus\ResumeBundle\Repository;
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Avatar;
-use Com\Nairus\ResumeBundle\Entity\Profile;
 
 /**
  * Test Avatar Repository.
@@ -28,13 +27,10 @@ class AvatarRepositoryTest extends AbstractKernelTestCase {
      * Test entity insert, update and delete.
      */
     public function testInsertUpdateAndDelete() {
-        /* @var $profile Profile */
-        $profile = static::$em->getRepository(NSResumeBundle::NAME . ":Profile")->find(1);
         $newAvatar = new Avatar();
         $newAvatar
                 ->setImageSrcPath("image/src/path.png")
-                ->setImageThbPath("image/thb/path.png")
-                ->setProfile($profile);
+                ->setImageThbPath("image/thb/path.png");
 
         static::$em->persist($newAvatar);
         static::$em->flush();
@@ -46,7 +42,6 @@ class AvatarRepositoryTest extends AbstractKernelTestCase {
         $avatar = $avatars[0];
         $this->assertSame("image/src/path.png", $avatar->getImageSrcPath(), "1.2. Le champ [imageSrcPath] doit être identique.");
         $this->assertSame("image/thb/path.png", $avatar->getImageThbPath(), "1.3. Le champ [imageThbPath] doit être identique.");
-        $this->assertSame($profile->getId(), $avatar->getProfile()->getId(), "1.4. Le champ [profile] doit être identique.");
 
         // Test update.
         $avatar
@@ -65,20 +60,6 @@ class AvatarRepositoryTest extends AbstractKernelTestCase {
         static::$em->clear();
         $avatarDeleted = static::$repository->find($id);
         $this->assertNull($avatarDeleted, "3.1. L'entité doit être supprimée.");
-    }
-
-    /**
-     * Test entity insert without foreign key.
-     *
-     * @expectedException \Doctrine\DBAL\Exception\NotNullConstraintViolationException
-     */
-    public function testInsertWithoutProfile() {
-        $avatar = new Avatar();
-        $avatar->setImageSrcPath("image/src/path.png")
-                ->setImageThbPath("image/thb/path.png");
-
-        static::$em->persist($avatar);
-        static::$em->flush($avatar);
     }
 
 }

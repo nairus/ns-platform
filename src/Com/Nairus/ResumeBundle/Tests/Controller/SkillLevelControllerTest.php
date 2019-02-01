@@ -8,6 +8,7 @@ use Com\Nairus\ResumeBundle\Entity\Skill;
 use Com\Nairus\ResumeBundle\Entity\SkillLevel;
 use Com\Nairus\UserBundle\Tests\AbstractUserWebTestCase;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
 
 /**
  * Functional tests for SkillLevel controller.
@@ -22,6 +23,14 @@ class SkillLevelControllerTest extends AbstractUserWebTestCase {
      */
     use \Com\Nairus\CoreBundle\Tests\Traits\DatasLoaderTrait;
     use \Com\Nairus\CoreBundle\Tests\Traits\DatasCleanerTrait;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown() {
+        $this->cleanDatas([SkillLevel::class]);
+        parent::tearDown();
+    }
 
     /**
      * Test index action with bad credentials.
@@ -343,11 +352,11 @@ class SkillLevelControllerTest extends AbstractUserWebTestCase {
     }
 
     /**
-     * Test form validation.
+     * Test new form validation.
      *
      * @return void
      */
-    public function testFormValidation(): void {
+    public function testValidateNewForm(): void {
         // Login and go to the new page.
         $crawler = $this->logInAdmin();
         $client = $this->getClient();
@@ -363,10 +372,46 @@ class SkillLevelControllerTest extends AbstractUserWebTestCase {
         $crawler = $client->submit($form);
 
         // Verify if there are some errors
-        $this->assertCount(2, $crawler->filter(".is-invalid"), "1.1 The form has to show 2 inputs in error.");
-        $this->assertCount(2, $crawler->filter(".invalid-feedback"), "1.2 The form has to show 2 errors messages.");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 The status code expected is not ok.");
+        $this->assertEquals("/admin/skilllevel/new", $client->getRequest()->getRequestUri(), '1.2 The request uri expected is not ok.');
+        $this->assertCount(2, $crawler->filter(".is-invalid"), "1.3 The form has to show 2 inputs in error.");
+        $this->assertCount(2, $crawler->filter(".invalid-feedback"), "1.4 The form has to show 2 errors messages.");
         $this->assertContains("Il y a des erreurs dans le formulaire ! Regardez dans les champs de traductions non visibles !",
-                $crawler->filter("#global-errors-container")->text(), "1.3 The global errors message is missing.");
+                $crawler->filter("#global-errors-container")->text(), "1.5 The global errors message is missing.");
+    }
+
+    /**
+     * Test the validation of edit form.
+     *
+     * @return void
+     */
+    public function testValidateEditForm(): void {
+        // Load datas
+        $this->loadDatas($this->getEntityManager(), [new LoadSkillLevel()]);
+        // Login as admin
+        $crawler = $this->logInAdmin();
+        $client = $this->getClient();
+
+        // Go to skill level edit page
+        $crawler = $client->click($crawler->selectLink("Gestion des niveaux de compétence")->link());
+        $crawler = $client->click($crawler->selectLink('Modifier')->link());
+
+        // Fill in the form.
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            'com_nairus_resumebundle_skilllevel[translations][fr][title]' => ' ',
+            'com_nairus_resumebundle_skilllevel[translations][en][title]' => 'Bad',
+        ]);
+
+        // Submit the form
+        $crawler = $client->submit($form);
+
+        // Verify if there are some errors
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 The status code expected is not ok.");
+        $this->assertRegExp("~^/admin/skilllevel/[0-9]+/edit$~", $client->getRequest()->getRequestUri(), '1.2 The request uri expected is not ok.');
+        $this->assertCount(2, $crawler->filter(".is-invalid"), "1.3 The form has to show 2 inputs in error.");
+        $this->assertCount(2, $crawler->filter(".invalid-feedback"), "1.4 The form has to show 2 errors messages.");
+        $this->assertContains("Il y a des erreurs dans le formulaire ! Regardez dans les champs de traductions non visibles !",
+                $crawler->filter("#global-errors-container")->text(), "1.5 The global errors message is missing.");
     }
 
     /**

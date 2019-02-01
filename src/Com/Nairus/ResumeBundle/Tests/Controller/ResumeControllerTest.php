@@ -444,11 +444,11 @@ class ResumeControllerTest extends AbstractUserWebTestCase {
     }
 
     /**
-     * Test form validation.
+     * Test the new form validation.
      *
      * @return void
      */
-    public function testFormValidation(): void {
+    public function testValidateNewForm(): void {
         $this->logInAdmin();
         $client = $this->getClient();
 
@@ -460,7 +460,34 @@ class ResumeControllerTest extends AbstractUserWebTestCase {
         ]);
         $crawler = $client->submit($form);
 
-        $this->assertEquals("/restricted/resume/new", $client->getRequest()->getRequestUri(), "1. The request uri expected is not ok.");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 The status code expected is not ok.");
+        $this->assertEquals("/restricted/resume/new", $client->getRequest()->getRequestUri(), "1.2 The request uri expected is not ok.");
+
+        // Verify if there are some errors
+        $this->assertCount(1, $crawler->filter(".is-invalid"), "2.1 The form has to show 1 input in error.");
+        $this->assertCount(1, $crawler->filter(".invalid-feedback"), "2.2 The form has to show 1 error message.");
+    }
+
+    /**
+     * Test the validation of edit form.
+     *
+     * @return void
+     */
+    public function testValidateEditForm(): void {
+        $crawler = $this->logInModerator();
+        $client = $this->getClient();
+
+        // Go to the show page.
+        $crawler = $client->click($crawler->selectLink("Mes CV")->link());
+        $crawler = $client->click($crawler->selectLink("Modifier")->link());
+
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            'com_nairus_resumebundle_resume[translations][fr][title]' => ' ',
+        ]);
+        $crawler = $client->submit($form);
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "1.1 The status code expected is not ok.");
+        $this->assertRegExp("~^/restricted/resume/[0-9]+/edit~", $client->getRequest()->getRequestUri(), '1.2 The request uri is not OK');
 
         // Verify if there are some errors
         $this->assertCount(1, $crawler->filter(".is-invalid"), "2.1 The form has to show 1 input in error.");
@@ -476,7 +503,7 @@ class ResumeControllerTest extends AbstractUserWebTestCase {
      * @return void
      */
     public function testPublishUnpublishAction(): void {
-        // Login as author.
+        // Login as moderator.
         $this->logInModerator();
         $client = $this->getClient();
 
