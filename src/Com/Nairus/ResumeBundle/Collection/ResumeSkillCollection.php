@@ -8,7 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * ResumeSkill entities collection.
  *
- * @author Nicolas Surian <nicolas.surian@gmail.com>
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class ResumeSkillCollection extends ArrayCollection {
 
@@ -79,6 +80,8 @@ class ResumeSkillCollection extends ArrayCollection {
 
     /**
      * Valid the type of the element.
+     *
+     * @codeCoverageIgnore
      *
      * @param ResumeSkill $entity The entity to verify.
      *

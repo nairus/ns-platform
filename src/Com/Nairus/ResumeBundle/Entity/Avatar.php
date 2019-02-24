@@ -4,10 +4,14 @@ namespace Com\Nairus\ResumeBundle\Entity;
 
 use Com\Nairus\CoreBundle\Entity\ImageInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Avatar
+ * Avatar entity.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Table(name="ns_avatar")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\AvatarRepository")
@@ -15,6 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Avatar implements ImageInterface {
 
     /**
+     * The id of the image.
+     *
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -24,22 +30,43 @@ class Avatar implements ImageInterface {
     private $id;
 
     /**
+     * The relative path.
+     *
      * @var string
      *
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(max = 255)
      */
-    private $imageSrcPath;
+    private $relativePath;
 
     /**
+     * The image's extension (jpg, jpeg, gif, png).
+     *
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(max = 255)
+     * @ORM\Column(type="string", length=3)
      */
-    private $imageThbPath;
+    private $extension;
+
+    /**
+     * The uploaded image file.
+     *
+     * @var UploadedFile
+     *
+     * @Assert\Image(
+     *   minWidth = 150,
+     *   maxRatio = 1,
+     *   minRatio = 1,
+     *   mimeTypes = {"image/gif", "image/jpeg", "image/png"}
+     * )
+     */
+    private $imageFile;
+
+    /**
+     * The temporary extension.
+     *
+     * @var string
+     */
+    private $tmpExtension;
 
     /**
      * Get id
@@ -51,47 +78,63 @@ class Avatar implements ImageInterface {
     }
 
     /**
-     * Set imageSrcPath
-     *
-     * @param string $imageSrcPath
-     *
-     * @return ImageInterface
+     * {@inheritDoc}
      */
-    public function setImageSrcPath(string $imageSrcPath): ImageInterface {
-        $this->imageSrcPath = $imageSrcPath;
+    public function getRelativePath(): string {
+        return $this->relativePath;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function setRelativePath(string $relativePath): ImageInterface {
+        $this->relativePath = $relativePath;
         return $this;
     }
 
     /**
-     * Get imageSrcPath
-     *
-     * @return string
+     * {@inheritDoc}
      */
-    public function getImageSrcPath(): string {
-        return $this->imageSrcPath;
+    public function getExtension(): string {
+        return $this->extension;
     }
 
     /**
-     * Set imageThbPath
-     *
-     * @param string $imageThbPath
-     *
-     * @return ImageInterface
+     * {@inheritDoc}
      */
-    public function setImageThbPath(string $imageThbPath): ImageInterface {
-        $this->imageThbPath = $imageThbPath;
-
+    public function setExtension(string $extension): ImageInterface {
+        $this->extension = $extension;
         return $this;
     }
 
     /**
-     * Get imageThbPath
-     *
-     * @return string
+     * {@inheritDoc}
      */
-    public function getImageThbPath(): string {
-        return $this->imageThbPath;
+    public function getImageFile(): ?UploadedFile {
+        return $this->imageFile;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setImageFile(UploadedFile $file): ImageInterface {
+        $this->imageFile = $file;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTmpExtension(string $tmpExtension): ImageInterface {
+        $this->tmpExtension = $tmpExtension;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTmpExtension(): ?string {
+        return $this->tmpExtension;
     }
 
 }

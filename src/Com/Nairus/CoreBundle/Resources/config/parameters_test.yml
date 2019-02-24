@@ -6,3 +6,28 @@ parameters:
 
     # Limit for the news list.
     ns_core.news_limit: 1
+
+    # Configuration for the ImageManager
+    image_manager: &image_manager
+        # Base directory for content uploads
+        uploads_base_dir: '%kernel.project_dir%%directory_separator%var'
+        # Relative directory for html links.
+        relative_base_dir: '%directory_separator%tests%directory_separator%image_manager%directory_separator%'
+        # Entities configuration
+        entities:
+            mock_image_entity:
+                # size in pixel
+                src_width: 160
+                src_height: 160
+                thb_width: 50
+                thb_height: 50
+                # crop in the middle after resize
+                crop: true
+            avatar:
+                # size in pixel
+                src_width: 160
+                src_height: 160
+                thb_width: 50
+                thb_height: 50
+                # crop in the middle after resize
+                crop: false

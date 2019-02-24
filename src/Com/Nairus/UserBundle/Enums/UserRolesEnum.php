@@ -8,10 +8,10 @@ namespace Com\Nairus\UserBundle\Enums;
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-abstract class UserRolesEnum {
+class UserRolesEnum {
 
     /**
-     * Définition des rôles d'utilisateur.
+     * Users roles definition.
      */
     const USER = "ROLE_USER";
     const AUTHOR = "ROLE_AUTHOR";
@@ -20,17 +20,26 @@ abstract class UserRolesEnum {
     const SUPER_ADMIN = "ROLE_SUPER_ADMIN";
 
     /**
-     * Constante pour définir si un utilisateur est authentifié par cookie ou par login.
+     * Constant to define if an user is authenticated by cookie or login.
      */
     const IS_AUTHENTICATED_REMEMBERED = "IS_AUTHENTICATED_REMEMBERED";
     const IS_AUTHENTICATED_FULLY = "IS_AUTHENTICATED_FULLY";
 
     /**
-     * Liste des rôles pour les utilisateurs.
+     * Constructor.
+     *
+     * @codeCoverageIgnore
+     */
+    private function __construct() {
+        // this class should not be instanciated.
+    }
+
+    /**
+     * Get the users roles list.
      *
      * @return array
      */
-    public static function getRolesList() {
+    public static function getRolesList(): array {
         return [
             self::AUTHOR => "Author",
             self::USER => "User",

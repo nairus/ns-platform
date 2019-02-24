@@ -27,3 +27,21 @@ services:
             $entityManager: "@doctrine.orm.entity_manager"
         calls:
             - [setAvailableLocales, ["%available_locales%"]]
+
+    ns_core.image_manager:
+        public: true
+        class: Com\Nairus\CoreBundle\Manager\GDImageManager
+        arguments:
+            $config: "%image_manager%"
+            $logger: "@logger"
+
+    ns_core.image_entity_listener:
+        public: true
+        class: Com\Nairus\CoreBundle\Listener\ImageEntityListener
+        arguments:
+            $entityManager: "@doctrine.orm.entity_manager"
+            $logger: "@logger"
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setImageManager, ["@ns_core.image_manager"]]

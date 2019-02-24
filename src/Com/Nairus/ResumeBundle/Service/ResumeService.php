@@ -4,8 +4,8 @@ namespace Com\Nairus\ResumeBundle\Service;
 
 use Com\Nairus\CoreBundle\Exception\FunctionalException;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
+use Com\Nairus\ResumeBundle\Constants\ExceptionCodeConstants;
 use Com\Nairus\ResumeBundle\Exception as NSResumeException;
-use Com\Nairus\ResumeBundle\Enums\ExceptionCodeEnums;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Entity\Profile;
 use Com\Nairus\ResumeBundle\Entity\Resume;
@@ -16,7 +16,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 /**
  * Service of Resume.
  *
- * @author nairus
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class ResumeService implements ResumeServiceInterface {
 
@@ -45,12 +46,12 @@ class ResumeService implements ResumeServiceInterface {
      */
     public function findAllOnlineForPage(int $page, int $nbPerPage): \Doctrine\ORM\Tools\Pagination\Paginator {
         if ($page < 1) {
-            throw new NSResumeException\ResumeListException($page, "Wrong page", ExceptionCodeEnums::WRONG_PAGE);
+            throw new NSResumeException\ResumeListException($page, "Wrong page", ExceptionCodeConstants::WRONG_PAGE);
         }
 
         $resumePaginator = $this->resumeRepository->findAllOnlineForPage($page, $nbPerPage);
         if (0 === count($resumePaginator->getQuery()->getResult())) {
-            throw new NSResumeException\ResumeListException($page, "Page not found", ExceptionCodeEnums::PAGE_NOT_FOUND);
+            throw new NSResumeException\ResumeListException($page, "Page not found", ExceptionCodeConstants::PAGE_NOT_FOUND);
         }
 
         return $resumePaginator;

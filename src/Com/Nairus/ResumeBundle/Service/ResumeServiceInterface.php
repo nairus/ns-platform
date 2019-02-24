@@ -9,7 +9,8 @@ use Com\Nairus\ResumeBundle\Exception\ResumePublicationException;
 /**
  * Interface of the resume service.
  *
- * @author nairus
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 interface ResumeServiceInterface {
 

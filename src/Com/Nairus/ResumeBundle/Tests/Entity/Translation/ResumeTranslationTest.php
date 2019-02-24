@@ -114,4 +114,29 @@ class ResumeTranslationTest extends KernelTestCase {
         $this->assertInstanceOf(Length::class, $error1->getConstraint(), "2. The error has to be a Length constraint.");
     }
 
+    /**
+     * Test the <code>setSlug</code> proxy method.
+     *
+     * @return void
+     */
+    public function testSetSlugWithBadValue(): void {
+        $badValues = [
+            "1" => null,
+            "2" => 1,
+            "3" => new stdClass(),
+            "4" => []
+        ];
+
+        foreach ($badValues as $key => $value) {
+            try {
+                $this->object->setSlug($value);
+                $this->fail("A [TypeError] error is expected.");
+            } catch (\Throwable $exc) {
+                $this->assertInstanceOf(\TypeError::class, $exc,
+                        $key . ". The exception expected is not ok: " . $exc->getMessage()
+                );
+            }
+        }
+    }
+
 }

@@ -8,7 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Education entities collection.
  *
- * @author Nicolas Surian <nicolas.surian@gmail.com>
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class EducationCollection extends ArrayCollection {
 
@@ -79,6 +80,8 @@ class EducationCollection extends ArrayCollection {
 
     /**
      * Valid the type of the element.
+     *
+     * @codeCoverageIgnore
      *
      * @param Education $entity The entity to verify.
      *

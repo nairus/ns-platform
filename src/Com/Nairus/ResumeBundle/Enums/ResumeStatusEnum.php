@@ -3,11 +3,13 @@
 namespace Com\Nairus\ResumeBundle\Enums;
 
 /**
- * Classe d'énumération des status de Resume.
+ * Enum class for resume's status.
  *
- * @author Nicolas Surian <nicolas.surian@gmail.com>
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-abstract class ResumeStatusEnum {
+class ResumeStatusEnum {
 
     const OFFLINE_INCOMPLETE = 0;
     const OFFLINE_TO_PUBLISHED = -1;
@@ -34,6 +36,15 @@ abstract class ResumeStatusEnum {
         self::OFFLINE_TO_PUBLISHED => "resume.status.to-published",
         self::ONLINE => "resume.status.online",
     ];
+
+    /**
+     * Constructor.
+     *
+     * @codeCoverageIgnore
+     */
+    private function __construct() {
+        // this class should not be instanciated.
+    }
 
     /**
      * Return the icon class for the current resume status.

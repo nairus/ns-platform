@@ -6,7 +6,7 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "Com\\Nairus\\": "src/Com/Nairus"
         },
         "classmap": [
             "app/AppKernel.php",
@@ -43,9 +43,10 @@
         "twig/twig": "^1.0||^2.0"
     },
     "require-dev": {
-        "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0",
-        "symfony/web-server-bundle": "^4.1"
+        "php-mock/php-mock": "^2.0",
+        "sensio/generator-bundle": "^3",
+        "symfony/phpunit-bridge": "^3.4",
+        "symfony/web-server-bundle": "3.4.22"
     },
     "scripts": {
         "symfony-scripts": [

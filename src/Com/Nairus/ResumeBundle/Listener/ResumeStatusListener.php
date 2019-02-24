@@ -107,8 +107,9 @@ class ResumeStatusListener implements EventSubscriberInterface {
         // If no resume skill is added, we downgrade the status.
         if ($resume->getResumeSkills()->count() === 0) {
             $this->updateStatus($resume->getId(), ResumeStatusEnum::OFFLINE_INCOMPLETE);
-            return;
         }
+
+        return;
     }
 
     /**

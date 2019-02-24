@@ -13,6 +13,18 @@ use PHPUnit\Framework\TestCase;
 class ResumeStatusEnumTest extends TestCase {
 
     /**
+     * Test the instanciation of the constants class.
+     * The constructor has to be private and a PHP Error is expected.
+     *
+     * @expectedException \Error
+     *
+     * @return void
+     */
+    public function testContructor(): void {
+        new ResumeStatusEnum();
+    }
+
+    /**
      * Test the <code>getIconClass</code> method.
      *
      * @covers Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum::getIconClass

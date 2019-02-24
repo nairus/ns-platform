@@ -8,7 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * ResumeSkill
+ * ResumeSkill entity.
  *
  * @ORM\Table(name="ns_resume_skill")
  * @ORM\Entity(repositoryClass="Com\Nairus\ResumeBundle\Repository\ResumeSkillRepository")

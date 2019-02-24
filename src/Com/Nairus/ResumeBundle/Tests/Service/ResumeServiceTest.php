@@ -3,8 +3,8 @@
 namespace Com\Nairus\ResumeBundle\Service;
 
 use Com\Nairus\CoreBundle\Exception\FunctionalException;
+use Com\Nairus\ResumeBundle\Constants\ExceptionCodeConstants;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
-use Com\Nairus\ResumeBundle\Enums\ExceptionCodeEnums;
 use Com\Nairus\ResumeBundle\Entity\Education;
 use Com\Nairus\ResumeBundle\Entity\Experience;
 use Com\Nairus\ResumeBundle\Entity\Resume;
@@ -142,7 +142,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
             $this->object->findAllOnlineForPage(0, 50);
         } catch (NSResumeException\ResumeListException $exc) {
             $this->assertSame(0, $exc->getPage(), "1. Le numéro de page doit être correcte.");
-            $this->assertSame(ExceptionCodeEnums::WRONG_PAGE, $exc->getCode(), "2. Le code de l'exception doit être correcte.");
+            $this->assertSame(ExceptionCodeConstants::WRONG_PAGE, $exc->getCode(), "2. Le code de l'exception doit être correcte.");
         } catch (\Exception | \Error $exc) {
             $this->fail("Exception/Erreur inatendue: " . $exc->getMessage());
         }
@@ -156,7 +156,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
             $this->object->findAllOnlineForPage(2, 50);
         } catch (NSResumeException\ResumeListException $exc) {
             $this->assertSame(2, $exc->getPage(), "1. Le numéro de page doit être correcte.");
-            $this->assertSame(ExceptionCodeEnums::PAGE_NOT_FOUND, $exc->getCode(), "2. Le code de l'exception doit être correcte.");
+            $this->assertSame(ExceptionCodeConstants::PAGE_NOT_FOUND, $exc->getCode(), "2. Le code de l'exception doit être correcte.");
         } catch (\Exception | \Error $exc) {
             $this->fail("Exception/Erreur inatendue: " . $exc->getMessage());
         }

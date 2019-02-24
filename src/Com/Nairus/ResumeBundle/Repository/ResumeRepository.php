@@ -60,6 +60,10 @@ class ResumeRepository extends \Doctrine\ORM\EntityRepository {
     }
 
     /**
+     * Build the query.
+     *
+     * @codeCoverageIgnore
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     private function getOnlineQueryBuilder(): \Doctrine\ORM\QueryBuilder {
