@@ -68,7 +68,7 @@ class ImageEntityListener implements EventSubscriber {
      * {@inheritDoc}
      */
     public function getSubscribedEvents(): array {
-        return [Events::prePersist, Events::preRemove, Events::postPersist, Events::postUpdate];
+        return [Events::prePersist, Events::preUpdate, Events::preRemove, Events::postPersist, Events::postUpdate];
     }
 
     /**
@@ -86,9 +86,12 @@ class ImageEntityListener implements EventSubscriber {
             return;
         }
 
-        // build the relative path and set the extension
+        // build the relative path and set the other mandatory fields
         $this->imageManager->buildRelativePath($imageEntity);
-        $imageEntity->setExtension($imageEntity->getImageFile()->getExtension());
+        $extension = $this->imageManager->getExtensionFromMimeType($imageEntity->getImageFile()->getMimeType());
+        $imageEntity
+                ->setExtension($extension)
+                ->setOriginalName($imageEntity->getImageFile()->getClientOriginalName());
     }
 
     /**
@@ -106,15 +109,41 @@ class ImageEntityListener implements EventSubscriber {
             return;
         }
 
-        // update the final relative path for the image processing.
-        $imageEntity->setRelativePath($imageEntity->getRelativePath() . $this->imageManager->getExtraFolders($imageEntity));
+        // get fresh entity to update final relative path.
         $repository = $this->entityManager->getRepository((new \ReflectionClass($imageEntity))->getName());
         /* @var $refreshedEntity ImageInterface */
         $refreshedEntity = $repository->find($imageEntity->getId());
+
+        // update the final relative path for the image processing.
+        // set the tmp name for not to delete image after updating.
         $refreshedEntity
-                ->setRelativePath($imageEntity->getRelativePath())
+                ->setRelativePath($imageEntity->getRelativePath() . $this->imageManager->getExtraFolders($imageEntity))
                 ->setImageFile($imageEntity->getImageFile());
         $this->entityManager->flush();
+    }
+
+    /**
+     * Invoked before update the entity.
+     *
+     * @param LifecycleEventArgs $args
+     *
+     * @return void
+     */
+    public function preUpdate(LifecycleEventArgs $args): void {
+        // we do nothing if this is not an Image entity or if there is no image to update.
+        $imageEntity = $this->checkEntity($args, true);
+        if (!$imageEntity) {
+            return;
+        }
+
+        // store the original extension if the original extension changed.
+        // this allowed to delete old images in post update.
+        $newExtension = $this->imageManager->getExtensionFromMimeType($imageEntity->getImageFile()->getMimeType());
+        if ($imageEntity->getExtension() !== $newExtension) {
+            $imageEntity
+                    ->setTmpExtension($imageEntity->getExtension())
+                    ->setExtension($newExtension);
+        }
     }
 
     /**

@@ -61,6 +61,19 @@
     </div>
 </div>
 
+<div class="form-row">
+    {% if profile.avatar %}
+        <img id="avatar-preview" src="{{ profile.avatar.relativePath ~ 'thb-' ~ profile.avatar.id ~ '.' ~ profile.avatar.extension }}" class="img-fluid img-thumbnail img-rounded" />
+    {% endif %}
+    <div class="form-group col-md-6">
+        <div class="custom-file">
+            {{ form_widget(form.avatar.imageFile, {attr: {'class': 'custom-file-input', 'lang': app.request.getLocale()}}) }}
+            <label class="custom-file-label" for="com_nairus_resumebundle_profile_avatar_imageFile">{{ "profile.labels.avatar" | trans }}</label>
+        </div>
+        {{ form_errors(form.avatar.imageFile) }}
+    </div>
+</div>
+
 <div class="row actions">
     <a class="btn btn-secondary mx-1 my-1"
        href="{{ path('resume_show', {'id': resume_id}) }}">

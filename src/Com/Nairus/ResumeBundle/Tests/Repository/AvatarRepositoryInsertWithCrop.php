@@ -44,8 +44,13 @@ class AvatarRepositoryInsertWithCrop extends AbstractAvatarRepositoryTestCase {
 
         $mockImageManager = $this->getMockBuilder(ImageManagerInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods(["buildRelativePath", "getExtraFolders", "getConfig", "resize", "crop"])
+                ->setMethods(["getExtensionFromMimeType", "buildRelativePath", "getExtraFolders", "getConfig", "resize", "crop"])
                 ->getMock();
+
+        $mockImageManager
+                ->expects($this->any())
+                ->method("getExtensionFromMimeType")
+                ->willReturn("png");
 
         // Define the getExtraFolders mocked method.
         $mockImageManager

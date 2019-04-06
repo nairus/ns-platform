@@ -99,6 +99,7 @@ profile:
         city: City
         zip: Zip code
         country: Country
+        avatar: Choose an avatar
     new:
         title: Add a profile for my resumes
     edit:

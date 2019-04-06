@@ -122,15 +122,14 @@ class ResumeTranslationTest extends KernelTestCase {
     public function testSetSlugWithBadValue(): void {
         $badValues = [
             "1" => null,
-            "2" => 1,
-            "3" => new stdClass(),
-            "4" => []
+            "2" => new \stdClass(),
+            "3" => []
         ];
 
         foreach ($badValues as $key => $value) {
             try {
                 $this->object->setSlug($value);
-                $this->fail("A [TypeError] error is expected.");
+                $this->fail("A [TypeError] error is expected for value: $value.");
             } catch (\Throwable $exc) {
                 $this->assertInstanceOf(\TypeError::class, $exc,
                         $key . ". The exception expected is not ok: " . $exc->getMessage()

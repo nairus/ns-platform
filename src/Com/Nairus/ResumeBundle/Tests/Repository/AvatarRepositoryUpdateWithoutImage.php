@@ -37,8 +37,13 @@ class AvatarRepositoryUpdateWithoutImage extends AbstractAvatarRepositoryTestCas
 
         $mockImageManager = $this->getMockBuilder(ImageManagerInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods(["buildRelativePath", "getExtraFolders", "getConfig", "resize", "crop"])
+                ->setMethods(["getExtensionFromMimeType", "buildRelativePath", "getExtraFolders", "getConfig", "resize", "crop"])
                 ->getMock();
+
+        $mockImageManager
+                ->expects($this->any())
+                ->method("getExtensionFromMimeType")
+                ->willReturn("png");
 
         // Define the getExtraFolders mocked method.
         $mockImageManager
@@ -95,7 +100,7 @@ class AvatarRepositoryUpdateWithoutImage extends AbstractAvatarRepositoryTestCas
         $avatar = $avatars[0];
 
         // force the update event without image file.
-        $avatar->setExtension("jpg");
+        $avatar->setOriginalName("no-image.png");
         static::$em->flush($avatar);
     }
 

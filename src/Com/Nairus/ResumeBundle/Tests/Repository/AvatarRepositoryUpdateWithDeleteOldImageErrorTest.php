@@ -38,8 +38,18 @@ class AvatarRepositoryUpdateWithDeleteOldImageErrorTest extends AbstractAvatarRe
 
         $mockImageManager = $this->getMockBuilder(ImageManagerInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods(["buildRelativePath", "getExtraFolders", "getConfig", "resize", "crop"])
+                ->setMethods(["getExtensionFromMimeType", "buildRelativePath", "getExtraFolders", "getConfig", "resize", "crop"])
                 ->getMock();
+
+        $datas = [
+            ["image/png", "png"],
+            ["image/png", "png"],
+            ["image/jpeg", "jpg"],
+        ];
+        $mockImageManager
+                ->expects($this->exactly(3))
+                ->method("getExtensionFromMimeType")
+                ->willReturnMap($datas);
 
         // Define the getExtraFolders mocked method.
         $mockImageManager
@@ -104,8 +114,7 @@ class AvatarRepositoryUpdateWithDeleteOldImageErrorTest extends AbstractAvatarRe
 
         // try to update with a new image.
         $newPath = static::$projectDirectory . $DS . "tests" . $DS . "resources" . $DS . "image-to-crop.jpg";
-        $avatar->setExtension("jpg")
-                ->setTmpExtension("png")
+        $avatar->setOriginalName("image-to-crop.jpg")
                 ->setImageFile(new UploadedFile($newPath, "image-to-crop.jpg"));
         // no exception is expected after updating the entity.
         static::$em->flush($avatar);

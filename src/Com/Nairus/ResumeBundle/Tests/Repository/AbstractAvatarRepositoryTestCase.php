@@ -12,7 +12,7 @@ use Com\Nairus\ResumeBundle\NSResumeBundle;
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class AbstractAvatarRepositoryTestCase extends AbstractKernelTestCase {
+abstract class AbstractAvatarRepositoryTestCase extends AbstractKernelTestCase {
 
     /**
      * ImageEntityListener instance from container.
@@ -34,6 +34,7 @@ class AbstractAvatarRepositoryTestCase extends AbstractKernelTestCase {
     protected static $repository;
 
     use \Com\Nairus\CoreBundle\Tests\Traits\DatasCleanerTrait;
+    use \Com\Nairus\CoreBundle\Tests\Traits\FileCleanerTrait;
 
     /**
      * {@inheritDoc}
@@ -76,29 +77,6 @@ class AbstractAvatarRepositoryTestCase extends AbstractKernelTestCase {
         static::$imageEntityListener->setImageManager(static::$container->get("ns_core.image_manager"));
 
         parent::tearDown();
-    }
-
-    /**
-     * Clean and remove folder.
-     *
-     * @param string $dirname The folder to remove.
-     *
-     * @return void
-     */
-    private function cleanAndRemoveFolder(string $dirname): void {
-        $dir = \opendir($dirname);
-        while (false !== ( $file = \readdir($dir))) {
-            if (( $file != '.' ) && ( $file != '..' )) {
-                $full = $dirname . DIRECTORY_SEPARATOR . $file;
-                if (\is_file($full)) {
-                    \unlink($full);
-                } else {
-                    $this->cleanAndRemoveFolder($full);
-                }
-            }
-        }
-        \closedir($dir);
-        \rmdir($dirname);
     }
 
     /**

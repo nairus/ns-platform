@@ -20,22 +20,6 @@ interface ImageInterface {
     public function getId(): int;
 
     /**
-     * Return the uploaed file.
-     *
-     * @return UploadedFile|null
-     */
-    public function getImageFile(): ?UploadedFile;
-
-    /**
-     * Define the uploaded file.
-     *
-     * @param UploadedFile The uploaded file
-     *
-     * @return UploadedFile
-     */
-    public function setImageFile(UploadedFile $file): ImageInterface;
-
-    /**
      * Return the relative path of the image.
      *
      * @return string
@@ -64,6 +48,40 @@ interface ImageInterface {
      * @return string
      */
     public function setExtension(string $extension): ImageInterface;
+
+    /**
+     * Return the original name of the image
+     *
+     * @return string
+     */
+    public function getOriginalName(): string;
+
+    /**
+     * Define the image original name.
+     *
+     * Used to invoked update if the extension is the same.
+     *
+     * @param string $originalName The original image name.
+     *
+     * @return ImageInterface
+     */
+    public function setOriginalName(string $originalName): ImageInterface;
+
+    /**
+     * Return the uploaded file (not stored in database).
+     *
+     * @return UploadedFile|null
+     */
+    public function getImageFile(): ?UploadedFile;
+
+    /**
+     * Define the uploaded file (not stored in database).
+     *
+     * @param UploadedFile The uploaded file
+     *
+     * @return ImageInterface
+     */
+    public function setImageFile(UploadedFile $file): ImageInterface;
 
     /**
      * Return the temporary extension (for update only and not stored in database).

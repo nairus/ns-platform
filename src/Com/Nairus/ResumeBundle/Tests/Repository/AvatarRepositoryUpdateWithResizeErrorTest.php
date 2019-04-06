@@ -36,8 +36,18 @@ class AvatarRepositoryUpdateWithResizeErrorTest extends AbstractAvatarRepository
 
         $mockImageManager = $this->getMockBuilder(ImageManagerInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods(["buildRelativePath", "getExtraFolders", "getConfig", "resize", "crop"])
+                ->setMethods(["getExtensionFromMimeType", "buildRelativePath", "getExtraFolders", "getConfig", "resize", "crop"])
                 ->getMock();
+
+        $datas = [
+            ["image/png", "png"],
+            ["image/png", "png"],
+            ["image/jpeg", "jpg"],
+        ];
+        $mockImageManager
+                ->expects($this->exactly(3))
+                ->method("getExtensionFromMimeType")
+                ->willReturnMap($datas);
 
         // Define the getExtraFolders mocked method.
         $mockImageManager
@@ -96,7 +106,7 @@ class AvatarRepositoryUpdateWithResizeErrorTest extends AbstractAvatarRepository
 
         // try to update with a new image.
         $newPath = static::$projectDirectory . $DS . "tests" . $DS . "resources" . $DS . "image-to-crop.jpg";
-        $avatar->setExtension("jpg")
+        $avatar->setOriginalName("image-to-crop.jpg")
                 ->setImageFile(new UploadedFile($newPath, "image-to-crop.jpg"));
         static::$em->flush($avatar);
     }

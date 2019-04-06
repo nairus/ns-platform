@@ -17,3 +17,6 @@ label.required:after {
     border-left: 1px solid #dee2e6;
     border-right: 1px solid #dee2e6;
 }
+
+/* Add internationalized label missing for file input */
+.custom-file-input:lang(fr)~.custom-file-label::after{content:"Parcourir"}

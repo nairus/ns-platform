@@ -117,7 +117,7 @@ class Profile {
     /**
      * @var Avatar
      *
-     * @ORM\OneToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Avatar")
+     * @ORM\OneToOne(targetEntity="Com\Nairus\ResumeBundle\Entity\Avatar", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(nullable=true)
      * @Assert\Valid()
      */

@@ -18,5 +18,6 @@ class ImageProcessingException extends \Exception {
     const GET_IMAGE_DATAS_ERROR = 3;
     const NO_IMAGE_TO_PROCESS_ERROR = 4;
     const DELETE_IMAGE_ERROR = 5;
+    const INVALID_MIME_TYPE = 6;
 
 }

@@ -503,8 +503,6 @@ class ProfileTest extends AbstractKernelTestCase {
      * @return void
      */
     public function testAvatarValidation(): void {
-        $this->markTestIncomplete("TODO");
-
         // Prepare entity valid datas.
         $this->object->setLastName("Surian")
                 ->setAddress("Address")
@@ -515,6 +513,20 @@ class ProfileTest extends AbstractKernelTestCase {
         ;
 
         // Case 1: Test IsValid constraint
+        $DS = DIRECTORY_SEPARATOR;
+        $baseImagePath = static::$kernel->getContainer()->getParameter('kernel.project_dir') . $DS . "tests" . $DS . "resources" . $DS;
+
+        $badMimeType = new \Symfony\Component\HttpFoundation\File\UploadedFile($baseImagePath . "bad-image.bmp", "bad-image.bmp");
+        $avatar = new Avatar();
+        $avatar->setImageFile($badMimeType);
+        $this->object->setAvatar($avatar);
+
+        $errors = $this->validator->validate($this->object);
+        $this->assertCount(1, $errors, "1.1 One error is expected");
+        /* @var $error1 \Symfony\Component\Validator\ConstraintViolation */
+        $error1 = $errors[0];
+        $this->assertInstanceOf(SFConstaints\Image::class, $error1->getConstraint(), "1.2 IsValid constraint is expected");
+        $this->assertEquals("avatar.imageFile", $error1->getPropertyPath(), "1.3 The avatar.imageFile field is expected");
     }
 
 }

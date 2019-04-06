@@ -2,7 +2,7 @@
 
 namespace Com\Nairus\ResumeBundle\Tests\Controller;
 
-use Com\Nairus\UserBundle\Entity\User;
+use Com\Nairus\ResumeBundle\Entity\Avatar;
 use Com\Nairus\ResumeBundle\Entity\Profile;
 use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Entity\Skill;
@@ -11,6 +11,7 @@ use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeOnline;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
+use Com\Nairus\UserBundle\Entity\User;
 use Com\Nairus\UserBundle\Tests\AbstractUserWebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -48,6 +49,8 @@ class ProfileControllerTest extends AbstractUserWebTestCase {
      * @var Profile
      */
     private $profile;
+
+    use \Com\Nairus\CoreBundle\Tests\Traits\FileCleanerTrait;
 
     /**
      * {@inheritDoc}
@@ -90,6 +93,13 @@ class ProfileControllerTest extends AbstractUserWebTestCase {
         $this->getEntityManager()->flush();
 
         unset($this->onlineResume, $this->resume, $this->profile);
+
+        // Remove the target image directory
+        $projectDirectory = static::$kernel->getContainer()->getParameter('kernel.project_dir');
+        $dirname = $projectDirectory . DIRECTORY_SEPARATOR . "var" . DIRECTORY_SEPARATOR . "tests" . DIRECTORY_SEPARATOR . "image_manager";
+        if (\is_dir($dirname)) {
+            $this->cleanAndRemoveFolder($dirname);
+        }
 
         // Clean the container.
         parent::tearDown();
@@ -173,22 +183,23 @@ class ProfileControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals("Ajout du profil pour mes CVs", $crawler->filter("h1")->text(), "1.5 The h1 expected is not ok");
         // Get the form
         $form = $crawler->filterXPath('//html/body/main/div/div/form[@name="com_nairus_resumebundle_profile"]');
-        $this->assertEquals(9, $form->filter(".form-group")->count(), "1.6 Nine form group elements are expected");
+        $this->assertEquals(10, $form->filter(".form-group")->count(), "1.6 Ten form group elements are expected");
         $this->assertContains("Nom", $form->text(), "1.7 The form has to contain lastName label.");
         $this->assertContains("Prénom", $form->text(), "1.8 The form has to contain firstName label.");
         $this->assertContains("Tél. fixe", $form->text(), "1.9 The form has to contain phone label.");
         $this->assertContains("Tél. portable", $form->text(), "1.10 The form has to contain cell label.");
         $this->assertContains("Adresse", $form->text(), "1.11 The form has to contain address label.");
-        $this->assertContains("Complément d'adresse", $form->text(), "1.8 The form has to contain addressAddition label.");
-        $this->assertContains("Ville", $form->text(), "1.9 The form has to contain city label.");
-        $this->assertContains("Code postal", $form->text(), "1.10 The form has to contain zip label.");
-        $this->assertContains("Pays", $form->text(), "1.10 The form has to contain country label.");
+        $this->assertContains("Complément d'adresse", $form->text(), "1.12 The form has to contain addressAddition label.");
+        $this->assertContains("Ville", $form->text(), "1.13 The form has to contain city label.");
+        $this->assertContains("Code postal", $form->text(), "1.14 The form has to contain zip label.");
+        $this->assertContains("Pays", $form->text(), "1.15 The form has to contain country label.");
+        $this->assertContains("Choisir un avatar", $form->text(), "1.15 The form has to avatar label.");
         $actionsElements = $form->filter(".actions")->children();
-        $this->assertCount(2, $actionsElements, "1.14 Two cta buttons are expected.");
-        $this->assertContains("Retour au CV", $actionsElements->eq(0)->text(), "1.15 The first button label is not ok.");
-        $this->assertContains('<i class="fas fa-chevron-left"></i>', $actionsElements->eq(0)->html(), "1.16 The first button pico is missing.");
-        $this->assertContains("Sauvegarder", $actionsElements->eq(1)->text(), "1.17 The second button label is not ok.");
-        $this->assertContains('<i class="far fa-save"></i>', $actionsElements->eq(1)->html(), "1.18 The second button pico is missing.");
+        $this->assertCount(2, $actionsElements, "1.16 Two cta buttons are expected.");
+        $this->assertContains("Retour au CV", $actionsElements->eq(0)->text(), "1.17 The first button label is not ok.");
+        $this->assertContains('<i class="fas fa-chevron-left"></i>', $actionsElements->eq(0)->html(), "1.18 The first button pico is missing.");
+        $this->assertContains("Sauvegarder", $actionsElements->eq(1)->text(), "1.19 The second button label is not ok.");
+        $this->assertContains('<i class="far fa-save"></i>', $actionsElements->eq(1)->html(), "1.20 The second button pico is missing.");
         $form = $crawler->selectButton('Sauvegarder')->form([
             "com_nairus_resumebundle_profile[lastName]" => "Surian",
             "com_nairus_resumebundle_profile[firstName]" => "Nicolas",
@@ -228,7 +239,7 @@ class ProfileControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals("Modification de mon profil de CV", $crawler->filter("h1")->text(), "2.4 The h1 expected is not ok");
         // Get the form
         $form = $crawler->filterXPath('//html/body/main/div/div/form[@name="com_nairus_resumebundle_profile"]');
-        $this->assertEquals(9, $form->filter(".form-group")->count(), "2.5 Nine form group elements are expected");
+        $this->assertEquals(10, $form->filter(".form-group")->count(), "2.5 Nine form group elements are expected");
         $actionsElements = $form->filter(".actions")->children();
         $this->assertCount(2, $actionsElements, "2.6 Two cta buttons are expected.");
         $form = $crawler->selectButton('Sauvegarder')->form([
@@ -257,18 +268,109 @@ class ProfileControllerTest extends AbstractUserWebTestCase {
         $this->assertContains('<i class="fas fa-mobile-alt"></i>', $profileCard->html(), "2.11 The form has to contain cell picto.");
         $this->assertContains("RDC porte droite", $profileCard->text(), "2.12 The form has to contain addressAddition label.");
         $this->assertContains("France", $profileCard->text(), "2.13 The form has to contain country label.");
+        $this->assertEquals(0, $profileCard->filter("#avatar-preview")->count(), "2.14 The avatar preview hasn't to exist");
 
-        // Case 3: Delete the profile.
+        // Case 3: Update profile with new avatar
+        $crawler = $client->click($profileCard->selectLink("Modifier le profil")->link());
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            "com_nairus_resumebundle_profile[lastName]" => "Surian",
+            "com_nairus_resumebundle_profile[firstName]" => "Nicolas",
+            "com_nairus_resumebundle_profile[phone]" => "04 01 02 03 04",
+            "com_nairus_resumebundle_profile[cell]" => "07 01 02 03 04",
+            "com_nairus_resumebundle_profile[address]" => "1 place de l'hôtel de ville",
+            "com_nairus_resumebundle_profile[addressAddition]" => "RDC porte droite",
+            "com_nairus_resumebundle_profile[city]" => "Marseille",
+            "com_nairus_resumebundle_profile[zip]" => "13001",
+            "com_nairus_resumebundle_profile[country]" => "France",
+        ]);
+        $DS = DIRECTORY_SEPARATOR;
+        $imagePath = static::$kernel->getContainer()->getParameter('kernel.project_dir') . $DS . "tests" . $DS . "resources" . $DS . "image-to-resize.png";
+        $form["com_nairus_resumebundle_profile[avatar][imageFile]"]->upload($imagePath);
+
+        // Submit the form and return to the resume show page
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        // Verify if the avatar has been uploaded and displayed in the profile.
+        $this->assertEquals(1, $crawler->filter("#avatar")->count(), "3.1 The avatar has to been displayed.");
+        $this->assertEquals("img", $crawler->filter("#avatar")->getNode(0)->tagName, "3.2 The img html tag expected is not ok.");
+        $this->assertRegExp("~src-[0-9]+\.png~m",
+                $crawler->filter("#avatar")->parents()->html(), "3.3 The src link expected is not ok.");
+
+        // Case 4: Update the avatar
+        $crawler = $client->click($profileCard->selectLink("Modifier le profil")->link());
+        $this->assertEquals(1, $crawler->filter("#avatar-preview")->count(), "4.1 The avatar has to been displayed.");
+        $this->assertEquals("img", $crawler->filter("#avatar-preview")->getNode(0)->tagName, "4.2 The img html tag expected is not ok.");
+        $this->assertRegExp("~thb-[0-9]+\.png~m",
+                $crawler->filter("#avatar-preview")->parents()->html(), "4.3 The src link expected is not ok.");
+
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            "com_nairus_resumebundle_profile[lastName]" => "Surian",
+            "com_nairus_resumebundle_profile[firstName]" => "Nicolas",
+            "com_nairus_resumebundle_profile[phone]" => "04 01 02 03 04",
+            "com_nairus_resumebundle_profile[cell]" => "07 01 02 03 04",
+            "com_nairus_resumebundle_profile[address]" => "1 place de l'hôtel de ville",
+            "com_nairus_resumebundle_profile[addressAddition]" => "RDC porte droite",
+            "com_nairus_resumebundle_profile[city]" => "Marseille",
+            "com_nairus_resumebundle_profile[zip]" => "13001",
+            "com_nairus_resumebundle_profile[country]" => "France",
+        ]);
+        $DS = DIRECTORY_SEPARATOR;
+        $imagePath = static::$kernel->getContainer()->getParameter('kernel.project_dir') . $DS . "tests" . $DS . "resources" . $DS . "image-to-resize.jpg";
+        $form["com_nairus_resumebundle_profile[avatar][imageFile]"]->upload($imagePath);
+
+        // Submit the form and return to the resume show page
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        // Verify if the avatar has been changed in the profile.
+        $this->assertRegExp("~src-[0-9]+\.jpg~m",
+                $crawler->filter("#avatar")->parents()->html(), "4.4 The src link expected is not ok.");
+
+        // Case 5: Update only the profile (no imageFile sent)
+        $crawler = $client->click($profileCard->selectLink("Modifier le profil")->link());
+        $this->assertRegExp("~thb-[0-9]+\.jpg~m",
+                $crawler->filter("#avatar-preview")->parents()->html(), "5.1 The src link expected is not ok.");
+
+        $form = $crawler->selectButton('Sauvegarder')->form([
+            "com_nairus_resumebundle_profile[lastName]" => "Surian",
+            "com_nairus_resumebundle_profile[firstName]" => "Nicolas",
+            "com_nairus_resumebundle_profile[phone]" => "04 01 02 03 04",
+            "com_nairus_resumebundle_profile[cell]" => "07 01 02 03 04",
+            "com_nairus_resumebundle_profile[address]" => "2 place de l'hôtel de ville",
+            "com_nairus_resumebundle_profile[addressAddition]" => "RDC porte droite",
+            "com_nairus_resumebundle_profile[city]" => "Marseille",
+            "com_nairus_resumebundle_profile[zip]" => "13001",
+            "com_nairus_resumebundle_profile[country]" => "France",
+        ]);
+
+        // Submit the form and return to the resume show page
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        // Verify if the avatar has been changed in the profile.
+        $this->assertRegExp("~src-[0-9]+\.jpg~m",
+                $crawler->filter("#avatar")->parents()->html(), "5.2 The src link expected is not ok.");
+
+        $profileCard = $crawler->filter("#profile-card");
+        $this->assertContains("2 place de l'hôtel de ville", $profileCard->text(), "5.3 The address has to be changed");
+
+        // Case 6: Delete the profile and the avatar.
         $client->submit($profileCard->selectButton('Supprimer')->form());
         $crawler = $client->followRedirect();
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "3.1 The response status code expected is not ok.");
-        $this->assertRegExp("~^/restricted/resume/[0-9]+/show$~", $client->getRequest()->getRequestUri(), "3.2 The request uri expected is not ok.");
-        $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "3.3 The [delete] flash message is missing.");
-        $this->assertContains("Profil supprimé avec succès !", $crawler->filter('.message-container')->text(), "3.4 The [delete] flash message is not ok.");
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "6.1 The response status code expected is not ok.");
+        $this->assertRegExp("~^/restricted/resume/[0-9]+/show$~", $client->getRequest()->getRequestUri(), "6.2 The request uri expected is not ok.");
+        $this->assertGreaterThan(0, $crawler->filter('.message-container > .alert-success')->count(), "6.3 The [delete] flash message is missing.");
+        $this->assertContains("Profil supprimé avec succès !", $crawler->filter('.message-container')->text(), "6.4 The [delete] flash message is not ok.");
         $actionsButtons = $crawler->filter("#profile-card .card-body")->children();
-        $this->assertCount(1, $actionsButtons, "3.5 One button is expected");
-        $this->assertContains("Ajouter un profil", $actionsButtons->eq(0)->text(), "3.6 The first button label expected is not ok");
-        $this->assertContains('<i class="fas fa-plus"></i>', $actionsButtons->eq(0)->html(), "3.7 The first button picto expected is not ok");
+        $this->assertCount(1, $actionsButtons, "6.5 One button is expected");
+        $this->assertContains("Ajouter un profil", $actionsButtons->eq(0)->text(), "6.6 The first button label expected is not ok");
+        $this->assertContains('<i class="fas fa-plus"></i>', $actionsButtons->eq(0)->html(), "6.7 The first button picto expected is not ok");
+
+        $avatars = $this->getEntityManager()->getRepository(Avatar::class)->findAll();
+        $this->assertCount(0, $avatars, "6.8 No avatar has to be in database");
+        $admin = $this->getEntityManager()->getRepository(User::class)->findOneByUsername("admin");
+        $this->assertNull($this->getEntityManager()->getRepository(Profile::class)->findOneByUser($admin), "6.9 No profile has to be in database for user [admin]");
     }
 
     /**
@@ -296,17 +398,18 @@ class ProfileControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals("Add a profile for my resumes", $crawler->filter("h1")->text(), "1.5 The h1 expected is not ok");
         // Get the form
         $form = $crawler->filterXPath('//html/body/main/div/div/form[@name="com_nairus_resumebundle_profile"]');
-        $this->assertEquals(9, $form->filter(".form-group")->count(), "1.6 Nine form group elements are expected");
+        $this->assertEquals(10, $form->filter(".form-group")->count(), "1.6 Nine form group elements are expected");
         $formGroups = $form->filter(".form-group");
         $this->assertContains("Last name", $formGroups->eq(0)->text(), "1.7 The form has to contain lastName label.");
         $this->assertContains("First name", $formGroups->eq(1)->text(), "1.8 The form has to contain firstName label.");
         $this->assertContains("Landline phone", $formGroups->eq(2)->text(), "1.9 The form has to contain phone label.");
         $this->assertContains("Mobile phone", $formGroups->eq(3)->text(), "1.10 The form has to contain cell label.");
         $this->assertContains("Address", $formGroups->eq(4)->text(), "1.11 The form has to contain address label.");
-        $this->assertContains("Additional address", $formGroups->eq(5)->text(), "1.8 The form has to contain addressAddition label.");
-        $this->assertContains("City", $formGroups->eq(6)->text(), "1.9 The form has to contain city label.");
-        $this->assertContains("Zip code", $formGroups->eq(7)->text(), "1.10 The form has to contain zip label.");
-        $this->assertContains("Country", $formGroups->eq(8)->text(), "1.10 The form has to contain country label.");
+        $this->assertContains("Additional address", $formGroups->eq(5)->text(), "1.12 The form has to contain addressAddition label.");
+        $this->assertContains("City", $formGroups->eq(6)->text(), "1.13 The form has to contain city label.");
+        $this->assertContains("Zip code", $formGroups->eq(7)->text(), "1.14 The form has to contain zip label.");
+        $this->assertContains("Country", $formGroups->eq(8)->text(), "1.15 The form has to contain country label.");
+        $this->assertContains("Choose an avatar", $formGroups->eq(9)->text(), "1.16 The form has to contain avatar label.");
         $actionsElements = $form->filter(".actions")->children();
         $this->assertCount(2, $actionsElements, "1.14 Two cta buttons are expected.");
         $this->assertContains("Return to the resume", $actionsElements->eq(0)->text(), "1.15 The first button label is not ok.");
@@ -352,7 +455,7 @@ class ProfileControllerTest extends AbstractUserWebTestCase {
         $this->assertEquals("Modification of my resumes's profile", $crawler->filter("h1")->text(), "2.4 The h1 expected is not ok");
         // Get the form
         $form = $crawler->filterXPath('//html/body/main/div/div/form[@name="com_nairus_resumebundle_profile"]');
-        $this->assertEquals(9, $form->filter(".form-group")->count(), "2.5 Nine form group elements are expected");
+        $this->assertEquals(10, $form->filter(".form-group")->count(), "2.5 Nine form group elements are expected");
         $actionsElements = $form->filter(".actions")->children();
         $this->assertCount(2, $actionsElements, "2.6 Two cta buttons are expected.");
         $form = $crawler->selectButton('Save')->form([

@@ -10,20 +10,32 @@
         </div>
     {% else %}
         <div class="card-body">
-            <p class="font-weight-bold">
-                {{ profile.firstName }} {{ profile.lastName }}
-            </p>
-            <p>
-                {{ profile.address }}<br>
-                {% if profile.addressAddition %}{{ profile.addressAddition }}<br>{% endif %}
-                {{"profile.show.city" | trans({"%city%": profile.city, "%zip%": profile.zip}, "NSResumeBundle")}}
-                {% if profile.country %}<br>{{ profile.country }}{% endif %}
-            </p>
-            <p>
-                {% if profile.phone %}<i class="fas fa-phone"></i>&nbsp;{{profile.phone}}{% endif %}
-                {% if profile.phone and profile.cell %}&nbsp;/&nbsp;{% endif %}
-                {% if profile.cell %}<i class="fas fa-mobile-alt"></i>&nbsp;{{profile.cell}}{% endif %}
-            </p>
+            <div class="row">
+                <div class="col-6">
+                    <p class="font-weight-bold">
+                        {{ profile.firstName }} {{ profile.lastName }}
+                    </p>
+                    <p>
+                        {{ profile.address }}<br>
+                        {% if profile.addressAddition %}{{ profile.addressAddition }}<br>{% endif %}
+                        {{"profile.show.city" | trans({"%city%": profile.city, "%zip%": profile.zip}, "NSResumeBundle")}}
+                        {% if profile.country %}<br>{{ profile.country }}{% endif %}
+                    </p>
+                </div>
+                {% if profile.avatar %}
+                    <div class="col-6">
+                        <img id="avatar" class="img-fluid img-thumbnail img-rounded"
+                             src="{{ profile.avatar.relativePath ~ 'src-' ~ profile.avatar.id ~ '.' ~ profile.avatar.extension }}" />
+                    </div>
+                {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    {% if profile.phone %}<i class="fas fa-phone"></i>&nbsp;{{profile.phone}}{% endif %}
+                    {% if profile.phone and profile.cell %}&nbsp;/&nbsp;{% endif %}
+                    {% if profile.cell %}<i class="fas fa-mobile-alt"></i>&nbsp;{{profile.cell}}{% endif %}
+                </div>
+            </div>
         </div>
         <div class="card-footer text-center">
             <a href="{{ path("profile_edit", {"id": profile.id, "resume_id": resume.id}) }}" class="d-inline-block p-1 btn btn-primary btn-sm">

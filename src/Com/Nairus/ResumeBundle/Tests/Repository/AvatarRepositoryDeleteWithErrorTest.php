@@ -38,8 +38,18 @@ class AvatarRepositoryDeleteWithErrorTest extends AbstractAvatarRepositoryTestCa
 
         $mockImageManager = $this->getMockBuilder(ImageManagerInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods(["buildRelativePath", "getExtraFolders", "getConfig", "resize", "crop"])
+                ->setMethods(["getExtensionFromMimeType", "buildRelativePath", "getExtraFolders", "getConfig", "resize", "crop"])
                 ->getMock();
+
+        $datas = [
+            ["image/png", "png"],
+            ["image/png", "png"],
+            ["image/jpeg", "jpg"],
+        ];
+        $mockImageManager
+                ->expects($this->exactly(3))
+                ->method("getExtensionFromMimeType")
+                ->willReturnMap($datas);
 
         // Define the getExtraFolders mocked method.
         $mockImageManager
@@ -111,13 +121,13 @@ class AvatarRepositoryDeleteWithErrorTest extends AbstractAvatarRepositoryTestCa
 
         // update with a new image.
         $newPath = static::$projectDirectory . $DS . "tests" . $DS . "resources" . $DS . "image-to-crop.jpg";
-        $avatar->setExtension("jpg")
-                ->setTmpExtension("png")
+        $avatar->setOriginalName("image-to-crop.jpg")
                 ->setImageFile(new UploadedFile($newPath, "image-to-crop.jpg"));
         static::$em->flush($avatar);
 
         static::$em->refresh($avatar);
         $this->assertEquals("jpg", $avatar->getExtension(), "2. The extension has to be updated.");
+        $this->assertEquals("image-to-crop.jpg", $avatar->getOriginalName(), "3. The original name has to be updated.");
 
         // Try to remove the entity.
         static::$em->remove($avatar);

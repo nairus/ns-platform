@@ -5,30 +5,23 @@ namespace Com\Nairus\ResumeBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 /**
- * Profile form type.
+ * Avatar form.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class ProfileType extends AbstractType {
+class AvatarType extends AbstractType {
 
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('firstName')
-                ->add('lastName')
-                ->add('phone')
-                ->add('cell')
-                ->add('address')
-                ->add('addressAddition')
-                ->add('city')
-                ->add('zip')
-                ->add('country')
-                ->add('avatar', AvatarType::class, ["required" => false, "label" => false])
-        ;
+        $builder->remove("extension")
+                ->remove("relativePath")
+                ->add("imageFile", FileType::class, ["label" => false]);
     }
 
     /**
@@ -36,7 +29,7 @@ class ProfileType extends AbstractType {
      */
     public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Com\Nairus\ResumeBundle\Entity\Profile'
+            'data_class' => 'Com\Nairus\ResumeBundle\Entity\Avatar'
         ));
     }
 
@@ -44,7 +37,7 @@ class ProfileType extends AbstractType {
      * {@inheritdoc}
      */
     public function getBlockPrefix() {
-        return 'com_nairus_resumebundle_profile';
+        return 'com_nairus_resumebundle_avatar';
     }
 
 }

@@ -48,6 +48,15 @@ class Avatar implements ImageInterface {
     private $extension;
 
     /**
+     * The image original name.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $originalName;
+
+    /**
      * The uploaded image file.
      *
      * @var UploadedFile
@@ -67,6 +76,8 @@ class Avatar implements ImageInterface {
      * @var string
      */
     private $tmpExtension;
+
+    use \Com\Nairus\CoreBundle\Entity\Traits\IsNewTrait;
 
     /**
      * Get id
@@ -110,6 +121,21 @@ class Avatar implements ImageInterface {
     /**
      * {@inheritDoc}
      */
+    public function getOriginalName(): string {
+        return $this->originalName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOriginalName(string $originalName): ImageInterface {
+        $this->originalName = $originalName;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getImageFile(): ?UploadedFile {
         return $this->imageFile;
     }
@@ -125,16 +151,16 @@ class Avatar implements ImageInterface {
     /**
      * {@inheritDoc}
      */
-    public function setTmpExtension(string $tmpExtension): ImageInterface {
-        $this->tmpExtension = $tmpExtension;
-        return $this;
+    public function getTmpExtension(): ?string {
+        return $this->tmpExtension;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getTmpExtension(): ?string {
-        return $this->tmpExtension;
+    public function setTmpExtension(string $tmpExtension): ImageInterface {
+        $this->tmpExtension = $tmpExtension;
+        return $this;
     }
 
 }

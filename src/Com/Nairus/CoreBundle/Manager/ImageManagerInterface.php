@@ -17,6 +17,15 @@ use Symfony\Component\HttpFoundation\File\File;
 interface ImageManagerInterface {
 
     /**
+     * Return the extension from image mimetype.
+     *
+     * @param string $mimeType The image mimetype.
+     *
+     * @return string
+     */
+    public function getExtensionFromMimeType(string $mimeType): string;
+
+    /**
      * Get the extra folders for the path (2 last digits).
      *
      * @param ImageInterface $imageEntity The image entity.

@@ -67,15 +67,30 @@ class MockImageEntity implements ImageInterface {
     /**
      * {@inheritDoc}
      */
-    public function getImageFile(): ?UploadedFile {
-        return $this->imageFile;
+    public function getRelativePath(): string {
+        return $this->relativePath;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setImageFile(UploadedFile $file): ImageInterface {
-        $this->imageFile = $file;
+    public function setRelativePath(string $relativePath): ImageInterface {
+        $this->relativePath = $relativePath;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOriginalName(): string {
+        return 'original-name.png';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOriginalName(string $originalName): ImageInterface {
+        // nothing to do here.
         return $this;
     }
 
@@ -96,6 +111,21 @@ class MockImageEntity implements ImageInterface {
     /**
      * {@inheritDoc}
      */
+    public function getImageFile(): ?UploadedFile {
+        return $this->imageFile;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setImageFile(UploadedFile $file): ImageInterface {
+        $this->imageFile = $file;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setTmpExtension(string $tmpExtension): ImageInterface {
         $this->tmpExtension = $tmpExtension;
     }
@@ -105,21 +135,6 @@ class MockImageEntity implements ImageInterface {
      */
     public function getTmpExtension(): string {
         return $this->tmpExtension;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getRelativePath(): string {
-        return $this->relativePath;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setRelativePath(string $relativePath): ImageInterface {
-        $this->relativePath = $relativePath;
-        return $this;
     }
 
 }

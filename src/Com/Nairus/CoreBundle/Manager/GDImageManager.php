@@ -51,6 +51,32 @@ class GDImageManager implements ImageManagerInterface {
     /**
      * {@inheritDoc}
      */
+    public function getExtensionFromMimeType(string $mimeType): string {
+        switch ($mimeType) {
+            case "image/jpeg":
+                return "jpg";
+            case "image/png":
+                return "png";
+            case "image/gif":
+                return "gif";
+            case "image/bmp":
+                return "bmp";
+            case "image/tiff":
+                return "tiff";
+            case "image/webp":
+                return "webp";
+            case "image/svg+xml":
+                return "svg";
+            case "image/x-icon":
+                return "ico";
+            default:
+                throw new ImageProcessingException("Invalid image mimetype", ImageProcessingException::INVALID_MIME_TYPE);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getExtraFolders(ImageInterface $imageEntity): string {
         // Get the two last digits of the id.
         $id = (string) $imageEntity->getId();

@@ -19,8 +19,8 @@ parameters:
             avatar:
                 # size in pixel
                 src_width: 160
-                src_heigth: 160
-                thumb_width: 50
-                thumb_height: 50
+                src_height: 160
+                thb_width: 50
+                thb_height: 50
                 # crop in the middle after resize
                 crop: false

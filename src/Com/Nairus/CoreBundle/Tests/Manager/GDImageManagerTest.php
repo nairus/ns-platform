@@ -469,6 +469,39 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
+     * Test the <code>getExtensionFromMimeType</code> method.
+     *
+     * @return void
+     */
+    public function testGetExtensionFromMimeType(): void {
+        $mimeTypes = [
+            1 => ["image/gif", "gif"],
+            2 => ["image/x-icon", "ico"],
+            3 => ["image/jpeg", "jpg"],
+            4 => ["image/png", "png"],
+            5 => ["image/svg+xml", "svg"],
+            6 => ["image/tiff", "tiff"],
+            7 => ["image/webp", "webp"],
+        ];
+
+        foreach ($mimeTypes as $num => $mimeType) {
+            $this->assertEquals($mimeType[1], static::$imageManager->getExtensionFromMimeType($mimeType[0]), "$num. The extension expected is not ok.");
+        }
+    }
+
+    /**
+     * Test the <code>getExtensionFromMimeType</code> method with not an image mimeType.
+     *
+     * @expectedException \Com\Nairus\CoreBundle\Exception\ImageProcessingException
+     * @expectedExceptionCode 6
+     *
+     * @return void
+     */
+    public function testGetExtensionFromMimeTypeWithWrongMimeType(): void {
+        static::$imageManager->getExtensionFromMimeType("application/pdf");
+    }
+
+    /**
      * Return the images extensions to test.
      *
      * @return array

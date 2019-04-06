@@ -103,6 +103,7 @@ profile:
         city: Ville
         zip: Code postal
         country: Pays
+        avatar: Choisir un avatar
     new:
         title: Ajout du profil pour mes CVs
     edit:

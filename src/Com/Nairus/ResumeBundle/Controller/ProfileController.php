@@ -2,6 +2,7 @@
 
 namespace Com\Nairus\ResumeBundle\Controller;
 
+use Com\Nairus\CoreBundle\Manager\ImageManagerInterface;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Profile;
 use Com\Nairus\ResumeBundle\Entity\Resume;
@@ -32,8 +33,9 @@ class ProfileController extends Controller {
     /**
      * Constructor.
      *
-     * @param LoggerInterface     $logger     The logger service.
-     * @param TranslatorInterface $translator The translatorService.
+     * @param LoggerInterface       $logger       The logger service.
+     * @param TranslatorInterface   $translator   The translator service.
+     * @param ImageManagerInterface $imageManager The image manager.
      */
     public function __construct(LoggerInterface $logger, TranslatorInterface $translator) {
         $this->logger = $logger;
@@ -83,6 +85,11 @@ class ProfileController extends Controller {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $avatar = $profile->getAvatar();
+            // In case of avatar existing and to update, we need to define manually the original name field to invoke update events.
+            if ($avatar && $avatar->getImageFile()) {
+                $avatar->setOriginalName($avatar->getImageFile()->getClientOriginalName());
+            }
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash("success", $this->getTranslation("flashes.success.profile.edit", [], NSResumeBundle::NAME));
