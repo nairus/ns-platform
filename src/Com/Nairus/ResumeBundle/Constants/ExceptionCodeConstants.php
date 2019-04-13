@@ -21,6 +21,11 @@ class ExceptionCodeConstants {
     public const PAGE_NOT_FOUND = 11;
 
     /**
+     * Define the code when an unknown error is thrown.
+     */
+    public const UNKNOWN_ERROR = 1;
+
+    /**
      * Constructor.
      *
      * @codeCoverageIgnore

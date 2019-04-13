@@ -10,9 +10,15 @@
     </div>
     <div class="container-fluid">
         <div class="row mb-2">
-            {% for i in range(1, maxCardPerPage) %}
-                {% include 'NSResumeBundle::card.html.twig' %}
-            {% endfor %}
+            {% if entities|length > 0 %}
+                {% for resume in entities %}
+                    {% include 'NSResumeBundle::card.html.twig' %}
+                {% endfor %}
+            {% else %}
+                <div class="no-resume text-center col-12">
+                    <em>{{ "public.index.no-resume"|trans({}, "NSResumeBundle") }}</em>
+                </div>
+            {% endif %}
         </div>
 
         <div class="row pagination-container">

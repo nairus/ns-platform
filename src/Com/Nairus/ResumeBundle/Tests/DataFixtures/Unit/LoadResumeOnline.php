@@ -2,6 +2,7 @@
 
 namespace Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit;
 
+use Com\Nairus\CoreBundle\Tests\DataFixtures\RemovableFixturesInterface;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Education;
 use Com\Nairus\ResumeBundle\Entity\Experience;
@@ -10,6 +11,7 @@ use Com\Nairus\ResumeBundle\Entity\SkillLevel;
 use Com\Nairus\ResumeBundle\Entity\Profile;
 use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Entity\ResumeSkill;
+use Com\Nairus\ResumeBundle\Entity\Translation\ResumeTranslation;
 use Com\Nairus\UserBundle\Entity\User;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\UserBundle\NSUserBundle;
@@ -23,7 +25,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class LoadResumeOnline implements FixtureInterface {
+class LoadResumeOnline implements FixtureInterface, RemovableFixturesInterface {
 
     /**
      * {@inheritDoc}
@@ -50,13 +52,9 @@ class LoadResumeOnline implements FixtureInterface {
     }
 
     /**
-     * Remove the tests set.
-     *
-     * @param ObjectManager $manager The entity manager instance.
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function remove(EntityManagerInterface $manager): void {
+    public function remove(EntityManagerInterface $manager) {
         /* @var $profileRepository ProfileRepository */
         $profileRepository = $manager->getRepository(NSResumeBundle::NAME . ":Profile");
         /* @var $userRepository ObjectRepository */
@@ -97,9 +95,11 @@ class LoadResumeOnline implements FixtureInterface {
 
         /* @var $profile Profile */
         $profile = $profileRepository->findOneByUser($user);
-        $manager->remove($profile);
-        $manager->flush();
-        $manager->clear();
+        if ($profile) {
+            $manager->remove($profile);
+            $manager->flush();
+            $manager->clear();
+        }
     }
 
     /**
@@ -123,7 +123,16 @@ class LoadResumeOnline implements FixtureInterface {
                     ->setAuthor($user)
                     ->setStatus(ResumeStatusEnum::ONLINE)
                     ->setCreatedAt($creationDate)
-                    ->setTitle("Test" . $index);
+                    ->setTitle("Test$index fr");
+
+            // Adding en translation for even index
+            if (0 === $index % 2) {
+                $resumeTranslation = new ResumeTranslation();
+                $resumeTranslation->setLocale("en")
+                        ->setTitle("Test$index en");
+                $resume->addTranslation($resumeTranslation);
+            }
+
             $manager->persist($resume);
 
             // On insère des données nécessaires pour les 2 premiers cv uniquement.

@@ -54,9 +54,12 @@ public:
             Publish <strong>your CV</strong> and highlight <strong>your talents</strong>. <br>
             <strong>Recruiter</strong>, Search and Retrieve at a glance <strong>your rare pearl</strong>here.
         pagination-label: 'Resumes list Pagination'
-        show-detail: Show Resume
-        published-at: Published at
-        skills-title: "Skills:"
+        show-detail: See more details
+        updated-at: Updated at
+        skills-title: "Skills"
+        educations-title: "Educations"
+        experiences-title: "Experiences"
+        no-resume: No online resume found
 education:
     labels:
         institution: Institution

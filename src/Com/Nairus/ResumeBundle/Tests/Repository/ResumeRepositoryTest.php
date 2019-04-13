@@ -66,6 +66,7 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
         if ($result <= 0) {
             $this->fail("The table truncate was not executed successfully!");
         }
+        static::$loadResumeOnline->remove(static::$em);
     }
 
     /**
@@ -155,7 +156,7 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
      */
     public function testFindAllOnlineForPage() {
         // Test with no online resume.
-        $noResumeList = static::$repository->findAllOnlineForPage(1, 1);
+        $noResumeList = static::$repository->findAllOnlineForPage(1, 1, "fr");
         $this->assertInstanceOf(\Doctrine\ORM\Tools\Pagination\Paginator::class, $noResumeList, "1.1. The method has to return a [Paginator] object.");
         $this->assertSame(0, $noResumeList->count(), "1.2. No resume has to be online.");
 
@@ -163,21 +164,21 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
         static::$loadResumeOnline->load(static::$em);
 
         // Page 1.
-        $resumesPage1 = static::$repository->findAllOnlineForPage(1, 1);
+        $resumesPage1 = static::$repository->findAllOnlineForPage(1, 1, "fr");
         $this->assertSame(2, $resumesPage1->count(), "2.1. Only two resumes have to be online.");
         $resultPage1 = $resumesPage1->getQuery()->getResult();
         $this->assertCount(1, $resultPage1, "2.2. One resume has to be on page 1.");
-        $this->assertSame("Test1", $resultPage1[0]->getTitle(), "2.3. The first resume has to have the title expected.");
+        $this->assertSame("Test1 fr", $resultPage1[0]->getTitle(), "2.3. The first resume has to have the title expected.");
 
         // Page 2.
-        $resumesPage2 = static::$repository->findAllOnlineForPage(2, 1);
+        $resumesPage2 = static::$repository->findAllOnlineForPage(2, 1, "fr");
         $this->assertSame(2, $resumesPage2->count(), "3.1. Only two resumes have to be online.");
         $resultPage2 = $resumesPage2->getQuery()->getResult();
         $this->assertCount(1, $resultPage2, "3.2. One resume has to be on  page 2.");
-        $this->assertSame("Test0", $resultPage2[0]->getTitle(), "3.3. The second resume has to have the title expected.");
+        $this->assertSame("Test0 fr", $resultPage2[0]->getTitle(), "3.3. The second resume has to have the title expected.");
 
         // Page 3.
-        $resumesPage3 = static::$repository->findAllOnlineForPage(3, 1);
+        $resumesPage3 = static::$repository->findAllOnlineForPage(3, 1, "fr");
         $this->assertSame(2, $resumesPage3->count(), "3.1. Only two resumes have to be online.");
         $resultPage3 = $resumesPage3->getQuery()->getResult();
         $this->assertCount(0, $resultPage3, "3.2. No resume are expected on page 3.");

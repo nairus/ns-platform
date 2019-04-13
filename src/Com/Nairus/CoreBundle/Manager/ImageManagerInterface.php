@@ -19,6 +19,8 @@ interface ImageManagerInterface {
     /**
      * Return the extension from image mimetype.
      *
+     * @see https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
+     *
      * @param string $mimeType The image mimetype.
      *
      * @return string

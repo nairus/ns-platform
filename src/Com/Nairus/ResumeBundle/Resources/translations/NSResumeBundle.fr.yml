@@ -56,9 +56,12 @@ public:
             Publier <strong>vos CV</strong> et Mettez <strong>vos talents</strong> en évidence.<br>
             <strong>Recruteurs</strong>, Chercher et Retrouver en un clin d'oeil <strong>votre perle rare</strong> ici.
         pagination-label: 'Pagination de liste des CV'
-        show-detail: Voir le CV
-        published-at: Publié le
-        skills-title: "Compétences :"
+        show-detail: Voir + de détail
+        updated-at: Mis à jour le
+        skills-title: "Compétences"
+        educations-title: "Diplômes"
+        experiences-title: "Expériences"
+        no-resume: Aucun CV en ligne trouvé
 education:
     labels:
         institution: Organisme

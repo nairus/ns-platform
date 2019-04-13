@@ -3,6 +3,7 @@
 namespace Com\Nairus\ResumeBundle\Service;
 
 use Com\Nairus\CoreBundle\Exception\FunctionalException;
+use Com\Nairus\ResumeBundle\Dto\ResumePaginatorDto;
 use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Exception\ResumePublicationException;
 
@@ -17,14 +18,15 @@ interface ResumeServiceInterface {
     /**
      * Return a collection of ResumeListDto
      *
-     * @param int $page      The current page.
-     * @param int $nbPerPage The number of elements per page.
+     * @param int    $page      The current page.
+     * @param int    $nbPerPage The number of elements per page.
+     * @param string $locale    The current locale.
      *
-     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     * @return ResumePaginatorDto
      *
      * @throws \Com\Nairus\ResumeBundle\Exception\ResumeListException When an error occurs.
      */
-    public function findAllOnlineForPage(int $page, int $nbPerPage): \Doctrine\ORM\Tools\Pagination\Paginator;
+    public function findAllOnlineForPage(int $page, int $nbPerPage, string $locale): ResumePaginatorDto;
 
     /**
      * Publish a resume.

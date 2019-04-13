@@ -17,6 +17,7 @@ use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeOnline;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
+use Com\Nairus\ResumeBundle\Dto\ResumePaginatorDto;
 
 /**
  * Test of ResumeService.
@@ -52,10 +53,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
         parent::setUpBeforeClass();
 
         // Load test fixtures.
-        $loadSkill = new LoadSkill();
-        $loadSkill->load(static::$em);
-        $loadSkillLevel = new LoadSkillLevel();
-        $loadSkillLevel->load(static::$em);
+        static::loadBeforeClass(static::$em, [new LoadSkill(), new LoadSkillLevel()]);
     }
 
     /**
@@ -108,7 +106,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
      * @return void
      */
     public function testImplementations(): void {
-        $this->assertInstanceOf(ResumeServiceInterface::class, $this->object, "1. Le service doit être de type [ResumeServiceInterface].");
+        $this->assertInstanceOf(ResumeServiceInterface::class, $this->object, "1. The service has to implement [ResumeServiceInterface].");
     }
 
     /**
@@ -120,13 +118,12 @@ class ResumeServiceTest extends AbstractKernelTestCase {
      */
     public function testFindAllOnlineForPage(): void {
         try {
-            /* @var $resumePaginator \Doctrine\ORM\Tools\Pagination\Paginator */
-            $resumePaginator = $this->object->findAllOnlineForPage(1, 2);
-
-            $this->assertSame(2, $resumePaginator->count(), "1. Il doit y avoir 2 CV en ligne au total.");
-            $this->assertCount(2, $resumePaginator->getQuery()->getResult(), "2. Il doit y avoir 2 CV sur la première page.");
+            $resumeDto = $this->object->findAllOnlineForPage(1, 2, "fr");
+            $this->assertInstanceOf(ResumePaginatorDto::class, $resumeDto, "1. The result expected has to be an instance of [ResumePaginatorDto]");
+            $this->assertSame(1, $resumeDto->getPages(), "2. One page has to be displayed only.");
+            $this->assertCount(2, $resumeDto->getEntities(), "3. Two entities are expexted on the first page.");
         } catch (\Exception | \Error $exc) {
-            $this->fail("Aucune exception/erreur ne doit être levée:" . $exc->getMessage());
+            $this->fail("No exception/error has to be thrown: " . $exc->getMessage());
         }
     }
 
@@ -139,12 +136,12 @@ class ResumeServiceTest extends AbstractKernelTestCase {
      */
     public function testFindAllOnlineForPageWithWrongPage(): void {
         try {
-            $this->object->findAllOnlineForPage(0, 50);
+            $this->object->findAllOnlineForPage(0, 50, "fr");
         } catch (NSResumeException\ResumeListException $exc) {
-            $this->assertSame(0, $exc->getPage(), "1. Le numéro de page doit être correcte.");
-            $this->assertSame(ExceptionCodeConstants::WRONG_PAGE, $exc->getCode(), "2. Le code de l'exception doit être correcte.");
+            $this->assertSame(0, $exc->getPage(), "1. The page number expected is not ok.");
+            $this->assertSame(ExceptionCodeConstants::WRONG_PAGE, $exc->getCode(), "2. The exception code expected is not ok.");
         } catch (\Exception | \Error $exc) {
-            $this->fail("Exception/Erreur inatendue: " . $exc->getMessage());
+            $this->fail("Wrong exception/error expected: " . $exc->getMessage());
         }
     }
 
@@ -153,12 +150,12 @@ class ResumeServiceTest extends AbstractKernelTestCase {
      */
     public function testFindAllOnlineForPageWithPageNotExists(): void {
         try {
-            $this->object->findAllOnlineForPage(2, 50);
+            $this->object->findAllOnlineForPage(2, 50, "fr");
         } catch (NSResumeException\ResumeListException $exc) {
-            $this->assertSame(2, $exc->getPage(), "1. Le numéro de page doit être correcte.");
-            $this->assertSame(ExceptionCodeConstants::PAGE_NOT_FOUND, $exc->getCode(), "2. Le code de l'exception doit être correcte.");
+            $this->assertSame(2, $exc->getPage(), "1. The page number expected is not ok.");
+            $this->assertSame(ExceptionCodeConstants::PAGE_NOT_FOUND, $exc->getCode(), "2. The exception code expected is not ok.");
         } catch (\Exception | \Error $exc) {
-            $this->fail("Exception/Erreur inatendue: " . $exc->getMessage());
+            $this->fail("Wrong exception/error expected: " . $exc->getMessage());
         }
     }
 
@@ -168,9 +165,9 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     public function testLoadWithIoc(): void {
         try {
             $resumeService = static::$container->get("ns_resume.resume_service");
-            $this->assertInstanceOf(ResumeServiceInterface::class, $resumeService, "1. Le service doit être du bon type.");
+            $this->assertInstanceOf(ResumeServiceInterface::class, $resumeService, "1. The service has to implement [ResumeServiceInterface] interface.");
         } catch (\Exception | \Error $exc) {
-            $this->fail("2. Exception non attendue: " . $exc->getMessage());
+            $this->fail("2. Exception/error not expected: " . $exc->getMessage());
         }
     }
 

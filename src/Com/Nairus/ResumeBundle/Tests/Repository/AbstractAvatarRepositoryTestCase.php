@@ -68,7 +68,7 @@ abstract class AbstractAvatarRepositoryTestCase extends AbstractKernelTestCase {
         }
 
         // Truncate the avatar table.
-        $this->cleanDatas([\Com\Nairus\ResumeBundle\Entity\Avatar::class]);
+        $this->cleanDatas(static::$container, [\Com\Nairus\ResumeBundle\Entity\Avatar::class]);
 
         // Disable all mocks.
         \phpmock\Mock::disableAll();

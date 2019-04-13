@@ -13,14 +13,14 @@ use Doctrine\ORM\EntityManagerInterface;
 trait DatasLoaderTrait {
 
     /**
-     * Load datas in tests.
+     * Load datas in tests before class.
      *
      * @param EntityManagerInterface $entityManager The instance of entity manager.
      * @param array                  $dataLoaders   The list of loaders.
      *
      * @return void
      */
-    protected function loadDatas(EntityManagerInterface $entityManager, array $dataLoaders): void {
+    protected static function loadBeforeClass(EntityManagerInterface $entityManager, array $dataLoaders): void {
         foreach ($dataLoaders as $loader) {
             // If the loader is an instance of [FixtureInterface].
             if ($loader instanceof \Doctrine\Common\DataFixtures\FixtureInterface) {
@@ -31,6 +31,18 @@ trait DatasLoaderTrait {
                 $entityManager->flush($loader);
             }
         }
+    }
+
+    /**
+     * Load datas in tests.
+     *
+     * @param EntityManagerInterface $entityManager The instance of entity manager.
+     * @param array                  $dataLoaders   The list of loaders.
+     *
+     * @return void
+     */
+    protected function loadDatas(EntityManagerInterface $entityManager, array $dataLoaders): void {
+        static::loadBeforeClass($entityManager, $dataLoaders);
     }
 
 }

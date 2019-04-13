@@ -2,6 +2,9 @@
 
 namespace Com\Nairus\CoreBundle\Tests\Traits;
 
+use Com\Nairus\CoreBundle\Tests\DataFixtures\RemovableFixturesInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Trait for DatasCleaner behaviors.
  *
@@ -11,17 +14,22 @@ namespace Com\Nairus\CoreBundle\Tests\Traits;
 trait DatasCleanerTrait {
 
     /**
-     * Clean datas for next tests.
+     * Clean datas for static afterClass method.
+     *
+     * @param ContainerInterface $container     The services container.
+     * @param array              $entityClasses The entities to remove.
      *
      * @return void
+     *
+     * @throws \Exception
      */
-    protected function cleanDatas(array $entityClasses): void {
+    protected static function cleanDatasAfterTest(ContainerInterface $container, array $entityClasses): void {
         // Reset the entity manager to prevent "Doctrine\ORM\ORMException".
-        static::$kernel->getContainer()
+        $container
                 ->get("doctrine")
                 ->resetManager();
 
-        $entityManager = static::$kernel->getContainer()
+        $entityManager = $container
                 ->get("doctrine")
                 ->getManager();
 
@@ -31,9 +39,13 @@ trait DatasCleanerTrait {
         try {
             $connection->query('PRAGMA foreign_keys = OFF');
             foreach ($entityClasses as $className) {
-                $entityMetadata = $entityManager->getClassMetadata($className);
-                $query = $databasePlatform->getTruncateTableSql($entityMetadata->getTableName());
-                $connection->executeUpdate($query);
+                if ($className instanceof RemovableFixturesInterface) {
+                    $className->remove($entityManager);
+                } else {
+                    $entityMetadata = $entityManager->getClassMetadata($className);
+                    $query = $databasePlatform->getTruncateTableSql($entityMetadata->getTableName());
+                    $connection->executeUpdate($query);
+                }
             }
             $connection->query('PRAGMA foreign_keys = ON');
             $connection->commit();
@@ -41,6 +53,20 @@ trait DatasCleanerTrait {
             $connection->rollBack();
             throw $exc;
         }
+    }
+
+    /**
+     * Clean datas for next tests.
+     *
+     * @param ContainerInterface $container     The services container.
+     * @param array              $entityClasses The entities to remove.
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    protected function cleanDatas(ContainerInterface $container, array $entityClasses): void {
+        static::cleanDatasAfterTest($container, $entityClasses);
     }
 
 }

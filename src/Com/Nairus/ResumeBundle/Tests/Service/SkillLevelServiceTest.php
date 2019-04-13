@@ -27,6 +27,11 @@ class SkillLevelServiceTest extends AbstractKernelTestCase {
     private $object;
 
     /**
+     * Load traits to manipulate test datas.
+     */
+    use \Com\Nairus\CoreBundle\Tests\Traits\DatasCleanerTrait;
+
+    /**
      * {@inheritDoc}
      */
     public static function setUpBeforeClass() {
@@ -44,10 +49,7 @@ class SkillLevelServiceTest extends AbstractKernelTestCase {
      */
     public static function tearDownAfterClass() {
         // Remove test fixtures.
-        $loadSkill = new LoadSkill();
-        $loadSkill->remove(static::$em);
-        $loadSkillLevel = new LoadSkillLevel();
-        $loadSkillLevel->remove(static::$em);
+        static::cleanDatasAfterTest(static::$container, [new LoadSkill()], new LoadSkillLevel());
     }
 
     /**
@@ -141,7 +143,7 @@ class SkillLevelServiceTest extends AbstractKernelTestCase {
         } catch (\Exception $exc) {
             $this->fail("2. Unexpected exception: " . $exc->getMessage());
         } finally {
-            $this->cleanDatas();
+            $this->cleanDatas(static::$container, [Skill::class, ResumeSkill::class]);
         }
     }
 
@@ -231,42 +233,6 @@ class SkillLevelServiceTest extends AbstractKernelTestCase {
             $this->assertEquals("flashes.error.unknown", $exc->getTranslationKey(), "1. The translation key expected is not ok.");
         } catch (\Error | \Exception $exc) {
             $this->fail("2. Unexpected exception! " . $exc->getMessage());
-        }
-    }
-
-    /**
-     * Clean datas after test.
-     *
-     * @return void
-     *
-     * @throws \Exception
-     */
-    private function cleanDatas(): void {
-        // Reset the entity manager to prevent "Doctrine\ORM\ORMException".
-        static::$container
-                ->get("doctrine")
-                ->resetManager();
-
-        static::$em = static::$container
-                ->get("doctrine")
-                ->getManager();
-
-        $skillClassMetadata = static::$em->getClassMetadata(Skill::class);
-        $resumeSkillClassMetadata = static::$em->getClassMetadata(ResumeSkill::class);
-        $connection = static::$em->getConnection();
-        $databasePlatform = $connection->getDatabasePlatform();
-        $connection->beginTransaction();
-        try {
-            $connection->query('PRAGMA foreign_keys = OFF');
-            $q1 = $databasePlatform->getTruncateTableSql($resumeSkillClassMetadata->getTableName());
-            $connection->executeUpdate($q1);
-            $q2 = $databasePlatform->getTruncateTableSql($skillClassMetadata->getTableName());
-            $connection->executeUpdate($q2);
-            $connection->query('PRAGMA foreign_keys = ON');
-            $connection->commit();
-        } catch (\Exception $exc) {
-            $connection->rollBack();
-            throw $exc;
         }
     }
 

@@ -2,6 +2,7 @@
 
 namespace Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit;
 
+use Com\Nairus\CoreBundle\Tests\DataFixtures\RemovableFixturesInterface;
 use Com\Nairus\ResumeBundle\Entity\Skill;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -13,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class LoadSkill implements FixtureInterface {
+class LoadSkill implements FixtureInterface, RemovableFixturesInterface {
 
     /**
      * {@inheritDoc}
@@ -34,11 +35,7 @@ class LoadSkill implements FixtureInterface {
     }
 
     /**
-     * Remove all entities in the database.
-     *
-     * @param EntityManagerInterface $manager The entity manager instance.
-     *
-     * @return mixed
+     * {@inheritDoc}
      */
     public function remove(EntityManagerInterface $manager) {
         $className = Skill::class;

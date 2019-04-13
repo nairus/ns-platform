@@ -5,6 +5,7 @@ namespace Com\Nairus\ResumeBundle\Repository;
 use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\ORM\Query\Expr as Expr;
 
 /**
  * Repository for Resume entities.
@@ -19,13 +20,14 @@ class ResumeRepository extends \Doctrine\ORM\EntityRepository {
     /**
      * Return the list of Resume for the current page.
      *
-     * @param int $page      The current page.
-     * @param int $nbPerPage The number of entity per page.
+     * @param int    $page      The current page.
+     * @param int    $nbPerPage The number of entity per page.
+     * @param string $locale    The current locale.
      *
      * @return Paginator
      */
-    public function findAllOnlineForPage(int $page, int $nbPerPage): Paginator {
-        $qb = $this->getOnlineQueryBuilder();
+    public function findAllOnlineForPage(int $page, int $nbPerPage, string $locale): Paginator {
+        $qb = $this->getOnlineQueryBuilder($locale);
         $qb
                 ->setFirstResult(($page - 1) * $nbPerPage)
                 ->setMaxResults($nbPerPage);
@@ -64,26 +66,32 @@ class ResumeRepository extends \Doctrine\ORM\EntityRepository {
      *
      * @codeCoverageIgnore
      *
+     * @param string $locale The current locale
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    private function getOnlineQueryBuilder(): \Doctrine\ORM\QueryBuilder {
-        return $this->createQueryBuilder("r")
-                        ->leftJoin("r.translations", "rtrans")
+    private function getOnlineQueryBuilder(string $locale): \Doctrine\ORM\QueryBuilder {
+        $qb = $this->createQueryBuilder("r");
+
+        return $qb->innerJoin("r.translations", "rtrans", Expr\Join::WITH, "rtrans.locale = :locale")
                         ->addSelect("rtrans")
                         ->innerJoin("r.educations", "edu")
                         ->addSelect("edu")
-                        ->leftJoin("edu.translations", "edutrans")
-                        ->addSelect("edutrans")
                         ->innerJoin("r.experiences", "exp")
                         ->addSelect("exp")
-                        ->leftJoin("exp.translations", "exptrans")
-                        ->addSelect("exptrans")
                         ->innerJoin("r.resumeSkills", "rsk")
                         ->addSelect("rsk")
+                        ->innerJoin("rsk.skill", "ski")
+                        ->addSelect("ski")
+                        ->innerJoin("rsk.skillLevel", "skl")
+                        ->addSelect("skl")
+                        ->leftJoin("skl.translations", "skltrans", Expr\Join::WITH, "skltrans.locale = :locale")
+                        ->addSelect("skltrans")
                         ->where("r.status = :status")
                         ->groupBy("r.id")
                         ->orderBy("r.createdAt", "DESC")
-                        ->setParameter("status", ResumeStatusEnum::ONLINE);
+                        ->setParameter("status", ResumeStatusEnum::ONLINE)
+                        ->setParameter("locale", $locale);
     }
 
 }

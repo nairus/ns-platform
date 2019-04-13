@@ -25,6 +25,12 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
     private static $repository;
 
     /**
+     * Load traits to manipulate test datas.
+     */
+    use \Com\Nairus\CoreBundle\Tests\Traits\DatasLoaderTrait;
+    use \Com\Nairus\CoreBundle\Tests\Traits\DatasCleanerTrait;
+
+    /**
      * {@inheritDoc}
      */
     public static function setUpBeforeClass() {
@@ -32,10 +38,7 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":ResumeSkill");
 
         // Load test fixtures.
-        $loadSkill = new LoadSkill();
-        $loadSkill->load(static::$em);
-        $loadSkillLevel = new LoadSkillLevel();
-        $loadSkillLevel->load(static::$em);
+        static::loadBeforeClass(static::$em, [new LoadSkill(), new LoadSkillLevel()]);
     }
 
     /**
@@ -43,10 +46,7 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
      */
     public static function tearDownAfterClass() {
         // Remove test fixtures.
-        $loadSkill = new LoadSkill();
-        $loadSkill->remove(static::$em);
-        $loadSkillLevel = new LoadSkillLevel();
-        $loadSkillLevel->remove(static::$em);
+        static::cleanDatasAfterTest(static::$container, [new LoadSkill(), new LoadSkillLevel()]);
     }
 
     /**

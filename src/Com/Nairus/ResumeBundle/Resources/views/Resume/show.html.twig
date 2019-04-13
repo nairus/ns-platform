@@ -16,7 +16,7 @@
         {% set title = resume.title ? resume.title : resume.translate(defaultLocale).title %}
         {% set locale = resume.title ? app.request.getLocale() : defaultLocale %}
         <h2 class="card-header text-center">
-            <img width="50" src="/bundles/nscore/img/flags/{{ locale }}.png"></span>
+            <img width="50" src="/bundles/nscore/img/flags/{{ locale }}.png" />
             {{ title }}
         </h2>
         <div class="card-body">

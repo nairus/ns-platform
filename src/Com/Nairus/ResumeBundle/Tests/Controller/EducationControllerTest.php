@@ -52,7 +52,7 @@ class EducationControllerTest extends AbstractUserWebTestCase {
     protected function tearDown() {
         $loadResumeOnline = new LoadResumeOnline();
         $loadResumeOnline->remove($this->getEntityManager());
-        $this->cleanDatas([Skill::class, SkillLevel::class]);
+        $this->cleanDatas($this->getClient()->getContainer(), [Skill::class, SkillLevel::class]);
         unset($this->resume);
         parent::tearDown();
     }

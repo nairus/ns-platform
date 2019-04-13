@@ -49,3 +49,9 @@ h6 {
 .message-container > .alert {
     margin-top: 1rem;
 }
+
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

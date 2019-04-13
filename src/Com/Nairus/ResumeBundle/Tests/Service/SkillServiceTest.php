@@ -26,6 +26,11 @@ class SkillServiceTest extends AbstractKernelTestCase {
     private $object;
 
     /**
+     * Load traits to manipulate test datas.
+     */
+    use \Com\Nairus\CoreBundle\Tests\Traits\DatasCleanerTrait;
+
+    /**
      * {@inheritDoc}
      */
     public static function setUpBeforeClass() {
@@ -43,10 +48,7 @@ class SkillServiceTest extends AbstractKernelTestCase {
      */
     public static function tearDownAfterClass() {
         // Remove test fixtures.
-        $loadSkill = new LoadSkill();
-        $loadSkill->remove(static::$em);
-        $loadSkillLevel = new LoadSkillLevel();
-        $loadSkillLevel->remove(static::$em);
+        static::cleanDatasAfterTest(static::$container, [new LoadSkill(), new LoadSkillLevel()]);
     }
 
     /**
@@ -181,7 +183,7 @@ class SkillServiceTest extends AbstractKernelTestCase {
         } catch (\Exception $exc) {
             $this->fail("2. Unexpected exception: " . $exc->getMessage());
         } finally {
-            $this->cleanDatas();
+            $this->cleanDatas(static::$container, [Skill::class, ResumeSkill::class]);
         }
     }
 
@@ -280,7 +282,7 @@ class SkillServiceTest extends AbstractKernelTestCase {
      *
      * @throws \Exception
      */
-    private function cleanDatas(): void {
+    private function cleanDatast(): void {
         // Reset the entity manager to prevent "Doctrine\ORM\ORMException".
         static::$container
                 ->get("doctrine")

@@ -1,27 +1,49 @@
 {# NSResumeBundle::card.html.twig #}
 
 <div class="col-lg-3 col-md-4 col-sm-6 mb-2">
-    <div class="card border-secondary last-news-tile">
-        <div class="card-header  text-center">
-            <h3 class="card-title">Développeur PHP</h3>
+    <div class="card border-secondary resume-tile">
+        <div class="card-header text-center">
+            <h3 class="card-title">
+                {{ resume.title }}
+            </h3>
             <p class="card-text">
                 <small class="text-muted">
-                    {{ "public.index.published-at"|trans({}, "NSResumeBundle") }}
-                    {{ today|localizeddate('short', 'short', null, null, dateFormat) }}
+                    {{ "public.index.updated-at"|trans({}, "NSResumeBundle") }}
+                    {{ resume.updatedAt|localizeddate('short', 'short', null, null, dateFormat) }}
                 </small>
             </p>
         </div>
 
+        {% set education = resume.educations[0] %}
+        {% set resumeSkill = resume.resumeSkills[0] %}
+        {% set experience = resume.experiences[0] %}
         <div class="card-body p-3">
             <h4 class="card-subtitle text-muted">{{ "public.index.skills-title"|trans({}, "NSResumeBundle") }}</h4>
-            <p class="card-text text-justify">
-            <ul>
-                <li>PHP 7 <span class="text-success">(Expert)</span></li>
-                <li>Javascript <span class="text-primary">(Confirmé)</span></li>
-                <li>Java <span class="text-primary">(Confirmé)</span></li>
-                <li>Python 3 <span class="text-secondary">(Débutant)</span></li>
+            <ul class="card-text text-justify">
+                <li>
+                    <p class="truncate">
+                        {{ resumeSkill.skill.title }} <span class="text-success">({{ resumeSkill.skillLevel.title }})</span>
+                    </p>
+                </li>
             </ul>
-            </p>
+
+            <h4 class="card-subtitle text-muted">{{ "public.index.educations-title"|trans({}, "NSResumeBundle") }}</h4>
+            <ul class="card-text text-justify">
+                {% set domain = education.domain ? education.domain : education.translate(defaultLocale).domain %}
+                <li>
+                    <p class="truncate">{{ domain ~ " - " ~ education.institution}}</p>
+                </li>
+            </ul>
+
+            <h4 class="card-subtitle text-muted">{{ "public.index.experiences-title"|trans({}, "NSResumeBundle") }}</h4>
+            <ul class="card-text text-justify">
+                <li>
+                    <p class="truncate">
+                        {{ experience.company ~ " - " ~ experience.location }}
+                    </p>
+                </li>
+            </ul>
+            <i class="fas fa-ellipsis-h"></i>
         </div>
 
         <div class="card-footer text-center">

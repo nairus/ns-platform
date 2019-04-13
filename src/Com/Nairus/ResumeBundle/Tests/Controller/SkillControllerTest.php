@@ -28,7 +28,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
      */
     protected function tearDown() {
         // Clean the datas.
-        $this->cleanDatas([Skill::class]);
+        $this->cleanDatas($this->getClient()->getContainer(), [Skill::class]);
         parent::tearDown();
     }
 
@@ -113,7 +113,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         } catch (\Exception $exc) {
             $this->fail("0. Unexpected exception: " . $exc->getMessage());
         } finally {
-            $this->cleanDatas([ResumeSkill::class, Skill::class, SkillLevel::class]);
+            $this->cleanDatas($this->getClient()->getContainer(), [ResumeSkill::class, Skill::class, SkillLevel::class]);
         }
     }
 
@@ -145,7 +145,7 @@ class SkillControllerTest extends AbstractUserWebTestCase {
         } catch (\Exception $exc) {
             $this->fail("0. Unexpected exception: " . $exc->getMessage());
         } finally {
-            $this->cleanDatas([ResumeSkill::class, Skill::class, SkillLevel::class]);
+            $this->cleanDatas($this->getClient()->getContainer(), [ResumeSkill::class, Skill::class, SkillLevel::class]);
         }
     }
 

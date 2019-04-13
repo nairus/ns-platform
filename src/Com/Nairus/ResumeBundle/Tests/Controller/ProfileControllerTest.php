@@ -82,7 +82,7 @@ class ProfileControllerTest extends AbstractUserWebTestCase {
         // Remove the datas set.
         $loadResumeOnline = new LoadResumeOnline();
         $loadResumeOnline->remove($this->getEntityManager());
-        $this->cleanDatas([Skill::class, SkillLevel::class]);
+        $this->cleanDatas($this->getClient()->getContainer(), [Skill::class, SkillLevel::class]);
         $admin = $this->getEntityManager()->getRepository(User::class)->findOneByUsername("admin");
         $resume = $this->getEntityManager()->getRepository(Resume::class)->findOneByAuthor($admin);
         $this->getEntityManager()->remove($resume);

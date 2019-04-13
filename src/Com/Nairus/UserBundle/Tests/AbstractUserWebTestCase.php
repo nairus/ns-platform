@@ -88,7 +88,7 @@ abstract class AbstractUserWebTestCase extends WebTestCase {
      *
      * @return TranslatorInterface
      */
-    public function getTranslator(): TranslatorInterface {
+    protected function getTranslator(): TranslatorInterface {
         return $this->translator;
     }
 
@@ -97,7 +97,7 @@ abstract class AbstractUserWebTestCase extends WebTestCase {
      *
      * @return EntityManagerInterface
      */
-    public function getEntityManager(): EntityManagerInterface {
+    protected function getEntityManager(): EntityManagerInterface {
         return $this->entityManager;
     }
 

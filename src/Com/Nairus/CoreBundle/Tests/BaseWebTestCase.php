@@ -2,6 +2,7 @@
 
 namespace Com\Nairus\CoreBundle\Tests;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 
@@ -25,7 +26,7 @@ abstract class BaseWebTestCase extends WebTestCase {
      *
      * @return void
      */
-    public function setUp(): void {
+    protected function setUp(): void {
         $this->client = static::createClient();
     }
 
@@ -36,6 +37,15 @@ abstract class BaseWebTestCase extends WebTestCase {
      */
     protected function getClient(): Client {
         return $this->client;
+    }
+
+    /**
+     * Return the entity manager.
+     *
+     * @return EntityManagerInterface
+     */
+    protected function getEntityManager(): EntityManagerInterface {
+        return $this->client->getKernel()->getContainer()->get("doctrine")->getManager();
     }
 
 }

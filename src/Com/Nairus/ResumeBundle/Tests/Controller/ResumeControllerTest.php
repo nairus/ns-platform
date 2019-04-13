@@ -805,7 +805,7 @@ class ResumeControllerTest extends AbstractUserWebTestCase {
     private function removeAllDatasSet(): void {
         $loadResumeOnline = new LoadResumeOnline();
         $loadResumeOnline->remove($this->getEntityManager());
-        $this->cleanDatas([Skill::class, SkillLevel::class]);
+        $this->cleanDatas($this->getClient()->getContainer(), [Skill::class, SkillLevel::class]);
 
         // Get all admin's resumes remaining and remove them.
         $user = $this->getEntityManager()->getRepository(User::class)->findOneByUsername("admin");

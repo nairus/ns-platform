@@ -482,6 +482,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
             5 => ["image/svg+xml", "svg"],
             6 => ["image/tiff", "tiff"],
             7 => ["image/webp", "webp"],
+            8 => ["image/bmp", "bmp"],
         ];
 
         foreach ($mimeTypes as $num => $mimeType) {

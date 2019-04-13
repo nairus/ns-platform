@@ -5,6 +5,7 @@ namespace Com\Nairus\ResumeBundle\Service;
 use Com\Nairus\CoreBundle\Exception\FunctionalException;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Constants\ExceptionCodeConstants;
+use Com\Nairus\ResumeBundle\Dto\ResumePaginatorDto;
 use Com\Nairus\ResumeBundle\Exception as NSResumeException;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Entity\Profile;
@@ -44,17 +45,23 @@ class ResumeService implements ResumeServiceInterface {
     /**
      * {@inheritDoc}
      */
-    public function findAllOnlineForPage(int $page, int $nbPerPage): \Doctrine\ORM\Tools\Pagination\Paginator {
+    public function findAllOnlineForPage(int $page, int $nbPerPage, string $locale): ResumePaginatorDto {
         if ($page < 1) {
             throw new NSResumeException\ResumeListException($page, "Wrong page", ExceptionCodeConstants::WRONG_PAGE);
         }
 
-        $resumePaginator = $this->resumeRepository->findAllOnlineForPage($page, $nbPerPage);
-        if (0 === count($resumePaginator->getQuery()->getResult())) {
+        $resumePaginator = $this->resumeRepository->findAllOnlineForPage($page, $nbPerPage, $locale);
+        $entities = $resumePaginator->getIterator()->getArrayCopy();
+        if ($page > 1 && 0 === count($entities)) {
             throw new NSResumeException\ResumeListException($page, "Page not found", ExceptionCodeConstants::PAGE_NOT_FOUND);
         }
 
-        return $resumePaginator;
+        $nbPages = ceil($resumePaginator->count() / $nbPerPage);
+        $dto = new ResumePaginatorDto();
+        $dto->setCurrentPage($page)
+                ->setPages($nbPages)
+                ->setEntities($entities);
+        return $dto;
     }
 
     /**
