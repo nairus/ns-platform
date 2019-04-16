@@ -40,6 +40,7 @@ class LoadSkillLevel implements FixtureInterface, RemovableFixturesInterface {
         }
 
         $manager->flush();
+        $manager->clear();
     }
 
     /**
@@ -55,6 +56,7 @@ class LoadSkillLevel implements FixtureInterface, RemovableFixturesInterface {
             $manager->remove($entity);
         }
         $manager->flush();
+        $manager->clear();
     }
 
 }

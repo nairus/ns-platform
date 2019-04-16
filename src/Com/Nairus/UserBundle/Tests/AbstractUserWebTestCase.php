@@ -65,16 +65,6 @@ abstract class AbstractUserWebTestCase extends WebTestCase {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    protected function tearDown() {
-        parent::tearDown();
-
-        // Free the resources.
-        unset($this->client, $this->translator, $this->entityManager);
-    }
-
-    /**
      * Return the test HTTP client.
      *
      * @return Client

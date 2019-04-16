@@ -3,6 +3,7 @@
 namespace Com\Nairus\ResumeBundle\Service;
 
 use Com\Nairus\CoreBundle\Exception\FunctionalException;
+use Com\Nairus\ResumeBundle\Dto\ResumeDetailsDto;
 use Com\Nairus\ResumeBundle\Dto\ResumePaginatorDto;
 use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Exception\ResumePublicationException;
@@ -59,4 +60,14 @@ interface ResumeServiceInterface {
      * @return void
      */
     public function unpublish(Resume $resume): void;
+
+    /**
+     * Return the details of the resume.
+     *
+     * @param Resume $resume The current resume.
+     * @param string $locale The current locale.
+     *
+     * @return ResumeDetailsDto
+     */
+    public function getDetailsForResume(Resume $resume, string $locale): ResumeDetailsDto;
 }

@@ -360,11 +360,11 @@ class Profile {
     /**
      * Set avatar
      *
-     * @param Avatar $avatar
+     * @param Avatar|null $avatar
      *
      * @return Profile
      */
-    public function setAvatar(Avatar $avatar): Profile {
+    public function setAvatar(?Avatar $avatar): Profile {
         $this->avatar = $avatar;
 
         return $this;

@@ -7,6 +7,7 @@ use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Entity as NSResumeEntity;
 use Com\Nairus\ResumeBundle\Event\NSResumeEvents;
 use Com\Nairus\ResumeBundle\Event\ResumeStatusEvent;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResume;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
 use Com\Nairus\UserBundle\Entity\User;
@@ -23,6 +24,7 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
      * Load traits to manipulate test datas.
      */
     use \Com\Nairus\CoreBundle\Tests\Traits\DatasLoaderTrait;
+    use \Com\Nairus\CoreBundle\Tests\Traits\DatasCleanerTrait;
 
     /**
      * @var NSResumeEntity\Resume
@@ -44,49 +46,19 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
      * {@inheritDoc}
      */
     protected function tearDown() {
-        $author = static::$em->getRepository(User::class)->findOneBy(["username" => "user"]);
-        $resumes = static::$em->getRepository(NSResumeEntity\Resume::class)->findBy(["author" => $author]);
-
-        foreach ($resumes as /* @var $resume NSResumeEntity\Resume */ $resume) {
-            // Clean the datas properly .
-            foreach ($resume->getEducations() as $education) {
-                $resume->removeEducation($education);
-                static::$em->remove($education);
-            }
-            foreach ($resume->getExperiences() as $experience) {
-                $resume->removeExperience($experience);
-                static::$em->remove($experience);
-            }
-            foreach ($resume->getResumeSkills() as $resumeSkill) {
-                $resume->removeResumeSkill($resumeSkill);
-                static::$em->remove($resumeSkill);
-            }
-            static::$em->remove($resume);
-        }
-        static::$em->flush();
-
-        $loadSkill = new LoadSkill();
-        $loadSkill->remove(static::$em);
-        $loadSkillLevel = new LoadSkillLevel();
-        $loadSkillLevel->remove(static::$em);
-
         parent::tearDown();
 
-        unset($this->resume);
+        $this->cleanDatas(static::$container, [new LoadSkill(), new LoadSkillLevel(), new LoadResume()]);
     }
 
     /**
      * {@inheritDoc}
      */
     protected function setUp() {
-        // Create the new resume.
-        $author = static::$em->getRepository(User::class)->findOneBy(["username" => "user"]);
-        $this->resume = new NSResumeEntity\Resume();
-        $this->resume->setAnonymous(true)
-                ->setIp("127.0.0.1")
-                ->setStatus(ResumeStatusEnum::OFFLINE_INCOMPLETE)
-                ->setAuthor($author);
-        $this->loadDatas(static::$em, [new LoadSkill(), new LoadSkillLevel(), $this->resume]);
+        $this->loadDatas(static::$em, [new LoadSkill(), new LoadSkillLevel(), new LoadResume()]);
+
+        $user = static::$em->getRepository(User::class)->findOneByUsername("user");
+        $this->resume = static::$em->getRepository(NSResumeEntity\Resume::class)->findOneByAuthor($user);
     }
 
     /**
@@ -123,7 +95,7 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
         // Case 1: Create a new resume.
         $resumeStatusEventCase1 = new ResumeStatusEvent($this->resume);
         static::$dispatcher->dispatch(NSResumeEvents::UPDATE_STATUS, $resumeStatusEventCase1);
-        static::$em->refresh($this->resume);
+        $this->resume = static::$em->getRepository(NSResumeEntity\Resume::class)->find($this->resume->getId());
         $this->assertEquals(ResumeStatusEnum::OFFLINE_INCOMPLETE, $this->resume->getStatus(), "1. The status has to remain unchanged.");
 
         // Case 2: Add education entity.
@@ -232,6 +204,7 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
     public function testOnDeleteStatusOnline(): void {
         // Case 4: Update resume status if there is no datas but online status.
         // Prepare resume datas
+        $this->resume = static::$em->getRepository(NSResumeEntity\Resume::class)->find($this->resume->getId());
         $this->resume->setStatus(ResumeStatusEnum::ONLINE);
         static::$em->flush($this->resume);
         $this->assertEquals(ResumeStatusEnum::ONLINE, $this->resume->getStatus(), "1. The status has to be correct.");

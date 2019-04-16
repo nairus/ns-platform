@@ -3,14 +3,13 @@
 namespace Com\Nairus\ResumeBundle\Service;
 
 use Com\Nairus\CoreBundle\Exception\FunctionalException;
-use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Constants\ExceptionCodeConstants;
+use Com\Nairus\ResumeBundle\Dto\ResumeDetailsDto;
 use Com\Nairus\ResumeBundle\Dto\ResumePaginatorDto;
 use Com\Nairus\ResumeBundle\Exception as NSResumeException;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
-use Com\Nairus\ResumeBundle\Entity\Profile;
-use Com\Nairus\ResumeBundle\Entity\Resume;
-use Com\Nairus\ResumeBundle\Repository\ResumeRepository;
+use Com\Nairus\ResumeBundle\Entity as NSResumeEntity;
+use Com\Nairus\ResumeBundle\Repository as NSResumeRepository;
 use Com\Nairus\ResumeBundle\Service\ResumeServiceInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -28,9 +27,29 @@ class ResumeService implements ResumeServiceInterface {
     private $entityManager;
 
     /**
-     * @var ResumeRepository
+     * @var NSResumeRepository\ResumeRepository
      */
     private $resumeRepository;
+
+    /**
+     * @var NSResumeRepository\ProfileRepository
+     */
+    private $profileRepository;
+
+    /**
+     * @var NSResumeRepository\EducationRepository
+     */
+    private $educationRepository;
+
+    /**
+     * @var NSResumeRepository\ExperienceRepository
+     */
+    private $experienceRepository;
+
+    /**
+     * @var NSResumeRepository\ResumeSkillRepository
+     */
+    private $resumeSkillRepository;
 
     /**
      * Constructor.
@@ -39,7 +58,11 @@ class ResumeService implements ResumeServiceInterface {
      */
     public function __construct(ObjectManager $entityManager) {
         $this->entityManager = $entityManager;
-        $this->resumeRepository = $entityManager->getRepository(NSResumeBundle::NAME . ":Resume");
+        $this->resumeRepository = $entityManager->getRepository(NSResumeEntity\Resume::class);
+        $this->profileRepository = $entityManager->getRepository(NSResumeEntity\Profile::class);
+        $this->educationRepository = $entityManager->getRepository(NSResumeEntity\Education::class);
+        $this->experienceRepository = $entityManager->getRepository(NSResumeEntity\Experience::class);
+        $this->resumeSkillRepository = $entityManager->getRepository(NSResumeEntity\ResumeSkill::class);
     }
 
     /**
@@ -67,7 +90,7 @@ class ResumeService implements ResumeServiceInterface {
     /**
      * {@inheritDoc}
      */
-    public function publish(Resume $resume, bool $force = FALSE): bool {
+    public function publish(NSResumeEntity\Resume $resume, bool $force = FALSE): bool {
         // Store the id of the resume.
         $resumeId = $resume->getId();
 
@@ -78,7 +101,7 @@ class ResumeService implements ResumeServiceInterface {
 
         // Check if the resume is not anonymous and the user has no profile.
         $author = $resume->getAuthor();
-        $profile = $this->entityManager->getRepository(Profile::class)->findOneBy(['user' => $author]);
+        $profile = $this->profileRepository->findOneBy(['user' => $author]);
         if (!$resume->getAnonymous() && null === $profile) {
             throw new NSResumeException\ResumePublicationException("flashes.error.resume.no-profile", "No profile set for non anonymous resume!");
         }
@@ -98,12 +121,12 @@ class ResumeService implements ResumeServiceInterface {
     /**
      * {@inheritDoc}
      */
-    public function removeWithDependencies(Resume $resume): bool {
+    public function removeWithDependencies(NSResumeEntity\Resume $resume): bool {
         $this->entityManager->beginTransaction();
         $resumeId = $resume->getId();
         try {
             // Try to remove the resume skills linked.
-            foreach ($resume->getResumeSkills() as $resumeSkill) {
+            foreach ($this->resumeSkillRepository->findBy(['resume' => $resume]) as $resumeSkill) {
                 // Remove the entity from the collection.
                 $resume->removeResumeSkill($resumeSkill);
                 // Remove the entity.
@@ -111,14 +134,14 @@ class ResumeService implements ResumeServiceInterface {
             }
 
             // Try to remove the educations linked.
-            foreach ($resume->getEducations() as $education) {
+            foreach ($this->educationRepository->findBy(['resume' => $resume]) as $education) {
                 // Remove the entity from the collection.
                 $resume->removeEducation($education);
                 // Remove the entity.
                 $this->entityManager->remove($education);
             }
 
-            foreach ($resume->getExperiences() as $experience) {
+            foreach ($this->experienceRepository->findBy(['resume' => $resume]) as $experience) {
                 // Remove the entity from the collection.
                 $resume->removeExperience($experience);
                 // Remove the entity.
@@ -143,7 +166,7 @@ class ResumeService implements ResumeServiceInterface {
     /**
      * {@inheritDoc}
      */
-    public function unpublish(Resume $resume): void {
+    public function unpublish(NSResumeEntity\Resume $resume): void {
         // Init the dependencies counter.
         $countDependencies = 0;
 
@@ -164,6 +187,25 @@ class ResumeService implements ResumeServiceInterface {
 
         // Commit the update query.
         $this->entityManager->flush();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDetailsForResume(NSResumeEntity\Resume $resume, string $locale): ResumeDetailsDto {
+        $resumeDetailsDto = new ResumeDetailsDto();
+
+        // Get the profile with avatar if not anonymous.
+        if (!$resume->getAnonymous()) {
+            $resumeDetailsDto->setProfile($this->profileRepository->getWithAvatarForUser($resume->getAuthor()));
+        }
+
+        // Get the resume's details
+        $resumeDetailsDto->setEducations($this->educationRepository->findOrderedForResumeId($resume->getId(), $locale))
+                ->setExperiences($this->experienceRepository->findOrderedForResumeId($resume->getId(), $locale))
+                ->setResumeSkills($this->resumeSkillRepository->findOrderedByRank($resume->getId(), $locale));
+
+        return $resumeDetailsDto;
     }
 
 }

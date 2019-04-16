@@ -32,6 +32,7 @@ class LoadSkill implements FixtureInterface, RemovableFixturesInterface {
         }
 
         $manager->flush();
+        $manager->clear();
     }
 
     /**

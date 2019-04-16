@@ -5,7 +5,9 @@ namespace Com\Nairus\ResumeBundle\Repository;
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Experience;
-use Com\Nairus\ResumeBundle\Entity\Translation\ExperienceTranslation;
+use Com\Nairus\ResumeBundle\Entity\Resume;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadExperience;
+use Com\Nairus\UserBundle\NSUserBundle;
 
 /**
  * Test Experience Repository.
@@ -19,9 +21,24 @@ class ExperienceRepositoryTest extends AbstractKernelTestCase {
      */
     private static $repository;
 
+    /**
+     * Load traits to manipulate test datas.
+     */
+    use \Com\Nairus\CoreBundle\Tests\Traits\DatasCleanerTrait;
+
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":Experience");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function tearDown() {
+        parent::tearDown();
+
+        // Remove test fixtures.
+        $this->cleanDatas(static::$container, [new LoadExperience()]);
     }
 
     /**
@@ -125,6 +142,63 @@ class ExperienceRepositoryTest extends AbstractKernelTestCase {
         ;
         static::$em->persist($experience);
         static::$em->flush();
+    }
+
+    /**
+     * Test the <code>findOrderedForResumeId</code> method.
+     *
+     * @return void
+     */
+    public function testFindOrderedForResumeIdInFr(): void {
+        // prepare test datas.
+        $loadEducation = new LoadExperience();
+        $loadEducation->load(static::$em);
+
+        // get the resume with resumeSkills added.
+        $author = static::$em->getRepository(NSUserBundle::NAME . ":User")->findOneByUsername('author');
+        /* @var $resume Resume */
+        $resume = static::$em->getRepository(NSResumeBundle::NAME . ":Resume")->findOneByAuthor($author);
+
+        // test in fr.
+        $experiencesOrderedFr = static::$repository->findOrderedForResumeId($resume->getId(), "fr");
+
+        $this->assertCount(3, $experiencesOrderedFr, "1.1 Three entities fr are expected in the collection.");
+        $this->assertGreaterThan($experiencesOrderedFr->get(1)->getStartYear(), $experiencesOrderedFr->get(0)->getStartYear(),
+                "1.2 The start year of the first entity has to be greater than the second.");
+        $this->assertEquals($experiencesOrderedFr->get(1)->getStartYear(), $experiencesOrderedFr->get(2)->getStartYear(),
+                "1.3 The start year of the third entity has to be equal than the second.");
+        $this->assertLessThan($experiencesOrderedFr->get(1)->getStartMonth(), $experiencesOrderedFr->get(2)->getStartMonth(),
+                "1.4 The start month of the third entity has to be less than the second.");
+
+        // verify fr translation.
+        /* @var $experienceTranslations \Doctrine\Common\Collections\ArrayCollection */
+        $experienceTranslations = $experiencesOrderedFr->get(0)->getTranslations();
+        $this->assertGreaterThan(0, $experienceTranslations->count(), "2.1 At least one translation is expected in the entity.");
+        $this->assertTrue($experienceTranslations->containsKey("fr"), "2.2 The fr translation is expected in the entity.");
+    }
+
+    /**
+     * Test the <code>findOrderedForResumeId</code> method.
+     *
+     * @return void
+     */
+    public function testFindOrderedForResumeIdEn(): void {
+        // prepare test datas.
+        $loadEducation = new LoadExperience();
+        $loadEducation->load(static::$em);
+
+        // get the resume with resumeSkills added.
+        $author = static::$em->getRepository(NSUserBundle::NAME . ":User")->findOneByUsername('author');
+        /* @var $resume Resume */
+        $resume = static::$em->getRepository(NSResumeBundle::NAME . ":Resume")->findOneByAuthor($author);
+
+        // test in en.
+        $experiencesOrderedEn = static::$repository->findOrderedForResumeId($resume->getId(), "en");
+        $this->assertCount(2, $experiencesOrderedEn, "1.1 Two entities en are expected in the collection.");
+        /* @var $experienceTranslations \Doctrine\Common\Collections\ArrayCollection */
+        $experienceTranslations = $experiencesOrderedEn->get(0)->getTranslations();
+        $this->assertGreaterThan(0, $experienceTranslations->count(), "1.2 At least one translation is expected in the entity.");
+        $this->assertTrue($experienceTranslations->containsKey("en"), "1.3 The en translation is expected in the entity.");
     }
 
 }

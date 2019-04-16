@@ -49,7 +49,7 @@ class EducationTranslation extends AbstractTranslationEntity {
      *
      * @param string|null $description
      *
-     * @return Education
+     * @return EducationTranslation
      */
     public function setDescription(?string $description): EducationTranslation {
         $this->description = $description;
@@ -70,9 +70,13 @@ class EducationTranslation extends AbstractTranslationEntity {
      * Set the resume domain.
      *
      * @param string|null $domain
+     *
+     * @return EducationTranslation
      */
-    public function setDomain(?string $domain) {
+    public function setDomain(?string $domain): EducationTranslation {
         $this->domain = $domain;
+
+        return $this;
     }
 
     /**

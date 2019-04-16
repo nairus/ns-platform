@@ -44,6 +44,7 @@
     },
     "require-dev": {
         "php-mock/php-mock": "^2.0",
+        "phpunit/phpunit": "^7.5",
         "sensio/generator-bundle": "^3",
         "symfony/phpunit-bridge": "^3.4",
         "symfony/web-server-bundle": "3.4.22"

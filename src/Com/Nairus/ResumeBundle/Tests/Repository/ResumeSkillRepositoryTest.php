@@ -10,6 +10,8 @@ use Com\Nairus\ResumeBundle\Entity\Skill;
 use Com\Nairus\ResumeBundle\Entity\SkillLevel;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeSkill;
+use Com\Nairus\UserBundle\NSUserBundle;
 use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 
 /**
@@ -46,7 +48,7 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
      */
     public static function tearDownAfterClass() {
         // Remove test fixtures.
-        static::cleanDatasAfterTest(static::$container, [new LoadSkill(), new LoadSkillLevel()]);
+        static::cleanDatasAfterTest(static::$container, [new LoadSkill(), new LoadSkillLevel(), ResumeSkill::class]);
     }
 
     /**
@@ -203,6 +205,36 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
         } finally {
             static::$em->rollback();
         }
+    }
+
+    /**
+     * Test the <code>getOrderByRank</code> method.
+     *
+     * @return void
+     */
+    public function testGetOrderByRank(): void {
+        // prepare datas to test.
+        $loadResumeSkill = new LoadResumeSkill();
+        $loadResumeSkill->load(static::$em);
+
+        // get the resume with resumeSkills added.
+        $author = static::$em->getRepository(NSUserBundle::NAME . ":User")->findOneByUsername('author');
+        /* @var $resume Resume */
+        $resume = static::$em->getRepository(NSResumeBundle::NAME . ":Resume")->findOneByAuthor($author);
+
+        // launch the test in fr.
+        $resumeSkillsFr = static::$repository->findOrderedByRank($resume->getId(), "fr");
+        $allResumeSkills = static::$repository->findByResume($resume);
+
+        $this->assertCount(2, $resumeSkillsFr, "1.1 Two entities are expected.");
+        $this->assertEquals(1, $resumeSkillsFr->first()->getRank(), "1.2 The first element has not the good rank.");
+        $this->assertNotEquals($allResumeSkills[0]->getId(), $resumeSkillsFr->first()->getId(), "1.3 The id has to be different");
+        $skillLevelTranslations = $resumeSkillsFr->first()->getSkillLevel()->getTranslations();
+        $this->assertCount(1, $skillLevelTranslations, "1.4 One skill level translation is expected.");
+        $this->assertArrayHasKey("fr", $skillLevelTranslations, "1.5 The translation expected has to be in fr.");
+
+        $resumeSkillsEn = static::$repository->findOrderedByRank($resume->getId(), "en");
+        $this->assertCount(0, $resumeSkillsEn, "2. No entity is expected in en.");
     }
 
 }

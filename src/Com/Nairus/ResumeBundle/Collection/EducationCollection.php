@@ -33,14 +33,14 @@ class EducationCollection extends ArrayCollection {
     /**
      * Return the first element or FALSE.
      *
-     * @return Com\Nairus\ResumeBundle\Entity\Education|bool
+     * @return Education|bool
      */
     public function first() {
         return parent::first();
     }
 
     /**
-     * @return Com\Nairus\ResumeBundle\Entity\Education
+     * @return Education
      */
     public function get($key): ?Education {
         return parent::get($key);
@@ -49,14 +49,14 @@ class EducationCollection extends ArrayCollection {
     /**
      * Return the last element or FALSE.
      *
-     * @return Com\Nairus\ResumeBundle\Entity\Education|bool
+     * @return Education|bool
      */
     public function last() {
         return parent::last();
     }
 
     /**
-     * @return Com\Nairus\ResumeBundle\Entity\Education|null
+     * @return Education|null
      */
     public function offsetGet($offset): ?Education {
         return parent::offsetGet($offset);

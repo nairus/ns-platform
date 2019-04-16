@@ -7,6 +7,7 @@ use Com\Nairus\ResumeBundle\Constants\ExceptionCodeConstants;
 use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Entity\Education;
 use Com\Nairus\ResumeBundle\Entity\Experience;
+use Com\Nairus\ResumeBundle\Entity\Profile;
 use Com\Nairus\ResumeBundle\Entity\Resume;
 use Com\Nairus\ResumeBundle\Entity\ResumeSkill;
 use Com\Nairus\ResumeBundle\Entity\Skill;
@@ -223,17 +224,11 @@ class ResumeServiceTest extends AbstractKernelTestCase {
         // Load datas.
         $this->loadDatas(static::$em, [$resume, $education, $experience, $resumeSkill]);
 
-        // Refresh the entity.
-        static::$em->refresh($resume);
-        static::$em->refresh($education);
-        static::$em->refresh($experience);
-        static::$em->refresh($resumeSkill);
-
         $resumeId = $resume->getId();
         $educationId = $education->getId();
         $experienceId = $experience->getId();
         $resumeSkillId = $resumeSkill->getId();
-        $this->object->removeWithDependencies($resume);
+        $this->object->removeWithDependencies(static::$em->find(Resume::class, $resumeId));
 
         $this->assertNull(static::$em->find(Resume::class, $resumeId), "1. The resume entity has to be removed");
         $this->assertNull(static::$em->find(Education::class, $educationId), "2. The education entity has to be removed");
@@ -251,36 +246,37 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     public function testRemoveWithDependenciesAndErrors(): void {
         // Create the mocks for the test.
         $resume = $this->createMock(Resume::class);
-        $resume->expects($this->at(0))
+        $resume->expects($this->exactly(1))
                 ->method('getId')
                 ->willReturn(1);
-        $resume->expects($this->at(1))
-                ->method('getResumeSkills')
-                ->willReturn(new \Doctrine\Common\Collections\ArrayCollection());
-        $resume->expects($this->at(2))
-                ->method('getEducations')
-                ->willReturn(new \Doctrine\Common\Collections\ArrayCollection());
-        $resume->expects($this->at(3))
-                ->method('getExperiences')
+
+        $repositoryMock = $this->createMock(\Doctrine\Common\Persistence\ObjectRepository::class);
+        $repositoryMock->expects($this->exactly(3))
+                ->method('findBy')
                 ->willReturn(new \Doctrine\Common\Collections\ArrayCollection());
 
-        $resumeSkillRepository = $this->createMock(\Com\Nairus\ResumeBundle\Repository\ResumeRepository::class);
         $objectManager = $this->createMock(\Doctrine\ORM\EntityManagerInterface::class);
         $objectManager
-                ->expects($this->at(0))
+                ->expects($this->exactly(5))
                 ->method('getRepository')
-                ->willReturn($resumeSkillRepository);
+                ->willReturn($repositoryMock);
         $objectManager
-                ->expects($this->at(1))
+                ->expects($this->exactly(1))
                 ->method('beginTransaction')
                 ->willReturn(null);
-        $objectManager->expects($this->at(2))
+        $objectManager->expects($this->exactly(1))
                 ->method('remove')
-                ->willThrowException(new \Exception("Error"));
+                ->willThrowException(new \Doctrine\ORM\ORMException("Error"));
         $objectManager
-                ->expects($this->at(3))
+                ->expects($this->exactly(1))
                 ->method('rollback')
                 ->willReturn(null);
+        $objectManager
+                ->expects($this->exactly(0))
+                ->method('flush');
+        $objectManager
+                ->expects($this->exactly(0))
+                ->method('commit');
 
         // The test
         try {
@@ -288,8 +284,9 @@ class ResumeServiceTest extends AbstractKernelTestCase {
             $service->removeWithDependencies($resume);
         } catch (FunctionalException $exc) {
             $this->assertEquals("flashes.error.resume.delete", $exc->getTranslationKey(), "1. The translation key expected is not ok.");
+            $this->assertInstanceOf(\Doctrine\ORM\ORMException::class, $exc->getPrevious(), "2. The error has to be a ORMException type.");
         } catch (\Error | \Exception $exc) {
-            $this->fail("2. Unexpected exception! " . $exc->getMessage());
+            $this->fail("3. Unexpected exception! " . $exc->getMessage());
         }
     }
 
@@ -435,6 +432,123 @@ class ResumeServiceTest extends AbstractKernelTestCase {
         static::$em->refresh($resume);
 
         $this->assertEquals(ResumeStatusEnum::OFFLINE_TO_PUBLISHED, $resume->getStatus(), "1. The status expected is not ok.");
+    }
+
+    /**
+     * Test the <code>getDetailsForResume</code> method.
+     *
+     * @return void
+     */
+    public function testGetDetailsForResumeWithProfile(): void {
+        // Create the mocks for the test.
+        $resume = $this->createMock(Resume::class);
+        $resume->expects($this->any())
+                ->method('getId')
+                ->willReturn(1);
+        $resume->expects($this->once())
+                ->method('getAuthor')
+                ->willReturn(new User());
+        $resume->expects($this->once())
+                ->method("getAnonymous")
+                ->willReturn(false);
+
+        $profileRepositoryMock = $this->createMock(\Com\Nairus\ResumeBundle\Repository\ProfileRepository::class);
+        $profileRepositoryMock->expects($this->once())
+                ->method('getWithAvatarForUser')
+                ->willReturn(new \Com\Nairus\ResumeBundle\Entity\Profile());
+
+        $educationRepositoryMock = $this->createMock(\Com\Nairus\ResumeBundle\Repository\EducationRepository::class);
+        $educationRepositoryMock->expects($this->once())
+                ->method("findOrderedForResumeId")
+                ->willReturn(new \Com\Nairus\ResumeBundle\Collection\EducationCollection([new Education()]));
+
+        $experienceRepositoryMock = $this->createMock(\Com\Nairus\ResumeBundle\Repository\ExperienceRepository::class);
+        $experienceRepositoryMock->expects($this->once())
+                ->method("findOrderedForResumeId")
+                ->willReturn(new \Com\Nairus\ResumeBundle\Collection\ExperienceCollection([new Experience()]));
+
+        $resumeSkillRepositoryMock = $this->createMock(\Com\Nairus\ResumeBundle\Repository\ResumeSkillRepository::class);
+        $resumeSkillRepositoryMock->expects($this->once())
+                ->method("findOrderedByRank")
+                ->willReturn(new \Com\Nairus\ResumeBundle\Collection\ResumeSkillCollection([new ResumeSkill()]));
+
+        $map = [
+            [Resume::class, $this->createMock(\Com\Nairus\ResumeBundle\Repository\ResumeRepository::class)],
+            [Profile::class, $profileRepositoryMock],
+            [Education::class, $educationRepositoryMock],
+            [Experience::class, $experienceRepositoryMock],
+            [ResumeSkill::class, $resumeSkillRepositoryMock]
+        ];
+        $objectManager = $this->createMock(\Doctrine\ORM\EntityManagerInterface::class);
+        $objectManager
+                ->expects($this->exactly(5))
+                ->method('getRepository')
+                ->willReturnMap($map);
+
+        // launch the test.
+        $service = new ResumeService($objectManager);
+        $dto = $service->getDetailsForResume($resume, "fr");
+
+        $this->assertNotNull($dto, "1. The DTO has not to be null");
+        $this->assertNotNull($dto->getProfile(), "2. The profile has not to be null.");
+        $this->assertNotEmpty($dto->getEducations(), "3. The education's collection has not to be empty.");
+        $this->assertNotEmpty($dto->getExperiences(), "4. The experience's collection has not to be empty.");
+        $this->assertNotEmpty($dto->getResumeSkills(), "5. The resumeSkill's collection has not to be empty.");
+    }
+
+    /**
+     * Test the <code>getDetailsForResume</code> method.
+     *
+     * @return void
+     */
+    public function testGetDetailsForResumeWithNoProfile(): void {
+        // Create the mocks for the test.
+        $resume = $this->createMock(Resume::class);
+        $resume->expects($this->any())
+                ->method('getId')
+                ->willReturn(1);
+        $resume->expects($this->exactly(0))
+                ->method('getAuthor')
+                ->willReturn(new User());
+        $resume->expects($this->once())
+                ->method("getAnonymous")
+                ->willReturn(true);
+
+        $profileRepositoryMock = $this->createMock(\Com\Nairus\ResumeBundle\Repository\ProfileRepository::class);
+        $profileRepositoryMock->expects($this->exactly(0))
+                ->method('getWithAvatarForUser');
+
+        $educationRepositoryMock = $this->createMock(\Com\Nairus\ResumeBundle\Repository\EducationRepository::class);
+        $educationRepositoryMock->expects($this->once())
+                ->method("findOrderedForResumeId");
+
+        $experienceRepositoryMock = $this->createMock(\Com\Nairus\ResumeBundle\Repository\ExperienceRepository::class);
+        $experienceRepositoryMock->expects($this->once())
+                ->method("findOrderedForResumeId");
+
+        $resumeSkillRepositoryMock = $this->createMock(\Com\Nairus\ResumeBundle\Repository\ResumeSkillRepository::class);
+        $resumeSkillRepositoryMock->expects($this->once())
+                ->method("findOrderedByRank");
+
+        $map = [
+            [Resume::class, $this->createMock(\Com\Nairus\ResumeBundle\Repository\ResumeRepository::class)],
+            [Profile::class, $profileRepositoryMock],
+            [Education::class, $educationRepositoryMock],
+            [Experience::class, $experienceRepositoryMock],
+            [ResumeSkill::class, $resumeSkillRepositoryMock]
+        ];
+        $objectManager = $this->createMock(\Doctrine\ORM\EntityManagerInterface::class);
+        $objectManager
+                ->expects($this->exactly(5))
+                ->method('getRepository')
+                ->willReturnMap($map);
+
+        // launch the test.
+        $service = new ResumeService($objectManager);
+        $dto = $service->getDetailsForResume($resume, "fr");
+
+        $this->assertNotNull($dto, "1. The DTO has not to be null");
+        $this->assertNull($dto->getProfile(), "2. The profile has to be null.");
     }
 
 }

@@ -6,6 +6,8 @@ use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Education;
 use Com\Nairus\ResumeBundle\Entity\Resume;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadEducation;
+use Com\Nairus\UserBundle\NSUserBundle;
 
 /**
  * Test Education Repository.
@@ -20,15 +22,30 @@ class EducationRepositoryTest extends AbstractKernelTestCase {
      */
     private static $repository;
 
+    // Common trait for datas cleaning.
+    use \Com\Nairus\CoreBundle\Tests\Traits\DatasCleanerTrait;
+
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":Education");
     }
 
     /**
-     * Test entities insert, update and delete.
+     * {@inheritDoc}
      */
-    public function testInsertUpdateAndDelete() {
+    public function tearDown() {
+        parent::tearDown();
+
+        // Remove test fixtures.
+        $this->cleanDatas(static::$container, [new LoadEducation()]);
+    }
+
+    /**
+     * Test entities insert, update and delete.
+     *
+     * @return void
+     */
+    public function testInsertUpdateAndDelete(): void {
         /* @var $resume Resume */
         $resume = static::$em->find(NSResumeBundle::NAME . ":Resume", 1);
         $newEducation = new Education();
@@ -105,8 +122,10 @@ class EducationRepositoryTest extends AbstractKernelTestCase {
      * Insert test without foreign key.
      *
      * @expectedException \Doctrine\DBAL\Exception\NotNullConstraintViolationException
+     *
+     * @return void
      */
-    public function testInsertWithoutResume() {
+    public function testInsertWithoutResume(): void {
         $education = new Education();
         $education
                 ->setCurrentLocale("fr")
@@ -119,6 +138,71 @@ class EducationRepositoryTest extends AbstractKernelTestCase {
         ;
         static::$em->persist($education);
         static::$em->flush();
+    }
+
+    /**
+     * Test the <code>findOrderedForResumeId</code> method.
+     *
+     * @return void
+     */
+    public function testFindOrderedForResumeIdInFr(): void {
+        // prepare test datas.
+        $loadEducation = new LoadEducation();
+        $loadEducation->load(static::$em);
+
+        // get the resume with resumeSkills added.
+        $author = static::$em->getRepository(NSUserBundle::NAME . ":User")->findOneByUsername('author');
+        /* @var $resume Resume */
+        $resume = static::$em->getRepository(NSResumeBundle::NAME . ":Resume")->findOneByAuthor($author);
+
+        // test the method in fr
+        $educationsOrderedFr = static::$repository->findOrderedForResumeId($resume->getId(), "fr");
+        $educations = static::$repository->findByResume($resume);
+
+        /* @var $firstEducation Education */
+        $firstEducation = $educations[0];
+        /* @var $secondEducation Education */
+        $secondEducation = $educations[1];
+        /* @var $thirdEducation Education */
+        $thirdEducation = $educations[2];
+
+        $this->assertCount(3, $educationsOrderedFr, "1.1 Three entities are expected in the collection.");
+        $this->assertGreaterThan($firstEducation->getStartYear(), $educationsOrderedFr->get(0)->getStartYear(),
+                "1.2 The start year expected has to be greater than the first education inserted in database.");
+        $this->assertEquals($secondEducation->getStartYear(), $educationsOrderedFr->get(1)->getStartYear(),
+                "1.3 The start year expected has to be equals than the second education inserted in database.");
+        $this->assertLessThan($thirdEducation->getStartYear(), $educationsOrderedFr->get(2)->getStartYear(),
+                "1.4 The start year expected has to be less than the third education inserted in database.");
+
+        // test the translations.
+        /* @var $educationTranslations \Doctrine\Common\Collections\ArrayCollection */
+        $educationTranslations = $educationsOrderedFr->first()->getTranslations();
+        $this->assertGreaterThan(0, $educationTranslations->count(), "2.1 At least one translation is expected.");
+        $this->assertTrue($educationTranslations->containsKey("fr"), "2.2 The translation expected has to be in fr.");
+    }
+
+    /**
+     * Test the <code>findOrderedForResumeId</code> method.
+     *
+     * @return void
+     */
+    public function testFindOrderedForResumeIdInEn(): void {
+        // prepare test datas.
+        $loadEducation = new LoadEducation();
+        $loadEducation->load(static::$em);
+
+        // get the resume with resumeSkills added.
+        $author = static::$em->getRepository(NSUserBundle::NAME . ":User")->findOneByUsername('author');
+        /* @var $resume Resume */
+        $resume = static::$em->getRepository(NSResumeBundle::NAME . ":Resume")->findOneByAuthor($author);
+
+        // launch the test.
+        $educationsOrderedEn = static::$repository->findOrderedForResumeId($resume->getId(), "en");
+        $this->assertCount(2, $educationsOrderedEn, "2.1 Two entities in en are expected in the collection");
+        /* @var $educationTranslations \Doctrine\Common\Collections\ArrayCollection */
+        $educationTranslations = $educationsOrderedEn->get(0)->getTranslations();
+        $this->assertGreaterThan(0, $educationTranslations->count(), "2.2 At least one translation is expected.");
+        $this->assertTrue($educationTranslations->containsKey("en"), "2.3 The en translation is expected in the entity.");
     }
 
 }

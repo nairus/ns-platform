@@ -2,10 +2,16 @@
 
 namespace Com\Nairus\ResumeBundle\Repository;
 
+use Com\Nairus\CoreBundle\Dto\ImageConfigDto;
+use Com\Nairus\CoreBundle\Listener\ImageEntityListener;
+use Com\Nairus\CoreBundle\Manager\ImageManagerInterface;
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Entity\Profile;
+use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadProfile;
+use Com\Nairus\UserBundle\NSUserBundle;
 use Com\Nairus\UserBundle\Entity\User;
+use phpmock\MockBuilder;
 
 /**
  * Test de la classe ProfileRepository.
@@ -22,14 +28,31 @@ class ProfileRepositoryTest extends AbstractKernelTestCase {
     /**
      * Gestionnaire des utilisateur.
      *
-     * @var \FOS\UserBundle\Model\UserManagerInterface
+     * @var \Com\Nairus\UserBundle\Repository\UserRepository
      */
-    private static $userManager;
+    private static $userRepository;
 
+    /**
+     * Current user entity.
+     *
+     * @var User
+     */
+    private static $author;
+
+    /**
+     * Load traits to manipulate test datas.
+     */
+    use \Com\Nairus\CoreBundle\Tests\Traits\DatasLoaderTrait;
+    use \Com\Nairus\CoreBundle\Tests\Traits\DatasCleanerTrait;
+
+    /**
+     * {@inheritDoc}
+     */
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         static::$repository = static::$em->getRepository(NSResumeBundle::NAME . ":Profile");
-        static::$userManager = static::$container->get("fos_user.user_manager");
+        static::$userRepository = static::$em->getRepository(User::class);
+        static::$author = static::$userRepository->findOneByUsername("author");
     }
 
     /**
@@ -38,7 +61,7 @@ class ProfileRepositoryTest extends AbstractKernelTestCase {
     public function testInsertUpdateAndDelete() {
         // Test d'insertion.
         /* @var $user User */
-        $user = static::$userManager->findUserByUsername("sadmin");
+        $user = static::$userRepository->findOneByUsername("sadmin");
         $newProfile = new Profile();
         $newProfile
                 ->setAddress("Adresse 4")
@@ -124,6 +147,109 @@ class ProfileRepositoryTest extends AbstractKernelTestCase {
                 ->setZip("13004");
         static::$em->persist($profile);
         static::$em->flush();
+    }
+
+    /**
+     * Test the <code>getByUserWithAvatar</code>.
+     *
+     * @return void
+     */
+    public function testGetWithAvatarForUser(): void {
+        try {
+            // Set the mock for the image manager.
+            $DS = DIRECTORY_SEPARATOR;
+            $uploadBaseDir = static::$container->getParameter('kernel.project_dir') . $DS . "var";
+            $relativeBaseDir = $DS . "tests" . $DS . "image_manager" . $DS;
+            $imageConfigDto = new ImageConfigDto();
+            $imageConfigDto->setBaseUploadDir($uploadBaseDir)
+                    ->setCrop(false)
+                    ->setRelativeBaseDir($relativeBaseDir)
+                    ->setSrcHeight(100)
+                    ->setSrcWidth(100)
+                    ->setThbHeight(50)
+                    ->setThbWidth(50);
+
+            $mockImageManager = $this->getMockBuilder(ImageManagerInterface::class)
+                    ->disableOriginalConstructor()
+                    ->setMethods(["getExtensionFromMimeType", "buildRelativePath", "getExtraFolders", "getConfig", "resize", "crop"])
+                    ->getMock();
+
+            $mockImageManager
+                    ->expects($this->any())
+                    ->method("getExtensionFromMimeType")
+                    ->willReturn("png");
+
+            $mockImageManager
+                    ->expects($this->any())
+                    ->method("getExtraFolders")
+                    ->willReturn("0" . $DS . "1" . $DS);
+
+            $mockImageManager
+                    ->expects($this->any())
+                    ->method("getConfig")
+                    ->willReturn($imageConfigDto);
+
+            $mockImageManager
+                    ->expects($this->any())
+                    ->method("resize")
+                    ->willReturn(true);
+
+            $mockImageManager
+                    ->expects($this->any())
+                    ->method("crop")
+                    ->willReturn(true);
+
+            /* @var $imageEntityListener ImageEntityListener */
+            $imageEntityListener = static::$container->get("ns_core.image_entity_listener");
+
+            // Set the mock in the app container.
+            $imageEntityListener->setImageManager($mockImageManager);
+
+            // Create the builtin php functions mock to enable.
+            $reflectionClass = new \ReflectionClass(ImageEntityListener::class);
+            $builder = new MockBuilder();
+            $builder->setNamespace($reflectionClass->getNamespaceName())
+                    ->setName("unlink")
+                    ->setFunction(function (string $filename, $context = null): bool {
+                        return true;
+                    })
+                    ->build()
+                    ->enable();
+
+            $builder->setName("mkdir")
+                    ->setFunction(function (string $pathname, int $mode = 0777, bool $recursive = false, $context = null): bool {
+                        return true;
+                    })
+                    ->build()
+                    ->enable();
+
+            // load datas.
+            $this->loadDatas(static::$em, [new LoadProfile()]);
+
+            $user = static::$em->getRepository(NSUserBundle::NAME . ":User")->findOneByUsername("sadmin");
+            /* @var $profile Profile */
+            $profile = static::$repository->getWithAvatarForUser($user);
+
+            $this->assertNotNull($profile->getAvatar(), "1. The avatar has to be fetch with the profile.");
+        } catch (\Exception | \Error $exc) {
+            $this->fail("No exception expected: " . $exc->getMessage());
+        } finally {
+            // clean the datas
+            static::cleanDatasAfterTest(static::$container, [new LoadProfile()]);
+
+            // Disable all mocks.
+            \phpmock\Mock::disableAll();
+        }
+    }
+
+    /**
+     * Test the <code>getByUserWithAvatar</code> with <code>NoResultException</code>.
+     *
+     * @expectedException \Doctrine\ORM\NoResultException
+     */
+    public function testGetByUserWithAvatarNoResult() {
+        $user = static::$userRepository->findOneByUsername("user");
+        static::$repository->getWithAvatarForUser($user);
     }
 
 }
