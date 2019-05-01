@@ -2,11 +2,11 @@
 
 namespace Com\Nairus\CoreBundle\Controller;
 
+use Symfony\Bundle\TwigBundle\Controller\ExceptionController as TwigErrorController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\TwigBundle\Controller\ExceptionController as TwigErrorController;
 
 /**
  * Error controller.
@@ -38,6 +38,18 @@ class ErrorController extends TwigErrorController {
             $request->setLocale($matches[1]);
         } else if (null !== $locale) {
             $request->setLocale($locale);
+        }
+
+        if ($exception->getStatusCode() >= Response::HTTP_INTERNAL_SERVER_ERROR) {
+            $logger->error("An error occured while request `{request}`: {message}", [
+                "request" => $request->getRequestUri(),
+                "message" => $exception->getMessage()
+            ]);
+        } else {
+            $logger->info("An error occured while request `{request}`: {message}", [
+                "request" => $request->getRequestUri(),
+                "message" => $exception->getMessage()
+            ]);
         }
 
         return parent::showAction($request, $exception, $logger);

@@ -1,0 +1,108 @@
+{% extends "NSCoreBundle::layout.html.twig" %}
+
+{% trans_default_domain 'NSResumeBundle' %}
+
+{% block title %}{{ "public.details.title" | trans({"%id%": dto.resume.id, "%title%": dto.resume.title})}} - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="container jumbotron">
+        <h1 class="mt-0 display-4 text-dark text-center">{{ dto.resume.title }}</h1>
+
+        {# display the profile details if the resume is not anonymous #}
+        {% if not dto.isAnonymous() %}
+            {% set profile = dto.profile %}
+            <div id="profile" class="text-left">
+                {% if profile.avatar %}
+                    <img class="float-left mr-3 img-thumbnail"
+                         src="{{ profile.avatar.relativePath ~ 'src-' ~ profile.avatar.id ~ '.' ~ profile.avatar.extension }}"
+                         alt="{{ profile.firstName ~ ' ' ~profile.lastName }}" />
+                {% endif %}
+                <div class="ml-1">
+                    <h2 class="mt-0 text-secondary">{{ profile.firstName }} {{ profile.lastName }}</h2>
+                    <p>
+                        {{ profile.address }}<br>
+                        {% if profile.addressAddition %}
+                            {{ profile.addressAddition }}<br>
+                        {% endif %}
+                        {{"profile.show.city" | trans({"%city%": profile.city, "%zip%": profile.zip})}}
+                    </p>
+                    <p class="mb-0">
+                        {% if profile.phone %}
+                            <i class="fas fa-phone"></i>&nbsp;
+                            {{ profile.phone }}
+                        {% endif %}
+
+                        {% if profile.phone and profile.cell %}
+                            &nbsp;/&nbsp;
+                        {% endif %}
+
+                        {% if profile.cell %}
+                            <i class="fas fa-mobile-alt"></i>&nbsp;{{ profile.cell }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <div id="details-container" class="container-fluid row">
+        <section id="experiences" class="col-lg-4 col-md-6 col-sm-12">
+            <div class="mx-1 p-2 bg-light light border-secondary rounded-top">
+                <h2 class="text-primary text-center p-2 h3 border-bottom border-primary">{{ "public.details.experiences" | trans }}</h2>
+                <ul>
+                    {% for experience in dto.experiences %}
+                        <li>
+                            <h3 class="text-secondary h5">{{ experience.company }}&nbsp;-&nbsp;{{ experience.location }}</h3>
+                            <p>
+                                {% set startMonth = ('monthes.' ~ experience.startMonth) | trans({}, "messages") %}
+                                {{ startMonth }}&nbsp;{{ experience.startYear }}
+
+                                &nbsp;-&nbsp;
+
+                                {% if experience.currentJob %}
+                                    {{ "public.details.current-job" | trans }}
+                                {% else %}
+                                    {% set endMonth = ('monthes.' ~ experience.endMonth) | trans({}, "messages") %}
+                                    {{ endMonth }}&nbsp;{{ experience.endYear }}
+                                {% endif %}
+
+                            </p>
+                            <p>
+                                {{ experience.description }}
+                            </p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+        <section id="educations" class="col-lg-4 col-md-6 col-sm-12">
+            <div class="mx-1 p-2 bg-light light border-secondary rounded-top">
+                <h2 class="text-primary text-center p-2 h3 border-bottom border-primary">{{ "public.details.educations" | trans }}</h2>
+                <ul>
+                    {% for education in dto.educations %}
+                        <li>
+                            <h3 class="text-secondary h5">{{ education.diploma }} {{ education.domain }}</h3>
+                            <p>
+                                {{ education.description }}
+                            </p>
+                            <p>
+                                {{ "education.labels.details" | trans({"%institution%": education.institution, "%startYear%": education.startYear, "%endYear%": education.endYear})}}
+                            </p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+        <section id="resume-skills" class="col-lg-4 col-md-6 col-sm-12">
+            <div class="mx-1 p-2 bg-light light border-secondary rounded-top">
+                <h2 class="text-primary text-center p-2 h3 border-bottom border-primary">{{ "public.details.resume-skills" | trans }}</h2>
+                <ul class="row">
+                    {% for resumeSkill in dto.resumeSkills %}
+                        <li class="col-lg-6 col-sm-12">
+                            {{ resumeSkill.skill.title }} <span class="text-info">({{ resumeSkill.skillLevel.title}})</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+    </div>
+{% endblock %}

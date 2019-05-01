@@ -2,16 +2,20 @@
 
 namespace Com\Nairus\ResumeBundle\Controller;
 
+use Com\Nairus\CoreBundle\Exception\GoneHttpException;
 use Com\Nairus\ResumeBundle\NSResumeBundle;
 use Com\Nairus\ResumeBundle\Constants\ExceptionCodeConstants;
+use Com\Nairus\ResumeBundle\Entity\Resume;
+use Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum;
 use Com\Nairus\ResumeBundle\Exception\ResumeListException;
+use Com\Nairus\ResumeBundle\Helper\ResumeHelperInterface;
 use Com\Nairus\ResumeBundle\Service\ResumeServiceInterface;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 /**
  * Public controller.
@@ -29,6 +33,13 @@ class PublicController extends Controller {
      * @var ResumeServiceInterface
      */
     private $resumeService;
+
+    /**
+     * Resume helper.
+     *
+     * @var ResumeHelperInterface
+     */
+    private $resumeHelper;
 
     /**
      * Logger service instance.
@@ -49,13 +60,14 @@ class PublicController extends Controller {
      * @param ResumeServiceInterface $resumeService resume service.
      * @param LoggerInterface        $logger        logger service.
      */
-    public function __construct(ResumeServiceInterface $resumeService, LoggerInterface $logger) {
+    public function __construct(ResumeServiceInterface $resumeService, ResumeHelperInterface $resumeHelper, LoggerInterface $logger) {
         $this->resumeService = $resumeService;
+        $this->resumeHelper = $resumeHelper;
         $this->logger = $logger;
     }
 
     /**
-     * Index controller.
+     * List of all resumes.
      *
      * @param Request $request The current request.
      * @param integer $page    The current page.
@@ -84,18 +96,56 @@ class PublicController extends Controller {
                         "defaultLocale" => $defaultLocale,
             ]);
         } catch (ResumeListException $exc) {
-            switch ($exc->getCode()) {
-                case ExceptionCodeConstants::PAGE_NOT_FOUND:
-                    throw $this->createNotFoundException($exc->getMessage(), $exc);
-
-                case ExceptionCodeConstants::WRONG_PAGE:
-                    throw new BadRequestHttpException($exc->getMessage(), $exc);
-
-                default:
-                    $this->logger->error("An unkown error occured in {controller}.{action}({page})",
-                            ["controller" => self::NAME, "action" => "indexAction", "page" => $page]);
-                    throw new ServiceUnavailableHttpException(null, null, $exc);
+            if ($exc->getCode() == ExceptionCodeConstants::PAGE_NOT_FOUND) {
+                throw $this->createNotFoundException($exc->getMessage(), $exc);
+            } else {
+                throw new BadRequestHttpException($exc->getMessage(), $exc);
             }
+        } catch (\Throwable $exc) {
+            $this->logger->error("An unkown error occured in {controller}.{action}({page})",
+                    ["controller" => self::NAME, "action" => "indexAction", "page" => $page]);
+            throw new ServiceUnavailableHttpException(null, null, $exc);
+        }
+    }
+
+    /**
+     * Details of a resume.
+     *
+     * @param Request $request The current HTTP request.
+     * @param int     $id      The current resume id.
+     *
+     * @return Response
+     */
+    public function detailsAction(Request $request, int $id, string $slug): Response {
+        try {
+            $locale = $request->getLocale();
+
+            // Get the details of the resume for the current locale.
+            $dto = $this->resumeService->getDetailsForResumeId($id, $locale);
+
+            // 410 redirect if the resume is offline.
+            if (ResumeStatusEnum::ONLINE !== $dto->getResume()->getStatus()) {
+                throw new GoneHttpException($this->generateUrl("ns_resume_homepage"), "The resume [$id] is offline for locale [$locale]");
+            }
+
+            // If the resume is incomplete, do a 410 redirection.
+            if (!$this->resumeHelper->isComplete($dto)) {
+                throw new GoneHttpException($this->generateUrl("ns_resume_homepage"), "The resume [$id] is incomplete for locale [$locale]");
+            }
+
+            // 301 redirect if the the slug is not ok
+            if ($slug !== $dto->getResume()->getSlug()) {
+                return $this->redirect($this->generateUrl("ns_resume_details", ['id' => $id, 'slug' => $dto->getResume()->getSlug()]),
+                                Response::HTTP_MOVED_PERMANENTLY);
+            }
+
+            $datesFormat = $this->container->getParameter("dates_format");
+            return $this->render(self::NAME . ':details.html.twig', [
+                        "dto" => $dto,
+                        "dateFormat" => $datesFormat[$request->getLocale()],
+            ]);
+        } catch (\Doctrine\ORM\EntityNotFoundException $exc) {
+            throw new GoneHttpException($this->generateUrl("ns_resume_homepage"), "The resume [$id] does not exist for the locale [$locale]", $exc);
         }
     }
 

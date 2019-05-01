@@ -16,6 +16,17 @@ class EducationCollection extends ArrayCollection {
     /**
      * {@inheritDoc}
      */
+    public function __construct(array $elements = array()) {
+        foreach ($elements as $entity) {
+            $this->validType($entity);
+        }
+
+        parent::__construct($elements);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function add($element): bool {
         $this->validType($element);
         return parent::add($element);
@@ -89,7 +100,7 @@ class EducationCollection extends ArrayCollection {
      */
     private function validType($entity) {
         if (!$entity instanceof Education) {
-            throw new \TypeError("Entité [Education] attendue.");
+            throw new \TypeError("[Education] entity expected.");
         }
     }
 

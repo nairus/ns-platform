@@ -60,6 +60,13 @@ public:
         educations-title: "Educations"
         experiences-title: "Experiences"
         no-resume: No online resume found
+
+    details:
+        title: Resume's details - %title% - No %id%
+        resume-skills: My skills
+        experiences: My professional experiences
+        educations: My qualifications
+        current-job: in position
 education:
     labels:
         institution: Institution

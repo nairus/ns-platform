@@ -18,6 +18,12 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 abstract class AbstractUserWebTestCase extends WebTestCase {
 
+    const USER = "user";
+    const AUTHOR = "author";
+    const MODERATOR = "moderator";
+    const ADMIN = "admin";
+    const SADMIN = "sadmin";
+
     /**
      * Client HTTP de test.
      *
@@ -45,11 +51,11 @@ abstract class AbstractUserWebTestCase extends WebTestCase {
      * @var User[]
      */
     public static $users = [
-        "user" => UserRolesEnum::USER,
-        "author" => UserRolesEnum::AUTHOR,
-        "moderator" => UserRolesEnum::MODERATOR,
-        "admin" => UserRolesEnum::ADMIN,
-        "sadmin" => UserRolesEnum::SUPER_ADMIN
+        self::USER => UserRolesEnum::USER,
+        self::AUTHOR => UserRolesEnum::AUTHOR,
+        self::MODERATOR => UserRolesEnum::MODERATOR,
+        self::ADMIN => UserRolesEnum::ADMIN,
+        self::SADMIN => UserRolesEnum::SUPER_ADMIN
     ];
 
     /**
@@ -100,7 +106,7 @@ abstract class AbstractUserWebTestCase extends WebTestCase {
      */
     protected function logInUser($locale = null): Crawler {
         $user = new User();
-        $user->setUsername("user")
+        $user->setUsername(self::USER)
                 ->setPassword("userpass")
                 ->setEmail("user@test.com")
                 ->addRole(static::$users["user"]);
@@ -117,7 +123,7 @@ abstract class AbstractUserWebTestCase extends WebTestCase {
      */
     protected function logInAuthor($locale = null): Crawler {
         $user = new User();
-        $user->setUsername("author")
+        $user->setUsername(self::AUTHOR)
                 ->setPassword("authorpass")
                 ->setEmail("author@test.com")
                 ->addRole(static::$users["author"]);
@@ -134,7 +140,7 @@ abstract class AbstractUserWebTestCase extends WebTestCase {
      */
     protected function logInModerator($locale = null): Crawler {
         $user = new User();
-        $user->setUsername("moderator")
+        $user->setUsername(self::MODERATOR)
                 ->setPassword("moderatorpass")
                 ->setEmail("moderator@test.com")
                 ->addRole(static::$users["moderator"]);
@@ -151,7 +157,7 @@ abstract class AbstractUserWebTestCase extends WebTestCase {
      */
     protected function logInAdmin($locale = null): Crawler {
         $user = new User();
-        $user->setUsername("admin")
+        $user->setUsername(self::ADMIN)
                 ->setPassword("adminpass")
                 ->setEmail("admin@test.com")
                 ->addRole(static::$users["admin"]);
@@ -168,7 +174,7 @@ abstract class AbstractUserWebTestCase extends WebTestCase {
      */
     protected function logInSuperAdmin($locale = null): Crawler {
         $user = new User();
-        $user->setUsername("sadmin")
+        $user->setUsername(self::SADMIN)
                 ->setPassword("sadminpass")
                 ->setEmail("sadmin@test.com")
                 ->addRole(static::$users["sadmin"]);

@@ -192,11 +192,17 @@ class ResumeService implements ResumeServiceInterface {
     /**
      * {@inheritDoc}
      */
-    public function getDetailsForResume(NSResumeEntity\Resume $resume, string $locale): ResumeDetailsDto {
-        $resumeDetailsDto = new ResumeDetailsDto();
+    public function getDetailsForResumeId(int $resumeId, string $locale): ResumeDetailsDto {
+        // Get the resume with the id.
+        $resume = $this->resumeRepository->findWithTranslationAndAuthor($resumeId, $locale);
+        if (null === $resume) {
+            throw new \Doctrine\ORM\EntityNotFoundException("Resume not found for the id: `$resumeId` and the locale `$locale`.");
+        }
+
+        $resumeDetailsDto = new ResumeDetailsDto($resume);
 
         // Get the profile with avatar if not anonymous.
-        if (!$resume->getAnonymous()) {
+        if (!$resumeDetailsDto->isAnonymous()) {
             $resumeDetailsDto->setProfile($this->profileRepository->getWithAvatarForUser($resume->getAuthor()));
         }
 

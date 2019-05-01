@@ -55,6 +55,13 @@ errors:
         description: >
             La page demandée, ne peut pas être appelée avec la méthode "%method%".
 
+    error410:
+        subtitle:
+            gone: "La page demandée n'existe plus !"
+            error: Erreur 410
+        description: >
+            La page demandée, n'est plus référencée sur le site.
+
 headline: "Travaux de Nairus"
 nav:
     homepage: "Accueil"

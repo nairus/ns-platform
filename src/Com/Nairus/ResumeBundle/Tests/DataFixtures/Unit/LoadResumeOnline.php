@@ -44,7 +44,6 @@ class LoadResumeOnline implements FixtureInterface, RemovableFixturesInterface {
                 ->setZip("13800")
                 ->setUser($user);
 
-        $manager->persist($user);
         $manager->persist($profile);
         $this->prepareResumeDatas($manager, $user);
         $manager->flush();

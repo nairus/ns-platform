@@ -1,6 +1,6 @@
-{# NSResumeBundle::card.html.twig #}
+{# @NSResume/Public/partials/card.html.twig #}
 
-<div class="col-lg-3 col-md-4 col-sm-6 mb-2">
+<div id="resume-{{resume.id}}" class="col-lg-3 col-md-4 col-sm-6 mb-2">
     <div class="card border-secondary resume-tile">
         <div class="card-header text-center">
             <h3 class="card-title">
@@ -48,7 +48,7 @@
 
         <div class="card-footer text-center">
             <a class="card-link"
-               href="#">
+               href="{{ path("ns_resume_details", {"id": resume.id, "slug": resume.slug}) }}">
                 {{ "public.index.show-detail" | trans({}, "NSResumeBundle")}} &raquo;
             </a>
         </div>

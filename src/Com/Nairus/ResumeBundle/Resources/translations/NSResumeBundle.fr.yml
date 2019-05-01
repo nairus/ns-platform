@@ -62,6 +62,13 @@ public:
         educations-title: "Diplômes"
         experiences-title: "Expériences"
         no-resume: Aucun CV en ligne trouvé
+
+    details:
+        title: Détails du CV - %title% - n°%id%
+        resume-skills: Mes compétences
+        experiences: Mes expériences professionnelles
+        educations: Mes diplômes
+        current-job: en poste
 education:
     labels:
         institution: Organisme

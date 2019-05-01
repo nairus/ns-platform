@@ -7,3 +7,12 @@ ns_resume_homepage:
     requirements:
         page: \d*
     methods: GET
+
+ns_resume_details:
+    path: /{slug}-{id}.html
+    defaults:
+        _controller: NSResumeBundle:Public:details
+    requirements:
+        slug: .+
+        id: \d+
+    methods: GET

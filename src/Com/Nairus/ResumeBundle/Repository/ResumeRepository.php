@@ -36,16 +36,15 @@ class ResumeRepository extends \Doctrine\ORM\EntityRepository {
     }
 
     /**
-     * Find a resume with a translation.
-     *
-     * This query's purpose is only for testing translatable behavior.
+     * Find a resume with a translation and his author.
      *
      * @return Resume
      */
-    public function findWithTranslation(int $resumeId, string $locale): ?Resume {
-        $dql = "SELECT resume
+    public function findWithTranslationAndAuthor(int $resumeId, string $locale): ?Resume {
+        $dql = "SELECT resume, trans, author
                 FROM " . static::$entityClass . " resume
                 JOIN resume.translations trans
+                JOIN resume.author author
                 WHERE
                     resume.id = :id
                     AND trans.locale = :locale";

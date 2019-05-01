@@ -64,10 +64,12 @@ interface ResumeServiceInterface {
     /**
      * Return the details of the resume.
      *
-     * @param Resume $resume The current resume.
-     * @param string $locale The current locale.
+     * @param int    $resumeId The current resume id.
+     * @param string $locale   The current locale.
      *
      * @return ResumeDetailsDto
+     *
+     * @throws \Doctrine\ORM\EntityNotFoundException If the resume is not found.
      */
-    public function getDetailsForResume(Resume $resume, string $locale): ResumeDetailsDto;
+    public function getDetailsForResumeId(int $resumeId, string $locale): ResumeDetailsDto;
 }

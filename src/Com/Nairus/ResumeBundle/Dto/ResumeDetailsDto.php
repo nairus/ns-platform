@@ -4,6 +4,7 @@ namespace Com\Nairus\ResumeBundle\Dto;
 
 use Com\Nairus\ResumeBundle\Collection as NSResumeCollection;
 use Com\Nairus\ResumeBundle\Entity\Profile;
+use Com\Nairus\ResumeBundle\Entity\Resume;
 
 /**
  * Details for a resume entity.
@@ -42,9 +43,19 @@ class ResumeDetailsDto {
     private $resumeSkills;
 
     /**
-     * The constructor.
+     * Define if the resume is anonymous or not.
+     *
+     * @var bool
      */
-    public function __construct() {
+    private $resume;
+
+    /**
+     * Constructor.
+     *
+     * @param Resume $resume Define if the resume is anonymous.
+     */
+    public function __construct(Resume $resume) {
+        $this->resume = $resume;
         $this->educations = new NSResumeCollection\EducationCollection();
         $this->experiences = new NSResumeCollection\ExperienceCollection();
         $this->resumeSkills = new NSResumeCollection\ResumeSkillCollection();
@@ -132,6 +143,24 @@ class ResumeDetailsDto {
     public function setResumeSkills(NSResumeCollection\ResumeSkillCollection $resumeSkills): ResumeDetailsDto {
         $this->resumeSkills = $resumeSkills;
         return $this;
+    }
+
+    /**
+     * Return <code>true</code> if the resume is anonymous.
+     *
+     * @return bool
+     */
+    public function isAnonymous(): bool {
+        return $this->resume->getAnonymous();
+    }
+
+    /**
+     * Return the resume.
+     *
+     * @return Resume
+     */
+    public function getResume(): Resume {
+        return $this->resume;
     }
 
 }

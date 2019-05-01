@@ -12,7 +12,7 @@
         <div class="row mb-2">
             {% if entities|length > 0 %}
                 {% for resume in entities %}
-                    {% include 'NSResumeBundle::card.html.twig' %}
+                    {% include '@NSResume/Public/partials/card.html.twig' %}
                 {% endfor %}
             {% else %}
                 <div class="no-resume text-center col-12">

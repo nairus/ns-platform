@@ -188,16 +188,18 @@ class ResumeRepositoryTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test find a resume with his translation.
+     * Test find a resume with his translation and author.
      *
-     * @covers Com\Nairus\ResumeBundle\Repository\ResumeRepository::findWithTranslation
+     * @covers Com\Nairus\ResumeBundle\Repository\ResumeRepository::findWithTranslationAndAuthor
      */
-    public function testFindWithTranslation() {
+    public function testFindWithTranslationAndAuthorFr() {
         /* @var $resumeFr Resume */
-        $resumeFr = static::$repository->findWithTranslation(1, "fr");
-        $this->assertInstanceOf("Com\Nairus\ResumeBundle\Entity\Resume", $resumeFr, "1. The entity has to be an instance of [Resume] with [fr] translation.");
+        $resumeFr = static::$repository->findWithTranslationAndAuthor(1, "fr");
+        $this->assertInstanceOf(Resume::class, $resumeFr, "1. The entity has to be an instance of [Resume] with [fr] translation.");
+        $this->assertNotNull($resumeFr->getAuthor(), "2. The entity has to contain his author.");
+        $this->assertArrayHasKey("fr", $resumeFr->getTranslations(), "3. The resume has to contain [fr] translation.");
 
-        $resumeEn = static::$repository->findWithTranslation(1, "en");
+        $resumeEn = static::$repository->findWithTranslationAndAuthor(1, "en");
         $this->assertNull($resumeEn, "2. The resume musts not exist with [en] locale.");
     }
 

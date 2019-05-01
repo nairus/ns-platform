@@ -14,7 +14,7 @@ use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkillLevel;
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-class PublicControllerTest extends BaseWebTestCase {
+class PublicControllerIndexTest extends BaseWebTestCase {
 
     /**
      * Load traits to manipulate test datas.
