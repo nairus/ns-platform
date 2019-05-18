@@ -6,6 +6,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * Manage News entities.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class NewsRepository extends \Doctrine\ORM\EntityRepository {
 

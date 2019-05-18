@@ -9,7 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Content for News Entity
+ * Content for News Entity.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Table(name="ns_news_content",
  *     uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={

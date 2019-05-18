@@ -45,3 +45,16 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setImageManager, ["@ns_core.image_manager"]]
+
+    ns_core.validator.antiflood:
+        class: Com\Nairus\CoreBundle\Validator\Constraints\AntifloodValidator
+        arguments:
+            $em: "@doctrine.orm.entity_manager"
+        tags:
+            - { name: validator.constraint_validator, alias: ns_core.validator.antiflood }
+
+    ns_core.contact_service:
+        class : Com\Nairus\CoreBundle\Service\ContactService
+        arguments:
+            $entityManager: "@doctrine.orm.entity_manager"
+            $logger: "@logger"

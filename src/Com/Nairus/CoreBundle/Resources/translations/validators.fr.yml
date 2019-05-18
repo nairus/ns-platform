@@ -1,0 +1,10 @@
+## I18n translations for common validators
+
+ns_core:
+    antiflood:
+        default_message: "Votre message ne peut pas être envoyé. Essayez plus tard s'il vous plait !"
+
+    form:
+        contact:
+            errors:
+                phone: Le téléphone ou l'email doivent être renseigné.

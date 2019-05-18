@@ -11,7 +11,10 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * News
+ * News entity.
+ *
+ * @author nairus <nicolas.surian@gmail.com>
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * @ORM\Table(name="ns_news")
  * @ORM\Entity(repositoryClass="Com\Nairus\CoreBundle\Repository\NewsRepository")

@@ -1,0 +1,5 @@
+## I18n translations for common validators
+
+ns_core:
+    antiflood:
+        default_message: "Your message cannot be sent. Please try later!"
