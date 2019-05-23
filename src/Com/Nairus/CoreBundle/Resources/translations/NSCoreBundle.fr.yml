@@ -1,10 +1,6 @@
 ## Translations file only for the bundle
 
 flashes:
-    homepage:
-        contact:
-            page-unavailable: "La page de contact n'est pas encore disponible, merci de revenir plus tard."
-
     success:
         news:
             add: News ajoutée avec succès !
@@ -38,6 +34,21 @@ homepage:
             Je suis un passionné du <strong>web</strong> et j'ai décidé de construire cette plateforme afin de partager et de montrer mon travail.
         github-profile: Voir mon profil Github
         last-news-button: Voir les détails
+
+contact:
+    form:
+        head:
+            title: Formulaire de contact
+        title: A propos de moi
+        subtitle: Si voulez en savoir plus sur moi, contactez-moi via ce formulaire
+        labels:
+            name: Nom / Prénom
+            email: Email
+            phone: Téléphone
+            message: Votre message (50 caractères min.)
+    message:
+        success: "Merci ! Votre message a bien été envoyé."
+        error: "Une erreur est survenue ! Votre message n'a pas pu être envoyé."
 
 news:
     index:

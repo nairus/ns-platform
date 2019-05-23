@@ -44,29 +44,4 @@ class HomepageController extends Controller {
         return $this->render(NSCoreBundle::NAME . ':Homepage:index.html.twig', ["lastNewsContentList" => $lastNewsContentList]);
     }
 
-    /**
-     * Contact controller.
-     *
-     * @param Request $request The current request.
-     *
-     * @return Response
-     */
-    public function contactAction(Request $request): Response {
-        $request->getSession()->getFlashBag()->add(
-                'info',
-                $this->getTranslator()->trans("flashes.homepage.contact.page-unavailable", [], NSCoreBundle::NAME)
-        );
-
-        return $this->redirectToRoute("ns_core_homepage");
-    }
-
-    /**
-     * Retourne une instance du service de traduction.
-     *
-     * @return \Symfony\Component\Translation\TranslatorInterface
-     */
-    private function getTranslator() {
-        return $this->get("translator");
-    }
-
 }

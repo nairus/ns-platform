@@ -110,9 +110,9 @@ class NewsController extends Controller {
 
                 // Add success flash message
                 $this->addFlash('success', $this->getTranslation("flashes.success.news.add"));
-            } catch (\Exception $exc) {
+            } catch (\Throwable $exc) {
                 // Log the error.
-                $this->logError($exc, self::NAME . ":add");
+                $this->logError(static::NAME, "addAction", $exc);
 
                 // Add error flash message.
                 $this->addFlash('error', $this->getTranslation("flashes.error.news.add"));
@@ -178,8 +178,8 @@ class NewsController extends Controller {
 
                 // Add success flash message.
                 $this->addFlash('success', $this->getTranslation("flashes.success.news.edit", $transParams));
-            } catch (\Exception $exc) {
-                $this->logError($exc, NSCoreBundle::NAME . ":edit");
+            } catch (\Throwable $exc) {
+                $this->logError(static::NAME, "editAction", $exc);
 
                 // Add error flash message.
                 $this->addFlash('error', $this->getTranslation("flashes.error.news.edit", $transParams));
@@ -217,8 +217,8 @@ class NewsController extends Controller {
 
                 // Add success flash message.
                 $this->addFlash('success', $this->getTranslation("flashes.success.news.delete", $transParams));
-            } catch (\Exception $exc) {
-                $this->logError($exc, static::NAME . ":delete");
+            } catch (\Throwable $exc) {
+                $this->logError(static::NAME, "deleteAction", $exc);
 
                 // Add error flash message.
                 $this->addFlash('error', $this->getTranslation("flashes.error.news.delete", $transParams));
@@ -242,7 +242,7 @@ class NewsController extends Controller {
         try {
             $newsContent = $this->newsService->findContentForNewsId($news, $locale);
         } catch (\Com\Nairus\CoreBundle\Exception\LocaleError $exc) {
-            $this->logError($exc, static::NAME . ":translation");
+            $this->logError(static::NAME, "translationAction", $exc);
             throw $this->createNotFoundException();
         }
 
@@ -281,8 +281,8 @@ class NewsController extends Controller {
 
                 // Add success flash message.
                 $this->addFlash('success', $this->getTranslation($successFlashMessage, $transParams));
-            } catch (\Exception $exc) {
-                $this->logError($exc, NSCoreBundle::NAME . ":translation");
+            } catch (\Throwable $exc) {
+                $this->logError(static::NAME, "translationAction", $exc);
 
                 // Add error flash message.
                 $this->addFlash('error', $this->getTranslation($errorFlashMessage, $transParam));
@@ -313,8 +313,8 @@ class NewsController extends Controller {
             $news->setPublished(true);
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute("ns_core_homepage");
-        } catch (\Exception $exc) {
-            $this->logError($exc, NSCoreBundle::NAME . ":publish");
+        } catch (\Throwable $exc) {
+            $this->logError(static::NAME, "publishAction", $exc);
 
             // Add error flash message.
             $this->addFlash('error', $this->getTranslation("flashes.error.news.edit", ["%id%" => $news->getId()]));

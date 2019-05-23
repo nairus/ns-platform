@@ -13,6 +13,7 @@ web_profiler:
     toolbar: false
     intercept_redirects: false
 
+# /!\ don't exists anymore in symfony 4.3
 swiftmailer:
     disable_delivery: true
 

@@ -236,10 +236,10 @@ class ResumeController extends Controller {
                 $this->resumeService->removeWithDependencies($resume);
                 $this->addFlash("success", $this->getTranslation("flashes.success.resume.delete", ["%id%" => $resumeId], NSResumeBundle::NAME));
             } catch (FunctionalException $exc) {
-                $this->logError($exc, self::NAME . ":deleteAction");
+                $this->logError(static::NAME, "deleteAction", $exc);
                 $this->addFlash("error", $this->getTranslation($exc->getTranslationKey(), ["%id%" => $resumeId], NSResumeBundle::NAME));
             } catch (\Throwable $exc) {
-                $this->logError($exc, self::NAME . ':deleteAction');
+                $this->logError(static::NAME, "deleteAction", $exc);
                 $this->addFlash("error", $this->getTranslation('flashes.error.unknown', ['%id%' => $resume->getId()], NSResumeBundle::NAME));
             }
         }
@@ -268,7 +268,7 @@ class ResumeController extends Controller {
             } catch (NSResumeException\ResumePublicationException $exc) {
                 return $this->manageResumePublicationException($resume, $exc);
             } catch (\Throwable $exc) {
-                $this->logError($exc, self::NAME . ':publishAction');
+                $this->logError(static::NAME, "publishAction", $exc);
                 $this->addFlash("error", $this->getTranslation('flashes.error.unknown', ['%id%' => $resume->getId()], NSResumeBundle::NAME));
             }
         }
@@ -295,7 +295,7 @@ class ResumeController extends Controller {
                 $this->resumeService->unpublish($resume);
                 $this->addFlash('success', $this->getTranslation('flashes.success.resume.unpublished', ['%id%' => $resume->getId()], NSResumeBundle::NAME));
             } catch (\Throwable $exc) {
-                $this->logError($exc, self::NAME . ':unpublishAction');
+                $this->logError(static::NAME, "unpublishAction", $exc);
                 $this->addFlash("error", $this->getTranslation('flashes.error.unknown', ['%id%' => $resume->getId()], NSResumeBundle::NAME));
             }
         }

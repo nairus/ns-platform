@@ -166,7 +166,7 @@ class SkillLevelController extends Controller {
                 $this->addFlash("success", $this->getTranslation("flashes.success.skill-level.delete", ["%id%" => $id], NSResumeBundle::NAME));
             } catch (FunctionalException $exc) {
                 $this->addFlash("error", $this->getTranslation($exc->getTranslationKey(), ["%id%" => $id], NSResumeBundle::NAME));
-                $this->logError($exc, self::NAME . ":deleteAction");
+                $this->logError(static::NAME, "deleteAction", $exc);
             }
         }
 

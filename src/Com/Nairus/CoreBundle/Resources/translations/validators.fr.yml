@@ -3,6 +3,7 @@
 ns_core:
     antiflood:
         default_message: "Votre message ne peut pas être envoyé. Essayez plus tard s'il vous plait !"
+    antispam: Ouups ! Spam détecté ! Êtes-vous sûr de ne pas être un bot ?
 
     form:
         contact:

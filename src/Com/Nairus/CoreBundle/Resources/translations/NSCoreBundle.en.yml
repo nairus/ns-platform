@@ -1,9 +1,6 @@
 ## Translations file only for the bundle
 
 flashes:
-    homepage:
-        contact:
-            page-unavailable: "Contact page is not yet available, please come back later."
     success:
         news:
             add: News added successfully!
@@ -37,6 +34,21 @@ homepage:
             I'm a <strong>web</strong> passionate and I decided to build this platform to share my experiences and show my works.
         github-profile: See my Github profile
         last-news-button: View details
+
+contact:
+    form:
+        head:
+            title: Contact form
+        title: About me
+        subtitle: If you want to know more about me, please contact me via this form
+        labels:
+            name: Last name / First name
+            email: Email
+            phone: Phone
+            message: Your message (50 characters min.)
+    message:
+        success: "Thank you! Your message has been sent successfully."
+        error: "An error has occurred! Your message could not be sent."
 
 news:
     index:

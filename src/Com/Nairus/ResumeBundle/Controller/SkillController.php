@@ -181,7 +181,7 @@ class SkillController extends Controller {
                 $this->addFlash("success", $this->getTranslation("flashes.success.skill.delete", ["%id%" => $idDeleted], NSResumeBundle::NAME));
             } catch (FunctionalException $exc) {
                 $this->addFlash("error", $this->getTranslation($exc->getTranslationKey(), ["%id%" => $idDeleted], NSResumeBundle::NAME));
-                $this->logError($exc, self::NAME . ":deleteAction");
+                $this->logError(static::NAME, "deleteAction", $exc);
                 return $this->redirectToRoute('skill_show', ['id' => $skill->getId()]);
             }
         }

@@ -1,0 +1,12 @@
+{# empty Twig template #}
+
+{% block antispam_widget %}
+    {% for key, choice in choices %}
+        <button name="{{ full_name }}" id="{{ id }}_{{ key }}" value="{{ choice.value }}" type="submit" class="{{ btn_classes[key] }}" formnovalidate="formnovalidate">
+            {{ label_prefix[key] is not null ? label_prefix[key] | raw : '' }}{{ choice.label | trans }}
+        </button>
+    {% endfor %}
+    <p><em class="emphasis">{{ "antispam.message" | trans }}</em></p>
+    {% endblock %}
+
+{% block antispam_label %}{% endblock %}

@@ -5,6 +5,16 @@ services:
         arguments:
             $newsService: "@ns_core.news_service"
 
+    # the controller is declared to allow service moking for testing error cases
+    Com\Nairus\CoreBundle\Controller\ContactController:
+        public: true
+        tags: ['controller.service_arguments']
+        arguments:
+            $contactService: "@ns_core.contact_service"
+            $logger: "@logger"
+            $translator: "@translator"
+            $mailer: "@mailer"
+
     Com\Nairus\CoreBundle\Controller\NewsController:
         public: true
         tags: ['controller.service_arguments']
@@ -47,6 +57,7 @@ services:
             - [ setImageManager, ["@ns_core.image_manager"]]
 
     ns_core.validator.antiflood:
+        public: true
         class: Com\Nairus\CoreBundle\Validator\Constraints\AntifloodValidator
         arguments:
             $em: "@doctrine.orm.entity_manager"
@@ -54,7 +65,16 @@ services:
             - { name: validator.constraint_validator, alias: ns_core.validator.antiflood }
 
     ns_core.contact_service:
+        public: true
         class : Com\Nairus\CoreBundle\Service\ContactService
         arguments:
             $entityManager: "@doctrine.orm.entity_manager"
             $logger: "@logger"
+
+    ns_core.antispam_type:
+        public: true
+        class: Com\Nairus\CoreBundle\Form\AntispamType
+        arguments:
+            $choices: "%antispam_choices%"
+        tags:
+            - {name: form.type, alias: antispam}

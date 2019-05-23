@@ -1,11 +1,19 @@
 ## Parameters config for test only.
 
 parameters:
+    # internal email for testing
+    mailer_user: nairus.from@test.com
+    mailer_user_to: nairus.to@test.com
+
     # Salt for password (override the production salt).
     secret: ThisIsASecret
 
     # Limit for the news list.
     ns_core.news_limit: 1
+
+    antispam_choices:
+        good: 12fc7bb9b8d24566b51a90e748eb35d9
+        bad:  23ab771164ed4db4a5b0641fc35e7fb2
 
     # Configuration for the ImageManager
     image_manager: &image_manager

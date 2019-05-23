@@ -13,7 +13,7 @@ interface IpTraceable {
     /**
      * Return the ip of the entity.
      *
-     * @return string
+     * @return string|null
      */
-    public function getIp(): string;
+    public function getIp(): ?string;
 }

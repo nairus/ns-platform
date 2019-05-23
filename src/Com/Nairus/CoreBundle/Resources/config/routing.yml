@@ -8,4 +8,5 @@ ns_core_homepage:
 
 ns_core_contact:
     path:     /contact
-    defaults: { _controller: NSCoreBundle:Homepage:contact }
+    defaults: { _controller: NSCoreBundle:Contact:form }
+    methods:  [GET, POST]

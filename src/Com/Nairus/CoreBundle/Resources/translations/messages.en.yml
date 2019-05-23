@@ -131,3 +131,9 @@ monthes:
     10: October
     11: November
     12: December
+
+antispam:
+    message: "* If you are not a bot, please click on the blue button to send your message."
+    options:
+        good: Send
+        bad: "Do not send *"

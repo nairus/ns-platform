@@ -45,11 +45,23 @@ trait CommonComponentsTrait {
     /**
      * Log an error.
      *
-     * @param \Throwable $error   The error to log.
-     * @param string     $context The error context (name of the service, controller, bundle ...).
+     * @param string     $who           The class / bundle name where the error occured.
+     * @param string     $how           The method where the error occured.
+     * @param \Throwable $error         The exception/error to log.
+     * @param string     $customMessage The custom message to log (replace the default message).
+     * @param array      $customContext The custom context (merge with the default context: ['class' => $who, 'method' => $how]).
+     *
+     * @return void
      */
-    protected function logError(\Throwable $error, string $context): void {
-        $this->logger->error($error->getMessage(), [$context => $error]);
+    protected function logError(string $who, string $how, \Throwable $error = null, string $customMessage = "", array $customContext = []): void {
+        $context = array_merge(['class' => $who, 'method' => $how], $customContext);
+        $message = empty($customMessage) ? "An error occured for class [{class}], method [{method}]" : $customMessage;
+        if (null !== $error) {
+            $context['error'] = $error->getMessage();
+            $message .= ", message: {error}";
+        }
+
+        $this->logger->error($message, $context);
     }
 
 }

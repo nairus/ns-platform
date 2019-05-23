@@ -45,7 +45,7 @@ abstract class BaseWebTestCase extends WebTestCase {
      * @return EntityManagerInterface
      */
     protected function getEntityManager(): EntityManagerInterface {
-        return $this->client->getKernel()->getContainer()->get("doctrine")->getManager();
+        return $this->client->getContainer()->get("doctrine")->getManager();
     }
 
 }

@@ -51,7 +51,10 @@ twig:
     exception_controller: NSCoreBundle:Error:show
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
-    form_themes: ['bootstrap_4_layout.html.twig']
+    form_themes:
+        - 'bootstrap_4_layout.html.twig'
+        - 'NSCoreBundle:Templates:antispam.html.twig'
+
     # View globale variables
     globals:
         webmaster: "%app_webmaster%"

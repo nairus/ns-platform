@@ -1,4 +1,6 @@
 /* main styles */
+
+/* thoses `header` classes override bootstrap classes */
 h1,h2,h3,h4,h5,h6 {
     font-family: Verdana, Arial, sans-serif;
     color: #333;
@@ -54,4 +56,8 @@ h6 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.emphasis {
+    font-size: 0.6em;
 }

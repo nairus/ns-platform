@@ -3,3 +3,9 @@
 ns_core:
     antiflood:
         default_message: "Your message cannot be sent. Please try later!"
+    antispam: Ooops! Spam detected! Are you sure that your are not a bot?
+
+    form:
+        contact:
+            errors:
+                phone: The phone or email must be filled in.

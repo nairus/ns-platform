@@ -18,8 +18,8 @@
                 <a class="nav-link {%if app.request.pathinfo matches '~^/(en/)?resume/+$~' %}active{%endif%}"
                    href="{{path("ns_resume_homepage")}}">{{ "nav.resume.list"|trans }}</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="{{path("ns_core_contact")}}">{{ "nav.contact"|trans }}</a>
+            <li class="nav-item {%if app.request.get('_route') == "ns_core_contact" %}active{%endif%}">
+                <a class="nav-link" href="{{path("ns_core_contact")}}">{{ "nav.contact"|trans }}</a>
             </li>
             {% include 'NSCoreBundle::admin-nav.html.twig' %}
         </ul>

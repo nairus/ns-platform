@@ -105,9 +105,9 @@ class ContactMessage implements IpTraceable {
     /**
      * Get name.
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string {
+    public function getName(): ?string {
         return $this->name;
     }
 
@@ -192,9 +192,9 @@ class ContactMessage implements IpTraceable {
     /**
      * Get ip.
      *
-     * @return string
+     * @return string|null
      */
-    public function getIp(): string {
+    public function getIp(): ?string {
         return $this->ip;
     }
 

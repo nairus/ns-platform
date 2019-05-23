@@ -1,0 +1,58 @@
+{% extends "NSCoreBundle::layout.html.twig" %}
+
+{% block title %}{{ "contact.form.head.title" | trans({}, "NSCoreBundle") }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ '/bundles/nscore/css/forms.css' }}" type="text/css">
+{% endblock %}
+
+{% block body %}
+    <div id="contact-form" class="container">
+        {{ include("NSCoreBundle::messages.html.twig") }}
+        <div class="jumbotron">
+            <h1 class="display-4 text-center">{{ "contact.form.title" | trans({}, "NSCoreBundle") }}</h1>
+            <p class="text-center"><em class="text-center">{{ "contact.form.subtitle" | trans({}, "NSCoreBundle") }}</em></p>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="form-group">
+                        <label for="com_nairus_corebundle_contactmessage_name" class="required">{{ 'contact.form.labels.name' | trans({}, "NSCoreBundle")}}</label>
+                        {{ form_widget(form.name) }}
+                        {{ form_errors(form.name) }}
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <div class="form-group">
+                        <label for="com_nairus_corebundle_contactmessage_phone">{{ 'contact.form.labels.phone' | trans({}, "NSCoreBundle")}}</label>
+                        {{ form_widget(form.phone) }}
+                        {{ form_errors(form.phone) }}
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <div class="form-group">
+                        <label for="com_nairus_corebundle_contactmessage_email">{{ 'contact.form.labels.email' | trans({}, "NSCoreBundle")}}</label>
+                        {{ form_widget(form.email) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="com_nairus_corebundle_contactmessage_message">{{ 'contact.form.labels.message' | trans({}, "NSCoreBundle")}}</label>
+                {{ form_widget(form.message) }}
+                {{ form_errors(form.message) }}
+            </div>
+
+            {# Rest of the form #}
+            <div class="row actions mt-2">
+                {{ form_rest(form) }}
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

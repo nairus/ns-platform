@@ -82,46 +82,6 @@ class HomepageControllerTest extends BaseWebTestCase {
     }
 
     /**
-     * Test contact action.
-     *
-     * @return void
-     */
-    public function testContact(): void {
-        $client = $this->getClient();
-        $client->request("GET", "/contact");
-        $this->assertEquals(302, $this->getClient()->getResponse()->getStatusCode(), "1. The response has to return a [302] code.");
-
-        $crawler = $client->followRedirect();
-        $uriRedirect = $client->getRequest()->getUri();
-        $this->assertEquals("http://localhost/", $uriRedirect, "2.1 The redirect uri has to be correct");
-        $this->assertContains(
-                "La page de contact n'est pas encore disponible, merci de revenir plus tard.",
-                $crawler->filter(".message-container .alert-info")->text(),
-                "2.2 The redirect message has to be correct.");
-    }
-
-    /**
-     * Test contact action in english.
-     *
-     * @covers Com\Nairus\CoreBundle\Controller\HomepageController::contactAction
-     *
-     * @return void
-     */
-    public function testContactEn(): void {
-        $client = $this->getClient();
-        $client->request("GET", "/en/contact");
-        $this->assertEquals(302, $this->getClient()->getResponse()->getStatusCode(), "1. The response has to return a [302] code.");
-
-        $crawler = $client->followRedirect();
-        $uriRedirect = $client->getRequest()->getUri();
-        $this->assertEquals("http://localhost/en/", $uriRedirect, "2.1 The redirect uri has to be correct");
-        $this->assertContains(
-                "Contact page is not yet available, please come back later.",
-                $crawler->filter(".message-container .alert-info")->text(),
-                "2.2 The redirect message has to be correct.");
-    }
-
-    /**
      * Test not found exception.
      *
      * @return void
