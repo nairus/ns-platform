@@ -1,0 +1,47 @@
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block title %}{{ "contact-message.show.title" | trans({"%id%": contactMessage.id}, "NSCoreBundle") }} - {{ parent() }}{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "contact-message.show.title" | trans({"%id%": contactMessage.id}, "NSCoreBundle") }}</h1>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            {% set separator = (contactMessage.phone and contactMessage.email) ? "&nbsp;/&nbsp;" : "" %}
+            <p>{{ contactMessage.name }}</p>
+            <p>
+                {{ contactMessage.phone }}{{ separator|raw }}{{ contactMessage.email }}
+            </p>
+            <p>{{ contactMessage.message }}</p>
+            <p>
+                <em>
+                    {% if blacklistForm is not defined %}<i class="fas fa-user-slash"></i>{%endif%}{{ contactMessage.ip }}
+                    {% if contactMessage.requestDate %}&nbsp;-&nbsp;{{ contactMessage.requestDate|localizeddate('short', 'short', null, null, dateFormat) }}{% endif %}
+                </em>
+            </p>
+        </div>
+        <div class="card-footer actions">
+            <a class="btn btn-secondary mx-2 my-1" href="{{ path('sadmin_contact_index') }}">
+                <i class="fas fa-chevron-left"></i>
+                {{ "actions.list" | trans }}
+            </a>
+
+            {{ form_start(deleteForm, {'attr': {'class': "d-inline-block mb-2 mr-2"}}) }}
+            <button class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i>
+                {{ "actions.delete" | trans}}
+            </button>
+            {{ form_end(deleteForm) }}
+
+            {% if blacklistForm is defined %}
+                {{ form_start(blacklistForm, {'attr': {'class': "d-inline-block mb-2"}}) }}
+                <button class="btn btn-warning">
+                    <i class="fas fa-user-slash"></i>
+                    {{ "actions.blacklist" | trans}}
+                </button>
+                {{ form_end(blacklistForm) }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

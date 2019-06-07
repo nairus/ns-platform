@@ -13,6 +13,9 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ path("news_index") }}">{{ "nav.authentication.news" | trans }}</a>
             {% endif %}
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <a class="dropdown-item" href="{{ path("sadmin_contact_index") }}">{{ "nav.authentication.contacts" | trans }}</a>
+            {% endif %}
             {% if is_granted('ROLE_AUTHOR') %}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ path("resume_index") }}">{{ "nav.authentication.resume.my-resumes" | trans }}</a>

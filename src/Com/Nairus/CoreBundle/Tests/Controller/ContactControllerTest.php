@@ -99,8 +99,8 @@ class ContactControllerTest extends BaseWebTestCase {
 
         // 3. send a message
         $submitForm = $form->selectButton("Envoyer")->form([
-            "com_nairus_corebundle_contactmessage[name]" => "Son Goku",
-            "com_nairus_corebundle_contactmessage[message]" => "Lorem ipsum dolor sit amet, consectetur cras amet.",
+            "com_nairus_corebundle_contactmessage[name]" => "<span>Son Goku</span>",
+            "com_nairus_corebundle_contactmessage[message]" => "<script>alert('foo');</script>Lorem ipsum dolor sit amet, consectetur cras amet.",
             "com_nairus_corebundle_contactmessage[email]" => "son.goku@dragonball.super",
             "com_nairus_corebundle_contactmessage[phone]" => "+33 701 020 304"
         ]);
@@ -138,7 +138,7 @@ class ContactControllerTest extends BaseWebTestCase {
         $this->assertEquals("Son Goku", $contactMessage->getName(), "3.12 The name of the contact is not ok");
         $this->assertEquals("son.goku@dragonball.super", $contactMessage->getEmail(), "3.13 The email of the contact is not ok");
         $this->assertEquals("+33 701 020 304", $contactMessage->getPhone(), "3.14 The phone of the contact is not ok");
-        $this->assertEquals("Lorem ipsum dolor sit amet, consectetur cras amet.", $contactMessage->getMessage(),
+        $this->assertEquals("alert('foo');Lorem ipsum dolor sit amet, consectetur cras amet.", $contactMessage->getMessage(),
                 "3.15 The message of the contact is not ok");
 
         // 4. try to resend a message (antiflood constraint error)

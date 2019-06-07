@@ -16,7 +16,7 @@ class NewsPaginatorDto {
      * Map of missing translation for news collection.
      *
      * Key: news_id / Value: array <string>
-     * Exemple of map:
+     * Example of map:
      * [
      *   1 => ["fr", "en"],
      *   2 => ["en"],

@@ -6,6 +6,7 @@ use Com\Nairus\CoreBundle\Entity as NSEntity;
 use Com\Nairus\CoreBundle\Exception\FunctionalException;
 use Com\Nairus\CoreBundle\Repository as NSRepository;
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
+use Com\Nairus\CoreBundle\Tests\DataFixtures\Unit\LoadContactMessage;
 
 /**
  * Test of ContactService.
@@ -21,10 +22,10 @@ class ContactServiceTest extends AbstractKernelTestCase {
      * {@inheritDoc}
      */
     protected function tearDown() {
-        // Truncate the datas table.
-        $this->cleanDatas(static::$container, [NSEntity\ContactMessage::class]);
-
         parent::tearDown();
+
+        // Truncate the datas table.
+        $this->cleanDatas(static::$container, [NSEntity\ContactMessage::class, NSEntity\BlacklistedIp::class]);
     }
 
     /**
@@ -34,7 +35,7 @@ class ContactServiceTest extends AbstractKernelTestCase {
      */
     public function testHandleContactMessage(): void {
         // 1. nominal case
-        $contactService = new ContactService(static::$em, static::$container->get("logger"));
+        $contactService = $this->getService();
 
         // prepare the datas to handle
         $contactMessage = new NSEntity\ContactMessage();
@@ -64,15 +65,19 @@ class ContactServiceTest extends AbstractKernelTestCase {
             $blacklistedIpRepository->expects($this->once())
                     ->method("isBlackListed")
                     ->willReturn(true);
+            $paramsMap = [
+                [NSEntity\BlacklistedIp::class, $blacklistedIpRepository],
+                [NSEntity\ContactMessage::class, $this->createMock(NSRepository\ContactMessageRepository::class)]
+            ];
             $entityManager = $this->createMock(\Doctrine\ORM\EntityManagerInterface::class);
-            $entityManager->expects($this->once())
+            $entityManager->expects($this->exactly(2))
                     ->method('getRepository')
-                    ->willReturn($blacklistedIpRepository);
+                    ->willReturnMap($paramsMap);
             $entityManager->expects($this->exactly(0))
                     ->method("beginTransaction");
 
             // prepare the datas to handle
-            $contactService = new ContactService($entityManager, static::$container->get("logger"));
+            $contactService = $this->getService($entityManager);
             $contactMessage = new NSEntity\ContactMessage();
             $contactMessage->setEmail("son.goku@dbz.com")
                     ->setMessage("Hello world!")
@@ -99,10 +104,14 @@ class ContactServiceTest extends AbstractKernelTestCase {
             $blacklistedIpRepository->expects($this->once())
                     ->method("isBlackListed")
                     ->willReturn(false);
+            $paramsMap = [
+                [NSEntity\BlacklistedIp::class, $blacklistedIpRepository],
+                [NSEntity\ContactMessage::class, $this->createMock(NSRepository\ContactMessageRepository::class)]
+            ];
             $entityManager = $this->createMock(\Doctrine\ORM\EntityManagerInterface::class);
-            $entityManager->expects($this->once())
+            $entityManager->expects($this->exactly(2))
                     ->method('getRepository')
-                    ->willReturn($blacklistedIpRepository);
+                    ->willReturnMap($paramsMap);
             $entityManager->expects($this->once())
                     ->method("beginTransaction");
             $entityManager->expects($this->once())
@@ -116,7 +125,7 @@ class ContactServiceTest extends AbstractKernelTestCase {
                     ->method("rollback");
 
             // prepare the datas to handle
-            $contactService = new ContactService($entityManager, static::$container->get("logger"));
+            $contactService = $this->getService($entityManager);
             $contactMessage = new NSEntity\ContactMessage();
             $contactMessage->setEmail("son.goku@dbz.com")
                     ->setMessage("Hello world!")
@@ -140,6 +149,105 @@ class ContactServiceTest extends AbstractKernelTestCase {
         $this->assertNotNull($service, "1. The service has to be in the container.");
         $this->assertInstanceOf(ContactServiceInterface::class, $service, "2. The service has to be an instance of [ContactServiceInterface]");
         $this->assertInstanceOf(ContactService::class, $service, "3. The service has to be an instance of [ContactService]");
+    }
+
+    /**
+     * Test the <code>findAllForPage</code> method.
+     *
+     * @return void
+     */
+    public function testFindAllForPage(): void {
+        // load datas for testing
+        $loadContactMessage = new LoadContactMessage();
+        $loadContactMessage->load(static::$em);
+
+        // test for page 1
+        $contactService = $this->getService();
+        $dtoPage1 = $contactService->findAllForPage(1, 2);
+
+        // verify for page 1
+        $this->assertNotNull($dtoPage1, "1.1 The dto expected is null");
+        $this->assertSame(2, $dtoPage1->getPages(), "1.2 Two pages are expected");
+        $this->assertCount(2, $dtoPage1->getEntities(), "1.3 Two entities are expected in the collection");
+        $this->assertCount(1, $dtoPage1->getBlacklistedIps(), "1.4 One blacklisted ip is expected");
+        $this->assertArrayHasKey("127.0.0.3", $dtoPage1->getBlacklistedIps(), "1.5 The ip expected is not ok.");
+
+        // test for page 2
+        $dtoPage2 = $contactService->findAllForPage(2, 2);
+
+        // verify for page 1
+        $this->assertNotNull($dtoPage2, "2.1 The dto expected is null");
+        $this->assertSame(2, $dtoPage2->getPages(), "2.2 Two pages are expected");
+        $this->assertCount(1, $dtoPage2->getEntities(), "2.3 One entity expected in the collection");
+        $this->assertCount(1, $dtoPage2->getBlacklistedIps(), "2.4 One blacklisted ip is expected");
+        $this->assertArrayHasKey("127.0.0.1", $dtoPage2->getBlacklistedIps(), "2.5 The ip expected is not ok.");
+    }
+
+    /**
+     * Test the <code>findAllForPage</code> method.
+     *
+     * @expectedException \Com\Nairus\CoreBundle\Exception\PaginatorException
+     *
+     * @return void
+     */
+    public function testFindAllForPageWithBadPage(): void {
+        $contactService = $this->getService();
+        $contactService->findAllForPage(0, 2);
+    }
+
+    /**
+     * Test <code>blacklistContactMessage</code> method.
+     *
+     * @return void
+     */
+    public function testBlacklistContactMessage(): void {
+        // load datas for testing
+        $loadContactMessage = new LoadContactMessage();
+        $loadContactMessage->load(static::$em);
+
+        // get the entity to blacklist.
+        $contactMessage = static::$em->getRepository(NSEntity\ContactMessage::class)->findOneByIp("127.0.0.2");
+
+        // launch the test.
+        $service = $this->getService();
+        $this->assertTrue($service->blacklistContactMessage($contactMessage), "1. The ip has to be blacklisted");
+        $this->assertFalse($service->blacklistContactMessage($contactMessage), "2. The ip has not to be blacklisted");
+    }
+
+    /**
+     * Test <code>deleteContactMessage</code> method.
+     *
+     * @return void
+     */
+    public function testDeleteContactMessage(): void {
+        // load datas for testing
+        $loadContactMessage = new LoadContactMessage();
+        $loadContactMessage->load(static::$em);
+
+        // get the entity to blacklist.
+        /* @var $contactMessage NSEntity\ContactMessage */
+        $contactMessage = static::$em->getRepository(NSEntity\ContactMessage::class)->findOneByIp("127.0.0.2");
+        $id = $contactMessage->getId();
+
+        // launch the test.
+        $service = $this->getService();
+        $idDeleted = $service->deleteContactMessage($contactMessage);
+
+        // verify the test.
+        $this->assertSame($id, $idDeleted, "1. The id expected is not ok.");
+        $this->assertNull(static::$em->find(NSEntity\ContactMessage::class, $id), "2. The entity has to be deleted in database.");
+    }
+
+    /**
+     * Create and return the service instance.
+     *
+     * @param EntityManagerInterface $em
+     *
+     * @return ContactService
+     */
+    private function getService(\Doctrine\ORM\EntityManagerInterface $em = null): ContactService {
+        $entityManager = $em ? $em : static::$em;
+        return new ContactService($entityManager, static::$container->get("logger"));
     }
 
 }

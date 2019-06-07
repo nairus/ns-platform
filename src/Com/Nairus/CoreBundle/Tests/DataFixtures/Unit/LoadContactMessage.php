@@ -3,6 +3,7 @@
 namespace Com\Nairus\CoreBundle\Tests\DataFixtures\Unit;
 
 use Com\Nairus\CoreBundle\Entity\ContactMessage;
+use Com\Nairus\CoreBundle\Entity\BlacklistedIp;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -20,16 +21,33 @@ class LoadContactMessage implements FixtureInterface {
      * @param ObjectManager $manager The entity manager.
      */
     public function load(ObjectManager $manager) {
-        $contactMessage = new ContactMessage();
-        $contactMessage->setEmail("goku@dbsuper.com")
-                ->setIp("127.0.0.1")
-                ->setMessage("Bonjour le monde")
-                ->setName("Son Goku")
-                ->setRequestDate(new \DateTime());
+        $currentDate = new \DateTimeImmutable();
+        $datas = [
+            1 => $currentDate,
+            2 => $currentDate->add(new \DateInterval("P1D")),
+            3 => $currentDate->add(new \DateInterval("P2D"))
+        ];
 
-        $manager->persist($contactMessage);
+        foreach ($datas as $ip => $requestDate) {
+            $contactMessage = new ContactMessage();
+            $contactMessage->setEmail("goku@dbsuper.com")
+                    ->setIp("127.0.0.$ip")
+                    ->setMessage("Bonjour le monde")
+                    ->setName("Son Goku")
+                    ->setRequestDate($requestDate);
+            $manager->persist($contactMessage);
+
+            // If this is an odd digit, we blacklist the ip
+            if ($ip % 2) {
+                $blacklistedIp = new BlacklistedIp();
+                $blacklistedIp->setBlacklistedAt(new \DateTime())
+                        ->setIp($contactMessage->getIp());
+                $manager->persist($blacklistedIp);
+            }
+        }
+
         $manager->flush();
-        $manager->clear(ContactMessage::class);
+        $manager->clear();
     }
 
 }

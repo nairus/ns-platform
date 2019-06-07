@@ -37,7 +37,7 @@ class ContactMessageTest extends AbstractKernelTestCase {
      */
     protected function tearDown() {
         parent::tearDown();
-        $this->cleanDatas(static::$container, [ContactMessage::class]);
+        $this->cleanDatas(static::$container, [ContactMessage::class, BlacklistedIp::class]);
         unset($this->validator);
     }
 
@@ -66,7 +66,7 @@ class ContactMessageTest extends AbstractKernelTestCase {
         // prepare datas test.
         $contactMessage = new ContactMessage();
         $contactMessage->setEmail("goku@dbsuper.com")
-                ->setIp("127.0.0.2")
+                ->setIp("127.0.0.99")
                 ->setMessage("Lorem ipsum dolor sit amet, consectetur cras amet.")
                 ->setRequestDate(new \DateTime());
 
@@ -89,7 +89,7 @@ class ContactMessageTest extends AbstractKernelTestCase {
         ];
 
         $contactMessage = new ContactMessage();
-        $contactMessage->setIp("127.0.0.2")
+        $contactMessage->setIp("127.0.0.99")
                 ->setMessage("Lorem ipsum dolor sit amet, consectetur cras amet.")
                 ->setName("Son Goku")
                 ->setRequestDate(new \DateTime());
@@ -106,7 +106,7 @@ class ContactMessageTest extends AbstractKernelTestCase {
         ];
 
         $contactMessage = new ContactMessage();
-        $contactMessage->setIp("127.0.0.2")
+        $contactMessage->setIp("127.0.0.99")
                 ->setMessage("Lorem ipsum dolor sit amet, consectetur cras amet.")
                 ->setName("Son Goku")
                 ->setRequestDate(new \DateTime());
@@ -120,7 +120,7 @@ class ContactMessageTest extends AbstractKernelTestCase {
         // prepare datas test.
         $contactMessage = new ContactMessage();
         $contactMessage->setEmail("goku@dbsuper.com")
-                ->setIp("127.0.0.2")
+                ->setIp("127.0.0.99")
                 ->setName("Son Goku")
                 ->setEmail("goku@son.jp")
                 ->setRequestDate(new \DateTime());

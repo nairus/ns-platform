@@ -332,7 +332,7 @@ class NewsController extends Controller {
     private function createDeleteForm(News $news) {
         return $this->createFormBuilder()
                         ->setAction($this->generateUrl('news_delete', array('id' => $news->getId())))
-                        ->setMethod('DELETE')
+                        ->setMethod(Request::METHOD_DELETE)
                         ->getForm()
         ;
     }

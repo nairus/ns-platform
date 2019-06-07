@@ -5,6 +5,8 @@ parameters:
     ns_core.last_news_limit: 3
     # Limit for the News list (Cf. NewsController::indexAction).
     ns_core.news_limit: 5
+    # Limit for contact message list (Cf. ContactMessageController::indexAction).
+    ns_core.contact_message_limit: 20
     dates_format:
         fr: EEE d MMM Y
         en: EEE, MMM d Y

@@ -10,3 +10,7 @@ ns_core_contact:
     path:     /contact
     defaults: { _controller: NSCoreBundle:Contact:form }
     methods:  [GET, POST]
+
+ns_core_sadmin_contact:
+    resource: "@NSCoreBundle/Resources/config/routing/contactmessage.yml"
+    prefix:   /sadmin/contact

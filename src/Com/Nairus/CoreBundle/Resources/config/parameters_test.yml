@@ -11,6 +11,9 @@ parameters:
     # Limit for the news list.
     ns_core.news_limit: 1
 
+    # Limit for contact message list (Cf. ContactMessageController::indexAction).
+    ns_core.contact_message_limit: 2
+
     antispam_choices:
         good: 12fc7bb9b8d24566b51a90e748eb35d9
         bad:  23ab771164ed4db4a5b0641fc35e7fb2

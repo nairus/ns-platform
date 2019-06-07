@@ -73,6 +73,7 @@ nav:
         welcome: Welcome %username% !
         adminbutton: Admin
         news: Manage News
+        contacts: Manage Contacts
         user:
             account: My account
         resume:
@@ -85,6 +86,7 @@ actions:
     show: Show details
     save: Save
     edit: Edit
+    blacklist: Blacklist ip
     translate: Translate in "%locale%"
     add: Add
     delete: Delete

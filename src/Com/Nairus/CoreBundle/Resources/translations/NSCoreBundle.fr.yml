@@ -11,6 +11,10 @@ flashes:
                 add: Contenu "%locale%" ajouté avec succès pour la news "%news_id%" !
                 edit: Contenu "%locale%" modifié avec succès pour la news "%news_id%" !
 
+        contact-message:
+            delete: Le message n°"%id%" a été supprimé avec succès !
+            blacklist: L'ip "%ip%" a été blacklistée avec succès !
+
     error:
         news:
             add: Une erreur est survenue en ajoutant une news !
@@ -20,6 +24,11 @@ flashes:
             content:
                 add: Une erreur est survenue en ajoutant le contenu "%locale%" pour la news "%news_id%" !
                 edit: Une erreur est survenue en modifiant le contenu "%locale%" pour la news "%news_id%" !
+
+        contact-message:
+            delete: Le message n°"%id%" n'a pas été supprimé !
+            blacklist: L'ip "%ip%" n'a pas été blacklistée !
+            already-blacklisted: L'ip "%ip%" a déjà été blacklistée !
 
 homepage:
     index:
@@ -77,3 +86,15 @@ news:
             title: Titre
             description: Description
             published: Publié ?
+
+contact-message:
+    index:
+        title: "{1}Gestion des contacts|]1,Inf[Gestion des contacts - Page %page%"
+        list: Liste des contacts
+        pagination-label: Pagination des messages de contact
+        cols:
+            name: Nom / Prénom
+            email: Tél. / Email
+            request-date: Date de demande
+    show:
+        title: "Détail du message n°%id%"

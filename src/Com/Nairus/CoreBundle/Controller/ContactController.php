@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Description of ContactController
+ * Front contact controller.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -69,6 +69,7 @@ class ContactController extends Controller {
         // if the form is submitted
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                $this->sanitize($contactMessage);
                 $this->contactService->handleContactMessage($request->getClientIp(), $contactMessage);
                 $request->getSession()->getFlashBag()->add("success", $this->getTranslation("contact.message.success"));
 
@@ -139,6 +140,18 @@ class ContactController extends Controller {
             $this->logError(static::NAME, "sendNotification", null, "The email has not been sent for recipient: {recipient} in `{class}.{method}`, ",
                     ['recipient' => $recipientEmail]);
         }
+    }
+
+    /**
+     * Sanitize the content.
+     *
+     * @param ContactMessage $contactMessage
+     *
+     * @return void
+     */
+    private function sanitize(ContactMessage $contactMessage): void {
+        $contactMessage->setName(strip_tags($contactMessage->getName()))
+                ->setMessage(strip_tags($contactMessage->getMessage()));
     }
 
 }

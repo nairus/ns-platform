@@ -1,0 +1,23 @@
+sadmin_contact_index:
+    path:     /{page}
+    defaults:
+        _controller: "NSCoreBundle:ContactMessage:index"
+        page: 1
+    requirements:
+        page: \d*
+    methods:  GET
+
+sadmin_contact_show:
+    path:     /{id}/show
+    defaults: { _controller: "NSCoreBundle:ContactMessage:show" }
+    methods:  GET
+
+sadmin_contact_blacklist:
+    path: /{id}/blacklist
+    defaults: { _controller: "NSCoreBundle:ContactMessage:blacklist"}
+    methods: POST
+
+sadmin_contact_delete:
+    path: /{id}/delete
+    defaults: { _controller: "NSCoreBundle:ContactMessage:delete"}
+    methods: DELETE

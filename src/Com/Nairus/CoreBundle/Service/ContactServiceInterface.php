@@ -2,6 +2,7 @@
 
 namespace Com\Nairus\CoreBundle\Service;
 
+use Com\Nairus\CoreBundle\Dto\ContactMessageDto;
 use Com\Nairus\CoreBundle\Entity\ContactMessage;
 use Com\Nairus\CoreBundle\Exception\FunctionalException;
 
@@ -29,4 +30,32 @@ interface ContactServiceInterface {
      * @throws FunctionalException
      */
     public function handleContactMessage(string $clientIp, ContactMessage $contactMessage): bool;
+
+    /**
+     * Find contact message for current page.
+     *
+     * @param int $page  The current page.
+     * @param int $limit The limit of entities per page.
+     *
+     * @return ContactMessageDto
+     */
+    public function findAllForPage(int $page, int $limit): ContactMessageDto;
+
+    /**
+     * Delete a contact message and return the entity's id deleted if succeed.
+     *
+     * @param ContactMessage $contactMessage The entity to delete.
+     *
+     * @return int
+     */
+    public function deleteContactMessage(ContactMessage $contactMessage): int;
+
+    /**
+     * Blacklist a contact message ip and return <code>true</code> if succeed.
+     *
+     * @param ContactMessage $contactMessage The entity to blacklist.
+     *
+     * @return bool
+     */
+    public function blacklistContactMessage(ContactMessage $contactMessage): bool;
 }

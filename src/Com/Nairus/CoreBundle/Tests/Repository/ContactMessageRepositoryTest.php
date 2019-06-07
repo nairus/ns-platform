@@ -4,6 +4,8 @@ namespace Com\Nairus\CoreBundle\Repository;
 
 use Com\Nairus\CoreBundle\Tests\AbstractKernelTestCase;
 use Com\Nairus\CoreBundle\Entity\ContactMessage;
+use Com\Nairus\CoreBundle\Entity\BlacklistedIp;
+use Com\Nairus\CoreBundle\Tests\DataFixtures\Unit\LoadContactMessage;
 
 /**
  * Test of ContactMessageRepository.
@@ -34,7 +36,7 @@ class ContactMessageRepositoryTest extends AbstractKernelTestCase {
      */
     protected function tearDown() {
         // Truncate the datas table.
-        $this->cleanDatas(static::$container, [ContactMessage::class]);
+        $this->cleanDatas(static::$container, [ContactMessage::class, BlacklistedIp::class]);
 
         parent::tearDown();
     }
@@ -112,6 +114,33 @@ class ContactMessageRepositoryTest extends AbstractKernelTestCase {
         static::$em->clear(ContactMessage::class);
 
         $this->assertTrue(self::$repository->isFlood($contactMessage, 3600), "2. A flood attack has to be detected.");
+    }
+
+    /**
+     * Test the <code>findAllForPage</code> method.
+     *
+     * @return void
+     */
+    public function testFindForPage(): void {
+        // Prepare test datas.
+        $loadContactMessage = new LoadContactMessage();
+        $loadContactMessage->load(static::$em);
+
+        // launch the test for page 1
+        $paginatorForPage1 = static::$repository->findAllForPage(0, 2);
+
+        // verify the result
+        $this->assertSame(3, $paginatorForPage1->count(), "1.1. Three entities are expected in the collection");
+        $entitiesForPage1 = $paginatorForPage1->getIterator()->getArrayCopy();
+        $this->assertCount(2, $entitiesForPage1, "1.2. Two entities are expected on the page");
+        $this->assertEquals("127.0.0.3", $entitiesForPage1[0]->getIp(), "1.3. The ip of the first entity is not ok");
+        $this->assertEquals("127.0.0.2", $entitiesForPage1[1]->getIp(), "1.4 The ip of the second entity is not ok");
+
+        // launch the test for page 2
+        $paginatorForPage2 = static::$repository->findAllForPage(2, 2);
+        $entitiesForPage2 = $paginatorForPage2->getIterator()->getArrayCopy();
+        $this->assertCount(1, $entitiesForPage2, "2.1. One entities is expected in the collection");
+        $this->assertEquals("127.0.0.1", $entitiesForPage2[0]->getIp(), "2.2. The ip of the first entity is not ok");
     }
 
 }

@@ -6,6 +6,7 @@ use Com\Nairus\CoreBundle\Entity\IpTraceable;
 use Com\Nairus\CoreBundle\Validator\Antifloodable;
 use Com\Nairus\CoreBundle\Entity\ContactMessage;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * ContactMessage repository.
@@ -32,6 +33,23 @@ class ContactMessageRepository extends EntityRepository implements Antifloodable
                 ->getSingleScalarResult();
 
         return $nbMessage > 0;
+    }
+
+    /**
+     * Find contact message for current page.
+     *
+     * @param int $offset The beginning of the collection.
+     * @param int $limit  The limit of entities per page.
+     *
+     * @return Paginator
+     */
+    public function findAllForPage(int $offset, int $limit): Paginator {
+        $qb = $this->createQueryBuilder("cm");
+        $qb->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->orderBy("cm.requestDate", "DESC");
+
+        return new Paginator($qb->getQuery());
     }
 
 }

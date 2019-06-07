@@ -92,13 +92,13 @@ class NewsService implements NewsServiceInterface {
      * {@inheritDoc}
      */
     public function findNewsForPage(int $page, int $limit): NewsPaginatorDto {
-        $newsPaginatorDto = new NewsPaginatorDto();
-
         // Bad page argument
         if ($page < 1) {
             // Throws an exception.
             throw new PaginatorException($page, "Bad page [$page] for new list");
         }
+
+        $newsPaginatorDto = new NewsPaginatorDto();
 
         // Calculate the offset for the current page.
         $offset = ($page - 1) * $limit;

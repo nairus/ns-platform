@@ -11,6 +11,10 @@ flashes:
                 add: Content "%locale%" added successfully for news "%news_id%"!
                 edit: Content "%locale%" modified successfully for news "%news_id%"!
 
+        contact-message:
+            delete: The message No."%id%" has been successfully deleted!
+            blacklist: The "%ip%" ip has been successfully blacklisted!
+
     error:
         news:
             add: An error occured adding a news!
@@ -20,6 +24,11 @@ flashes:
             content:
                 add: An error occured adding content "%locale%" for news "%news_id%"!
                 edit: An error occured modifying content "%locale%" for news "%news_id%"!
+
+        contact-message:
+            delete: The message No. "%id%" has not been deleted!
+            blacklist: The "%ip%" ip hasn't been blacklisted!
+            already-blacklisted: The "%ip%" ip has been blacklisted already!
 
 homepage:
     index:
@@ -77,3 +86,14 @@ news:
             title: Title
             description: Description
             published: Published?
+
+contact-message:
+    index:
+        title: "{1}Contacts management|]1,Inf[Contacts management - Page %page%"
+        list: Contacts list
+        cols:
+            name: Last name / First name
+            email: Phone / Email
+            request-date: Request date
+    show:
+        title: "Detail of the message No. %id%"

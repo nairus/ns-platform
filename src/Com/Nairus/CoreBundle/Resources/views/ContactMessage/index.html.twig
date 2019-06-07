@@ -1,0 +1,102 @@
+{% extends 'NSCoreBundle::admin.html.twig' %}
+
+{% block title %}{{ "contact-message.index.title" | transchoice(currentPage, {"%page%": currentPage}, "NSCoreBundle") }} - {{ parent() }}{% endblock %}
+
+{% block ns_core_admin_body %}
+    <div class="jumbotron">
+        <h1 class="text-center">{{ "contact-message.index.list" | trans({}, "NSCoreBundle") }}</h1>
+
+        {{ include("NSCoreBundle::messages.html.twig") }}
+    </div>
+
+    <div id="contacts-container">
+        {% if items | length > 0 %}
+            <table class="table table-striped table-hover table-light table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th>{{ "contact-message.index.cols.name" | trans({}, "NSCoreBundle") }}</th>
+                        <th>{{ "contact-message.index.cols.email" | trans({}, "NSCoreBundle") }}</th>
+                        <th>Ip</th>
+                        <th>{{ "contact-message.index.cols.request-date" | trans({}, "NSCoreBundle") }}</th>
+                        <th>{{ "table.cols.actions" | trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        {% set contactMessage = item['entity'] %}
+                        {% set deleteForm = item['deleteForm'] %}
+                        {% set blacklistForm = item['blacklistForm'] is defined ? item['blacklistForm'] : false %}
+                        <tr>
+                            <th scope="row"><a href="{{ path('sadmin_contact_show', { 'id': contactMessage.id }) }}">{{ contactMessage.id }}</a></th>
+                            <td>
+                                {{ contactMessage.name }}
+                                <span role="button" data-toggle="popover" data-trigger="hover"
+                                      data-content="{{ contactMessage.message|e('html')|truncate(20, true, '…') }}">
+                                    <i class="far fa-comment-dots"></i>
+                                </span>
+                            </td>
+                            <td>
+                                {% set separator= (contactMessage.email and contactMessage.phone) ? ' - ' : '' %}
+                                {{ contactMessage.email ~ separator ~ contactMessage.phone }}
+                            </td>
+                            <td>{% if not blacklistForm %}<i class="fas fa-user-slash"></i>{% endif %}{{ contactMessage.ip }}</td>
+                            <td>{% if contactMessage.requestDate %}{{ contactMessage.requestDate|localizeddate('short', 'short') }}{% endif %}</td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <a class="btn btn-secondary" href="{{ path('sadmin_contact_show', { 'id': contactMessage.id }) }}">
+                                            <i class="far fa-eye"></i>
+                                            {{ "actions.show" | trans}}
+                                        </a>
+                                    </li>
+                                    <li class="mb-2">
+                                        {{ form_start(deleteForm) }}
+                                        <button class="btn btn-danger">
+                                            <i class="fas fa-trash-alt"></i>
+                                            {{ "actions.delete" | trans}}
+                                        </button>
+                                        {{ form_end(deleteForm) }}
+                                    </li>
+                                    {% if blacklistForm %}
+                                        <li>
+                                            {{ form_start(blacklistForm) }}
+                                            <button class="btn btn-warning">
+                                                <i class="fas fa-user-slash"></i>
+                                                {{ "actions.blacklist" | trans}}
+                                            </button>
+                                            {{ form_end(blacklistForm) }}
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pages > 1 %}
+                <div id="message-contact-pager" class="row">
+                    {#
+                        We set the specific variables for the pagination template.
+                        See ContactMessageController for the generic variables (pages and currentPage).
+                    #}
+                    {% set paginationLabel = ("contact-message.index.pagination-label" | trans({}, "NSCoreBundle")) %}
+                    {% set routeName = "sadmin_contact_index" %}
+                    {% include "NSCoreBundle::pagination.html.twig" %}
+                </div>
+            {% endif %}
+        {% else %}
+            <em>{{ "table.no-item" | trans }}</em>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover({container: 'body', delay: {"show": 100, "hide": 500}});
+        });
+    </script>
+{% endblock %}
