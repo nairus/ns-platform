@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor>
+    <title><![CDATA[NSPlatform documentation]]></title>
+    <parser>
+        <target>docs\build</target>
+    </parser>
+    <transformer>
+        <target>docs</target>
+    </transformer>
+    <logging>
+        <level>warn</level>
+        <paths>
+            <default>{APP_ROOT}/var/logs/{DATE}.log</default>
+            <errors>{APP_ROOT}/var/logs/{DATE}.errors.log</errors>
+        </paths>
+    </logging>
+    <files>
+        <directory>src</directory>
+        <ignore>*\Tests\*</ignore>
+        <ignore>*Test.php</ignore>
+    </files>
+</phpdocumentor>

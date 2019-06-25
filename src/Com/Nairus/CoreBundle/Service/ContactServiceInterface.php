@@ -20,7 +20,7 @@ interface ContactServiceInterface {
     const IS_BLACKLITED_ERROR_CODE = 1;
 
     /**
-     * Handle contact message and return <code>true</code> if succeed, throw a <code>FunctionalException</code> otherwise.
+     * Handle contact message and return `true` if succeed, throw a `FunctionalException` otherwise.
      *
      * @param string         $clientIp       The client ip.
      * @param ContactMessage $contactMessage The contact message.
@@ -51,7 +51,7 @@ interface ContactServiceInterface {
     public function deleteContactMessage(ContactMessage $contactMessage): int;
 
     /**
-     * Blacklist a contact message ip and return <code>true</code> if succeed.
+     * Blacklist a contact message ip and return `true` if succeed.
      *
      * @param ContactMessage $contactMessage The entity to blacklist.
      *

@@ -210,7 +210,7 @@ class ExperienceTest extends KernelTestCase {
     }
 
     /**
-     * Test the <code>getTranslationEntityClass</code> static method.
+     * Test the `getTranslationEntityClass` static method.
      *
      * @covers Com\Nairus\ResumeBundle\Entity\Experience::getTranslationEntityClass
      *

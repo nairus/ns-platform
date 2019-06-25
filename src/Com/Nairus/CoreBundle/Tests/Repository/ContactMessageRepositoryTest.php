@@ -94,7 +94,7 @@ class ContactMessageRepositoryTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>isFlood</code> method.
+     * Test the `isFlood` method.
      *
      * @return void
      */
@@ -117,7 +117,7 @@ class ContactMessageRepositoryTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>findAllForPage</code> method.
+     * Test the `findAllForPage` method.
      *
      * @return void
      */

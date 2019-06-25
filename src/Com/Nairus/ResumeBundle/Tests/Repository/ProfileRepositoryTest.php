@@ -150,7 +150,7 @@ class ProfileRepositoryTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>getByUserWithAvatar</code>.
+     * Test the `getByUserWithAvatar`.
      *
      * @return void
      */
@@ -243,7 +243,7 @@ class ProfileRepositoryTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>getByUserWithAvatar</code> with <code>NoResultException</code>.
+     * Test the `getByUserWithAvatar` with `NoResultException`.
      *
      * @expectedException \Doctrine\ORM\NoResultException
      */

@@ -32,7 +32,7 @@ class ResumeHelperTest extends TestCase {
     }
 
     /**
-     * Test the <code>isComplete</code>.
+     * Test the `isComplete`.
      *
      * @return void
      */
@@ -47,7 +47,7 @@ class ResumeHelperTest extends TestCase {
     }
 
     /**
-     * Test the <code>isComplete</code> with no profile.
+     * Test the `isComplete` with no profile.
      *
      * @return void
      */
@@ -58,7 +58,7 @@ class ResumeHelperTest extends TestCase {
     }
 
     /**
-     * Test the <code>isComplete</code> with no education.
+     * Test the `isComplete` with no education.
      *
      * @return void
      */
@@ -71,7 +71,7 @@ class ResumeHelperTest extends TestCase {
     }
 
     /**
-     * Test the <code>isComplete</code> with no experience.
+     * Test the `isComplete` with no experience.
      *
      * @return void
      */
@@ -85,7 +85,7 @@ class ResumeHelperTest extends TestCase {
     }
 
     /**
-     * Test the <code>isComplete</code> with no resumeSkill.
+     * Test the `isComplete` with no resumeSkill.
      *
      * @return void
      */

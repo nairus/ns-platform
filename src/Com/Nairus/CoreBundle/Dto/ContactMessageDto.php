@@ -36,7 +36,7 @@ class ContactMessageDto {
     }
 
     /**
-     * Return <code>true</code> if the ip is blacklisted.
+     * Return `true` if the ip is blacklisted.
      *
      * @param string $ip The ip to find.
      *

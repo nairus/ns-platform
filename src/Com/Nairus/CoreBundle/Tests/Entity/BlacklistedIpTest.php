@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class BlacklistedIpTest extends TestCase {
 
     /**
-     * Test the <code>getBlacklistedAt</code> method.
+     * Test the `getBlacklistedAt` method.
      */
     public function testGetBlacklistedAt() {
         $blacklistedIp = new BlacklistedIp();

@@ -13,11 +13,11 @@ use Com\Nairus\CoreBundle\Entity\TranslationEntityInterface;
 interface TranslatableEntityInterface {
 
     /**
-     * Return <code>true</code> if the entity has a translation for the current locale, <code>false</code> otherwise.
+     * Return `true` if the entity has a translation for the current locale, `false` otherwise.
      *
      * @param string $locale The current locale.
      *
-     * @return bool <code>true</code> if the entity has a translation for the current field, <code>false</code> otherwise
+     * @return bool `true` if the entity has a translation for the current field, `false` otherwise
      */
     public function hasTranslation(string $locale): bool;
 

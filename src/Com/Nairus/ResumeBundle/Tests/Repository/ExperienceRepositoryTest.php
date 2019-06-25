@@ -145,7 +145,7 @@ class ExperienceRepositoryTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>findOrderedForResumeId</code> method.
+     * Test the `findOrderedForResumeId` method.
      *
      * @return void
      */
@@ -178,7 +178,7 @@ class ExperienceRepositoryTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>findOrderedForResumeId</code> method.
+     * Test the `findOrderedForResumeId` method.
      *
      * @return void
      */

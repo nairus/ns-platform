@@ -79,7 +79,7 @@ class NewsServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test of the <code>findAllOnlineForPage</code> method.
+     * Test of the `findAllOnlineForPage` method.
      */
     public function testFindLastNewsPublished(): void {
         $newsContents = $this->object->findLastNewsPublished(2, "fr");

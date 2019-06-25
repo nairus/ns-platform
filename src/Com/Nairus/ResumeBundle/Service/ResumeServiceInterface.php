@@ -46,7 +46,7 @@ interface ResumeServiceInterface {
      *
      * @param Resume $resume The resume to remove.
      *
-     * @return bool <code>TRUE</code> if the removal had succeed.
+     * @return bool `TRUE` if the removal had succeed.
      *
      * @throws FunctionalException if an error occured.
      */

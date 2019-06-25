@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use phpmock\MockBuilder;
 
 /**
- * Test of GDImageManager with <code>imagecopyresampled</code> function in failure.
+ * Test of GDImageManager with `imagecopyresampled` function in failure.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -16,7 +16,7 @@ use phpmock\MockBuilder;
 class GDImageManagerResizeFailImageResampledTest extends AbstractImageManagerTest {
 
     /**
-     * Test <code>imagecopyresampled</code> function in failure.
+     * Test `imagecopyresampled` function in failure.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\ImageProcessingException
      * @expectedExceptionCode 2

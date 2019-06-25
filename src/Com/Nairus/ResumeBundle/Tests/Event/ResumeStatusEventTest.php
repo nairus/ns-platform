@@ -26,7 +26,7 @@ class ResumeStatusEventTest extends TestCase {
     }
 
     /**
-     * Test the <code>getResume</code> method.
+     * Test the `getResume` method.
      *
      * @covers Com\Nairus\ResumeBundle\Event\ResumeStatusEvent::getResume
      *

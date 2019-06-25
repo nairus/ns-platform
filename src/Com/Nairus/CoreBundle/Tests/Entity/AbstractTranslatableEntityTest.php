@@ -59,7 +59,7 @@ class AbstractTranslatableEntityTest extends TestCase {
     }
 
     /**
-     * Test the <code>getCurrentLocale</code> method.
+     * Test the `getCurrentLocale` method.
      *
      * @covers Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity::getCurrentLocale
      * @covers Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity::setCurrentLocale
@@ -73,7 +73,7 @@ class AbstractTranslatableEntityTest extends TestCase {
     }
 
     /**
-     * Test the <code>removeTranslation</code> method.
+     * Test the `removeTranslation` method.
      *
      * @covers Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity::removeTranslation
      *
@@ -89,7 +89,7 @@ class AbstractTranslatableEntityTest extends TestCase {
     }
 
     /**
-     * Test the <code>translate</code> method with <code>null</code> locale.
+     * Test the `translate` method with `null` locale.
      *
      * @covers Com\Nairus\CoreBundle\Entity\AbstractTranslatableEntity::translate
      *

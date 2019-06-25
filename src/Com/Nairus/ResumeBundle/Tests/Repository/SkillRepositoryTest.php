@@ -79,7 +79,7 @@ class SkillRepositoryTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>findAllForPage</code> method.
+     * Test the `findAllForPage` method.
      *
      * @covers Com\Nairus\ResumeBundle\Repository\SkillRepository::findAllForPage
      *

@@ -55,6 +55,13 @@ This is a web platform internationalized for personal website, resumes, blog pos
     php bin/console assets:install
     ```
 
+1. Add users
+
+    Actually, no user can subscribe in this version. So you need to use the command below to create users and manage the application.
+    ```bash
+    php bin/console fos:user:create nairus --super-admin
+    ```
+
 1. Configure Web server
     
     *Note: I presume you have installed the web server wanted first.  

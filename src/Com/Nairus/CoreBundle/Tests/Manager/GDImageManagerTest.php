@@ -45,7 +45,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>buildRelativePath</code> method with <code>KeyMissingException</code> thrown.
+     * Test the `buildRelativePath` method with `KeyMissingException` thrown.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\KeyMissingException
      * @expectedExceptionMessage The key [uploads_base_dir] is missing.
@@ -58,7 +58,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>buildRelativePath</code> method with <code>KeyMissingException</code> thrown.
+     * Test the `buildRelativePath` method with `KeyMissingException` thrown.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\KeyMissingException
      * @expectedExceptionMessage The key [relative_base_dir] is missing.
@@ -71,7 +71,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>buildRelativePath</code> method with <code>KeyMissingException</code> thrown.
+     * Test the `buildRelativePath` method with `KeyMissingException` thrown.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\KeyMissingException
      * @expectedExceptionMessage The key [entities] is missing.
@@ -87,7 +87,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>getExtraFolders</code> method.
+     * Test the `getExtraFolders` method.
      *
      * @return void
      */
@@ -102,7 +102,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>buildRelativePath</code> method.
+     * Test the `buildRelativePath` method.
      *
      * @return void
      */
@@ -117,7 +117,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>getConfig</code> method.
+     * Test the `getConfig` method.
      *
      * @return void
      */
@@ -134,7 +134,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test <code>getConfig</code> with <code>src_height</code> key missing.
+     * Test `getConfig` with <code>src_height` key missing.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\KeyMissingException
      * @expectedExceptionMessage The key [src_height] is missing.
@@ -159,7 +159,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test <code>getConfig</code> with <code>src_width</code> key missing.
+     * Test `getConfig` with <code>src_width` key missing.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\KeyMissingException
      * @expectedExceptionMessage The key [src_width] is missing.
@@ -184,7 +184,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test <code>getConfig</code> with <code>thb_height</code> key missing.
+     * Test `getConfig` with <code>thb_height` key missing.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\KeyMissingException
      * @expectedExceptionMessage The key [thb_height] is missing.
@@ -209,7 +209,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test <code>getConfig</code> with <code>thb_width</code> key missing.
+     * Test `getConfig` with <code>thb_width` key missing.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\KeyMissingException
      * @expectedExceptionMessage The key [thb_width] is missing.
@@ -234,7 +234,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test <code>getConfig</code> with <code>crop</code> key missing.
+     * Test `getConfig` with <code>crop` key missing.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\KeyMissingException
      * @expectedExceptionMessage The key [crop] is missing.
@@ -259,7 +259,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test <code>getConfig</code> with <code>mock_image_entity</code> key missing.
+     * Test `getConfig` with <code>mock_image_entity` key missing.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\KeyMissingException
      * @expectedExceptionMessage The key [mock_image_entity] is missing.
@@ -277,7 +277,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>crop</code> method.
+     * Test the `crop` method.
      *
      * @return void
      */
@@ -302,7 +302,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>crop</code> method with bad image type.
+     * Test the `crop` method with bad image type.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\ImageProcessingException
      * @expectedException 3
@@ -322,7 +322,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>crop</code> method with bad width.
+     * Test the `crop` method with bad width.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\ImageProcessingException
      * @expectedException 3
@@ -342,7 +342,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>crop</code> method with bad height.
+     * Test the `crop` method with bad height.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\ImageProcessingException
      * @expectedException 3
@@ -362,7 +362,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>resize</code> method.
+     * Test the `resize` method.
      *
      * @return void
      */
@@ -409,7 +409,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>crop</code> method with bad image type.
+     * Test the `crop` method with bad image type.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\ImageProcessingException
      * @expectedExceptionCode 3
@@ -429,7 +429,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>crop</code> method with bad width.
+     * Test the `crop` method with bad width.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\ImageProcessingException
      * @expectedExceptionCode 3
@@ -449,7 +449,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>crop</code> method with bad height.
+     * Test the `crop` method with bad height.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\ImageProcessingException
      * @expectedExceptionCode 3
@@ -469,7 +469,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>getExtensionFromMimeType</code> method.
+     * Test the `getExtensionFromMimeType` method.
      *
      * @return void
      */
@@ -491,7 +491,7 @@ class GDImageManagerTest extends AbstractImageManagerTest {
     }
 
     /**
-     * Test the <code>getExtensionFromMimeType</code> method with not an image mimeType.
+     * Test the `getExtensionFromMimeType` method with not an image mimeType.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\ImageProcessingException
      * @expectedExceptionCode 6

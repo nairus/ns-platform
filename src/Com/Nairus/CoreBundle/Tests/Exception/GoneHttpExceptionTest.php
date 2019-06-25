@@ -32,7 +32,7 @@ class GoneHttpExceptionTest extends TestCase {
     }
 
     /**
-     * Test the <code>getRedirectUrl</code> method.
+     * Test the `getRedirectUrl` method.
      *
      * @return void
      */

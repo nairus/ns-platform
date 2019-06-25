@@ -24,7 +24,7 @@ class StringUtilTest extends TestCase {
     }
 
     /**
-     * Test the <code>camelize</code> method.
+     * Test the `camelize` method.
      *
      * @return void
      */
@@ -40,7 +40,7 @@ class StringUtilTest extends TestCase {
     }
 
     /**
-     * Test the <code>decamelize</code> method.
+     * Test the `decamelize` method.
      *
      * @return void
      */

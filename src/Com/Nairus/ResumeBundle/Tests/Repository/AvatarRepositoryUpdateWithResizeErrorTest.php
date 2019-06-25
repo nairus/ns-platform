@@ -1,5 +1,7 @@
 <?php
 
+namespace Com\Nairus\ResumeBundle\Repository;
+
 use Com\Nairus\ResumeBundle\Tests\Repository\AbstractAvatarRepositoryTestCase;
 use Com\Nairus\CoreBundle\Dto\ImageConfigDto;
 use Com\Nairus\CoreBundle\Exception\ImageProcessingException;

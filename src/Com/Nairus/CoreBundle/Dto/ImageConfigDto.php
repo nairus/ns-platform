@@ -186,7 +186,7 @@ class ImageConfigDto {
     }
 
     /**
-     * Return <code>true</true> if the image is cropped, <code>false</code> otherwise.
+     * Return `true` if the image is cropped, `false` otherwise.
      *
      * @return bool
      */

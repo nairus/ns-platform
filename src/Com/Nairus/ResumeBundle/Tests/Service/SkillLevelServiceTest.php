@@ -87,7 +87,7 @@ class SkillLevelServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>removeSkillLevel</code> method.
+     * Test `removeSkillLevel` method.
      *
      * @covers Com\Nairus\ResumeBundle\Service\SkillLevelService::removeSkillLevel
      * @covers Com\Nairus\ResumeBundle\Repository\SkillLevelRepository::remove
@@ -192,7 +192,7 @@ class SkillLevelServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>removeSkillLEvel</code> with unknown error.
+     * Test `removeSkillLEvel` with unknown error.
      *
      * @return void
      */

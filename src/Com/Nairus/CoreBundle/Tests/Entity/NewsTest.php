@@ -33,7 +33,7 @@ class NewsTest extends TestCase {
     }
 
     /**
-     * Test <code>removeContent</code> method.
+     * Test `removeContent` method.
      *
      * @covers Com\Nairus\CoreBundle\Entity\News::getContents
      * @covers Com\Nairus\CoreBundle\Entity\News::addContent
@@ -55,7 +55,7 @@ class NewsTest extends TestCase {
     }
 
     /**
-     * Test <code>__toString</code> method.
+     * Test `__toString` method.
      *
      * @covers Com\Nairus\CoreBundle\Entity\News::__toString()
      *

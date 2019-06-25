@@ -19,7 +19,7 @@ interface SkillLevelServiceInterface {
      *
      * @return void
      *
-     * @throw <code>FunctionalException</code> if an errror occured.
+     * @throws FunctionalException if an error occurs.
      */
     public function removeSkillLevel(SkillLevel $skillLevel): void;
 }

@@ -29,7 +29,7 @@ class ContactServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>handleContactMessage</code> method.
+     * Test the `handleContactMessage` method.
      *
      * @return void
      */
@@ -53,7 +53,7 @@ class ContactServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>handleContactMessage</code> method with a blacklisted ip.
+     * Test the `handleContactMessage` method with a blacklisted ip.
      *
      * @return void
      */
@@ -92,7 +92,7 @@ class ContactServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>handleContactMessage</code> method with an unkown error.
+     * Test the `handleContactMessage` method with an unkown error.
      *
      * @return void
      */
@@ -152,7 +152,7 @@ class ContactServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>findAllForPage</code> method.
+     * Test the `findAllForPage` method.
      *
      * @return void
      */
@@ -184,7 +184,7 @@ class ContactServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>findAllForPage</code> method.
+     * Test the `findAllForPage` method.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\PaginatorException
      *
@@ -196,7 +196,7 @@ class ContactServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>blacklistContactMessage</code> method.
+     * Test `blacklistContactMessage` method.
      *
      * @return void
      */
@@ -215,7 +215,7 @@ class ContactServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>deleteContactMessage</code> method.
+     * Test `deleteContactMessage` method.
      *
      * @return void
      */

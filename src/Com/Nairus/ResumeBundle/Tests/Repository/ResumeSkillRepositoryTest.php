@@ -208,7 +208,7 @@ class ResumeSkillRepositoryTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>getOrderByRank</code> method.
+     * Test the `getOrderByRank` method.
      *
      * @return void
      */

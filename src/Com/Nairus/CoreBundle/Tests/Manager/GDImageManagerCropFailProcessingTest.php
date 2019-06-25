@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use phpmock\MockBuilder;
 
 /**
- * Test of GDImageManager with isolated process for mocking <code>imagecrop</code> builtin function.
+ * Test of GDImageManager with isolated process for mocking `imagecrop` builtin function.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -16,7 +16,7 @@ use phpmock\MockBuilder;
 class GDImageManagerCropFailProcessingTest extends AbstractImageManagerTest {
 
     /**
-     * Test the <code>crop</code> method with bad image type.
+     * Test the `crop` method with bad image type.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\ImageProcessingException
      * @expectedExceptionCode 1

@@ -273,7 +273,7 @@ class ResumeTest extends KernelTestCase {
     }
 
     /**
-     * Test the <code>getTranslationEntityClass</code> static method.
+     * Test the `getTranslationEntityClass` static method.
      *
      * @covers Com\Nairus\ResumeBundle\Entity\Resume::getTranslationEntityClass
      *
@@ -325,7 +325,7 @@ class ResumeTest extends KernelTestCase {
     }
 
     /**
-     * Test the <code>setSlug</code> proxy method.
+     * Test the `setSlug` proxy method.
      *
      * @return void
      */

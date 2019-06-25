@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use phpmock\MockBuilder;
 
 /**
- * Test of GDImageManager with <code>imagecreatetruecolor</code> function in failure.
+ * Test of GDImageManager with `imagecreatetruecolor` function in failure.
  *
- * This test has to be launch before <code>GDImageManagerResizeFailImageResampledTest</code> because of the mocked builtin function.
+ * This test has to be launch before `GDImageManagerResizeFailImageResampledTest` because of the mocked builtin function.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -18,7 +18,7 @@ use phpmock\MockBuilder;
 class GDImageManagerResizeFailImageCreationTest extends AbstractImageManagerTest {
 
     /**
-     * Test <code>imagecreatetruecolor</code> function in failure.
+     * Test `imagecreatetruecolor` function in failure.
      *
      * @expectedException \Com\Nairus\CoreBundle\Exception\ImageProcessingException
      * @expectedExceptionCode 2

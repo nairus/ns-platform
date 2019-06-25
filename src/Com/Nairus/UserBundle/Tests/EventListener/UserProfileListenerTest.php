@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class UserProfileListenerTest extends TestCase {
 
     /**
-     * Test <code>getSubscribedEvents</code> method.
+     * Test `getSubscribedEvents` method.
      *
      * @covers Com\Nairus\UserBundle\Listener\UserProfileListener::getSubscribedEvents
      *

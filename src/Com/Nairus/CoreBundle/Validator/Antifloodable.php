@@ -13,7 +13,7 @@ use Com\Nairus\CoreBundle\Entity\IpTraceable;
 interface Antifloodable {
 
     /**
-     * Return <code>true</code> if we detect a client's flood of requests.
+     * Return `true` if we detect a client's flood of requests.
      *
      * @param string $clientIp The current client IP.
      * @param int    $seconds  Number of seconds allowed between two requests.

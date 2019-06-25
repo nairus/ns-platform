@@ -62,7 +62,7 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>getSubscribedEvents</code> method.
+     * Test the `getSubscribedEvents` method.
      *
      * @covers Com\Nairus\ResumeBundle\Listener\ResumeStatusListener::getSubscribedEvents
      *
@@ -85,7 +85,7 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>onUpdateStatus</code> method.
+     * Test the `onUpdateStatus` method.
      *
      * @covers Com\Nairus\ResumeBundle\Listener\ResumeStatusListener::onUpdateStatus
      *
@@ -132,7 +132,7 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>onDeleteStatus</code> method.
+     * Test the `onDeleteStatus` method.
      *
      * @covers Com\Nairus\ResumeBundle\Listener\ResumeStatusListener::onDeleteStatus
      *
@@ -153,7 +153,7 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>onDeleteStatus</code> method.
+     * Test the `onDeleteStatus` method.
      *
      * @covers Com\Nairus\ResumeBundle\Listener\ResumeStatusListener::onDeleteStatus
      *
@@ -174,7 +174,7 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>onDeleteStatus</code> method.
+     * Test the `onDeleteStatus` method.
      *
      * @covers Com\Nairus\ResumeBundle\Listener\ResumeStatusListener::onDeleteStatus
      *
@@ -195,7 +195,7 @@ class ResumeStatusListenerTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>onDeleteStatus</code> method.
+     * Test the `onDeleteStatus` method.
      *
      * @covers Com\Nairus\ResumeBundle\Listener\ResumeStatusListener::onDeleteStatus
      *

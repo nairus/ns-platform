@@ -111,7 +111,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>findAllOnlineForPage</code> method.
+     * Test `findAllOnlineForPage` method.
      *
      * @covers Com\Nairus\ResumeBundle\Service\ResumeService::findAllOnlineForPage
      *
@@ -129,7 +129,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>findAllOnlineForPage</code> method.
+     * Test `findAllOnlineForPage` method.
      *
      * @covers Com\Nairus\ResumeBundle\Service\ResumeService::findAllOnlineForPage
      *
@@ -173,7 +173,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>removeWithDependencies</code> method.
+     * Test the `removeWithDependencies` method.
      *
      * @covers Com\Nairus\ResumeBundle\Service\ResumeService::removeWithDependencies
      *
@@ -237,7 +237,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>removeWithDependencies</code> method with error.
+     * Test the `removeWithDependencies` method with error.
      *
      * @covers Com\Nairus\ResumeBundle\Service\ResumeService::removeWithDependencies
      *
@@ -291,7 +291,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>publish</code> method for nominal case.
+     * Test the `publish` method for nominal case.
      *
      * @covers Com\Nairus\ResumeBundle\Service\ResumeService::publish
      *
@@ -309,7 +309,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>publish</code> method with force case.
+     * Test the `publish` method with force case.
      *
      * @covers Com\Nairus\ResumeBundle\Service\ResumeService::publish
      *
@@ -325,7 +325,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>publish</code> method with resume already online.
+     * Test the `publish` method with resume already online.
      *
      * @covers Com\Nairus\ResumeBundle\Service\ResumeService::publish
      *
@@ -345,7 +345,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>publish</code> method with resume incomplete.
+     * Test the `publish` method with resume incomplete.
      *
      * @covers Com\Nairus\ResumeBundle\Service\ResumeService::publish
      *
@@ -366,7 +366,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>publish</code> method with resume not anonymous and no user profile.
+     * Test the `publish` method with resume not anonymous and no user profile.
      *
      * @covers Com\Nairus\ResumeBundle\Service\ResumeService::publish
      *
@@ -395,7 +395,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>unpublish</code> method with an incomplete resume.
+     * Test the `unpublish` method with an incomplete resume.
      *
      * @return void
      */
@@ -420,7 +420,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>unpublish</code> method with an complete resume.
+     * Test the `unpublish` method with an complete resume.
      *
      * @return void
      */
@@ -435,7 +435,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>getDetailsForResume</code> method.
+     * Test the `getDetailsForResume` method.
      *
      * @return void
      */
@@ -503,7 +503,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>getDetailsForResume</code> method.
+     * Test the `getDetailsForResume` method.
      *
      * @return void
      */
@@ -564,7 +564,7 @@ class ResumeServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>getDetailsForResumeId</code> method.
+     * Test the `getDetailsForResumeId` method.
      *
      * @expectedException \Doctrine\ORM\EntityNotFoundException
      *

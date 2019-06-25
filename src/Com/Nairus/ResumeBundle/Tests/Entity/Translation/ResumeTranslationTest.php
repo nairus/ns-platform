@@ -115,7 +115,7 @@ class ResumeTranslationTest extends KernelTestCase {
     }
 
     /**
-     * Test the <code>setSlug</code> proxy method.
+     * Test the `setSlug` proxy method.
      *
      * @return void
      */

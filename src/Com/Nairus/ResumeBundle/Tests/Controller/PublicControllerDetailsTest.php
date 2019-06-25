@@ -1,5 +1,7 @@
 <?php
 
+namespace Com\Nairus\ResumeBundle\Tests\Controller;
+
 use Com\Nairus\CoreBundle\Tests\BaseWebTestCase;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadResumeDetails;
 use Com\Nairus\ResumeBundle\Tests\DataFixtures\Unit\LoadSkill;
@@ -56,7 +58,7 @@ class PublicControllerDetailsTest extends BaseWebTestCase {
     }
 
     /**
-     * Test the <code>detailsAction</code>.
+     * Test the `detailsAction`.
      *
      * @return void
      */
@@ -96,7 +98,7 @@ class PublicControllerDetailsTest extends BaseWebTestCase {
     }
 
     /**
-     * Test the <code>detailsAction</code>.
+     * Test the `detailsAction`.
      *
      * @return void
      */
@@ -119,7 +121,7 @@ class PublicControllerDetailsTest extends BaseWebTestCase {
     }
 
     /**
-     * Test the <code>detailsAction</code> with no resume.
+     * Test the `detailsAction` with no resume.
      *
      * @return void
      */
@@ -129,7 +131,7 @@ class PublicControllerDetailsTest extends BaseWebTestCase {
     }
 
     /**
-     * Test the <code>detailsAction</code> with an offline resume.
+     * Test the `detailsAction` with an offline resume.
      *
      * @return void
      */
@@ -146,7 +148,7 @@ class PublicControllerDetailsTest extends BaseWebTestCase {
     }
 
     /**
-     * Test the <code>detailsAction</code> with an incomplete resume.
+     * Test the `detailsAction` with an incomplete resume.
      *
      * @return void
      */
@@ -165,7 +167,7 @@ class PublicControllerDetailsTest extends BaseWebTestCase {
     }
 
     /**
-     * Test the <code>detailsAction</code> with an incomplete resume.
+     * Test the `detailsAction` with an incomplete resume.
      *
      * @return void
      */

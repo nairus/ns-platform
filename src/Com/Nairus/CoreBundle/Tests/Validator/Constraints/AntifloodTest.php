@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class AntifloodTest extends TestCase {
 
     /**
-     * Test the <code>getRequiredOptions</code> method.
+     * Test the `getRequiredOptions` method.
      *
      * @return void
      */
@@ -23,7 +23,7 @@ class AntifloodTest extends TestCase {
     }
 
     /**
-     * Test the <code>validatedBy</code>.
+     * Test the `validatedBy`.
      *
      * @return void
      */
@@ -33,7 +33,7 @@ class AntifloodTest extends TestCase {
     }
 
     /**
-     * Test the <code>getTargets</code> method.
+     * Test the `getTargets` method.
      *
      * @return void
      */
@@ -43,7 +43,7 @@ class AntifloodTest extends TestCase {
     }
 
     /**
-     * Test the <code>getDefaultOption</code> method.
+     * Test the `getDefaultOption` method.
      *
      * @return void
      */

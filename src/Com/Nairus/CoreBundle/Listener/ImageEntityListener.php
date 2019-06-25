@@ -37,8 +37,9 @@ class ImageEntityListener implements EventSubscriber {
     private $entityManager;
 
     /**
+     * The logger service.
      *
-     * @var
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -65,7 +66,9 @@ class ImageEntityListener implements EventSubscriber {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns an array of events this subscriber wants to listen to.
+     *
+     * @return array
      */
     public function getSubscribedEvents(): array {
         return [Events::prePersist, Events::preUpdate, Events::preRemove, Events::postPersist, Events::postUpdate];
@@ -222,7 +225,7 @@ class ImageEntityListener implements EventSubscriber {
      * @param LifecycleEventArgs $args              Entities lifecycle event args.
      * @param bool               $imageFileRequired Check if there is an uploaded file to process (default: false).
      *
-     * @return ImageInterface|null image entity expected type, <code>null</code> otherwise.
+     * @return ImageInterface|null image entity expected type, `null` otherwise.
      *
      * @throws ImageProcessingException if there is no image to process.
      */

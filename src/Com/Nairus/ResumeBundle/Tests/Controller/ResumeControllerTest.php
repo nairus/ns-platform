@@ -495,7 +495,7 @@ class ResumeControllerTest extends AbstractUserWebTestCase {
     }
 
     /**
-     * Test <code>publishAction</code> and <code>unpublishAction</code> method.
+     * Test `publishAction` and `unpublishAction` method.
      *
      * @covers Com\Nairus\ResumeBundle\Controller\ResumeController::unpublishAction
      * @covers Com\Nairus\ResumeBundle\Controller\ResumeController::publishAction
@@ -560,7 +560,7 @@ class ResumeControllerTest extends AbstractUserWebTestCase {
     }
 
     /**
-     * Test <code>publishAction</code> method with force parameter (uncomplete resume).
+     * Test `publishAction` method with force parameter (uncomplete resume).
      *
      * @return void
      */
@@ -608,7 +608,7 @@ class ResumeControllerTest extends AbstractUserWebTestCase {
     }
 
     /**
-     * Test <code>publishAction</code> method with no profile.
+     * Test `publishAction` method with no profile.
      *
      * @return void
      */

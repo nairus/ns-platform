@@ -86,7 +86,7 @@ class SkillServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>findAllForPage</code> method.
+     * Test `findAllForPage` method.
      *
      * @covers Com\Nairus\ResumeBundle\Service\SkillService::findAllForPage
      *
@@ -102,7 +102,7 @@ class SkillServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>findAllForPage</code> method.
+     * Test `findAllForPage` method.
      *
      * @covers Com\Nairus\ResumeBundle\Service\SkillService::findAllForPage
      *
@@ -115,7 +115,7 @@ class SkillServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>findAllForPage</code> method.
+     * Test `findAllForPage` method.
      *
      * @covers Com\Nairus\ResumeBundle\Service\SkillService::findAllForPage
      *
@@ -131,7 +131,7 @@ class SkillServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>removeSkill</code> method.
+     * Test `removeSkill` method.
      *
      * @covers Com\Nairus\ResumeBundle\Service\SkillService::removeSkill
      * @covers Com\Nairus\ResumeBundle\Repository\SkillRepository::remove
@@ -232,7 +232,7 @@ class SkillServiceTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>removeSkill</code> with unknown error.
+     * Test `removeSkill` with unknown error.
      *
      * @return void
      */

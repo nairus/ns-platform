@@ -191,7 +191,7 @@ class GDImageManager implements ImageManagerInterface {
      * Check config keys required.
      *
      * @param array       $keys   The config keys required.
-     * @param string|bool $entity The name decalize of the entity or <code>false</code>.
+     * @param string|bool $entity The name decalize of the entity or `false`.
      *
      * @return void
      *
@@ -231,7 +231,7 @@ class GDImageManager implements ImageManagerInterface {
     }
 
     /**
-     * Return the image datas to process or <code>false</code> if an error occurs.
+     * Return the image datas to process or `false` if an error occurs.
      *
      * @param string $imagePathName The image path to process.
      * @param string $mimeType      The image mimeType.

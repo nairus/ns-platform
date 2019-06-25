@@ -146,7 +146,7 @@ class ResumeDetailsDto {
     }
 
     /**
-     * Return <code>true</code> if the resume is anonymous.
+     * Return `true` if the resume is anonymous.
      *
      * @return bool
      */

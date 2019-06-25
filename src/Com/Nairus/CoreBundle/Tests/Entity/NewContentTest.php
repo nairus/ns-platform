@@ -144,7 +144,7 @@ class NewContentTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>__toString</code> method.
+     * Test `__toString` method.
      *
      * @covers Com\Nairus\CoreBundle\Entity\NewsContent::__toString()
      *

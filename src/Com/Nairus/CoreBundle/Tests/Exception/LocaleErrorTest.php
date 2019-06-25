@@ -32,7 +32,7 @@ class LocaleErrorTest extends TestCase {
     }
 
     /**
-     * Test the <code>getLocale</code> method.
+     * Test the `getLocale` method.
      *
      * @covers \Com\Nairus\CoreBundle\Exception\LocaleError::getLocale
      * 

@@ -22,7 +22,7 @@ interface SkillServiceInterface {
      *
      * @return SkillPaginatorDto
      *
-     * @throws <code>PaginatorException</code> in case of pagination error.
+     * @throws PaginatorException in case of pagination error.
      */
     public function findAllForPage(int $page, int $limit): SkillPaginatorDto;
 
@@ -31,7 +31,7 @@ interface SkillServiceInterface {
      *
      * @param Skill $skill The current skill.
      *
-     * @throw <code>FunctionalException</code> if an errror occured.
+     * @throw FunctionalException if an error occurs.
      */
     public function removeSkill(Skill $skill): void;
 }

@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class AntispamTypeTest extends TestCase {
 
     /**
-     * Test <code>getName</code> method.
+     * Test `getName` method.
      *
      * @return void
      */

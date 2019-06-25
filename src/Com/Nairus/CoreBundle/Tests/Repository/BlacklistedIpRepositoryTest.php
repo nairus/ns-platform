@@ -109,7 +109,7 @@ class BlacklistedIpRepositoryTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test <code>isBlackListed</code> method.
+     * Test `isBlackListed` method.
      *
      * @return void
      */

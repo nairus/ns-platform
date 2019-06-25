@@ -103,7 +103,7 @@ abstract class AbstractAvatarRepositoryTestCase extends AbstractKernelTestCase {
      * @param string $dirname   The current directory.
      * @param string $imageName The image name to find.
      *
-     * @return bool <code>true</code> if the image is found, <code>false</code> otherwise.
+     * @return bool `true` if the image is found, `false` otherwise.
      */
     private function recursiveFindImage(string $dirname, string $imageName): bool {
         $dir = \opendir($dirname);

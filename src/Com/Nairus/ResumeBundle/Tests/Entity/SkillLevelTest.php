@@ -74,7 +74,7 @@ class SkillLevelTest extends AbstractKernelTestCase {
     }
 
     /**
-     * Test the <code>getTranslationEntityClass</code> static method.
+     * Test the `getTranslationEntityClass` static method.
      *
      * @covers Com\Nairus\ResumeBundle\Entity\SkillLevel::getTranslationEntityClass
      *

@@ -25,7 +25,7 @@ class ResumeStatusEnumTest extends TestCase {
     }
 
     /**
-     * Test the <code>getIconClass</code> method.
+     * Test the `getIconClass` method.
      *
      * @covers Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum::getIconClass
      *
@@ -38,7 +38,7 @@ class ResumeStatusEnumTest extends TestCase {
     }
 
     /**
-     * Test the <code>getIconClass</code> method with a bad status.
+     * Test the `getIconClass` method with a bad status.
      *
      * @covers Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum::getIconClass
      *
@@ -52,7 +52,7 @@ class ResumeStatusEnumTest extends TestCase {
     }
 
     /**
-     * Test the <code>getLabelKey</code> method.
+     * Test the `getLabelKey` method.
      *
      * @covers Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum::getLabelKey
      *
@@ -65,7 +65,7 @@ class ResumeStatusEnumTest extends TestCase {
     }
 
     /**
-     * Test the <code>getLabelKey</code> method with a bad status.
+     * Test the `getLabelKey` method with a bad status.
      *
      * @covers Com\Nairus\ResumeBundle\Enums\ResumeStatusEnum::getLabelKey
      *

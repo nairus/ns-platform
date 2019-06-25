@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use phpmock\MockBuilder;
 
 /**
- * Test of GDImageManager with <code>imagepng</code> function in failure.
+ * Test of GDImageManager with `imagepng` function in failure.
  *
  * @author nairus <nicolas.surian@gmail.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -16,7 +16,7 @@ use phpmock\MockBuilder;
 class GDImageManagerResizeFailSavingTest extends AbstractImageManagerTest {
 
     /**
-     * Test <code>imagepng</code> function in failure.
+     * Test `imagepng` function in failure.
      *
      * @return void
      */

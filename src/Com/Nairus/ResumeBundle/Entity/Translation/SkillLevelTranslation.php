@@ -53,7 +53,7 @@ class SkillLevelTranslation extends AbstractTranslationEntity {
     /**
      * Get title
      *
-     * @return string| null
+     * @return string|null
      */
     public function getTitle(): ?string {
         return $this->title;

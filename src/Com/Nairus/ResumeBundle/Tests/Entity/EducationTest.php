@@ -187,7 +187,7 @@ class EducationTest extends KernelTestCase {
     }
 
     /**
-     * Test the <code>getTranslationEntityClass</code> static method.
+     * Test the `getTranslationEntityClass` static method.
      *
      * @covers Com\Nairus\ResumeBundle\Entity\Education::getTranslationEntityClass
      *
